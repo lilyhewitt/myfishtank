@@ -9,54 +9,54 @@
 *{box-sizing:border-box;margin:0;padding:0;image-rendering:pixelated;}
 :root{
   --deep:#0a1628;--mid:#0d2258;--light:#0a3580;
-  --sand:#D7CCC8;--gravel:#BCAAA4;--green:#1D9E75;
-  --gold:#FFB300;--red:#E53935;--blue:#0288D1;
-  --panel:#ffffff12;--border:#ffffff22;
-  --text:#e8f4f8;--muted:#7ba8c4;
+  --green:#1D9E75;--gold:#FFB300;--red:#E53935;--blue:#0288D1;
+  --panel:#ffffff12;--border:#ffffff22;--text:#e8f4f8;--muted:#7ba8c4;
   --font:'VT323',monospace;--pfont:'Press Start 2P',monospace;
 }
-body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:16px;min-height:100vh;overflow-x:hidden;}
-#app{max-width:860px;margin:0 auto;padding:.5rem;}
+body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:16px;min-height:100vh;}
+#app{max-width:900px;margin:0 auto;padding:.5rem;}
 .game-title{font-family:var(--pfont);font-size:11px;color:var(--gold);text-align:center;padding:8px 0 4px;letter-spacing:2px;text-shadow:0 0 10px #FFB30066;}
 .game-title::after{content:'';display:block;width:60%;height:1px;background:linear-gradient(90deg,transparent,#FFB30044,transparent);margin:6px auto 0;}
 .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:6px;flex-wrap:wrap;}
 .top-bar-left{display:flex;align-items:center;gap:8px;}
 .top-bar-right{display:flex;align-items:center;gap:6px;}
-.tank-outer{border:3px solid #1a237e;border-radius:10px;overflow:hidden;margin-bottom:6px;position:relative;box-shadow:0 0 20px rgba(10,53,128,0.4),inset 0 0 30px rgba(0,0,0,0.3);}
+.tank-outer{border:3px solid #1a237e;border-radius:10px;overflow:hidden;margin-bottom:6px;position:relative;box-shadow:0 0 20px rgba(10,53,128,0.4);}
 #TC{display:block;width:100%;image-rendering:pixelated;cursor:pointer;}
 .hud{display:flex;gap:5px;margin-bottom:6px;flex-wrap:wrap;}
-.hud-stat{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:14px;flex:1;min-width:75px;text-align:center;color:var(--muted);transition:all .3s;}
-.hud-stat b{display:block;font-size:18px;color:var(--text);}
+.hud-stat{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:14px;flex:1;min-width:70px;text-align:center;color:var(--muted);cursor:default;}
+.hud-stat b{display:block;font-size:17px;color:var(--text);}
 .hud-stat.warn b{color:#FFB300;}.hud-stat.bad b{color:#E53935;}.hud-stat.good b{color:#1D9E75;}
+.hud-stat.clickable{cursor:pointer;transition:background .2s;}.hud-stat.clickable:hover{background:#ffffff22;}
 .tabs{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;}
-.tab{padding:6px 11px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--muted);cursor:pointer;font-size:13px;font-family:var(--font);transition:all .2s;position:relative;}
-.tab:hover{background:#ffffff18;}.tab.on{background:var(--green);color:#fff;border-color:var(--green);box-shadow:0 0 8px #1D9E7544;}
+.tab{padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--muted);cursor:pointer;font-size:12px;font-family:var(--font);transition:all .2s;position:relative;}
+.tab:hover{background:#ffffff18;}.tab.on{background:var(--green);color:#fff;border-color:var(--green);}
 .tab .notif{position:absolute;top:-4px;right:-4px;width:8px;height:8px;background:var(--red);border-radius:50%;animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
-.sc{display:none;}.sc.v{display:block;animation:fadeIn .25s ease-out;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.sc{display:none;}.sc.v{display:block;animation:fadeIn .2s ease-out;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
 .panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:7px;}
-.item{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:9px;text-align:center;cursor:default;transition:all .2s;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:7px;}
+.item{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:9px;text-align:center;transition:all .2s;}
 .item:hover{border-color:#ffffff44;background:#ffffff10;}
 .item canvas{display:block;margin:0 auto 4px;image-rendering:pixelated;}
-.iname{font-size:13px;color:var(--text);margin-bottom:2px;}.idesc{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.iname{font-size:13px;color:var(--text);margin-bottom:2px;}.idesc{font-size:10px;color:var(--muted);margin-bottom:4px;}
 .iprice{font-size:12px;color:var(--gold);margin-bottom:5px;}
-.item button,.gbtn{padding:5px 8px;font-size:12px;border:1px solid var(--border);border-radius:6px;background:#ffffff15;color:var(--text);cursor:pointer;font-family:var(--font);width:100%;transition:all .2s;}
-.item button:hover,.gbtn:hover{background:var(--green);border-color:var(--green);color:#fff;}
+.item button{padding:5px 8px;font-size:11px;border:1px solid var(--border);border-radius:6px;background:#ffffff15;color:var(--text);cursor:pointer;font-family:var(--font);width:100%;transition:all .2s;}
+.item button:hover{background:var(--green);border-color:var(--green);color:#fff;}
 .item button:disabled{opacity:.35;cursor:not-allowed;}
-.owned{font-size:11px;color:var(--green);background:#1D9E7522;padding:2px 7px;border-radius:20px;display:inline-block;margin-top:3px;}
-.rare-tag{font-size:9px;color:#E040FB;background:#E040FB22;padding:1px 6px;border-radius:10px;display:inline-block;margin-bottom:3px;animation:shimmer 2s infinite;}
-@keyframes shimmer{0%,100%{opacity:1;}50%{opacity:0.6;}}
+.owned{font-size:10px;color:var(--green);background:#1D9E7522;padding:2px 7px;border-radius:20px;display:inline-block;margin-top:3px;}
+.rare-tag{font-size:9px;color:#E040FB;background:#E040FB22;padding:1px 5px;border-radius:8px;display:inline-block;margin-bottom:2px;animation:shimmer 2s infinite;}
+.super-rare-tag{font-size:9px;color:#FFD700;background:#FFD70022;padding:1px 5px;border-radius:8px;display:inline-block;margin-bottom:2px;animation:shimmer 1.5s infinite;}
+@keyframes shimmer{0%,100%{opacity:1;}50%{opacity:0.5;}}
 .bar{height:7px;background:#ffffff15;border-radius:20px;overflow:hidden;margin-top:3px;}
 .fill{height:100%;border-radius:20px;transition:width .4s;}
 .row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
 .lbl{font-size:13px;color:var(--muted);width:95px;flex-shrink:0;}.val{font-size:12px;font-weight:500;width:28px;text-align:right;}
 .btn{padding:8px 16px;background:var(--green);color:#fff;border:none;border-radius:7px;cursor:pointer;font-size:14px;font-family:var(--font);transition:all .2s;}
-.btn:hover{background:#0F6E56;transform:translateY(-1px);}.btn:active{transform:translateY(0);}.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.btn:hover{background:#0F6E56;}.btn:disabled{opacity:.4;cursor:not-allowed;}
 .btn-row{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap;}
 .al{padding:7px 11px;border-radius:7px;font-size:13px;margin-bottom:7px;animation:slideIn .3s ease-out;}
-@keyframes slideIn{from{opacity:0;transform:translateX(-10px);}to{opacity:1;transform:translateX(0);}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
 .ok{background:#1D9E7522;color:#4ade80;border:1px solid #1D9E7544;}
 .warn{background:#FFB30022;color:#FFB300;border:1px solid #FFB30044;}
 .bad{background:#E5393522;color:#ff6b6b;border:1px solid #E5393544;}
@@ -66,33 +66,43 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
 .finfo{flex:1;}.fname{font-size:14px;color:var(--text);}
 .ftag{font-size:10px;padding:1px 6px;border-radius:10px;display:inline-block;margin-right:3px;margin-top:2px;}
 .ftag-baby{background:#0288D122;color:#4FC3F7;}.ftag-adult{background:#1D9E7522;color:#4ade80;}
-.ftag-sick{background:#E5393522;color:#ff6b6b;}.ftag-age{background:#FFB30022;color:#FFB300;}
-.ftag-mood{background:#CE93D822;color:#CE93D8;}
+.ftag-sick{background:#E5393522;color:#ff6b6b;}.ftag-age{background:#FFB30022;color:#FFB300;}.ftag-mood{background:#CE93D822;color:#CE93D8;}
 .fbtns{display:flex;flex-direction:column;gap:3px;}
-.fbtns button{font-size:10px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:#ffffff10;cursor:pointer;font-family:var(--font);color:var(--text);transition:all .2s;}
+.fbtns button{font-size:10px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:#ffffff10;cursor:pointer;font-family:var(--font);color:var(--text);}
 .fbtns button:hover{background:var(--green);color:#fff;}
 .coins-display{font-family:var(--pfont);font-size:9px;color:var(--gold);background:#FFB30015;border:1px solid #FFB30033;padding:5px 10px;border-radius:7px;white-space:nowrap;}
 .level-display{font-family:var(--pfont);font-size:9px;color:#CE93D8;background:#CE93D815;border:1px solid #CE93D833;padding:5px 10px;border-radius:7px;white-space:nowrap;}
 .tank-size-badge{font-size:10px;color:var(--blue);background:#0288D122;border:1px solid #0288D133;padding:2px 8px;border-radius:10px;white-space:nowrap;}
-.ach-card{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:5px;background:#ffffff08;border:1px solid var(--border);border-radius:8px;transition:all .2s;}
+.audio-btn{font-family:var(--pfont);font-size:8px;padding:5px 8px;border:1px solid var(--border);border-radius:7px;background:var(--panel);color:var(--muted);cursor:pointer;}
+.audio-btn.on{color:#4ade80;border-color:#1D9E7544;}
+.ach-card{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:5px;background:#ffffff08;border:1px solid var(--border);border-radius:8px;}
 .ach-card.done{border-color:#1D9E7544;background:#1D9E7511;}
-.ach-icon{font-size:22px;width:36px;text-align:center;flex-shrink:0;}
+.ach-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0;}
 .ach-info{flex:1;}.ach-name{font-size:13px;color:var(--text);}.ach-desc{font-size:11px;color:var(--muted);margin-top:1px;}
 .ach-reward{font-size:10px;color:var(--gold);margin-top:2px;}.ach-check{color:#4ade80;font-size:16px;}
 .ach-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1a1a2e;border:2px solid var(--gold);border-radius:12px;padding:12px 20px;z-index:9999;display:flex;align-items:center;gap:10px;box-shadow:0 0 30px #FFB30044;transition:transform .5s cubic-bezier(.34,1.56,.64,1);font-family:var(--font);}
 .ach-popup.show{transform:translateX(-50%) translateY(0);}
-.ach-popup .ach-icon{font-size:26px;}.ach-popup .ach-text{color:var(--gold);font-size:14px;}.ach-popup .ach-sub{color:var(--muted);font-size:12px;}
+.ach-popup .ach-text{color:var(--gold);font-size:13px;}.ach-popup .ach-sub{color:var(--muted);font-size:11px;}
 .stat-box{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .stat-item{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
 .stat-val{font-size:12px;color:var(--gold);font-family:var(--pfont);}.stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
 .upgrade-card{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
-.upgrade-card .up-icon{font-size:24px;width:40px;text-align:center;}.upgrade-card .up-info{flex:1;}
+.upgrade-card .up-icon{font-size:22px;width:36px;text-align:center;}.upgrade-card .up-info{flex:1;}
 .upgrade-card .up-name{font-size:14px;color:var(--text);}.upgrade-card .up-desc{font-size:11px;color:var(--muted);margin-top:2px;}
 .upgrade-card .up-price{font-size:12px;color:var(--gold);margin-top:3px;}
 .feed-particle{position:absolute;pointer-events:none;font-size:10px;animation:feedDrop 1.2s ease-in forwards;}
 @keyframes feedDrop{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(60px);}}
 .coin-fly{position:fixed;pointer-events:none;font-family:var(--pfont);font-size:10px;color:var(--gold);z-index:9999;animation:coinUp 1s ease-out forwards;}
 @keyframes coinUp{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-40px);}}
+.tank-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:10;}
+.setup-panel{background:rgba(10,22,40,0.88);border:1px solid var(--border);border-radius:12px;padding:14px 18px;width:min(320px,88%);pointer-events:all;}
+.setup-panel .sp-title{font-family:var(--pfont);font-size:9px;color:var(--gold);margin-bottom:10px;text-align:center;letter-spacing:1px;}
+.setup-step{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #ffffff11;font-size:14px;}
+.setup-step:last-of-type{border-bottom:none;}
+.setup-step .ss-label{color:var(--muted);}.setup-step.done .ss-label{color:#4ade80;}
+.water-btn{width:100%;margin-top:10px;padding:9px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:15px;}
+.water-btn:hover{background:#0277BD;}.water-btn:disabled{opacity:.4;cursor:not-allowed;}
+.refresh-note{font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center;}
 </style>
 </head>
 <body>
@@ -101,210 +111,494 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
   <div class="top-bar">
     <div class="top-bar-left">
       <div style="font-size:12px;color:var(--muted)" id="time-display">Day 1 — 08:00</div>
-      <div class="tank-size-badge" id="tank-badge">Tank: Small (5 fish)</div>
+      <div class="tank-size-badge" id="tank-badge">Tank: Small</div>
     </div>
     <div class="top-bar-right">
-      <div class="level-display" id="LD">Lv. 1 (0 XP)</div>
+      <button class="audio-btn" id="audio-btn">♪ ON</button>
+      <div class="level-display" id="LD">Lv. 1</div>
       <div class="coins-display" id="CD">Coins: 500</div>
     </div>
   </div>
-  <div class="tank-outer"><canvas id="TC" height="280"></canvas></div>
+  <div class="tank-outer"><canvas id="TC" height="336"></canvas><div class="tank-overlay" id="tank-setup-overlay"></div></div>
+  <div id="wq-bar"></div>
   <div class="hud" id="HUD"></div>
   <div class="tabs" id="tab-bar">
     <button class="tab on" data-tab="shop">Shop</button>
-    <button class="tab" data-tab="setup">Setup</button>
-    <button class="tab" data-tab="water">Water</button>
     <button class="tab" data-tab="market">Fish Market</button>
-    <button class="tab" data-tab="myfish">My Fish</button>
+    <button class="tab" data-tab="plants">Plants</button>
     <button class="tab" data-tab="deco">Decorations</button>
+    <button class="tab" data-tab="myfish">My Fish</button>
     <button class="tab" data-tab="upgrades">Upgrades</button>
     <button class="tab" data-tab="achievements">Quests</button>
     <button class="tab" data-tab="stats">Stats</button>
   </div>
   <div id="a-global"></div>
   <div class="sc v" id="s-shop"><div class="stitle">Equipment Shop</div><div id="a-shop"></div><div class="grid" id="shop-g"></div></div>
-  <div class="sc" id="s-setup"><div class="stitle">Tank Setup</div><div id="a-setup"></div><div class="panel"><div style="font-size:13px;color:var(--muted);margin-bottom:10px;">Buy essentials then fill your tank with water.</div><div id="steps"></div><div class="btn-row"><button class="btn" id="btn-w">Add Water</button></div></div></div>
-  <div class="sc" id="s-water"><div class="stitle">Water Quality</div><div id="a-water"></div><div class="panel" id="wstats"></div><div class="btn-row"><button class="btn" id="btn-t">Run Water Test</button></div></div>
-  <div class="sc" id="s-market"><div class="stitle">Fish Market</div><div style="font-size:11px;color:var(--muted);margin-bottom:8px;" id="market-note"></div><div id="a-market"></div><div class="grid" id="fish-g"></div></div>
-  <div class="sc" id="s-myfish"><div class="stitle">My Fish</div><div id="a-myfish"></div><div id="fish-list"></div><div class="btn-row"><button class="btn" id="btn-feed">Feed All</button><button class="btn" style="background:#0288D1" id="btn-clean">Clean Tank (20 coins)</button></div></div>
-  <div class="sc" id="s-deco"><div class="stitle">Decorations</div><div id="a-deco"></div><div class="grid" id="deco-g"></div></div>
+  <div class="sc" id="s-market"><div class="stitle">Fish Market</div><div class="refresh-note" id="market-note"></div><div id="a-market"></div><div class="grid" id="fish-g"></div></div>
+  <div class="sc" id="s-plants"><div class="stitle">Plant Shop</div><div class="refresh-note" id="plant-note"></div><div id="a-plants"></div><div class="grid" id="plant-g"></div></div>
+  <div class="sc" id="s-deco"><div class="stitle">Decorations</div><div class="refresh-note" id="deco-note"></div><div id="a-deco"></div><div class="grid" id="deco-g"></div></div>
+  <div class="sc" id="s-myfish"><div class="stitle">My Fish</div><div id="a-myfish"></div><div id="fish-list"></div><div class="btn-row"><button class="btn" style="background:#0288D1" id="btn-clean">Clean Tank (20 coins)</button></div></div>
   <div class="sc" id="s-upgrades"><div class="stitle">Tank Upgrades</div><div id="a-upgrades"></div><div id="upgrade-list"></div></div>
-  <div class="sc" id="s-achievements"><div class="stitle">Quests & Achievements</div><div id="a-achievements"></div><div id="ach-list"></div></div>
-  <div class="sc" id="s-stats"><div class="stitle">Aquarium Stats</div><div id="a-stats"></div><div id="stats-content"></div></div>
+  <div class="sc" id="s-achievements"><div class="stitle">Quests</div><div id="a-achievements"></div><div id="ach-list"></div></div>
+  <div class="sc" id="s-stats"><div class="stitle">Stats</div><div id="a-stats"></div><div id="stats-content"></div></div>
 </div>
 <div class="ach-popup" id="ach-popup"><div class="ach-icon" id="ach-popup-icon"></div><div><div class="ach-text" id="ach-popup-text"></div><div class="ach-sub" id="ach-popup-sub"></div></div></div>
 
 <script>
-const PLANTS=[{id:'vallis',name:'Vallisneria',colors:['#1B5E20','#2E7D32','#43A047','#66BB6A'],shape:'tall',maxH:95},{id:'amazon',name:'Amazon Sword',colors:['#1A237E','#283593','#3949AB','#7986CB'],shape:'broad',maxH:65},{id:'moss',name:'Java Moss',colors:['#33691E','#558B2F','#7CB342','#AED581'],shape:'bush',maxH:35},{id:'crypt',name:'Cryptocoryne',colors:['#4E342E','#6D4C41','#8D6E63','#D7CCC8'],shape:'rosette',maxH:50},{id:'cabomba',name:'Cabomba',colors:['#004D40','#00695C','#00897B','#4DB6AC'],shape:'feather',maxH:80},{id:'lotus',name:'Red Lotus',colors:['#880E4F','#AD1457','#C2185B','#F48FB1'],shape:'broad',maxH:60},{id:'hornwort',name:'Hornwort',colors:['#1B5E20','#2E7D32','#388E3C','#81C784'],shape:'feather',maxH:88},{id:'anubias',name:'Anubias',colors:['#1A237E','#1B5E20','#2E7D32','#4CAF50'],shape:'broad',maxH:42}];
-const FISH_DEF=[
-  {id:'guppy',name:'Guppy',price:15,desc:'Hardy & colorful',temp:'24-28°C',hardiness:5,breedable:true,personality:'curious',poop:0.3,rarity:'common'},
-  {id:'betta',name:'Betta',price:30,desc:'Stunning fins',temp:'26-30°C',hardiness:3,breedable:false,personality:'territorial',poop:0.25,rarity:'common'},
-  {id:'neon',name:'Neon Tetra',price:12,desc:'Schooling fish',temp:'22-26°C',hardiness:4,breedable:true,personality:'shy',poop:0.2,rarity:'common'},
-  {id:'goldfish',name:'Goldfish',price:20,desc:'Classic cold water',temp:'18-22°C',hardiness:5,breedable:true,personality:'greedy',poop:0.5,rarity:'common'},
-  {id:'angel',name:'Angelfish',price:45,desc:'Elegant & tall',temp:'25-29°C',hardiness:3,breedable:true,personality:'proud',poop:0.3,rarity:'uncommon'},
-  {id:'pleco',name:'Pleco',price:35,desc:'Algae cleaner',temp:'23-27°C',hardiness:5,breedable:false,personality:'peaceful',poop:0.2,rarity:'common'},
-  {id:'discus',name:'Discus',price:80,desc:'King of freshwater',temp:'28-32°C',hardiness:2,breedable:true,personality:'sensitive',poop:0.35,rarity:'uncommon'},
-  {id:'zebra',name:'Zebra Danio',price:10,desc:'Fast & playful',temp:'18-24°C',hardiness:5,breedable:true,personality:'playful',poop:0.2,rarity:'common'},
-  {id:'arowana',name:'Arowana',price:200,desc:'Dragon fish, legendary',temp:'26-30°C',hardiness:2,breedable:false,personality:'majestic',poop:0.4,rarity:'rare'},
-  {id:'axolotl',name:'Axolotl',price:150,desc:'Cute & regenerative',temp:'16-20°C',hardiness:3,breedable:true,personality:'curious',poop:0.3,rarity:'rare'},
-  {id:'seahorse',name:'Seahorse',price:120,desc:'Graceful dancer',temp:'22-26°C',hardiness:2,breedable:true,personality:'shy',poop:0.15,rarity:'rare'},
-];
-const EQ=[
-  {id:'filter',name:'Filter',icon:'⚙',price:60,desc:'Cleans water over time'},
-  {id:'heater',name:'Heater',icon:'🌡',price:50,desc:'Stable temperature'},
-  {id:'gravel',name:'Gravel & Sand',icon:'◼',price:30,desc:'Natural substrate'},
-  {id:'airpump',name:'Air Pump',icon:'〇',price:35,desc:'Oxygen bubbles'},
-  {id:'light',name:'LED Light',icon:'✦',price:45,desc:'Day/night cycle'},
-  {id:'dechlorinator',name:'Dechlorinator',icon:'❋',price:20,desc:'Safe tap water'},
-  {id:'testkit',name:'Test Kit',icon:'⬡',price:25,desc:'Measure quality'},
-  {id:'heater2',name:'Pro Heater',icon:'🔥',price:90,desc:'Perfect temp control'},
-  {id:'filter2',name:'Pro Filter',icon:'⚙',price:120,desc:'Superior filtration'},
-  {id:'autofeeder',name:'Auto Feeder',icon:'⊛',price:100,desc:'Feeds fish every day'},
-  {id:'uv',name:'UV Sterilizer',icon:'☀',price:80,desc:'Reduces disease chance'},
-];
-const DECO_DEF=[
-  {id:'rock1',name:'Smooth Rock',price:25,desc:'Natural stone'},{id:'rock2',name:'Dragon Stone',price:40,desc:'Dramatic peaks'},
-  {id:'driftwood',name:'Driftwood',price:35,desc:'Aged sunken wood'},{id:'coral1',name:'Brain Coral',price:50,desc:'Colorful coral'},
-  {id:'coral2',name:'Fan Coral',price:45,desc:'Delicate branches'},{id:'treasure',name:'Treasure Chest',price:30,desc:'Classic ornament'},
-  {id:'castle',name:'Mini Castle',price:55,desc:'Fairy tale vibes'},{id:'shell',name:'Giant Shell',price:20,desc:'Ocean keepsake'},
-  {id:'anchor',name:'Old Anchor',price:60,desc:'Rustic shipwreck piece'},{id:'volcano',name:'Mini Volcano',price:70,desc:'Bubble eruptions!'},
-];
-const DISEASES=[{id:'ich',name:'White Spot (Ich)',cure:'Ich Medicine',cureCost:40,damage:12},{id:'fin_rot',name:'Fin Rot',cure:'Antibiotics',cureCost:35,damage:8},{id:'bloat',name:'Bloat',cure:'Medicated Food',cureCost:30,damage:10},{id:'fungal',name:'Fungal Infection',cure:'Antifungal',cureCost:45,damage:15}];
-const NAMES=['Bubbles','Nemo','Dory','Flash','Goldie','Zigzag','Pixel','Splash','Finn','Pearl','Luna','Comet','Mochi','Pebble','Ripple','Tide','Coral','Shimmer','Dart','Echo','Neptune','Poseidon','Whiskers','Biscuit','Noodle','Tofu','Mango','Poppy','Storm','Azure'];
-const STEPS=[{label:'Filter',ids:['filter','filter2']},{label:'Heater',ids:['heater','heater2']},{label:'Gravel/Sand',ids:['gravel']},{label:'Dechlorinator',ids:['dechlorinator']}];
-const TANK_SIZES=[{id:'small',name:'Small',capacity:5,cost:0},{id:'medium',name:'Medium',capacity:10,cost:200},{id:'large',name:'Large',capacity:18,cost:500},{id:'mega',name:'Mega',capacity:30,cost:1200}];
-const ACHIEVEMENTS=[
-  {id:'first_fish',name:'First Splash',icon:'🐟',desc:'Buy your first fish',reward:25,check:s=>s.fish.length>=1},
-  {id:'five_fish',name:'School\'s In',icon:'🐠',desc:'Own 5 fish at once',reward:50,check:s=>s.fish.length>=5},
-  {id:'ten_fish',name:'Crowd Control',icon:'🎏',desc:'Own 10 fish at once',reward:100,check:s=>s.fish.length>=10},
-  {id:'first_breed',name:'Proud Parent',icon:'🥚',desc:'Breed your first baby fish',reward:40,check:s=>(s.totalBred||0)>=1},
-  {id:'water_perfect',name:'Crystal Clear',icon:'💧',desc:'Reach 90+ water quality',reward:30,check:s=>avgW()>=90},
-  {id:'buy_all_eq',name:'Fully Equipped',icon:'⚙',desc:'Buy all equipment',reward:80,check:s=>EQ.every(e=>s.owned[e.id])},
-  {id:'survive_10',name:'Veteran Keeper',icon:'📅',desc:'Reach Day 10',reward:60,check:s=>s.day>=10},
-  {id:'survive_30',name:'Master Keeper',icon:'🏆',desc:'Reach Day 30',reward:200,check:s=>s.day>=30},
-  {id:'rich',name:'Deep Pockets',icon:'💰',desc:'Have 1000+ coins at once',reward:50,check:s=>s.coins>=1000},
-  {id:'collector',name:'Fish Collector',icon:'📚',desc:'Own 6 different species',reward:100,check:s=>new Set(s.fish.map(f=>f.id)).size>=6},
-  {id:'decorator',name:'Interior Designer',icon:'🏰',desc:'Place 5 decorations',reward:60,check:s=>(s.decos||[]).length>=5},
-  {id:'rare_catch',name:'Rare Catch!',icon:'⭐',desc:'Buy a rare fish',reward:75,check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='rare')},
-  {id:'upgrade_tank',name:'Moving Up',icon:'📦',desc:'Upgrade your tank',reward:50,check:s=>(s.tankSize||0)>=1},
-  {id:'cure_disease',name:'Doctor Fish',icon:'💊',desc:'Cure a disease',reward:30,check:s=>(s.totalCured||0)>=1},
-  {id:'feed_100',name:'Generous Soul',icon:'🍞',desc:'Feed fish 100 times',reward:50,check:s=>(s.totalFeeds||0)>=100},
-  {id:'earn_5000',name:'Tycoon',icon:'👑',desc:'Earn 5000 total coins',reward:150,check:s=>(s.totalEarned||0)>=5000},
-  {id:'no_death_10',name:'Perfect Record',icon:'🌟',desc:'10 days no deaths',reward:100,check:s=>(s.daysWithoutDeath||0)>=10},
-];
-const MOOD_EMOTES={happy:'♥',hungry:'…',sleepy:'zzZ',excited:'!!',lonely:'...',scared:'!?',playful:'~♪',content:'♪'};
+/* ═══════════════════════════════════════════════════════════
+   AUDIO ENGINE - Web Audio API procedural sounds + BGM
+═══════════════════════════════════════════════════════════ */
+let audioCtx=null,audioEnabled=true,bgmNode=null,bgmGain=null;
 
-function getFishMood(f){
-  if(f.hunger<25)return'hungry';if(f.health<40)return'scared';if(f.diseased)return'scared';
-  const hour=Math.floor((S.gameTime%1440)/60);if(hour>=21||hour<6)return'sleepy';
-  if(S.fish.filter(x=>x.id===f.id).length===1&&FISH_DEF.find(d=>d.id===f.id)?.personality==='shy')return'lonely';
-  if(f.hunger>80&&f.health>80)return'happy';if(avgW()>85&&f.health>70)return'content';
-  if(FISH_DEF.find(d=>d.id===f.id)?.personality==='playful')return'playful';return'content';
+function getAudio(){
+  if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}}
+  if(audioCtx.state==='suspended')audioCtx.resume();
+  return audioCtx;
 }
 
-let S={coins:500,owned:{},waterAdded:false,waterLevel:0,waterAnim:false,waterTested:false,testAnim:false,waterScore:{},fish:[],uid:0,day:1,plantAge:0,plantSeeds:[],decos:[],gameTime:8*60,poopLevel:0,lastRealTime:Date.now(),tankSize:0,xp:0,level:1,achievements:[],totalBred:0,totalCured:0,totalCleans:0,totalFeeds:0,totalEarned:0,totalSpent:0,totalFishBought:0,totalDeaths:0,daysWithoutDeath:0,maxDaysWithoutDeath:0,clickFeed:0};
+function playBubble(){
+  const ac=getAudio();if(!ac||!audioEnabled)return;
+  const o=ac.createOscillator();const g=ac.createGain();
+  o.connect(g);g.connect(ac.destination);
+  o.type='sine';o.frequency.setValueAtTime(800+Math.random()*400,ac.currentTime);
+  o.frequency.exponentialRampToValueAtTime(200,ac.currentTime+0.15);
+  g.gain.setValueAtTime(0.06,ac.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.15);
+  o.start();o.stop(ac.currentTime+0.15);
+}
 
-function sv(){try{localStorage.setItem('aq7',JSON.stringify(S));}catch(e){}}
-function ld(){try{const x=localStorage.getItem('aq7');if(x){Object.assign(S,JSON.parse(x));}}catch(e){}}
-function coin(n){if(n>0)S.totalEarned=(S.totalEarned||0)+n;if(n<0)S.totalSpent=(S.totalSpent||0)+Math.abs(n);S.coins+=n;document.getElementById('CD').textContent='Coins: '+S.coins;if(n>0)coinFlyAnim('+'+n);sv();checkAch();}
-function addXP(n){S.xp=(S.xp||0)+n;const need=S.level*100;if(S.xp>=need){S.xp-=need;S.level++;showAl('global','Level Up! Level '+S.level+'! +25 coins','ok');coin(25);}document.getElementById('LD').textContent='Lv. '+S.level+' ('+S.xp+' XP)';sv();}
-function coinFlyAnim(text){const el=document.createElement('div');el.className='coin-fly';el.textContent=text;const cd=document.getElementById('CD');const r=cd.getBoundingClientRect();el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top-5)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),1000);}
-function showAl(z,m,t){const el=document.getElementById('a-'+(z||'global'));if(!el)return;el.innerHTML='<div class="al '+t+'">'+m+'</div>';setTimeout(()=>{if(el)el.innerHTML='';},3000);}
-function getTankCap(){return TANK_SIZES[S.tankSize||0].capacity;}
-function avgW(){if(!S.waterTested)return 0;const v=Object.values(S.waterScore);return Math.round(v.reduce((a,b)=>a+b,0)/v.length);}
-function getWaterTemp(){return S.owned.heater2?27:S.owned.heater?25:18;}
+function playFeed(){
+  const ac=getAudio();if(!ac||!audioEnabled)return;
+  [0,0.05,0.1].forEach((d,i)=>{
+    const o=ac.createOscillator();const g=ac.createGain();
+    o.connect(g);g.connect(ac.destination);
+    o.type='sine';o.frequency.setValueAtTime(1200+i*200,ac.currentTime+d);
+    o.frequency.exponentialRampToValueAtTime(400,ac.currentTime+d+0.12);
+    g.gain.setValueAtTime(0.08,ac.currentTime+d);g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+d+0.12);
+    o.start(ac.currentTime+d);o.stop(ac.currentTime+d+0.12);
+  });
+}
 
-function checkAch(){ACHIEVEMENTS.forEach(a=>{if((S.achievements||[]).includes(a.id))return;if(a.check(S)){if(!S.achievements)S.achievements=[];S.achievements.push(a.id);coin(a.reward);addXP(20);showAchPopup(a);sv();}});}
-function showAchPopup(a){const p=document.getElementById('ach-popup');document.getElementById('ach-popup-icon').textContent=a.icon;document.getElementById('ach-popup-text').textContent='Achievement: '+a.name;document.getElementById('ach-popup-sub').textContent=a.desc+' (+'+a.reward+' coins)';p.classList.add('show');setTimeout(()=>p.classList.remove('show'),3500);}
+function playWaterFlow(){
+  const ac=getAudio();if(!ac||!audioEnabled)return;
+  const buf=ac.createBuffer(1,ac.sampleRate*0.4,ac.sampleRate);
+  const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.15;
+  const src=ac.createBufferSource();const g=ac.createGain();
+  const f=ac.createBiquadFilter();f.type='bandpass';f.frequency.value=600;f.Q.value=0.5;
+  src.buffer=buf;src.connect(f);f.connect(g);g.connect(ac.destination);
+  g.gain.setValueAtTime(0,ac.currentTime);g.gain.linearRampToValueAtTime(0.12,ac.currentTime+0.1);
+  g.gain.linearRampToValueAtTime(0,ac.currentTime+0.4);
+  src.start();src.stop(ac.currentTime+0.4);
+}
 
-function updateTankBadge(){const t=TANK_SIZES[S.tankSize||0];document.getElementById('tank-badge').textContent='Tank: '+t.name+' ('+t.capacity+' fish)';}
+function startBGM(){
+  const ac=getAudio();if(!ac)return;
+  if(bgmNode){bgmNode.stop();bgmNode=null;}
+  bgmGain=ac.createGain();bgmGain.gain.value=audioEnabled?0.18:0;bgmGain.connect(ac.destination);
 
-// Tabs
-document.getElementById('tab-bar').addEventListener('click',function(e){const btn=e.target.closest('.tab');if(!btn)return;const name=btn.dataset.tab;document.querySelectorAll('#app .sc').forEach(s=>s.classList.remove('v'));document.querySelectorAll('#app .tab').forEach(t=>t.classList.remove('on'));document.getElementById('s-'+name).classList.add('v');btn.classList.add('on');
-if(name==='setup')renderSetup();if(name==='water')renderWater();if(name==='market')renderMarket();if(name==='myfish')renderFishList();if(name==='deco')renderDeco();if(name==='upgrades')renderUpgrades();if(name==='achievements')renderAchievements();if(name==='stats')renderStats();});
+  const tempo=0.48;
+  const notes=[
+    [261,0],[294,1],[329,2],[349,3],[392,4],[349,5],[329,6],[294,7],
+    [261,8],[220,9],[246,10],[261,11],[294,12],[329,13],[349,14],[392,15],
+    [440,16],[392,17],[349,18],[329,19],[294,20],[261,21],[246,22],[220,23],
+    [196,24],[220,25],[246,26],[261,27],[294,28],[261,29],[220,30],[196,31],
+  ];
+  const bass=[
+    [65,0],[65,4],[73,8],[65,12],[55,16],[55,20],[65,24],[55,28],
+  ];
+  const totalBeats=32;
+  const loopDur=totalBeats*tempo;
 
-document.getElementById('btn-w').addEventListener('click',function(){if(S.waterAdded)return;S.waterAnim=true;S.waterLevel=0;sv();showAl('setup','Filling tank with water...','ok');renderSetup();});
-document.getElementById('btn-t').addEventListener('click',function(){if(!S.owned.testkit){showAl('water','Buy a test kit first!','warn');return;}if(!S.waterAdded){showAl('water','Add water first!','warn');return;}S.testAnim=true;sv();showAl('water','Analyzing water quality...','ok');setTimeout(()=>{S.waterTested=true;S.testAnim=false;recalcWater();sv();renderWater();if(!S.plantSeeds||!S.plantSeeds.length)initPlants();checkAch();},2500);});
-document.getElementById('btn-feed').addEventListener('click',function(){S.fish.forEach(f=>{f.hunger=Math.min(100,f.hunger+35);});S.totalFeeds=(S.totalFeeds||0)+S.fish.length;addXP(2);showAl('myfish','All fish fed!','ok');showFeedParticles();renderFishList();sv();checkAch();});
-document.getElementById('btn-clean').addEventListener('click',function(){if(S.coins<20){showAl('myfish','Not enough coins!','warn');return;}coin(-20);S.poopLevel=0;S.totalCleans=(S.totalCleans||0)+1;addXP(3);recalcWater();sv();showAl('myfish','Tank cleaned!','ok');renderFishList();checkAch();});
+  function scheduleLoop(startT){
+    notes.forEach(([freq,beat])=>{
+      const o=ac.createOscillator();const g=ac.createGain();
+      o.connect(g);g.connect(bgmGain);
+      o.type='triangle';o.frequency.value=freq;
+      const t=startT+beat*tempo;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.35,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.001,t+tempo*0.85);
+      o.start(t);o.stop(t+tempo);
+    });
+    bass.forEach(([freq,beat])=>{
+      const o=ac.createOscillator();const g=ac.createGain();
+      o.connect(g);g.connect(bgmGain);
+      o.type='square';o.frequency.value=freq;
+      const t=startT+beat*tempo;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.08,t+0.04);
+      g.gain.exponentialRampToValueAtTime(0.001,t+tempo*3.8);
+      o.start(t);o.stop(t+tempo*4);
+    });
+    for(let b=0;b<totalBeats;b+=2){
+      const o=ac.createOscillator();const g=ac.createGain();
+      o.connect(g);g.connect(bgmGain);
+      o.type='sine';o.frequency.value=523+Math.sin(b)*80;
+      const t=startT+b*tempo+tempo*0.5;
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.06,t+0.03);
+      g.gain.exponentialRampToValueAtTime(0.001,t+tempo*0.4);
+      o.start(t);o.stop(t+tempo*0.5);
+    }
+    setTimeout(()=>scheduleLoop(ac.currentTime+0.1),loopDur*1000-200);
+  }
+  scheduleLoop(ac.currentTime+0.1);
+}
 
-let tankRipples=[];
-document.getElementById('TC').addEventListener('click',function(e){if(!S.fish.length)return;S.clickFeed=(S.clickFeed||0)+1;if(S.clickFeed%3===0){S.fish.forEach(f=>{f.hunger=Math.min(100,f.hunger+5);});showAl('global','Tapped tank! Fish nibbled crumbs.','ok');addXP(1);}const rect=this.getBoundingClientRect();tankRipples.push({x:e.clientX-rect.left,y:e.clientY-rect.top,r:0,alpha:0.5});});
+function toggleAudio(){
+  audioEnabled=!audioEnabled;
+  const btn=document.getElementById('audio-btn');
+  btn.textContent=audioEnabled?'♪ ON':'♪ OFF';
+  btn.classList.toggle('on',audioEnabled);
+  if(bgmGain)bgmGain.gain.value=audioEnabled?0.18:0;
+  if(audioEnabled)startBGM();
+}
 
-function showFeedParticles(){const tank=document.querySelector('.tank-outer');for(let i=0;i<8;i++){const p=document.createElement('div');p.className='feed-particle';p.textContent='•';p.style.color='#FFB300';p.style.left=(15+Math.random()*70)+'%';p.style.top='5px';p.style.animationDelay=(Math.random()*0.5)+'s';tank.appendChild(p);setTimeout(()=>p.remove(),1700);}}
+/* ═══════════════════════════════════════════════════════════
+   DATA DEFINITIONS
+═══════════════════════════════════════════════════════════ */
+const FISH_DEF=[
+  {id:'guppy',    name:'Guppy',        price:15,  desc:'Hardy & colorful',  temp:'24-28°C',hardiness:5,breedable:true, personality:'curious',    poop:0.3, rarity:'common'},
+  {id:'betta',    name:'Betta',         price:30,  desc:'Flowing fins',      temp:'26-30°C',hardiness:3,breedable:false,personality:'territorial', poop:0.25,rarity:'common'},
+  {id:'neon',     name:'Neon Tetra',    price:12,  desc:'Electric stripe',   temp:'22-26°C',hardiness:4,breedable:true, personality:'shy',        poop:0.2, rarity:'common'},
+  {id:'goldfish', name:'Goldfish',      price:20,  desc:'Classic round body',temp:'18-22°C',hardiness:5,breedable:true, personality:'greedy',     poop:0.5, rarity:'common'},
+  {id:'angel',    name:'Angelfish',     price:45,  desc:'Tall diamond shape',temp:'25-29°C',hardiness:3,breedable:true, personality:'proud',      poop:0.3, rarity:'uncommon'},
+  {id:'pleco',    name:'Pleco',         price:35,  desc:'Flat algae eater',  temp:'23-27°C',hardiness:5,breedable:false,personality:'peaceful',   poop:0.2, rarity:'common'},
+  {id:'discus',   name:'Discus',        price:80,  desc:'Round royal fish',  temp:'28-32°C',hardiness:2,breedable:true, personality:'sensitive',  poop:0.35,rarity:'uncommon'},
+  {id:'zebra',    name:'Zebra Danio',   price:10,  desc:'Bold black stripes',temp:'18-24°C',hardiness:5,breedable:true, personality:'playful',   poop:0.2, rarity:'common'},
+  {id:'clown',    name:'Clownfish',     price:60,  desc:'Orange white bands',temp:'24-28°C',hardiness:3,breedable:false,personality:'curious',    poop:0.25,rarity:'uncommon'},
+  {id:'arowana',  name:'Arowana',       price:200, desc:'Golden dragon fish', temp:'26-30°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.4, rarity:'rare'},
+  {id:'axolotl',  name:'Axolotl',       price:150, desc:'Pink feathery gills',temp:'16-20°C',hardiness:3,breedable:true, personality:'curious',   poop:0.3, rarity:'rare'},
+  {id:'seahorse', name:'Seahorse',      price:120, desc:'Upright slow mover',temp:'22-26°C',hardiness:2,breedable:true, personality:'shy',        poop:0.15,rarity:'rare'},
+  {id:'manta',    name:'Manta Ray',     price:350, desc:'Gliding giant ray',  temp:'24-28°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.3, rarity:'super_rare'},
+  {id:'dragon',   name:'Dragon Goby',   price:280, desc:'Fierce eel-like',   temp:'25-29°C',hardiness:2,breedable:false,personality:'territorial', poop:0.35,rarity:'super_rare'},
+];
 
-function recalcWater(){const pp=Math.round(S.poopLevel*0.4);const fb=(S.owned.filter2?35:S.owned.filter?25:0);const pb=Math.min(15,Math.floor((S.plantSeeds||[]).length*2));const uv=S.owned.uv?8:0;
-S.waterScore={ph:Math.min(100,Math.max(0,70+(S.owned.dechlorinator?15:0)+(S.owned.filter||S.owned.filter2?5:0)+pb-pp+uv)),ammonia:Math.min(100,Math.max(0,60+fb+pb-pp*1.5+uv)),oxygen:Math.min(100,Math.max(0,55+(S.owned.airpump?20:0)+pb)),temp:Math.min(100,Math.max(0,60+(S.owned.heater2?38:S.owned.heater?30:0))),clarity:Math.min(100,Math.max(0,50+fb+(S.owned.gravel?15:0)-pp+uv))};
-Object.keys(S.waterScore).forEach(k=>{S.waterScore[k]=Math.round(S.waterScore[k]);});}
+const PLANTS_DEF=[
+  {id:'vallis',   name:'Vallisneria',   price:20, desc:'Tall ribbon grass',  rarity:'common'},
+  {id:'moss',     name:'Java Moss',      price:15, desc:'Fluffy ground cover',rarity:'common'},
+  {id:'amazon',   name:'Amazon Sword',   price:25, desc:'Wide dark leaves',   rarity:'common'},
+  {id:'cabomba',  name:'Cabomba',        price:22, desc:'Feathery fan plant', rarity:'common'},
+  {id:'crypt',    name:'Cryptocoryne',   price:28, desc:'Rosette brown-green',rarity:'common'},
+  {id:'hornwort', name:'Hornwort',       price:18, desc:'Pine-like stems',    rarity:'common'},
+  {id:'anubias',  name:'Anubias',        price:30, desc:'Dark waxy leaves',   rarity:'common'},
+  {id:'lotus',    name:'Red Lotus',      price:35, desc:'Deep red rosette',   rarity:'uncommon'},
+  {id:'tiger',    name:'Tiger Lotus',    price:40, desc:'Spotted purple-red', rarity:'uncommon'},
+  {id:'buce',     name:'Bucephalandra',  price:55, desc:'Jewel-like leaves',  rarity:'rare'},
+  {id:'pogostemon',name:'Pogostemon',    price:60, desc:'Pink stem plant',    rarity:'rare'},
+  {id:'utricularia',name:'Utricularia',  price:80, desc:'Carnivorous grass!', rarity:'super_rare'},
+  {id:'marimo',   name:'Marimo Ball',    price:90, desc:'Rare moss sphere',   rarity:'super_rare'},
+];
 
-function renderHUD(){const avg=avgW();const wq=S.waterTested?(avg>=80?'Excellent':avg>=60?'OK':'Poor'):'Unknown';const wc=!S.waterTested?'':avg>=80?'good':avg>=60?'warn':'bad';const cap=getTankCap();
-document.getElementById('HUD').innerHTML='<div class="hud-stat '+wc+'"><b>'+wq+'</b>Water</div><div class="hud-stat"><b>'+getWaterTemp()+'°C</b>Temp</div><div class="hud-stat"><b>'+(S.waterAdded?100:Math.round(S.waterLevel||0))+'%</b>Level</div><div class="hud-stat"><b>'+S.fish.length+'/'+cap+'</b>Fish</div><div class="hud-stat '+(S.poopLevel>50?'bad':S.poopLevel>25?'warn':'')+'"><b>'+Math.round(S.poopLevel)+'%</b>Waste</div>';}
+const DECO_DEF=[
+  {id:'rock1',    name:'Smooth Rock',    price:25, desc:'Natural stone',      rarity:'common'},
+  {id:'rock2',    name:'Dragon Stone',   price:40, desc:'Jagged peak rock',   rarity:'common'},
+  {id:'driftwood',name:'Driftwood',      price:35, desc:'Sunken aged wood',   rarity:'common'},
+  {id:'coral1',   name:'Brain Coral',    price:50, desc:'Pink brain coral',   rarity:'common'},
+  {id:'coral2',   name:'Fan Coral',      price:45, desc:'Cyan fan coral',     rarity:'common'},
+  {id:'treasure', name:'Treasure Chest', price:30, desc:'Classic chest',      rarity:'common'},
+  {id:'castle',   name:'Mini Castle',    price:55, desc:'Fairy tale vibes',   rarity:'common'},
+  {id:'shell',    name:'Giant Shell',    price:20, desc:'Ocean keepsake',     rarity:'common'},
+  {id:'anchor',   name:'Old Anchor',     price:60, desc:'Rustic shipwreck',   rarity:'common'},
+  {id:'volcano',  name:'Mini Volcano',   price:70, desc:'Bubble eruptions',   rarity:'common'},
+  {id:'statue',   name:'Buddha Statue',  price:120,desc:'Rare ancient statue',rarity:'rare'},
+  {id:'pagoda',   name:'Stone Pagoda',   price:150,desc:'Japanese pagoda',    rarity:'rare'},
+  {id:'mermaid',  name:'Mermaid Figure', price:180,desc:'Mystical mermaid',   rarity:'super_rare'},
+  {id:'sunken',   name:'Sunken Ship',    price:200,desc:'Shipwreck ruin',     rarity:'super_rare'},
+  {id:'crystal',  name:'Crystal Cluster',price:250,desc:'Glowing crystals',   rarity:'super_rare'},
+];
 
-function renderSetup(){document.getElementById('steps').innerHTML=STEPS.map(s=>{const have=s.ids.some(id=>S.owned[id]);return'<div class="row"><div class="lbl" style="color:'+(have?'#4ade80':'var(--muted)')+';">'+(have?'✓ ':'○ ')+s.label+'</div><div style="font-size:12px;color:'+(have?'#4ade80':'#ff6b6b')+'">'+(have?'Ready':'Missing')+'</div></div>';}).join('');const ok=STEPS.every(s=>s.ids.some(id=>S.owned[id]));const btn=document.getElementById('btn-w');btn.disabled=!ok||S.waterAdded;btn.textContent=S.waterAdded?'Water Added!':'Add Water';}
+const EQ=[
+  {id:'filter',   name:'Filter',         icon:'⚙', price:60,  desc:'Cleans water'},
+  {id:'heater',   name:'Heater',         icon:'🌡', price:50,  desc:'Stable temp'},
+  {id:'gravel',   name:'Gravel & Sand',  icon:'◼', price:30,  desc:'Natural floor'},
+  {id:'airpump',  name:'Air Pump',       icon:'〇', price:35,  desc:'O₂ bubbles'},
+  {id:'light',    name:'LED Light',      icon:'✦', price:45,  desc:'Day/night'},
+  {id:'dechlorinator',name:'Dechlorinator',icon:'❋',price:20, desc:'Safe water'},
+  {id:'heater2',  name:'Pro Heater',     icon:'🔥', price:90,  desc:'Perfect temp'},
+  {id:'filter2',  name:'Pro Filter',     icon:'⚙', price:120, desc:'Superior filter'},
+  {id:'autofeeder',name:'Auto Feeder',   icon:'⊛', price:100, desc:'Daily feed'},
+  {id:'uv',       name:'UV Sterilizer',  icon:'☀', price:80,  desc:'Reduce disease'},
+];
 
-function renderWater(){const btn=document.getElementById('btn-t');if(!S.waterAdded){document.getElementById('wstats').innerHTML='<div style="font-size:13px;color:var(--muted)">Set up tank and add water first.</div>';btn.disabled=true;return;}btn.disabled=false;if(!S.waterTested){document.getElementById('wstats').innerHTML='<div style="font-size:13px;color:var(--muted)">Press Run Water Test to check quality.</div>';return;}const ws=S.waterScore;const lbls={ph:'pH level',ammonia:'Ammonia',oxygen:'Oxygen',temp:'Temperature',clarity:'Clarity'};const col=v=>v>=80?'#4ade80':v>=55?'#FFB300':'#ff6b6b';document.getElementById('wstats').innerHTML=Object.keys(ws).map(k=>'<div class="row"><div class="lbl">'+lbls[k]+'</div><div style="flex:1"><div class="bar"><div class="fill" style="width:'+ws[k]+'%;background:'+col(ws[k])+'"></div></div></div><div class="val" style="color:'+col(ws[k])+'">'+ws[k]+'</div></div>').join('');const avg=avgW();showAl('water',avg>=80?'Excellent!':avg>=60?'Acceptable. Monitor closely.':'Poor water!',avg>=80?'ok':avg>=60?'warn':'bad');}
+const STEPS=[
+  {label:'Filter',     ids:['filter','filter2']},
+  {label:'Heater',     ids:['heater','heater2']},
+  {label:'Gravel/Sand',ids:['gravel']},
+  {label:'Dechlorinator',ids:['dechlorinator']},
+];
 
-function renderShop(){document.getElementById('shop-g').innerHTML=EQ.map(e=>{const o=S.owned[e.id];return'<div class="item"><div style="font-size:26px;margin-bottom:4px;color:var(--gold)">'+e.icon+'</div><div class="iname">'+e.name+'</div><div class="idesc">'+e.desc+'</div><div class="iprice">'+e.price+' coins</div>'+(o?'<div class="owned">✓ Owned</div>':'<button data-eq="'+e.id+'" '+(S.coins<e.price?'disabled':'')+'>Buy</button>')+'</div>';}).join('');document.getElementById('shop-g').querySelectorAll('[data-eq]').forEach(btn=>{btn.addEventListener('click',function(){const id=this.dataset.eq;const e=EQ.find(x=>x.id===id);if(!e||S.owned[id]||S.coins<e.price)return;coin(-e.price);S.owned[id]=true;addXP(10);sv();if(S.waterTested)recalcWater();showAl('shop','Got '+e.name+'!','ok');renderShop();renderHUD();checkAch();});});}
+const TANK_SIZES=[
+  {id:'small', name:'Small',  capacity:5,  cost:0},
+  {id:'medium',name:'Medium', capacity:12, cost:200},
+  {id:'large', name:'Large',  capacity:22, cost:500},
+  {id:'mega',  name:'Mega',   capacity:35, cost:1200},
+];
 
-function renderDeco(){const grid=document.getElementById('deco-g');grid.innerHTML='';DECO_DEF.forEach(d=>{const placed=(S.decos||[]).some(x=>x.id===d.id);const div=document.createElement('div');div.className='item';div.innerHTML='<div style="height:36px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;">'+drawDecoPreview(d.id)+'</div><div class="iname">'+d.name+'</div><div class="idesc">'+d.desc+'</div><div class="iprice">'+d.price+' coins</div>'+(placed?'<div class="owned">✓ Placed</div>':'<button data-deco="'+d.id+'" '+(S.coins<d.price?'disabled':'')+'>Buy & Place</button>');grid.appendChild(div);});grid.querySelectorAll('[data-deco]').forEach(btn=>{btn.addEventListener('click',function(){const id=this.dataset.deco;const d=DECO_DEF.find(x=>x.id===id);if(!d||S.coins<d.price)return;coin(-d.price);addXP(5);if(!S.decos)S.decos=[];S.decos.push({id,x:Math.random()*0.8+0.05});sv();showAl('deco',d.name+' placed!','ok');renderDeco();checkAch();});});}
+const DISEASES=[
+  {id:'ich',     name:'White Spot',      cure:'Ich Medicine',   cureCost:40,damage:12},
+  {id:'fin_rot', name:'Fin Rot',         cure:'Antibiotics',    cureCost:35,damage:8},
+  {id:'bloat',   name:'Bloat',           cure:'Medicated Food', cureCost:30,damage:10},
+  {id:'fungal',  name:'Fungal Infection',cure:'Antifungal',     cureCost:45,damage:15},
+];
 
-function drawDecoPreview(id){const c=document.createElement('canvas');c.width=32;c.height=32;c.style.width='32px';c.style.height='32px';c.style.imageRendering='pixelated';drawDecoSprite(c.getContext('2d'),id,0,0,2);return c.outerHTML;}
+const NAMES=['Bubbles','Nemo','Dory','Flash','Goldie','Zigzag','Pixel','Splash','Finn','Pearl','Luna','Comet','Mochi','Pebble','Ripple','Tide','Coral','Shimmer','Dart','Echo','Neptune','Azure','Biscuit','Tofu','Mango','Storm','Poppy','Whisker','Noodle','Poseidon'];
 
-function renderMarket(){if(!S.waterTested||avgW()<60){document.getElementById('fish-g').innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">Pass water quality test (60+).</div>';document.getElementById('market-note').textContent='';return;}const cap=getTankCap();const full=S.fish.length>=cap;document.getElementById('market-note').textContent=full?'Tank full! Upgrade for more room.':'Tank: '+S.fish.length+'/'+cap+'. Rare fish appear randomly!';
-let avail=FISH_DEF.filter(f=>f.rarity!=='rare');const rares=FISH_DEF.filter(f=>f.rarity==='rare');if(!S._marketRares){S._marketRares=[];rares.forEach(r=>{if(Math.random()<0.3)S._marketRares.push(r.id);});}avail=[...avail,...rares.filter(r=>S._marketRares.includes(r.id))];
-const grid=document.getElementById('fish-g');grid.innerHTML='';avail.forEach(f=>{const div=document.createElement('div');div.className='item';const c=makeFishCanvas(f.id,34);div.appendChild(c);const isR=f.rarity==='rare';div.innerHTML+=(isR?'<div class="rare-tag">★ RARE</div>':'')+'<div class="iname">'+f.name+'</div><div class="idesc">'+f.desc+'</div><div style="font-size:10px;color:var(--muted);margin-bottom:3px">'+f.temp+'</div><div style="font-size:10px;color:#7986CB;margin-bottom:4px">'+f.personality+'</div><div class="iprice">'+f.price+' coins</div><button data-fish="'+f.id+'" '+(S.coins<f.price||full?'disabled':'')+'>Buy</button>';grid.appendChild(div);});
-grid.querySelectorAll('[data-fish]').forEach(btn=>{btn.addEventListener('click',function(){const id=this.dataset.fish;const cat=FISH_DEF.find(f=>f.id===id);if(!cat||S.coins<cat.price||S.fish.length>=cap)return;coin(-cat.price);const name=NAMES[Math.floor(Math.random()*NAMES.length)];S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});S.totalFishBought=(S.totalFishBought||0)+1;addXP(5);sv();showAl('market',name+' the '+cat.name+' added!','ok');renderMarket();renderHUD();checkAch();});});}
+const MOOD_EMOTES={happy:'♥',hungry:'…',sleepy:'zzZ',lonely:'...',scared:'!?',playful:'~',content:'♪'};
 
-function renderFishList(){const list=document.getElementById('fish-list');if(!S.fish.length){list.innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">No fish yet. Visit Fish Market!</div>';return;}const col=v=>v>70?'#4ade80':v>40?'#FFB300':'#ff6b6b';list.innerHTML='';
-S.fish.forEach(f=>{const div=document.createElement('div');div.className='fcard';div.appendChild(makeFishCanvas(f.id,28));const info=document.createElement('div');info.className='finfo';const dis=f.disease?DISEASES.find(d=>d.id===f.disease):null;const mood=getFishMood(f);
-info.innerHTML='<div class="fname">'+f.name+' <span style="font-size:10px;color:var(--muted)">'+f.id+'</span> <span style="font-size:10px;">'+(MOOD_EMOTES[mood]||'')+'</span></div><div><span class="ftag ftag-'+(f.stage==='baby'?'baby':'adult')+'">'+f.stage+'</span>'+(f.diseased&&dis?'<span class="ftag ftag-sick">'+dis.name+'</span>':'')+'<span class="ftag ftag-age">day '+f.age+'</span><span class="ftag ftag-mood">'+mood+'</span></div><div class="row" style="margin-top:5px;margin-bottom:0"><div class="lbl" style="width:50px;font-size:11px">HP</div><div style="flex:1"><div class="bar"><div class="fill" style="width:'+f.health+'%;background:'+col(f.health)+'"></div></div></div><div class="val" style="color:'+col(f.health)+';font-size:10px">'+f.health+'</div></div><div class="row" style="margin-bottom:0"><div class="lbl" style="width:50px;font-size:11px">Hunger</div><div style="flex:1"><div class="bar"><div class="fill" style="width:'+f.hunger+'%;background:'+col(f.hunger)+'"></div></div></div><div class="val" style="color:'+col(f.hunger)+';font-size:10px">'+f.hunger+'</div></div>';
-div.appendChild(info);const btns=document.createElement('div');btns.className='fbtns';
-const fb=document.createElement('button');fb.textContent='Feed';fb.addEventListener('click',function(e){e.stopPropagation();f.hunger=Math.min(100,f.hunger+40);S.totalFeeds=(S.totalFeeds||0)+1;addXP(1);sv();renderFishList();showAl('myfish',f.name+' fed!','ok');checkAch();});btns.appendChild(fb);
-if(f.diseased&&dis){const tb=document.createElement('button');tb.textContent='Treat ('+dis.cureCost+')';tb.addEventListener('click',function(e){e.stopPropagation();if(S.coins<dis.cureCost){showAl('myfish','Not enough coins!','warn');return;}coin(-dis.cureCost);f.diseased=false;f.disease=null;f.health=Math.min(100,f.health+25);S.totalCured=(S.totalCured||0)+1;addXP(5);sv();renderFishList();showAl('myfish',f.name+' cured!','ok');checkAch();});btns.appendChild(tb);}
-const rb=document.createElement('button');rb.textContent='Rename';rb.addEventListener('click',function(e){e.stopPropagation();const nn=prompt('New name for '+f.name+':',f.name);if(nn&&nn.trim()){f.name=nn.trim();sv();renderFishList();}});btns.appendChild(rb);
-div.appendChild(btns);div.addEventListener('click',function(){f.hunger=Math.min(100,f.hunger+15);S.totalFeeds=(S.totalFeeds||0)+1;showAl('myfish','Tapped '+f.name+'! +15 hunger','ok');sv();renderFishList();});list.appendChild(div);});}
+const PERSONALITY_BEHAVIOR={
+  curious:    {speedMult:1.1,changeDir:0.004,foodMult:1.0},
+  territorial:{speedMult:1.2,changeDir:0.002,foodMult:1.0,aggro:true},
+  shy:        {speedMult:0.85,changeDir:0.003,foodMult:0.8,flees:true},
+  greedy:     {speedMult:1.3,changeDir:0.003,foodMult:1.5},
+  proud:      {speedMult:1.0,changeDir:0.002,foodMult:1.0},
+  peaceful:   {speedMult:0.9,changeDir:0.003,foodMult:1.0},
+  sensitive:  {speedMult:0.9,changeDir:0.002,foodMult:0.9,flees:true},
+  playful:    {speedMult:1.2,changeDir:0.006,foodMult:1.1},
+  majestic:   {speedMult:0.8,changeDir:0.001,foodMult:0.8},
+};
 
-function renderUpgrades(){const list=document.getElementById('upgrade-list');let html='';TANK_SIZES.forEach((t,i)=>{const cur=i===(S.tankSize||0);const bought=i<=(S.tankSize||0);const next=i===(S.tankSize||0)+1;
-html+='<div class="upgrade-card" style="'+(cur?'border-color:var(--green);':'')+'"><div class="up-icon">'+(i===0?'🏠':i===1?'🏡':i===2?'🏘':'🏰')+'</div><div class="up-info"><div class="up-name">'+t.name+' Tank <span style="font-size:11px;color:var(--muted)">('+t.capacity+' fish)</span></div>'+(cur?'<div style="font-size:11px;color:var(--green);margin-top:2px;">✓ Current</div>':bought?'<div style="font-size:11px;color:var(--green);margin-top:2px;">✓ Unlocked</div>':'<div class="up-price">'+t.cost+' coins</div>')+'</div>'+(next&&!bought?'<button class="btn" style="font-size:12px;padding:6px 12px;" data-upgrade="'+i+'" '+(S.coins<t.cost?'disabled':'')+'>Upgrade</button>':'')+'</div>';});
-list.innerHTML=html;list.querySelectorAll('[data-upgrade]').forEach(btn=>{btn.addEventListener('click',function(){const idx=parseInt(this.dataset.upgrade);const t=TANK_SIZES[idx];if(S.coins<t.cost)return;coin(-t.cost);S.tankSize=idx;addXP(30);sv();showAl('upgrades','Tank upgraded to '+t.name+'!','ok');renderUpgrades();updateTankBadge();renderHUD();checkAch();});});}
+const ACHIEVEMENTS=[
+  {id:'first_fish',  name:'First Splash',   icon:'🐟',desc:'Buy your first fish',   reward:25, check:s=>s.fish.length>=1},
+  {id:'five_fish',   name:'School\'s In',   icon:'🐠',desc:'Own 5 fish at once',     reward:50, check:s=>s.fish.length>=5},
+  {id:'ten_fish',    name:'Crowd Control',  icon:'🎏',desc:'Own 10 fish at once',    reward:100,check:s=>s.fish.length>=10},
+  {id:'first_breed', name:'Proud Parent',   icon:'🥚',desc:'Breed a baby fish',      reward:40, check:s=>(s.totalBred||0)>=1},
+  {id:'water_perfect',name:'Crystal Clear', icon:'💧',desc:'90+ water quality',      reward:30, check:s=>avgW()>=90},
+  {id:'survive_10',  name:'Veteran',        icon:'📅',desc:'Reach Day 10',           reward:60, check:s=>s.day>=10},
+  {id:'survive_30',  name:'Master Keeper',  icon:'🏆',desc:'Reach Day 30',           reward:200,check:s=>s.day>=30},
+  {id:'rich',        name:'Deep Pockets',   icon:'💰',desc:'Have 1000+ coins',       reward:50, check:s=>s.coins>=1000},
+  {id:'collector',   name:'Collector',      icon:'📚',desc:'6 different species',    reward:100,check:s=>new Set(s.fish.map(f=>f.id)).size>=6},
+  {id:'decorator',   name:'Designer',       icon:'🏰',desc:'Place 5 decorations',    reward:60, check:s=>(s.decos||[]).length>=5},
+  {id:'rare_catch',  name:'Rare Catch',     icon:'⭐',desc:'Buy a rare fish',         reward:75, check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='rare')},
+  {id:'super_rare',  name:'Legend',         icon:'👑',desc:'Buy a super rare fish',   reward:200,check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='super_rare')},
+  {id:'feed_100',    name:'Generous Soul',  icon:'🍞',desc:'Feed fish 100 times',    reward:50, check:s=>(s.totalFeeds||0)>=100},
+  {id:'earn_5000',   name:'Tycoon',         icon:'👛',desc:'Earn 5000 total coins',   reward:150,check:s=>(s.totalEarned||0)>=5000},
+  {id:'no_death_10', name:'Perfect Record', icon:'🌟',desc:'10 days no deaths',       reward:100,check:s=>(s.daysWithoutDeath||0)>=10},
+];
 
-function renderAchievements(){const done=S.achievements||[];document.getElementById('ach-list').innerHTML=ACHIEVEMENTS.map(a=>{const d=done.includes(a.id);return'<div class="ach-card '+(d?'done':'')+'"><div class="ach-icon">'+a.icon+'</div><div class="ach-info"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div><div class="ach-reward">Reward: '+a.reward+' coins + 20 XP</div></div>'+(d?'<div class="ach-check">✓</div>':'')+'</div>';}).join('');}
-
-function renderStats(){const avg=S.fish.length?Math.round(S.fish.reduce((a,f)=>a+f.health,0)/S.fish.length):0;const ah=S.fish.length?Math.round(S.fish.reduce((a,f)=>a+f.hunger,0)/S.fish.length):0;
-document.getElementById('stats-content').innerHTML='<div class="stat-box"><div class="stat-item"><div class="stat-val">'+S.day+'</div><div class="stat-label">Days</div></div><div class="stat-item"><div class="stat-val">'+S.fish.length+'</div><div class="stat-label">Fish Alive</div></div><div class="stat-item"><div class="stat-val">'+new Set(S.fish.map(f=>f.id)).size+'</div><div class="stat-label">Species</div></div><div class="stat-item"><div class="stat-val">'+(S.totalFishBought||0)+'</div><div class="stat-label">Bought</div></div><div class="stat-item"><div class="stat-val">'+(S.totalBred||0)+'</div><div class="stat-label">Bred</div></div><div class="stat-item"><div class="stat-val">'+(S.totalDeaths||0)+'</div><div class="stat-label">Deaths</div></div><div class="stat-item"><div class="stat-val">'+(S.totalCured||0)+'</div><div class="stat-label">Cured</div></div><div class="stat-item"><div class="stat-val">'+(S.totalFeeds||0)+'</div><div class="stat-label">Fed</div></div><div class="stat-item"><div class="stat-val">'+(S.totalEarned||0)+'</div><div class="stat-label">Earned</div></div><div class="stat-item"><div class="stat-val">'+(S.totalSpent||0)+'</div><div class="stat-label">Spent</div></div><div class="stat-item"><div class="stat-val">'+avg+'</div><div class="stat-label">Avg Health</div></div><div class="stat-item"><div class="stat-val">'+(S.maxDaysWithoutDeath||0)+'</div><div class="stat-label">Best Streak</div></div></div><div class="btn-row" style="margin-top:12px;"><button class="btn" style="background:var(--red);font-size:12px;" id="btn-reset">Reset Game</button></div>';
-document.getElementById('btn-reset').addEventListener('click',function(){if(confirm('Reset all progress?')){localStorage.removeItem('aq7');location.reload();}});}
-
-// ---- SPRITES ----
+/* ═══════════════════════════════════════════════════════════
+   PIXEL SPRITES — 3x more detailed fish
+═══════════════════════════════════════════════════════════ */
 function getSprite(id){
 const D={
-guppy:{w:13,h:8,p:[[2,1,'#FF6F00'],[3,1,'#FF8F00'],[4,1,'#FFB300'],[5,1,'#FFB300'],[6,1,'#FF8F00'],[1,2,'#FF6F00'],[2,2,'#FFB300'],[3,2,'#FFD54F'],[4,2,'#FFE082'],[5,2,'#FFD54F'],[6,2,'#FFB300'],[7,2,'#FF8F00'],[8,2,'#FF6F00'],[0,3,'#E65100'],[1,3,'#FF8F00'],[2,3,'#FFD54F'],[3,3,'#FFF9C4'],[4,3,'#FFFFFF'],[5,3,'#FFF9C4'],[6,3,'#FFD54F'],[7,3,'#FFB300'],[8,3,'#FF8F00'],[9,3,'#FF6F00'],[10,3,'#E65100'],[11,3,'#BF360C'],[1,4,'#FF6F00'],[2,4,'#FFB300'],[3,4,'#FFD54F'],[4,4,'#FFE082'],[5,4,'#FFD54F'],[6,4,'#FFB300'],[7,4,'#FF8F00'],[8,4,'#FF6F00'],[2,5,'#FF6F00'],[3,5,'#FF8F00'],[4,5,'#FFB300'],[5,5,'#FFB300'],[6,5,'#FF8F00'],[1,3,'#1a1a1a'],[9,2,'#fff'],[9,3,'#fff']]},
-neon:{w:12,h:7,p:[[1,1,'#1565C0'],[2,1,'#1565C0'],[3,1,'#1976D2'],[4,1,'#1976D2'],[5,1,'#1565C0'],[0,2,'#1976D2'],[1,2,'#42A5F5'],[2,2,'#90CAF9'],[3,2,'#90CAF9'],[4,2,'#42A5F5'],[5,2,'#1976D2'],[6,2,'#1565C0'],[7,2,'#0D47A1'],[0,3,'#FF1744'],[1,3,'#FF1744'],[2,3,'#FF5252'],[3,3,'#BBDEFB'],[4,3,'#90CAF9'],[5,3,'#42A5F5'],[6,3,'#1976D2'],[7,3,'#1565C0'],[8,3,'#0D47A1'],[9,3,'#082040'],[10,3,'#082040'],[0,4,'#1976D2'],[1,4,'#42A5F5'],[2,4,'#90CAF9'],[3,4,'#90CAF9'],[4,4,'#42A5F5'],[5,4,'#1976D2'],[6,4,'#1565C0'],[7,4,'#0D47A1'],[1,5,'#1565C0'],[2,5,'#1565C0'],[3,5,'#1976D2'],[4,5,'#1976D2'],[5,5,'#1565C0'],[0,3,'#1a1a1a'],[8,2,'#fff'],[8,3,'#fff']]},
-betta:{w:15,h:9,p:[[3,0,'#6A1B9A'],[4,0,'#7B1FA2'],[5,0,'#8E24AA'],[2,1,'#7B1FA2'],[3,1,'#AB47BC'],[4,1,'#CE93D8'],[5,1,'#E1BEE7'],[6,1,'#CE93D8'],[7,1,'#AB47BC'],[1,2,'#8E24AA'],[2,2,'#CE93D8'],[3,2,'#F3E5F5'],[4,2,'#FFFFFF'],[5,2,'#F3E5F5'],[6,2,'#CE93D8'],[7,2,'#9C27B0'],[8,2,'#7B1FA2'],[9,2,'#6A1B9A'],[1,3,'#9C27B0'],[2,3,'#E1BEE7'],[3,3,'#F3E5F5'],[4,3,'#FFFFFF'],[5,3,'#F3E5F5'],[6,3,'#E1BEE7'],[7,3,'#CE93D8'],[8,3,'#AB47BC'],[9,3,'#8E24AA'],[10,3,'#7B1FA2'],[11,3,'#6A1B9A'],[12,3,'#CE93D8'],[13,3,'#AB47BC'],[1,4,'#8E24AA'],[2,4,'#CE93D8'],[3,4,'#F3E5F5'],[4,4,'#FFFFFF'],[5,4,'#F3E5F5'],[6,4,'#CE93D8'],[7,4,'#9C27B0'],[8,4,'#7B1FA2'],[9,4,'#6A1B9A'],[2,5,'#7B1FA2'],[3,5,'#AB47BC'],[4,5,'#CE93D8'],[5,5,'#E1BEE7'],[6,5,'#CE93D8'],[7,5,'#AB47BC'],[3,6,'#6A1B9A'],[4,6,'#7B1FA2'],[5,6,'#8E24AA'],[10,2,'#CE93D8'],[11,2,'#AB47BC'],[10,4,'#CE93D8'],[11,4,'#AB47BC'],[1,3,'#1a1a1a'],[9,2,'#fff']]},
-goldfish:{w:13,h:9,p:[[2,1,'#E65100'],[3,1,'#FF6F00'],[4,1,'#FF8F00'],[5,1,'#FF8F00'],[6,1,'#FF6F00'],[1,2,'#FF6F00'],[2,2,'#FF8F00'],[3,2,'#FFA000'],[4,2,'#FFB300'],[5,2,'#FFA000'],[6,2,'#FF8F00'],[7,2,'#FF6F00'],[0,3,'#FF6F00'],[1,3,'#FFA000'],[2,3,'#FFD54F'],[3,3,'#FFE082'],[4,3,'#FFE082'],[5,3,'#FFD54F'],[6,3,'#FFA000'],[7,3,'#FF8F00'],[8,3,'#E65100'],[0,4,'#FF8F00'],[1,4,'#FFB300'],[2,4,'#FFE082'],[3,4,'#FFFFFF'],[4,4,'#FFFFFF'],[5,4,'#FFE082'],[6,4,'#FFD54F'],[7,4,'#FFA000'],[8,4,'#FF8F00'],[9,4,'#E65100'],[10,4,'#BF360C'],[11,4,'#E65100'],[0,5,'#FF6F00'],[1,5,'#FFA000'],[2,5,'#FFD54F'],[3,5,'#FFE082'],[4,5,'#FFE082'],[5,5,'#FFD54F'],[6,5,'#FFA000'],[7,5,'#FF8F00'],[8,5,'#E65100'],[1,6,'#FF6F00'],[2,6,'#FF8F00'],[3,6,'#FFA000'],[4,6,'#FFB300'],[5,6,'#FFA000'],[6,6,'#FF8F00'],[7,6,'#FF6F00'],[2,7,'#E65100'],[3,7,'#FF6F00'],[4,7,'#FF8F00'],[5,7,'#FF8F00'],[6,7,'#FF6F00'],[0,4,'#1a1a1a'],[9,3,'#fff'],[9,4,'#fff']]},
-angel:{w:10,h:14,p:[[4,0,'#37474F'],[5,0,'#455A64'],[3,1,'#455A64'],[4,1,'#78909C'],[5,1,'#90A4AE'],[6,1,'#546E7A'],[2,2,'#546E7A'],[3,2,'#90A4AE'],[4,2,'#B0BEC5'],[5,2,'#CFD8DC'],[6,2,'#90A4AE'],[7,2,'#546E7A'],[1,3,'#455A64'],[2,3,'#37474F'],[3,3,'#B0BEC5'],[4,3,'#ECEFF1'],[5,3,'#FFFFFF'],[6,3,'#ECEFF1'],[7,3,'#B0BEC5'],[8,3,'#37474F'],[9,3,'#37474F'],[1,4,'#546E7A'],[2,4,'#37474F'],[3,4,'#CFD8DC'],[4,4,'#FFFFFF'],[5,4,'#FFFFFF'],[6,4,'#FFFFFF'],[7,4,'#CFD8DC'],[8,4,'#455A64'],[2,5,'#546E7A'],[3,5,'#90A4AE'],[4,5,'#CFD8DC'],[5,5,'#ECEFF1'],[6,5,'#CFD8DC'],[7,5,'#90A4AE'],[8,5,'#546E7A'],[3,6,'#455A64'],[4,6,'#78909C'],[5,6,'#90A4AE'],[6,6,'#78909C'],[7,6,'#455A64'],[4,7,'#37474F'],[5,7,'#455A64'],[6,7,'#37474F'],[4,8,'#263238'],[5,8,'#37474F'],[1,3,'#1a1a1a'],[8,3,'#fff'],[8,4,'#fff']]},
-pleco:{w:13,h:8,p:[[2,1,'#3E2723'],[3,1,'#4E342E'],[4,1,'#5D4037'],[5,1,'#4E342E'],[6,1,'#3E2723'],[1,2,'#4E342E'],[2,2,'#6D4C41'],[3,2,'#795548'],[4,2,'#8D6E63'],[5,2,'#795548'],[6,2,'#6D4C41'],[7,2,'#4E342E'],[8,2,'#3E2723'],[0,3,'#5D4037'],[1,3,'#795548'],[2,3,'#8D6E63'],[3,3,'#A1887F'],[4,3,'#BCAAA4'],[5,3,'#A1887F'],[6,3,'#8D6E63'],[7,3,'#795548'],[8,3,'#6D4C41'],[9,3,'#4E342E'],[10,3,'#3E2723'],[11,3,'#4E342E'],[1,4,'#4E342E'],[2,4,'#795548'],[3,4,'#8D6E63'],[4,4,'#A1887F'],[5,4,'#8D6E63'],[6,4,'#795548'],[7,4,'#6D4C41'],[8,4,'#4E342E'],[2,5,'#3E2723'],[3,5,'#6D4C41'],[4,5,'#795548'],[5,5,'#6D4C41'],[6,5,'#3E2723'],[0,3,'#1a1a1a'],[10,3,'#fff']]},
-discus:{w:13,h:11,p:[[4,0,'#01579B'],[5,0,'#0277BD'],[6,0,'#0288D1'],[7,0,'#0277BD'],[3,1,'#0277BD'],[4,1,'#029BE5'],[5,1,'#29B6F6'],[6,1,'#4FC3F7'],[7,1,'#29B6F6'],[8,1,'#0288D1'],[2,2,'#0288D1'],[3,2,'#29B6F6'],[4,2,'#4FC3F7'],[5,2,'#81D4FA'],[6,2,'#B3E5FC'],[7,2,'#81D4FA'],[8,2,'#4FC3F7'],[9,2,'#0288D1'],[1,3,'#0277BD'],[2,3,'#039BE5'],[3,3,'#4FC3F7'],[4,3,'#B3E5FC'],[5,3,'#E1F5FE'],[6,3,'#FFFFFF'],[7,3,'#E1F5FE'],[8,3,'#B3E5FC'],[9,3,'#4FC3F7'],[10,3,'#0288D1'],[11,3,'#01579B'],[12,3,'#004D8C'],[1,4,'#0277BD'],[2,4,'#29B6F6'],[3,4,'#81D4FA'],[4,4,'#E1F5FE'],[5,4,'#FFFFFF'],[6,4,'#FFFFFF'],[7,4,'#E1F5FE'],[8,4,'#81D4FA'],[9,4,'#29B6F6'],[10,4,'#0288D1'],[2,5,'#0288D1'],[3,5,'#29B6F6'],[4,5,'#4FC3F7'],[5,5,'#B3E5FC'],[6,5,'#E1F5FE'],[7,5,'#B3E5FC'],[8,5,'#4FC3F7'],[9,5,'#0288D1'],[3,6,'#0277BD'],[4,6,'#029BE5'],[5,6,'#29B6F6'],[6,6,'#4FC3F7'],[7,6,'#29B6F6'],[8,6,'#0288D1'],[4,7,'#01579B'],[5,7,'#0277BD'],[6,7,'#0288D1'],[7,7,'#0277BD'],[1,3,'#1a1a1a'],[11,3,'#fff'],[11,4,'#fff']]},
-zebra:{w:12,h:6,p:[[1,0,'#C8E6C9'],[2,0,'#A5D6A7'],[3,0,'#81C784'],[4,0,'#66BB6A'],[5,0,'#4CAF50'],[0,1,'#81C784'],[1,1,'#1B5E20'],[2,1,'#E8F5E9'],[3,1,'#1B5E20'],[4,1,'#E8F5E9'],[5,1,'#388E3C'],[6,1,'#A5D6A7'],[7,1,'#66BB6A'],[0,2,'#A5D6A7'],[1,2,'#388E3C'],[2,2,'#F1F8E9'],[3,2,'#FFFFFF'],[4,2,'#F1F8E9'],[5,2,'#388E3C'],[6,2,'#C8E6C9'],[7,2,'#81C784'],[8,2,'#4CAF50'],[9,2,'#2E7D32'],[10,2,'#1B5E20'],[0,3,'#81C784'],[1,3,'#1B5E20'],[2,3,'#E8F5E9'],[3,3,'#1B5E20'],[4,3,'#E8F5E9'],[5,3,'#388E3C'],[6,3,'#A5D6A7'],[7,3,'#66BB6A'],[1,4,'#C8E6C9'],[2,4,'#A5D6A7'],[3,4,'#81C784'],[4,4,'#66BB6A'],[5,4,'#4CAF50'],[0,2,'#1a1a1a'],[8,1,'#fff'],[8,2,'#fff']]},
-arowana:{w:16,h:7,p:[[3,1,'#FFD700'],[4,1,'#FFD700'],[5,1,'#FFC107'],[6,1,'#FFC107'],[7,1,'#FFD700'],[8,1,'#FFD700'],[1,2,'#DAA520'],[2,2,'#FFD700'],[3,2,'#FFE44D'],[4,2,'#FFF176'],[5,2,'#FFF9C4'],[6,2,'#FFF176'],[7,2,'#FFE44D'],[8,2,'#FFD700'],[9,2,'#DAA520'],[10,2,'#B8860B'],[11,2,'#8B6914'],[0,3,'#B8860B'],[1,3,'#DAA520'],[2,3,'#FFE44D'],[3,3,'#FFF9C4'],[4,3,'#FFFFFF'],[5,3,'#FFFFFF'],[6,3,'#FFF9C4'],[7,3,'#FFE44D'],[8,3,'#FFD700'],[9,3,'#DAA520'],[10,3,'#B8860B'],[11,3,'#8B6914'],[12,3,'#705412'],[13,3,'#DAA520'],[14,3,'#B8860B'],[1,4,'#DAA520'],[2,4,'#FFD700'],[3,4,'#FFE44D'],[4,4,'#FFF176'],[5,4,'#FFF9C4'],[6,4,'#FFF176'],[7,4,'#FFE44D'],[8,4,'#FFD700'],[9,4,'#DAA520'],[10,4,'#B8860B'],[11,4,'#8B6914'],[3,5,'#B8860B'],[4,5,'#DAA520'],[5,5,'#FFD700'],[6,5,'#FFD700'],[7,5,'#DAA520'],[8,5,'#B8860B'],[0,3,'#1a1a1a'],[12,2,'#fff'],[12,3,'#fff']]},
-axolotl:{w:14,h:9,p:[[3,0,'#F8BBD0'],[4,0,'#F48FB1'],[8,0,'#F8BBD0'],[9,0,'#F48FB1'],[2,1,'#F48FB1'],[3,1,'#FCE4EC'],[4,1,'#F8BBD0'],[5,1,'#FCE4EC'],[7,1,'#FCE4EC'],[8,1,'#F8BBD0'],[9,1,'#FCE4EC'],[10,1,'#F48FB1'],[2,2,'#F48FB1'],[3,2,'#FFFFFF'],[4,2,'#FCE4EC'],[5,2,'#FFFFFF'],[6,2,'#FCE4EC'],[7,2,'#FFFFFF'],[8,2,'#FCE4EC'],[9,2,'#FFFFFF'],[10,2,'#F48FB1'],[1,3,'#EC407A'],[2,3,'#F8BBD0'],[3,3,'#FCE4EC'],[4,3,'#FFFFFF'],[5,3,'#FCE4EC'],[6,3,'#FFFFFF'],[7,3,'#FCE4EC'],[8,3,'#FFFFFF'],[9,3,'#F8BBD0'],[10,3,'#EC407A'],[2,4,'#F48FB1'],[3,4,'#FCE4EC'],[4,4,'#FFFFFF'],[5,4,'#FCE4EC'],[6,4,'#FFFFFF'],[7,4,'#FCE4EC'],[8,4,'#F8BBD0'],[9,4,'#F48FB1'],[10,4,'#EC407A'],[11,4,'#F48FB1'],[12,4,'#EC407A'],[3,5,'#F48FB1'],[4,5,'#F8BBD0'],[5,5,'#FCE4EC'],[6,5,'#F8BBD0'],[7,5,'#F48FB1'],[2,6,'#EC407A'],[3,6,'#F48FB1'],[5,6,'#F48FB1'],[6,6,'#EC407A'],[1,3,'#1a1a1a'],[3,2,'#333'],[7,2,'#333']]},
-seahorse:{w:8,h:13,p:[[3,0,'#FF8F00'],[4,0,'#FFB300'],[2,1,'#FF8F00'],[3,1,'#FFD54F'],[4,1,'#FFE082'],[5,1,'#FFB300'],[2,2,'#FFB300'],[3,2,'#FFE082'],[4,2,'#FFFFFF'],[5,2,'#FFD54F'],[3,3,'#FF8F00'],[4,3,'#FFB300'],[5,3,'#FF8F00'],[2,4,'#FFB300'],[3,4,'#FFD54F'],[4,4,'#FFE082'],[5,4,'#FFB300'],[1,5,'#FF8F00'],[2,5,'#FFD54F'],[3,5,'#FFE082'],[4,5,'#FFD54F'],[1,6,'#FFB300'],[2,6,'#FFE082'],[3,6,'#FFFFFF'],[4,6,'#FFB300'],[2,7,'#FF8F00'],[3,7,'#FFD54F'],[4,7,'#FF8F00'],[2,8,'#FFB300'],[3,8,'#FFB300'],[3,9,'#FF8F00'],[4,9,'#FFB300'],[4,10,'#FF8F00'],[2,2,'#1a1a1a'],[5,1,'#fff']]},
-};return D[id]||D.guppy;}
+guppy:{w:16,h:10,p:[
+  [3,2,'#E65100'],[4,2,'#FF6F00'],[5,2,'#FF8F00'],[6,2,'#FFB300'],[7,2,'#FFA000'],[8,2,'#FF8F00'],
+  [2,3,'#FF6F00'],[3,3,'#FFB300'],[4,3,'#FFD54F'],[5,3,'#FFE082'],[6,3,'#FFE082'],[7,3,'#FFD54F'],[8,3,'#FFB300'],[9,3,'#FF8F00'],[10,3,'#E65100'],
+  [1,4,'#FF6F00'],[2,4,'#FF8F00'],[3,4,'#FFD54F'],[4,4,'#FFF9C4'],[5,4,'#FFFFFF'],[6,4,'#FFFFFF'],[7,4,'#FFF9C4'],[8,4,'#FFD54F'],[9,4,'#FFB300'],[10,4,'#FF8F00'],[11,4,'#E65100'],[12,4,'#BF360C'],[13,4,'#FF8F00'],[14,4,'#FF6F00'],
+  [1,5,'#FF8F00'],[2,5,'#FFA000'],[3,5,'#FFD54F'],[4,5,'#FFE082'],[5,5,'#FFFFFF'],[6,5,'#FFFFFF'],[7,5,'#FFE082'],[8,5,'#FFD54F'],[9,5,'#FFA000'],[10,5,'#FF8F00'],[11,5,'#E65100'],
+  [2,6,'#FF6F00'],[3,6,'#FFB300'],[4,6,'#FFD54F'],[5,6,'#FFE082'],[6,6,'#FFE082'],[7,6,'#FFD54F'],[8,6,'#FFB300'],[9,6,'#FF8F00'],
+  [3,7,'#E65100'],[4,7,'#FF6F00'],[5,7,'#FF8F00'],[6,7,'#FF8F00'],[7,7,'#FF6F00'],
+  [1,4,'#111'],[11,3,'#fff'],[11,4,'#fff'],[12,4,'#E65100'],
+  [5,3,'#FF6347'],[6,3,'#FF4500'],
+]},
+neon:{w:15,h:9,p:[
+  [2,2,'#1565C0'],[3,2,'#1565C0'],[4,2,'#1976D2'],[5,2,'#1976D2'],[6,2,'#1565C0'],[7,2,'#0D47A1'],
+  [1,3,'#1976D2'],[2,3,'#42A5F5'],[3,3,'#90CAF9'],[4,3,'#BBDEFB'],[5,3,'#90CAF9'],[6,3,'#42A5F5'],[7,3,'#1976D2'],[8,3,'#1565C0'],[9,3,'#0D47A1'],
+  [1,4,'#FF1744'],[2,4,'#FF1744'],[3,4,'#FF5252'],[4,4,'#FFCDD2'],[5,4,'#90CAF9'],[6,4,'#42A5F5'],[7,4,'#1976D2'],[8,4,'#1565C0'],[9,4,'#0D47A1'],[10,4,'#082040'],[11,4,'#082040'],[12,4,'#0D1B3E'],[13,4,'#0D47A1'],
+  [1,5,'#1976D2'],[2,5,'#42A5F5'],[3,5,'#90CAF9'],[4,5,'#BBDEFB'],[5,5,'#90CAF9'],[6,5,'#42A5F5'],[7,5,'#1976D2'],[8,5,'#1565C0'],[9,5,'#0D47A1'],
+  [2,6,'#1565C0'],[3,6,'#1565C0'],[4,6,'#1976D2'],[5,6,'#1976D2'],[6,6,'#1565C0'],[7,6,'#0D47A1'],
+  [1,4,'#111'],[9,3,'#fff'],[9,4,'#fff'],
+  [1,4,'#B71C1C'],[2,4,'#D32F2F'],
+]},
+betta:{w:18,h:12,p:[
+  [4,1,'#6A1B9A'],[5,1,'#7B1FA2'],[6,1,'#8E24AA'],[7,1,'#9C27B0'],
+  [3,2,'#7B1FA2'],[4,2,'#AB47BC'],[5,2,'#CE93D8'],[6,2,'#E1BEE7'],[7,2,'#E1BEE7'],[8,2,'#CE93D8'],[9,2,'#AB47BC'],[10,2,'#7B1FA2'],
+  [2,3,'#8E24AA'],[3,3,'#CE93D8'],[4,3,'#F3E5F5'],[5,3,'#FFFFFF'],[6,3,'#FFFFFF'],[7,3,'#F3E5F5'],[8,3,'#CE93D8'],[9,3,'#9C27B0'],[10,3,'#7B1FA2'],[11,3,'#6A1B9A'],
+  [2,4,'#9C27B0'],[3,4,'#E1BEE7'],[4,4,'#F3E5F5'],[5,4,'#FFFFFF'],[6,4,'#FFFFFF'],[7,4,'#FFFFFF'],[8,4,'#F3E5F5'],[9,4,'#CE93D8'],[10,4,'#AB47BC'],[11,4,'#8E24AA'],[12,4,'#7B1FA2'],[13,4,'#6A1B9A'],[14,4,'#CE93D8'],[15,4,'#AB47BC'],[16,4,'#9C27B0'],
+  [2,5,'#8E24AA'],[3,5,'#CE93D8'],[4,5,'#F3E5F5'],[5,5,'#FFFFFF'],[6,5,'#FFFFFF'],[7,5,'#F3E5F5'],[8,5,'#CE93D8'],[9,5,'#9C27B0'],[10,5,'#7B1FA2'],[11,5,'#6A1B9A'],[12,5,'#CE93D8'],[13,5,'#AB47BC'],
+  [3,6,'#7B1FA2'],[4,6,'#AB47BC'],[5,6,'#CE93D8'],[6,6,'#E1BEE7'],[7,6,'#E1BEE7'],[8,6,'#CE93D8'],[9,6,'#AB47BC'],[10,6,'#7B1FA2'],
+  [4,7,'#6A1B9A'],[5,7,'#7B1FA2'],[6,7,'#8E24AA'],[7,7,'#9C27B0'],
+  [11,3,'#CE93D8'],[12,3,'#AB47BC'],[11,5,'#CE93D8'],[12,5,'#AB47BC'],
+  [2,4,'#111'],[12,3,'#fff'],
+  [3,3,'#4A148C'],[4,3,'#6A1B9A'],
+]},
+goldfish:{w:18,h:12,p:[
+  [4,1,'#E65100'],[5,1,'#FF6F00'],[6,1,'#FF8F00'],[7,1,'#FFA000'],[8,1,'#FF8F00'],[9,1,'#FF6F00'],
+  [3,2,'#FF6F00'],[4,2,'#FF8F00'],[5,2,'#FFA000'],[6,2,'#FFB300'],[7,2,'#FFC107'],[8,2,'#FFB300'],[9,2,'#FFA000'],[10,2,'#FF8F00'],[11,2,'#E65100'],
+  [2,3,'#FF6F00'],[3,3,'#FFA000'],[4,3,'#FFD54F'],[5,3,'#FFE082'],[6,3,'#FFECB3'],[7,3,'#FFECB3'],[8,3,'#FFE082'],[9,3,'#FFD54F'],[10,3,'#FFA000'],[11,3,'#FF8F00'],[12,3,'#E65100'],
+  [1,4,'#FF8F00'],[2,4,'#FFB300'],[3,4,'#FFE082'],[4,4,'#FFF9C4'],[5,4,'#FFFFFF'],[6,4,'#FFFFFF'],[7,4,'#FFFFFF'],[8,4,'#FFF9C4'],[9,4,'#FFE082'],[10,4,'#FFD54F'],[11,4,'#FFA000'],[12,4,'#FF8F00'],[13,4,'#E65100'],[14,4,'#BF360C'],[15,4,'#E65100'],[16,4,'#FF8F00'],
+  [1,5,'#FF6F00'],[2,5,'#FFB300'],[3,5,'#FFE082'],[4,5,'#FFF9C4'],[5,5,'#FFFFFF'],[6,5,'#FFFFFF'],[7,5,'#FFFFFF'],[8,5,'#FFF9C4'],[9,5,'#FFE082'],[10,5,'#FFD54F'],[11,5,'#FFA000'],[12,5,'#FF8F00'],[13,5,'#E65100'],
+  [2,6,'#FF6F00'],[3,6,'#FFA000'],[4,6,'#FFD54F'],[5,6,'#FFE082'],[6,6,'#FFECB3'],[7,6,'#FFECB3'],[8,6,'#FFE082'],[9,6,'#FFD54F'],[10,6,'#FFA000'],[11,6,'#FF8F00'],
+  [3,7,'#FF6F00'],[4,7,'#FF8F00'],[5,7,'#FFA000'],[6,7,'#FFB300'],[7,7,'#FFA000'],[8,7,'#FF8F00'],[9,7,'#FF6F00'],
+  [1,4,'#111'],[13,3,'#fff'],[13,4,'#fff'],
+]},
+angel:{w:14,h:18,p:[
+  [6,0,'#37474F'],[7,0,'#455A64'],[8,0,'#37474F'],
+  [5,1,'#455A64'],[6,1,'#607D8B'],[7,1,'#78909C'],[8,1,'#607D8B'],[9,1,'#455A64'],
+  [4,2,'#455A64'],[5,2,'#78909C'],[6,2,'#90A4AE'],[7,2,'#B0BEC5'],[8,2,'#90A4AE'],[9,2,'#78909C'],[10,2,'#455A64'],
+  [3,3,'#455A64'],[4,3,'#607D8B'],[5,3,'#37474F'],[6,3,'#B0BEC5'],[7,3,'#CFD8DC'],[8,3,'#ECEFF1'],[9,3,'#CFD8DC'],[10,3,'#37474F'],[11,3,'#607D8B'],[12,3,'#455A64'],
+  [2,4,'#546E7A'],[3,4,'#37474F'],[4,4,'#B0BEC5'],[5,4,'#CFD8DC'],[6,4,'#ECEFF1'],[7,4,'#FFFFFF'],[8,4,'#ECEFF1'],[9,4,'#CFD8DC'],[10,4,'#B0BEC5'],[11,4,'#37474F'],[12,4,'#546E7A'],[13,4,'#37474F'],
+  [2,5,'#455A64'],[3,5,'#546E7A'],[4,5,'#607D8B'],[5,5,'#37474F'],[6,5,'#CFD8DC'],[7,5,'#FFFFFF'],[8,5,'#FFFFFF'],[9,5,'#CFD8DC'],[10,5,'#37474F'],[11,5,'#607D8B'],[12,5,'#546E7A'],
+  [3,6,'#455A64'],[4,6,'#607D8B'],[5,6,'#78909C'],[6,6,'#B0BEC5'],[7,6,'#CFD8DC'],[8,6,'#CFD8DC'],[9,6,'#B0BEC5'],[10,6,'#78909C'],[11,6,'#607D8B'],[12,6,'#455A64'],
+  [4,7,'#546E7A'],[5,7,'#607D8B'],[6,7,'#78909C'],[7,7,'#90A4AE'],[8,7,'#90A4AE'],[9,7,'#78909C'],[10,7,'#607D8B'],[11,7,'#546E7A'],
+  [5,8,'#455A64'],[6,8,'#607D8B'],[7,8,'#78909C'],[8,8,'#78909C'],[9,8,'#607D8B'],[10,8,'#455A64'],
+  [6,9,'#37474F'],[7,9,'#455A64'],[8,9,'#455A64'],[9,9,'#37474F'],
+  [6,10,'#263238'],[7,10,'#37474F'],[8,10,'#37474F'],
+  [2,4,'#111'],[12,4,'#fff'],[12,5,'#fff'],
+  [4,3,'#263238'],[5,3,'#263238'],
+]},
+pleco:{w:16,h:11,p:[
+  [3,2,'#3E2723'],[4,2,'#4E342E'],[5,2,'#5D4037'],[6,2,'#6D4C41'],[7,2,'#5D4037'],[8,2,'#4E342E'],[9,2,'#3E2723'],
+  [2,3,'#4E342E'],[3,3,'#6D4C41'],[4,3,'#795548'],[5,3,'#8D6E63'],[6,3,'#A1887F'],[7,3,'#8D6E63'],[8,3,'#795548'],[9,3,'#6D4C41'],[10,3,'#4E342E'],[11,3,'#3E2723'],
+  [1,4,'#5D4037'],[2,4,'#795548'],[3,4,'#8D6E63'],[4,4,'#A1887F'],[5,4,'#BCAAA4'],[6,4,'#D7CCC8'],[7,4,'#BCAAA4'],[8,4,'#A1887F'],[9,4,'#8D6E63'],[10,4,'#795548'],[11,4,'#6D4C41'],[12,4,'#4E342E'],[13,4,'#3E2723'],[14,4,'#4E342E'],
+  [1,5,'#4E342E'],[2,5,'#795548'],[3,5,'#8D6E63'],[4,5,'#A1887F'],[5,5,'#BCAAA4'],[6,5,'#D7CCC8'],[7,5,'#BCAAA4'],[8,5,'#A1887F'],[9,5,'#8D6E63'],[10,5,'#795548'],[11,5,'#6D4C41'],[12,5,'#4E342E'],
+  [2,6,'#4E342E'],[3,6,'#6D4C41'],[4,6,'#795548'],[5,6,'#8D6E63'],[6,6,'#A1887F'],[7,6,'#8D6E63'],[8,6,'#795548'],[9,6,'#6D4C41'],[10,6,'#4E342E'],
+  [3,7,'#3E2723'],[4,7,'#6D4C41'],[5,7,'#795548'],[6,7,'#6D4C41'],[7,7,'#4E342E'],
+  [1,4,'#111'],[13,4,'#fff'],[13,5,'#fff'],
+  [3,3,'#1a1a1a'],[6,3,'#795548'],
+]},
+discus:{w:16,h:14,p:[
+  [5,1,'#01579B'],[6,1,'#0277BD'],[7,1,'#0288D1'],[8,1,'#0277BD'],[9,1,'#01579B'],
+  [4,2,'#0277BD'],[5,2,'#029BE5'],[6,2,'#29B6F6'],[7,2,'#4FC3F7'],[8,2,'#29B6F6'],[9,2,'#029BE5'],[10,2,'#0277BD'],
+  [3,3,'#0288D1'],[4,3,'#29B6F6'],[5,3,'#4FC3F7'],[6,3,'#81D4FA'],[7,3,'#B3E5FC'],[8,3,'#81D4FA'],[9,3,'#4FC3F7'],[10,3,'#29B6F6'],[11,3,'#0288D1'],
+  [2,4,'#0277BD'],[3,4,'#039BE5'],[4,4,'#4FC3F7'],[5,4,'#B3E5FC'],[6,4,'#E1F5FE'],[7,4,'#FFFFFF'],[8,4,'#E1F5FE'],[9,4,'#B3E5FC'],[10,4,'#4FC3F7'],[11,4,'#039BE5'],[12,4,'#0277BD'],
+  [1,5,'#01579B'],[2,5,'#0288D1'],[3,5,'#29B6F6'],[4,5,'#81D4FA'],[5,5,'#E1F5FE'],[6,5,'#FFFFFF'],[7,5,'#FFFFFF'],[8,5,'#FFFFFF'],[9,5,'#E1F5FE'],[10,5,'#81D4FA'],[11,5,'#29B6F6'],[12,5,'#0288D1'],[13,5,'#01579B'],[14,5,'#004D8C'],
+  [1,6,'#0277BD'],[2,6,'#29B6F6'],[3,6,'#81D4FA'],[4,6,'#E1F5FE'],[5,6,'#FFFFFF'],[6,6,'#FFFFFF'],[7,6,'#FFFFFF'],[8,6,'#E1F5FE'],[9,6,'#81D4FA'],[10,6,'#29B6F6'],[11,6,'#0288D1'],[12,6,'#01579B'],[13,6,'#004D8C'],[14,6,'#003166'],
+  [2,7,'#0288D1'],[3,7,'#29B6F6'],[4,7,'#81D4FA'],[5,7,'#E1F5FE'],[6,7,'#FFFFFF'],[7,7,'#FFFFFF'],[8,7,'#E1F5FE'],[9,7,'#81D4FA'],[10,7,'#29B6F6'],[11,7,'#0288D1'],
+  [3,8,'#0277BD'],[4,8,'#039BE5'],[5,8,'#4FC3F7'],[6,8,'#B3E5FC'],[7,8,'#E1F5FE'],[8,8,'#B3E5FC'],[9,8,'#4FC3F7'],[10,8,'#039BE5'],[11,8,'#0277BD'],
+  [4,9,'#0288D1'],[5,9,'#29B6F6'],[6,9,'#4FC3F7'],[7,9,'#81D4FA'],[8,9,'#4FC3F7'],[9,9,'#29B6F6'],[10,9,'#0288D1'],
+  [5,10,'#01579B'],[6,10,'#0277BD'],[7,10,'#0288D1'],[8,10,'#0277BD'],[9,10,'#01579B'],
+  [1,5,'#111'],[13,5,'#fff'],[13,6,'#fff'],
+  [3,5,'#0099B5'],[4,5,'#00B5D8'],
+]},
+zebra:{w:15,h:8,p:[
+  [2,1,'#C8E6C9'],[3,1,'#A5D6A7'],[4,1,'#81C784'],[5,1,'#66BB6A'],[6,1,'#4CAF50'],[7,1,'#43A047'],
+  [1,2,'#81C784'],[2,2,'#1B5E20'],[3,2,'#E8F5E9'],[4,2,'#1B5E20'],[5,2,'#E8F5E9'],[6,2,'#1B5E20'],[7,2,'#A5D6A7'],[8,2,'#66BB6A'],[9,2,'#4CAF50'],
+  [1,3,'#A5D6A7'],[2,3,'#388E3C'],[3,3,'#F1F8E9'],[4,3,'#2E7D32'],[5,3,'#FFFFFF'],[6,3,'#388E3C'],[7,3,'#C8E6C9'],[8,3,'#81C784'],[9,3,'#4CAF50'],[10,3,'#2E7D32'],[11,3,'#1B5E20'],[12,3,'#388E3C'],[13,3,'#2E7D32'],
+  [1,4,'#81C784'],[2,4,'#1B5E20'],[3,4,'#E8F5E9'],[4,4,'#1B5E20'],[5,4,'#E8F5E9'],[6,4,'#1B5E20'],[7,4,'#A5D6A7'],[8,4,'#66BB6A'],[9,4,'#4CAF50'],
+  [2,5,'#C8E6C9'],[3,5,'#A5D6A7'],[4,5,'#81C784'],[5,5,'#66BB6A'],[6,5,'#4CAF50'],[7,5,'#43A047'],
+  [1,3,'#111'],[9,2,'#fff'],[9,3,'#fff'],
+]},
+clown:{w:16,h:11,p:[
+  [3,1,'#E65100'],[4,1,'#FF6F00'],[5,1,'#FF8F00'],[6,1,'#FFA000'],[7,1,'#FF8F00'],[8,1,'#FF6F00'],
+  [2,2,'#FF6F00'],[3,2,'#FFFFFF'],[4,2,'#FFFFFF'],[5,2,'#FF8F00'],[6,2,'#FFA000'],[7,2,'#FF8F00'],[8,2,'#FFFFFF'],[9,2,'#FFFFFF'],[10,2,'#FF6F00'],
+  [1,3,'#E65100'],[2,3,'#FFFFFF'],[3,3,'#FF8F00'],[4,3,'#FFF8E1'],[5,3,'#FFFFFF'],[6,3,'#FFECB3'],[7,3,'#FFFFFF'],[8,3,'#FFF8E1'],[9,3,'#FF8F00'],[10,3,'#FFFFFF'],[11,3,'#E65100'],[12,3,'#FF8F00'],
+  [1,4,'#FF6F00'],[2,4,'#FFFFFF'],[3,4,'#FF8F00'],[4,4,'#FFFFFF'],[5,4,'#FFECB3'],[6,4,'#FFFFFF'],[7,4,'#FFECB3'],[8,4,'#FFFFFF'],[9,4,'#FF8F00'],[10,4,'#FFFFFF'],[11,4,'#FF6F00'],[12,4,'#E65100'],[13,4,'#BF360C'],[14,4,'#FF6F00'],
+  [1,5,'#E65100'],[2,5,'#FFFFFF'],[3,5,'#FF8F00'],[4,5,'#FFF8E1'],[5,5,'#FFFFFF'],[6,5,'#FFECB3'],[7,5,'#FFFFFF'],[8,5,'#FFF8E1'],[9,5,'#FF8F00'],[10,5,'#FFFFFF'],[11,5,'#E65100'],
+  [2,6,'#FF6F00'],[3,6,'#FFFFFF'],[4,6,'#FFFFFF'],[5,6,'#FF8F00'],[6,6,'#FFA000'],[7,6,'#FF8F00'],[8,6,'#FFFFFF'],[9,6,'#FFFFFF'],[10,6,'#FF6F00'],
+  [3,7,'#E65100'],[4,7,'#FF6F00'],[5,7,'#FF8F00'],[6,7,'#FFA000'],[7,7,'#FF8F00'],[8,7,'#FF6F00'],
+  [1,4,'#111'],[12,3,'#fff'],[12,4,'#fff'],
+  [2,3,'#1a1a1a'],[3,3,'#1a1a1a'],
+]},
+arowana:{w:20,h:9,p:[
+  [3,1,'#FFD700'],[4,1,'#FFD700'],[5,1,'#FFC107'],[6,1,'#FFC107'],[7,1,'#FFD700'],[8,1,'#FFD700'],[9,1,'#FFC107'],[10,1,'#FFD700'],
+  [1,2,'#DAA520'],[2,2,'#FFD700'],[3,2,'#FFE44D'],[4,2,'#FFF176'],[5,2,'#FFF9C4'],[6,2,'#FFF176'],[7,2,'#FFE44D'],[8,2,'#FFD700'],[9,2,'#FFC107'],[10,2,'#DAA520'],[11,2,'#B8860B'],[12,2,'#8B6914'],
+  [0,3,'#B8860B'],[1,3,'#DAA520'],[2,3,'#FFE44D'],[3,3,'#FFF9C4'],[4,3,'#FFFFFF'],[5,3,'#FFFFFF'],[6,3,'#FFF9C4'],[7,3,'#FFE44D'],[8,3,'#FFD700'],[9,3,'#DAA520'],[10,3,'#B8860B'],[11,3,'#8B6914'],[12,3,'#705412'],[13,3,'#DAA520'],[14,3,'#B8860B'],[15,3,'#DAA520'],[16,3,'#B8860B'],
+  [0,4,'#DAA520'],[1,4,'#FFD700'],[2,4,'#FFE44D'],[3,4,'#FFF9C4'],[4,4,'#FFFFFF'],[5,4,'#FFFFFF'],[6,4,'#FFF9C4'],[7,4,'#FFE44D'],[8,4,'#FFD700'],[9,4,'#DAA520'],[10,4,'#B8860B'],[11,4,'#8B6914'],[12,4,'#705412'],[13,4,'#B8860B'],[14,4,'#DAA520'],[15,4,'#B8860B'],[16,4,'#DAA520'],[17,4,'#B8860B'],[18,4,'#DAA520'],
+  [0,5,'#B8860B'],[1,5,'#DAA520'],[2,5,'#FFE44D'],[3,5,'#FFF9C4'],[4,5,'#FFFFFF'],[5,5,'#FFFFFF'],[6,5,'#FFF9C4'],[7,5,'#FFE44D'],[8,5,'#FFD700'],[9,5,'#DAA520'],[10,5,'#B8860B'],[11,5,'#8B6914'],[12,5,'#705412'],[13,5,'#DAA520'],
+  [1,6,'#DAA520'],[2,6,'#FFD700'],[3,6,'#FFE44D'],[4,6,'#FFF176'],[5,6,'#FFF9C4'],[6,6,'#FFF176'],[7,6,'#FFE44D'],[8,6,'#FFD700'],[9,6,'#DAA520'],[10,6,'#B8860B'],
+  [3,7,'#B8860B'],[4,7,'#DAA520'],[5,7,'#FFD700'],[6,7,'#FFD700'],[7,7,'#DAA520'],[8,7,'#B8860B'],
+  [0,4,'#111'],[14,3,'#fff'],[14,4,'#fff'],
+]},
+axolotl:{w:18,h:12,p:[
+  [4,0,'#F8BBD0'],[5,0,'#F48FB1'],[11,0,'#F8BBD0'],[12,0,'#F48FB1'],
+  [3,1,'#F48FB1'],[4,1,'#FCE4EC'],[5,1,'#F8BBD0'],[6,1,'#FCE4EC'],[9,1,'#FCE4EC'],[10,1,'#F8BBD0'],[11,1,'#FCE4EC'],[12,1,'#F48FB1'],
+  [3,2,'#F48FB1'],[4,2,'#FFFFFF'],[5,2,'#FCE4EC'],[6,2,'#FFFFFF'],[7,2,'#FCE4EC'],[8,2,'#FCE4EC'],[9,2,'#FFFFFF'],[10,2,'#FCE4EC'],[11,2,'#FFFFFF'],[12,2,'#F48FB1'],
+  [2,3,'#EC407A'],[3,3,'#F8BBD0'],[4,3,'#FCE4EC'],[5,3,'#FFFFFF'],[6,3,'#FCE4EC'],[7,3,'#FFFFFF'],[8,3,'#FCE4EC'],[9,3,'#FFFFFF'],[10,3,'#FCE4EC'],[11,3,'#F8BBD0'],[12,3,'#EC407A'],
+  [2,4,'#F48FB1'],[3,4,'#FCE4EC'],[4,4,'#FFFFFF'],[5,4,'#FCE4EC'],[6,4,'#FFFFFF'],[7,4,'#FCE4EC'],[8,4,'#FFFFFF'],[9,4,'#FCE4EC'],[10,4,'#F8BBD0'],[11,4,'#F48FB1'],[12,4,'#EC407A'],[13,4,'#F48FB1'],[14,4,'#EC407A'],
+  [3,5,'#F48FB1'],[4,5,'#F8BBD0'],[5,5,'#FCE4EC'],[6,5,'#F8BBD0'],[7,5,'#FCE4EC'],[8,5,'#F8BBD0'],[9,5,'#F48FB1'],
+  [2,6,'#EC407A'],[3,6,'#F48FB1'],[5,6,'#F48FB1'],[6,6,'#EC407A'],
+  [2,4,'#111'],[4,2,'#E91E63'],[9,2,'#E91E63'],
+]},
+seahorse:{w:10,h:16,p:[
+  [4,0,'#FF8F00'],[5,0,'#FFB300'],[6,0,'#FF8F00'],
+  [3,1,'#FF8F00'],[4,1,'#FFD54F'],[5,1,'#FFE082'],[6,1,'#FFD54F'],[7,1,'#FFB300'],
+  [3,2,'#FFB300'],[4,2,'#FFE082'],[5,2,'#FFFFFF'],[6,2,'#FFE082'],[7,2,'#FF8F00'],
+  [4,3,'#FF8F00'],[5,3,'#FFB300'],[6,3,'#FF8F00'],
+  [3,4,'#FFB300'],[4,4,'#FFD54F'],[5,4,'#FFE082'],[6,4,'#FFD54F'],[7,4,'#FFB300'],
+  [2,5,'#FF8F00'],[3,5,'#FFD54F'],[4,5,'#FFE082'],[5,5,'#FFD54F'],[6,5,'#FF8F00'],
+  [2,6,'#FFB300'],[3,6,'#FFE082'],[4,6,'#FFFFFF'],[5,6,'#FFB300'],
+  [2,7,'#FF8F00'],[3,7,'#FFD54F'],[4,7,'#FF8F00'],
+  [2,8,'#FFB300'],[3,8,'#FFB300'],
+  [3,9,'#FF8F00'],[4,9,'#FFB300'],
+  [4,10,'#FF8F00'],[5,10,'#FF8F00'],
+  [3,2,'#111'],[6,1,'#fff'],
+]},
+manta:{w:24,h:10,p:[
+  [2,3,'#1A237E'],[3,2,'#1A237E'],[4,1,'#283593'],[5,1,'#303F9F'],[6,2,'#3949AB'],[7,2,'#3F51B5'],[8,2,'#5C6BC0'],[9,2,'#7986CB'],[10,2,'#9FA8DA'],[11,2,'#C5CAE9'],[12,2,'#E8EAF6'],[13,2,'#C5CAE9'],[14,2,'#9FA8DA'],[15,2,'#7986CB'],[16,2,'#5C6BC0'],[17,2,'#3F51B5'],[18,2,'#3949AB'],[19,2,'#303F9F'],[20,2,'#283593'],
+  [1,4,'#1A237E'],[2,4,'#283593'],[3,3,'#3949AB'],[4,3,'#5C6BC0'],[5,3,'#7986CB'],[6,3,'#9FA8DA'],[7,3,'#C5CAE9'],[8,3,'#E8EAF6'],[9,3,'#FFFFFF'],[10,3,'#FFFFFF'],[11,3,'#FFFFFF'],[12,3,'#FFFFFF'],[13,3,'#E8EAF6'],[14,3,'#C5CAE9'],[15,3,'#9FA8DA'],[16,3,'#7986CB'],[17,3,'#5C6BC0'],[18,3,'#3949AB'],[19,3,'#283593'],[20,3,'#1A237E'],[21,3,'#1A237E'],
+  [0,5,'#0D1259'],[1,5,'#1A237E'],[2,5,'#283593'],[3,4,'#3949AB'],[4,4,'#5C6BC0'],[5,4,'#9FA8DA'],[6,4,'#C5CAE9'],[7,4,'#E8EAF6'],[8,4,'#FFFFFF'],[9,4,'#FFFFFF'],[10,4,'#FFFFFF'],[11,4,'#FFFFFF'],[12,4,'#E8EAF6'],[13,4,'#C5CAE9'],[14,4,'#9FA8DA'],[15,4,'#5C6BC0'],[16,4,'#3949AB'],[17,4,'#283593'],[18,4,'#1A237E'],[19,4,'#0D1259'],[20,4,'#1A237E'],[21,4,'#1A237E'],[22,4,'#0D1259'],
+  [1,6,'#1A237E'],[2,6,'#283593'],[3,5,'#3949AB'],[4,5,'#5C6BC0'],[5,5,'#7986CB'],[6,5,'#C5CAE9'],[7,5,'#E8EAF6'],[8,5,'#FFFFFF'],[9,5,'#F5F5F5'],[10,5,'#EEEEEE'],[11,5,'#F5F5F5'],[12,5,'#FFFFFF'],[13,5,'#E8EAF6'],[14,5,'#C5CAE9'],[15,5,'#7986CB'],[16,5,'#5C6BC0'],[17,5,'#3949AB'],[18,5,'#283593'],[19,5,'#1A237E'],
+  [2,7,'#1A237E'],[3,6,'#283593'],[4,6,'#3949AB'],[5,6,'#5C6BC0'],[6,6,'#7986CB'],[7,6,'#9FA8DA'],[8,6,'#C5CAE9'],[9,6,'#E8EAF6'],[10,6,'#E8EAF6'],[11,6,'#C5CAE9'],[12,6,'#9FA8DA'],[13,6,'#7986CB'],[14,6,'#5C6BC0'],[15,6,'#3949AB'],[16,6,'#283593'],[17,6,'#1A237E'],
+  [0,5,'#111'],[21,4,'#fff'],
+  [5,3,'#1565C0'],[10,3,'#1A237E'],
+]},
+dragon:{w:20,h:8,p:[
+  [2,1,'#1B5E20'],[3,1,'#2E7D32'],[4,1,'#388E3C'],[5,1,'#43A047'],[6,1,'#2E7D32'],[7,1,'#1B5E20'],
+  [1,2,'#1B5E20'],[2,2,'#388E3C'],[3,2,'#4CAF50'],[4,2,'#66BB6A'],[5,2,'#81C784'],[6,2,'#66BB6A'],[7,2,'#4CAF50'],[8,2,'#2E7D32'],[9,2,'#1B5E20'],[10,2,'#2E7D32'],[11,2,'#1B5E20'],
+  [0,3,'#1B5E20'],[1,3,'#2E7D32'],[2,3,'#4CAF50'],[3,3,'#66BB6A'],[4,3,'#A5D6A7'],[5,3,'#C8E6C9'],[6,3,'#A5D6A7'],[7,3,'#66BB6A'],[8,3,'#4CAF50'],[9,3,'#388E3C'],[10,3,'#2E7D32'],[11,3,'#388E3C'],[12,3,'#2E7D32'],[13,3,'#388E3C'],[14,3,'#2E7D32'],[15,3,'#1B5E20'],[16,3,'#2E7D32'],[17,3,'#1B5E20'],
+  [0,4,'#1B5E20'],[1,4,'#388E3C'],[2,4,'#4CAF50'],[3,4,'#66BB6A'],[4,4,'#A5D6A7'],[5,4,'#C8E6C9'],[6,4,'#A5D6A7'],[7,4,'#66BB6A'],[8,4,'#4CAF50'],[9,4,'#2E7D32'],[10,4,'#388E3C'],[11,4,'#2E7D32'],[12,4,'#388E3C'],[13,4,'#2E7D32'],[14,4,'#1B5E20'],[15,4,'#2E7D32'],[16,4,'#1B5E20'],[17,4,'#2E7D32'],[18,4,'#1B5E20'],
+  [1,5,'#1B5E20'],[2,5,'#2E7D32'],[3,5,'#4CAF50'],[4,5,'#66BB6A'],[5,5,'#81C784'],[6,5,'#66BB6A'],[7,5,'#4CAF50'],[8,5,'#2E7D32'],[9,5,'#1B5E20'],
+  [2,6,'#1B5E20'],[3,6,'#2E7D32'],[4,6,'#388E3C'],[5,6,'#43A047'],[6,6,'#2E7D32'],[7,6,'#1B5E20'],
+  [0,4,'#111'],[15,3,'#A5D6A7'],[15,4,'#A5D6A7'],
+  [4,2,'#2E7D32'],[5,2,'#1B5E20'],
+]},
+};
+return D[id]||D.guppy;
+}
 
-function getBabySprite(id){const sp=getSprite(id);return{w:Math.ceil(sp.w*0.6),h:Math.ceil(sp.h*0.6),p:sp.p.map(([x,y,c])=>[Math.round(x*0.6),Math.round(y*0.6),c])};}
-function makeFishCanvas(id,size,stage){const sp=stage==='baby'?getBabySprite(id):getSprite(id);const sc=Math.max(1,Math.floor(size/Math.max(sp.w,sp.h)));const c=document.createElement('canvas');c.width=sp.w*sc;c.height=sp.h*sc;c.style.width=c.width+'px';c.style.height=c.height+'px';c.style.display='block';c.style.margin='0 auto 3px';c.style.imageRendering='pixelated';const ctx=c.getContext('2d');sp.p.forEach(([x,y,col])=>{ctx.fillStyle=col;ctx.fillRect(x*sc,y*sc,sc,sc);});return c;}
-function initPlants(){const W=document.getElementById('TC').width||600;const types=['vallis','moss','cabomba','vallis','crypt','lotus','hornwort','anubias','moss','vallis'];S.plantSeeds=types.map((id,i)=>{const pdef=PLANTS.find(p=>p.id===id);return{id,x:W*(0.03+i*0.105),maxH:pdef.maxH,swayOff:Math.random()*Math.PI*2};});sv();}
-function getPlantH(p){return Math.min(p.maxH,4+S.plantAge*0.8);}
+function getBabySprite(id){
+  const sp=getSprite(id);
+  const seen=new Set();
+  return {w:Math.ceil(sp.w*0.55),h:Math.ceil(sp.h*0.55),
+    p:sp.p.map(([x,y,c])=>[Math.round(x*0.55),Math.round(y*0.55),c])
+      .filter(([x,y])=>{const k=x+','+y;if(seen.has(k))return false;seen.add(k);return true;})
+  };
+}
 
-function drawPlant(ctx,p,t){const pdef=PLANTS.find(d=>d.id===p.id)||PLANTS[0];const h=getPlantH(p);const base=210;const sw=Math.sin(t*0.5+p.swayOff)*3;
-if(pdef.shape==='bush'){for(let i=0;i<h;i+=3){const seg=i/h;ctx.fillStyle=pdef.colors[Math.floor(seg*3)%4];ctx.fillRect(Math.round(p.x+sw*seg*0.4)-3,base-i,6,3);if(i%9===0){ctx.fillRect(Math.round(p.x+sw*seg*0.4)-7,base-i,3,3);ctx.fillRect(Math.round(p.x+sw*seg*0.4)+4,base-i,3,3);}}const bw=Math.max(10,h*0.55);ctx.fillStyle=pdef.colors[2];ctx.fillRect(Math.round(p.x+sw*0.7)-bw/2,base-h,bw,4);ctx.fillRect(Math.round(p.x+sw*0.7)-bw/2-4,base-h+4,bw/2,4);ctx.fillRect(Math.round(p.x+sw*0.7)+bw/4,base-h+4,bw/2,4);return;}
-if(pdef.shape==='feather'){for(let i=0;i<h;i+=3){const seg=i/h;ctx.fillStyle=pdef.colors[Math.floor(seg*3)%4];ctx.fillRect(Math.round(p.x+sw*seg)-2,base-i,4,3);if(i%7===0){ctx.fillRect(Math.round(p.x+sw*seg)-9,base-i,5,2);ctx.fillRect(Math.round(p.x+sw*seg)+4,base-i,5,2);}if(i%14===0){ctx.fillRect(Math.round(p.x+sw*seg)-13,base-i+2,4,2);ctx.fillRect(Math.round(p.x+sw*seg)+9,base-i+2,4,2);}}return;}
-if(pdef.shape==='rosette'){for(let i=0;i<h*0.5;i+=3){ctx.fillStyle=pdef.colors[0];ctx.fillRect(Math.round(p.x+sw*(i/h)*0.4)-2,base-i,4,3);}for(let l=0;l<5;l++){const angle=(l/5)*Math.PI*2+sw*0.08;const lx=Math.round(p.x+Math.cos(angle)*h*0.38);const ly=Math.round(base-Math.abs(Math.sin(angle))*h*0.45-h*0.15);ctx.fillStyle=pdef.colors[1+(l%2)];ctx.fillRect(lx-7,ly,14,4);ctx.fillRect(lx-5,ly-3,10,3);ctx.fillRect(lx-3,ly+4,6,3);}return;}
-for(let i=0;i<h;i+=3){const seg=i/h;ctx.fillStyle=pdef.colors[Math.min(3,Math.floor(seg*4))];ctx.fillRect(Math.round(p.x+sw*seg)-3,base-i,6,3);}
-const leaves=[[0,h],[5,h*0.72],[-5,h*0.55],[5,h*0.38],[-4,h*0.22]];leaves.forEach(([lx,ly])=>{const wx=sw*(ly/h);ctx.fillStyle=pdef.colors[2];ctx.fillRect(Math.round(p.x+lx+wx)-7,Math.round(base-ly)-3,14,3);ctx.fillRect(Math.round(p.x+lx+wx)-9,Math.round(base-ly),18,3);ctx.fillRect(Math.round(p.x+lx+wx)-7,Math.round(base-ly)+3,14,3);});}
+function makeFishCanvas(id,size,stage){
+  const sp=stage==='baby'?getBabySprite(id):getSprite(id);
+  const sc=Math.max(1,Math.floor(size/Math.max(sp.w,sp.h)));
+  const c=document.createElement('canvas');
+  c.width=sp.w*sc;c.height=sp.h*sc;
+  c.style.width=c.width+'px';c.style.height=c.height+'px';
+  c.style.display='block';c.style.margin='0 auto 3px';c.style.imageRendering='pixelated';
+  const ctx=c.getContext('2d');
+  sp.p.forEach(([x,y,col])=>{ctx.fillStyle=col;ctx.fillRect(x*sc,y*sc,sc,sc);});
+  return c;
+}
 
-function drawDecoSprite(ctx,id,ox,oy,sc){const decos={
+/* ═══════════════════════════════════════════════════════════
+   PLANT SPRITES
+═══════════════════════════════════════════════════════════ */
+const PLANT_COLORS={
+  vallis:   {stem:'#2E7D32',leaf:['#43A047','#66BB6A','#81C784'],shape:'tall'},
+  moss:     {stem:'#558B2F',leaf:['#7CB342','#9CCC65','#AED581'],shape:'bush'},
+  amazon:   {stem:'#1565C0',leaf:['#1976D2','#3949AB','#5C6BC0'],shape:'broad'},
+  cabomba:  {stem:'#00695C',leaf:['#00897B','#26A69A','#4DB6AC'],shape:'feather'},
+  crypt:    {stem:'#5D4037',leaf:['#6D4C41','#8D6E63','#A1887F'],shape:'rosette'},
+  hornwort: {stem:'#2E7D32',leaf:['#388E3C','#43A047','#66BB6A'],shape:'feather'},
+  anubias:  {stem:'#1B5E20',leaf:['#2E7D32','#388E3C','#1B5E20'],shape:'broad'},
+  lotus:    {stem:'#880E4F',leaf:['#AD1457','#C2185B','#E91E63'],shape:'broad'},
+  tiger:    {stem:'#6A1B9A',leaf:['#7B1FA2','#AD1457','#C2185B'],shape:'rosette'},
+  buce:     {stem:'#004D40',leaf:['#00695C','#00897B','#00BCD4'],shape:'broad'},
+  pogostemon:{stem:'#880E4F',leaf:['#AD1457','#E91E63','#F48FB1'],shape:'tall'},
+  utricularia:{stem:'#1B5E20',leaf:['#2E7D32','#8BC34A','#CDDC39'],shape:'bush'},
+  marimo:   {stem:'#2E7D32',leaf:['#388E3C','#4CAF50','#66BB6A'],shape:'ball'},
+};
+
+function drawPlantCanvas(id,size){
+  const c=document.createElement('canvas');c.width=size;c.height=size;
+  c.style.width=size+'px';c.style.height=size+'px';c.style.imageRendering='pixelated';
+  const ctx=c.getContext('2d');
+  const pc=PLANT_COLORS[id]||PLANT_COLORS.vallis;
+  const sc=2;
+  if(pc.shape==='ball'){
+    ctx.fillStyle=pc.leaf[1];ctx.fillRect(4*sc,2*sc,8*sc,8*sc);
+    ctx.fillStyle=pc.leaf[0];ctx.fillRect(6*sc,1*sc,4*sc,10*sc);
+    ctx.fillStyle=pc.leaf[2];ctx.fillRect(7*sc,3*sc,2*sc,4*sc);
+    ctx.fillStyle=pc.stem;ctx.fillRect(7*sc,10*sc,2*sc,4*sc);
+  } else {
+    ctx.fillStyle=pc.stem;ctx.fillRect(7*sc,3*sc,2*sc,9*sc);
+    [2,5,8].forEach((y,i)=>{ctx.fillStyle=pc.leaf[i%3];ctx.fillRect((4+i)*sc,y*sc,5*sc,3*sc);});
+    ctx.fillStyle=pc.leaf[0];ctx.fillRect(5*sc,1*sc,6*sc,3*sc);
+  }
+  return c;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DECO SPRITES
+═══════════════════════════════════════════════════════════ */
+function drawDecoSprite(ctx,id,ox,oy,sc){
+const D={
 rock1:[[0,4,'#78909C'],[1,3,'#90A4AE'],[2,2,'#B0BEC5'],[3,2,'#90A4AE'],[4,3,'#78909C'],[5,4,'#607D8B'],[1,4,'#90A4AE'],[2,3,'#CFD8DC'],[3,3,'#B0BEC5'],[4,4,'#78909C'],[0,5,'#607D8B'],[1,5,'#78909C'],[2,4,'#90A4AE'],[3,4,'#78909C'],[4,5,'#607D8B'],[5,5,'#546E7A']],
-rock2:[[2,1,'#546E7A'],[3,0,'#607D8B'],[4,1,'#546E7A'],[1,2,'#607D8B'],[2,2,'#78909C'],[3,1,'#90A4AE'],[4,2,'#78909C'],[5,2,'#607D8B'],[0,3,'#546E7A'],[1,3,'#78909C'],[2,3,'#90A4AE'],[3,2,'#B0BEC5'],[4,3,'#78909C'],[5,3,'#546E7A'],[6,4,'#455A64'],[0,4,'#455A64'],[1,4,'#607D8B'],[2,4,'#78909C'],[3,3,'#90A4AE'],[4,4,'#607D8B'],[5,4,'#455A64']],
+rock2:[[2,1,'#546E7A'],[3,0,'#607D8B'],[4,1,'#546E7A'],[1,2,'#607D8B'],[2,2,'#78909C'],[3,1,'#90A4AE'],[4,2,'#78909C'],[5,2,'#607D8B'],[0,3,'#546E7A'],[1,3,'#78909C'],[2,3,'#90A4AE'],[3,2,'#B0BEC5'],[4,3,'#78909C'],[5,3,'#546E7A'],[0,4,'#455A64'],[1,4,'#607D8B'],[2,4,'#78909C'],[3,3,'#90A4AE'],[4,4,'#607D8B'],[5,4,'#455A64']],
 driftwood:[[0,3,'#4E342E'],[1,2,'#5D4037'],[2,2,'#6D4C41'],[3,3,'#5D4037'],[4,2,'#4E342E'],[5,3,'#6D4C41'],[6,3,'#5D4037'],[7,4,'#4E342E'],[1,3,'#795548'],[2,3,'#8D6E63'],[3,4,'#795548'],[4,3,'#6D4C41'],[5,4,'#795548'],[6,4,'#6D4C41'],[0,4,'#3E2723'],[2,4,'#6D4C41'],[3,5,'#5D4037'],[4,4,'#5D4037'],[5,5,'#4E342E']],
 coral1:[[3,0,'#E91E63'],[2,1,'#E91E63'],[3,1,'#F06292'],[4,1,'#E91E63'],[1,2,'#F48FB1'],[2,2,'#F06292'],[3,2,'#EC407A'],[4,2,'#F06292'],[5,2,'#F48FB1'],[0,3,'#F06292'],[1,3,'#EC407A'],[2,3,'#E91E63'],[3,3,'#F06292'],[4,3,'#E91E63'],[5,3,'#EC407A'],[6,3,'#F06292'],[1,4,'#AD1457'],[2,4,'#C2185B'],[3,4,'#AD1457'],[4,4,'#C2185B'],[5,4,'#AD1457']],
 coral2:[[3,0,'#00BCD4'],[2,1,'#00BCD4'],[3,1,'#26C6DA'],[4,1,'#00BCD4'],[1,2,'#26C6DA'],[2,2,'#00ACC1'],[3,2,'#00BCD4'],[4,2,'#00ACC1'],[5,2,'#26C6DA'],[0,3,'#0097A7'],[1,3,'#00ACC1'],[2,3,'#00BCD4'],[3,3,'#26C6DA'],[4,3,'#00BCD4'],[5,3,'#00ACC1'],[6,3,'#0097A7'],[2,4,'#006064'],[3,4,'#00838F'],[4,4,'#006064']],
@@ -313,57 +607,749 @@ castle:[[3,0,'#90A4AE'],[2,1,'#B0BEC5'],[3,1,'#90A4AE'],[4,1,'#B0BEC5'],[1,2,'#9
 shell:[[2,1,'#FFF9C4'],[3,0,'#FFF176'],[4,1,'#FFF9C4'],[1,2,'#FFF176'],[2,2,'#FFEE58'],[3,1,'#FFF9C4'],[4,2,'#FFEE58'],[5,2,'#FFF176'],[0,3,'#FDD835'],[1,3,'#FFEE58'],[2,3,'#FFF176'],[3,2,'#FFEE58'],[4,3,'#FFF176'],[5,3,'#FFEE58'],[6,3,'#FDD835'],[1,4,'#F9A825'],[2,4,'#FDD835'],[3,3,'#FFEE58'],[4,4,'#FDD835'],[5,4,'#F9A825'],[2,5,'#F57F17'],[3,4,'#FDD835'],[4,5,'#F57F17']],
 anchor:[[3,0,'#546E7A'],[3,1,'#607D8B'],[3,2,'#607D8B'],[2,2,'#546E7A'],[4,2,'#546E7A'],[1,3,'#78909C'],[2,3,'#607D8B'],[3,3,'#78909C'],[4,3,'#607D8B'],[5,3,'#78909C'],[3,4,'#607D8B'],[3,5,'#78909C'],[2,5,'#546E7A'],[4,5,'#546E7A'],[1,5,'#455A64'],[5,5,'#455A64']],
 volcano:[[3,0,'#E53935'],[4,0,'#FF5722'],[2,1,'#BF360C'],[3,1,'#E65100'],[4,1,'#FF6F00'],[5,1,'#BF360C'],[1,2,'#795548'],[2,2,'#8D6E63'],[3,2,'#A1887F'],[4,2,'#8D6E63'],[5,2,'#795548'],[6,2,'#6D4C41'],[0,3,'#5D4037'],[1,3,'#6D4C41'],[2,3,'#795548'],[3,3,'#8D6E63'],[4,3,'#795548'],[5,3,'#6D4C41'],[6,3,'#5D4037'],[7,3,'#4E342E'],[0,4,'#4E342E'],[1,4,'#5D4037'],[2,4,'#6D4C41'],[3,4,'#795548'],[4,4,'#6D4C41'],[5,4,'#5D4037'],[6,4,'#4E342E'],[7,4,'#3E2723']],
-};const px=decos[id]||decos.rock1;px.forEach(([x,y,c])=>{ctx.fillStyle=c;ctx.fillRect(ox+x*sc,oy+y*sc,sc,sc);});}
+statue:[[3,0,'#B0BEC5'],[4,0,'#CFD8DC'],[5,0,'#B0BEC5'],[2,1,'#90A4AE'],[3,1,'#E0E0E0'],[4,1,'#FFFFFF'],[5,1,'#E0E0E0'],[6,1,'#90A4AE'],[2,2,'#78909C'],[3,2,'#CFD8DC'],[4,2,'#F5F5F5'],[5,2,'#CFD8DC'],[6,2,'#78909C'],[1,3,'#607D8B'],[2,3,'#B0BEC5'],[3,3,'#E0E0E0'],[4,3,'#FFFFFF'],[5,3,'#E0E0E0'],[6,3,'#B0BEC5'],[7,3,'#607D8B'],[1,4,'#546E7A'],[2,4,'#90A4AE'],[3,4,'#CFD8DC'],[4,4,'#E0E0E0'],[5,4,'#CFD8DC'],[6,4,'#90A4AE'],[7,4,'#546E7A'],[0,5,'#455A64'],[1,5,'#607D8B'],[2,5,'#78909C'],[3,5,'#B0BEC5'],[4,5,'#CFD8DC'],[5,5,'#B0BEC5'],[6,5,'#78909C'],[7,5,'#607D8B'],[8,5,'#455A64']],
+pagoda:[[4,0,'#78909C'],[3,1,'#90A4AE'],[4,1,'#B0BEC5'],[5,1,'#90A4AE'],[2,2,'#78909C'],[3,2,'#B0BEC5'],[4,2,'#CFD8DC'],[5,2,'#B0BEC5'],[6,2,'#78909C'],[1,3,'#607D8B'],[2,3,'#90A4AE'],[3,3,'#FF8A65'],[4,3,'#FF7043'],[5,3,'#FF8A65'],[6,3,'#90A4AE'],[7,3,'#607D8B'],[2,4,'#78909C'],[3,4,'#90A4AE'],[4,4,'#B0BEC5'],[5,4,'#90A4AE'],[6,4,'#78909C'],[1,5,'#607D8B'],[2,5,'#78909C'],[3,5,'#FF8A65'],[4,5,'#FF7043'],[5,5,'#FF8A65'],[6,5,'#78909C'],[7,5,'#607D8B'],[0,6,'#546E7A'],[1,6,'#607D8B'],[2,6,'#90A4AE'],[3,6,'#B0BEC5'],[4,6,'#CFD8DC'],[5,6,'#B0BEC5'],[6,6,'#90A4AE'],[7,6,'#607D8B'],[8,6,'#546E7A']],
+mermaid:[[4,0,'#F8BBD0'],[5,0,'#F48FB1'],[3,1,'#F48FB1'],[4,1,'#FCE4EC'],[5,1,'#F8BBD0'],[6,1,'#F48FB1'],[3,2,'#F8BBD0'],[4,2,'#FFFFFF'],[5,2,'#FCE4EC'],[6,2,'#F48FB1'],[2,3,'#80DEEA'],[3,3,'#26C6DA'],[4,3,'#FCE4EC'],[5,3,'#F8BBD0'],[6,3,'#26C6DA'],[7,3,'#80DEEA'],[2,4,'#4DD0E1'],[3,4,'#00BCD4'],[4,4,'#26C6DA'],[5,4,'#4DD0E1'],[6,4,'#00BCD4'],[7,4,'#4DD0E1'],[3,5,'#00ACC1'],[4,5,'#4DD0E1'],[5,5,'#00ACC1'],[6,5,'#4DD0E1'],[2,6,'#0097A7'],[3,6,'#00ACC1'],[4,6,'#80DEEA'],[5,6,'#00ACC1'],[6,6,'#0097A7'],[1,7,'#006064'],[2,7,'#0097A7'],[3,7,'#00ACC1'],[4,7,'#0097A7'],[5,7,'#006064']],
+sunken:[[0,4,'#4E342E'],[1,3,'#5D4037'],[2,2,'#6D4C41'],[3,2,'#795548'],[4,2,'#6D4C41'],[5,3,'#5D4037'],[6,4,'#4E342E'],[7,3,'#5D4037'],[8,2,'#6D4C41'],[9,3,'#5D4037'],[10,4,'#4E342E'],[1,4,'#6D4C41'],[2,3,'#8D6E63'],[3,3,'#A1887F'],[4,3,'#8D6E63'],[5,4,'#6D4C41'],[6,5,'#4E342E'],[7,4,'#6D4C41'],[8,3,'#8D6E63'],[9,4,'#6D4C41'],[1,5,'#5D4037'],[2,4,'#795548'],[3,4,'#8D6E63'],[4,4,'#795548'],[5,5,'#5D4037'],[7,5,'#5D4037'],[8,4,'#795548'],[9,5,'#5D4037'],[0,6,'#3E2723'],[1,6,'#4E342E'],[2,5,'#6D4C41'],[3,5,'#795548'],[4,5,'#6D4C41'],[5,6,'#4E342E'],[6,6,'#3E2723'],[7,6,'#4E342E'],[8,5,'#6D4C41'],[9,6,'#4E342E'],[10,6,'#3E2723']],
+crystal:[[4,0,'#80DEEA'],[4,1,'#26C6DA'],[5,1,'#00BCD4'],[3,2,'#4DD0E1'],[4,2,'#00BCD4'],[5,2,'#26C6DA'],[6,2,'#80DEEA'],[2,3,'#80DEEA'],[3,3,'#26C6DA'],[4,3,'#FFFFFF'],[5,3,'#E0F7FA'],[6,3,'#00BCD4'],[7,3,'#4DD0E1'],[1,4,'#4DD0E1'],[2,4,'#00BCD4'],[3,4,'#E0F7FA'],[4,4,'#FFFFFF'],[5,4,'#E0F7FA'],[6,4,'#26C6DA'],[7,4,'#80DEEA'],[8,4,'#4DD0E1'],[2,5,'#80DEEA'],[3,5,'#26C6DA'],[4,5,'#00BCD4'],[5,5,'#26C6DA'],[6,5,'#80DEEA'],[3,6,'#4DD0E1'],[4,6,'#26C6DA'],[5,6,'#4DD0E1'],[6,1,'#E040FB'],[7,2,'#E040FB'],[1,3,'#E040FB']],
+};
+const px=D[id]||D.rock1;
+px.forEach(([x,y,c])=>{ctx.fillStyle=c;ctx.fillRect(ox+x*sc,oy+y*sc,sc,sc);});
+}
 
-let fishAnim=[],raf,poopParticles=[];
+function drawDecoPreview(id){
+  const c=document.createElement('canvas');c.width=36;c.height=36;
+  c.style.width='36px';c.style.height='36px';c.style.imageRendering='pixelated';
+  drawDecoSprite(c.getContext('2d'),id,0,0,3);return c.outerHTML;
+}
 
-function syncAnim(){const ex=new Map(fishAnim.map(a=>[a.uid,a]));fishAnim=S.fish.map(f=>{const a=ex.get(f.uid);if(a){a.stage=f.stage;return a;}return{uid:f.uid,id:f.id,stage:f.stage||'adult',x:15+Math.random()*70,y:20+Math.random()*55,dx:(Math.random()<0.5?1:-1)*(0.09+Math.random()*0.16),dy:(Math.random()<0.5?1:-1)*(0.04+Math.random()*0.07),wobble:Math.random()*Math.PI*2,poopCooldown:Math.random()*200,emoteTimer:0};});}
+/* ═══════════════════════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════════════════════ */
+let S={
+  coins:500,owned:{},waterAdded:false,waterLevel:0,waterAnim:false,
+  waterTested:true,waterScore:{},fish:[],uid:0,day:1,
+  plantAge:0,plantSeeds:[],decos:[],gameTime:8*60,poopLevel:0,
+  tankSize:0,xp:0,level:1,achievements:[],
+  totalBred:0,totalCured:0,totalCleans:0,totalFeeds:0,
+  totalEarned:0,totalSpent:0,totalFishBought:0,totalDeaths:0,
+  daysWithoutDeath:0,maxDaysWithoutDeath:0,clickFeed:0,
+  _marketRares:null,_marketRareDay:-1,
+  _decoRares:null,_decoRareDay:-1,
+  _plantRares:null,_plantRareDay:-1,
+};
 
-function drawTank(){const canvas=document.getElementById('TC');if(!canvas)return;const W=canvas.parentElement.clientWidth||600;if(canvas.width!==W)canvas.width=W;const H=280,ctx=canvas.getContext('2d');cancelAnimationFrame(raf);
-function frame(){const t=Date.now()/1000;ctx.clearRect(0,0,W,H);
-if(!S.waterAdded&&!S.waterAnim){ctx.fillStyle='#1a237e';ctx.fillRect(0,0,W,H);ctx.fillStyle='#3949AB';ctx.font='bold 12px monospace';ctx.textAlign='center';ctx.fillText('[ EMPTY TANK ]',W/2,H/2-10);ctx.fillStyle='#5C6BC0';ctx.font='10px monospace';ctx.fillText('set up your tank and add water',W/2,H/2+12);raf=requestAnimationFrame(frame);return;}
-if(S.waterAnim){S.waterLevel=Math.min(100,(S.waterLevel||0)+0.45);if(S.waterLevel>=100){S.waterAnim=false;S.waterAdded=true;sv();renderSetup();renderHUD();}ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);const wh=Math.round(S.waterLevel/100*H);const wy=H-wh;ctx.fillStyle='#0a2d6e';ctx.fillRect(0,wy,W,wh);ctx.fillStyle='rgba(100,180,255,0.35)';for(let i=0;i<8;i++)ctx.fillRect(Math.round(W*0.07+i*(W*0.12)+Math.sin(t*4+i)*7),wy,Math.round(W*0.08),3);ctx.fillStyle='#90CAF9';ctx.font='bold 11px monospace';ctx.textAlign='center';ctx.fillText('filling... '+Math.round(S.waterLevel)+'%',W/2,Math.max(18,wy-8));raf=requestAnimationFrame(frame);return;}
+function sv(){try{localStorage.setItem('aq8',JSON.stringify(S));}catch(e){}}
+function ld(){try{const x=localStorage.getItem('aq8');if(x){Object.assign(S,JSON.parse(x));S.waterTested=true;}}catch(e){}}
+function coin(n){if(n>0)S.totalEarned=(S.totalEarned||0)+n;if(n<0)S.totalSpent=(S.totalSpent||0)+Math.abs(n);S.coins+=n;document.getElementById('CD').textContent='Coins: '+S.coins;if(n>0)coinFlyAnim('+'+n);sv();checkAch();}
+function addXP(n){S.xp=(S.xp||0)+n;const need=S.level*100;if(S.xp>=need){S.xp-=need;S.level++;showAl('global','Level Up! Level '+S.level+'! +25 coins','ok');coin(25);}document.getElementById('LD').textContent='Lv. '+S.level;sv();}
+function coinFlyAnim(text){const el=document.createElement('div');el.className='coin-fly';el.textContent=text;const cd=document.getElementById('CD');const r=cd.getBoundingClientRect();el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top-5)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),1000);}
+function showAl(z,m,t){const el=document.getElementById('a-'+(z||'global'));if(!el)return;el.innerHTML='<div class="al '+t+'">'+m+'</div>';setTimeout(()=>{if(el)el.innerHTML='';},3000);}
+function getTankCap(){return TANK_SIZES[S.tankSize||0].capacity;}
+function avgW(){const v=Object.values(S.waterScore||{});if(!v.length)return 0;return Math.round(v.reduce((a,b)=>a+b,0)/v.length);}
+function getWaterTemp(){return S.owned.heater2?27:S.owned.heater?25:18;}
+function getFishMood(f){
+  if(f.hunger<25)return'hungry';if(f.health<40)return'scared';if(f.diseased)return'scared';
+  const hour=Math.floor((S.gameTime%1440)/60);if(hour>=21||hour<6)return'sleepy';
+  if(S.fish.filter(x=>x.id===f.id).length===1&&FISH_DEF.find(d=>d.id===f.id)?.personality==='shy')return'lonely';
+  if(f.hunger>80&&f.health>80)return'happy';
+  if(FISH_DEF.find(d=>d.id===f.id)?.personality==='playful')return'playful';
+  return'content';
+}
 
-const hour=Math.floor((S.gameTime%1440)/60);const isNight=hour<6||hour>=20;const isDawn=hour>=5&&hour<8;const isDusk=hour>=18&&hour<21;const nightAlpha=isNight?0.55:isDawn||isDusk?0.25:0;
-[[0,55,'#0d1b4b'],[55,110,'#0d2258'],[110,160,'#0a2d6e'],[160,205,'#0a3580'],[205,245,'#0d3d8f'],[245,280,'#0a4499']].forEach(([y1,y2,c])=>{ctx.fillStyle=c;ctx.fillRect(0,y1,W,y2-y1);});
-if(S.owned.light&&!isNight){ctx.save();ctx.globalAlpha=0.06;for(let i=0;i<5;i++){const rx=W*(0.1+i*0.2)+Math.sin(t*0.25+i)*14;ctx.fillStyle='#B3E5FC';ctx.beginPath();ctx.moveTo(rx-12,0);ctx.lineTo(rx+12,0);ctx.lineTo(rx+42,H);ctx.lineTo(rx-42,H);ctx.closePath();ctx.fill();}ctx.restore();}
-ctx.save();ctx.globalAlpha=0.13;for(let i=0;i<16;i++){const cx=W*(0.03+i*0.065)+Math.sin(t*0.55+i*1.1)*7;const cy=180+Math.cos(t*0.4+i)*6;ctx.fillStyle='#81D4FA';ctx.fillRect(Math.round(cx),Math.round(cy),4,2);}ctx.restore();
-if(S.waterTested&&S.plantSeeds&&S.plantSeeds.length)S.plantSeeds.forEach(p=>drawPlant(ctx,p,t));
-if(S.decos&&S.decos.length)S.decos.forEach(d=>{ctx.save();drawDecoSprite(ctx,d.id,Math.round(d.x*W)-10,210-18,3);ctx.restore();});
-const flY=210;
-if(S.owned.gravel){ctx.fillStyle='#D7CCC8';ctx.fillRect(0,flY,W,70);ctx.fillStyle='#BCAAA4';ctx.fillRect(0,flY,W,4);[.05,.13,.22,.31,.40,.50,.59,.68,.77,.86,.93].forEach((rx,i)=>{ctx.fillStyle=['#8D6E63','#795548','#A1887F','#8D6E63','#BCAAA4','#795548','#A1887F','#8D6E63','#795548','#A1887F','#8D6E63'][i];ctx.fillRect(Math.round(rx*W)-4,flY+5,8,5);ctx.fillRect(Math.round(rx*W)-6,flY+8,12,4);});}else{ctx.fillStyle='#546E7A';ctx.fillRect(0,flY,W,70);ctx.fillStyle='#455A64';ctx.fillRect(0,flY,W,3);}
-if(S.owned.airpump)for(let i=0;i<10;i++){const bx=W*0.05+(i%5)*13+Math.sin(t*0.5+i)*5;const by=flY-((t*19+i*25)%flY);ctx.strokeStyle='rgba(179,229,252,0.55)';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(bx,by,i%3===0?3:2,0,Math.PI*2);ctx.stroke();}
-if(S.decos&&S.decos.some(d=>d.id==='volcano')){const vd=S.decos.find(d=>d.id==='volcano');const vx=Math.round(vd.x*W);for(let i=0;i<4;i++){ctx.fillStyle='rgba(255,87,34,0.4)';ctx.beginPath();ctx.arc(vx+Math.sin(t*2+i*1.5)*8,flY-20-((t*30+i*20)%40),2,0,Math.PI*2);ctx.fill();}}
-poopParticles=poopParticles.filter(p=>{p.y+=p.vy;p.vy+=0.03;p.life--;if(p.life<=0||p.y>flY)return false;ctx.fillStyle='#5D4037';ctx.globalAlpha=p.life/80;ctx.fillRect(Math.round(p.x),Math.round(p.y),3,3);ctx.globalAlpha=1;return true;});
-tankRipples=tankRipples.filter(r=>{r.r+=1.5;r.alpha-=0.015;if(r.alpha<=0)return false;ctx.save();ctx.globalAlpha=r.alpha;ctx.strokeStyle='#B3E5FC';ctx.lineWidth=1;ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);ctx.stroke();ctx.restore();return true;});
-if(S.testAnim){ctx.save();ctx.globalAlpha=0.22+Math.sin(t*5)*0.1;ctx.fillStyle='#E1F5FE';ctx.fillRect(0,0,W,H);ctx.restore();ctx.fillStyle='#0288D1';ctx.font='bold 11px monospace';ctx.textAlign='center';ctx.fillText('analyzing water...',W/2,H/2);}
-syncAnim();
-fishAnim.forEach(a=>{a.wobble+=0.032;const sp=a.stage==='baby'?getBabySprite(a.id):getSprite(a.id);const ns=isNight?0.4:1;a.x+=a.dx*ns;a.y+=a.dy*ns+Math.sin(a.wobble)*0.04;if(a.x<3){a.x=3;a.dx=Math.abs(a.dx);}if(a.x>92){a.x=92;a.dx=-Math.abs(a.dx);}if(a.y<4){a.y=4;a.dy=Math.abs(a.dy);}if(a.y>70){a.y=70;a.dy=-Math.abs(a.dy);}if(Math.random()<0.003)a.dx=-a.dx;if(Math.random()<0.004)a.dy=(Math.random()<0.5?1:-1)*(0.04+Math.random()*0.07);
-a.poopCooldown=(a.poopCooldown||0)-1;if(a.poopCooldown<=0){const cat=FISH_DEF.find(f=>f.id===a.id);if(Math.random()<(cat?cat.poop:0.3)*0.01){poopParticles.push({x:Math.round(a.x/100*W),y:Math.round(a.y/100*H),vy:0.5+Math.random()*0.5,life:80});S.poopLevel=Math.min(100,(S.poopLevel||0)+0.5);a.poopCooldown=150+Math.random()*200;}}
-const px=Math.round(a.x/100*W);const py=Math.round(a.y/100*H);const sc=a.stage==='baby'?2:3;ctx.save();ctx.translate(px,py-sp.h*sc/2);if(a.dx<0){ctx.scale(-1,1);ctx.translate(-sp.w*sc,0);}sp.p.forEach(([x,y,c])=>{ctx.fillStyle=c;ctx.fillRect(x*sc,y*sc,sc,sc);});ctx.restore();
-a.emoteTimer=(a.emoteTimer||0)+1;if(a.emoteTimer%180<50){const fish=S.fish.find(f=>f.uid===a.uid);if(fish){const mood=getFishMood(fish);const em=MOOD_EMOTES[mood];if(em){ctx.save();ctx.globalAlpha=0.7;ctx.fillStyle=mood==='hungry'?'#FFB300':mood==='scared'?'#ff6b6b':mood==='happy'?'#ff6b9d':'#B3E5FC';ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText(em,px+sp.w*sc/2,py-sp.h*sc/2-4);ctx.restore();}}}});
-if(nightAlpha>0){ctx.save();ctx.globalAlpha=nightAlpha;ctx.fillStyle='#001030';ctx.fillRect(0,0,W,H);ctx.restore();if(isNight){ctx.save();ctx.globalAlpha=0.7;for(let i=0;i<12;i++){ctx.fillStyle='#E1F5FE';ctx.fillRect(Math.round(W*(0.05+((i*73)%91)*0.01)),Math.round(H*0.05+((i*37)%50)*H*0.005),2,2);}ctx.restore();}}
-ctx.save();ctx.globalAlpha=0.05;ctx.fillStyle='#fff';ctx.fillRect(0,0,10,H);ctx.fillRect(W-9,0,9,H);ctx.restore();
-raf=requestAnimationFrame(frame);}frame();}
+function checkAch(){ACHIEVEMENTS.forEach(a=>{if((S.achievements||[]).includes(a.id))return;if(a.check(S)){if(!S.achievements)S.achievements=[];S.achievements.push(a.id);coin(a.reward);addXP(20);showAchPopup(a);sv();}});}
+function showAchPopup(a){const p=document.getElementById('ach-popup');document.getElementById('ach-popup-icon').textContent=a.icon;document.getElementById('ach-popup-text').textContent='Achievement: '+a.name;document.getElementById('ach-popup-sub').textContent=a.desc+' (+'+a.reward+' coins)';p.classList.add('show');setTimeout(()=>p.classList.remove('show'),3500);}
+function updateTankBadge(){document.getElementById('tank-badge').textContent='Tank: '+TANK_SIZES[S.tankSize||0].name;}
 
+function recalcWater(){
+  const pp=Math.round(S.poopLevel*0.4);
+  const fb=(S.owned.filter2?35:S.owned.filter?25:0);
+  const pb=Math.min(15,Math.floor((S.plantSeeds||[]).length*2));
+  const uv=S.owned.uv?8:0;
+  S.waterScore={
+    ph:     Math.min(100,Math.max(0,65+(S.owned.dechlorinator?20:0)+(S.owned.filter||S.owned.filter2?5:0)+pb-pp+uv)),
+    ammonia:Math.min(100,Math.max(0,55+fb+pb-Math.round(pp*1.2)+uv)),
+    oxygen: Math.min(100,Math.max(0,45+(S.owned.airpump?30:0)+(S.owned.filter||S.owned.filter2?10:0)+pb)),
+    temp:   Math.min(100,Math.max(0,55+(S.owned.heater2?40:S.owned.heater?32:0))),
+    clarity:Math.min(100,Math.max(0,45+fb+(S.owned.gravel?18:0)-pp+uv)),
+  };
+  Object.keys(S.waterScore).forEach(k=>{S.waterScore[k]=Math.round(S.waterScore[k]);});
+  renderWaterBar();
+}
+
+function renderWaterBar(){
+  const el=document.getElementById('wq-bar');if(!el)return;
+  if(!S.waterAdded){el.innerHTML='';return;}
+  const ws=S.waterScore;if(!ws||!Object.keys(ws).length)return;
+  const lbls={ph:'pH',ammonia:'NH₃',oxygen:'O₂',temp:'Temp',clarity:'Clear'};
+  const col=v=>v>=80?'#4ade80':v>=55?'#FFB300':'#ff6b6b';
+  const vals=Object.values(ws);
+  const avg=Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+  const wq=avg>=80?'Excellent':avg>=60?'Good':avg>=40?'Poor':'Critical';
+  const wc=avg>=80?'#4ade80':avg>=60?'#FFB300':'#ff6b6b';
+  el.innerHTML='<div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:6px;">'
+    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">'
+    +'<span style="font-family:var(--pfont);font-size:8px;color:var(--muted);letter-spacing:1px;">WATER QUALITY</span>'
+    +'<span style="font-size:13px;color:'+wc+';font-weight:500;">'+wq+' — '+avg+'%</span></div>'
+    +'<div style="display:flex;gap:6px;">'
+    +Object.keys(ws).map(k=>'<div style="flex:1;text-align:center;">'
+      +'<div style="font-size:10px;color:var(--muted);margin-bottom:3px;">'+lbls[k]+'</div>'
+      +'<div style="height:6px;background:#ffffff15;border-radius:10px;overflow:hidden;"><div style="height:100%;width:'+ws[k]+'%;background:'+col(ws[k])+';border-radius:10px;transition:width .6s;"></div></div>'
+      +'</div>').join('')
+    +'</div></div>';
+}
+
+function renderHUD(){
+  const avg=avgW();const wq=avg>=80?'Excellent':avg>=60?'Good':avg>=40?'Poor':'Critical';
+  const wc=avg>=80?'good':avg>=60?'warn':'bad';const cap=getTankCap();
+  document.getElementById('HUD').innerHTML=
+    '<div class="hud-stat '+wc+'"><b>'+wq+'</b>Water</div>'+
+    '<div class="hud-stat"><b>'+getWaterTemp()+'°C</b>Temp</div>'+
+    '<div class="hud-stat"><b>'+(S.waterAdded?100:Math.round(S.waterLevel||0))+'%</b>Level</div>'+
+    '<div class="hud-stat"><b>'+S.fish.length+'/'+cap+'</b>Fish</div>'+
+    '<div class="hud-stat '+(S.poopLevel>50?'bad':S.poopLevel>25?'warn':'')+'"><b>'+Math.round(S.poopLevel)+'%</b>Waste</div>'+
+    '<div class="hud-stat clickable" id="hud-feed-btn" style="background:'+(S.waterAdded&&S.fish.length?'#1D9E7522':'var(--panel)')+';">'+
+    '<b style="font-size:15px;">🍞</b>Feed</div>';
+  const fb=document.getElementById('hud-feed-btn');
+  if(fb)fb.addEventListener('click',()=>{if(!S.waterAdded||!S.fish.length)return;dropFood();});
+}
+
+/* ═══════════════════════════════════════════════════════════
+   SETUP OVERLAY
+═══════════════════════════════════════════════════════════ */
+function renderSetup(){
+  const ov=document.getElementById('tank-setup-overlay');if(!ov)return;
+  if(S.waterAdded){ov.innerHTML='';return;}
+  const ok=STEPS.every(s=>s.ids.some(id=>S.owned[id]));
+  ov.innerHTML='<div class="setup-panel"><div class="sp-title">~ TANK SETUP ~</div>'
+    +STEPS.map(s=>{const h=s.ids.some(id=>S.owned[id]);return'<div class="setup-step '+(h?'done':'')+'"><span class="ss-label">'+(h?'✓ ':'○ ')+s.label+'</span><span style="font-size:12px;color:'+(h?'#4ade80':'#ff6b6b')+'">'+(h?'Ready':'Missing')+'</span></div>';}).join('')
+    +'<button class="water-btn" id="btn-w-ov" '+((!ok||S.waterAnim)?'disabled':'')+'>'+(S.waterAnim?'Filling...':'💧 Add Water')+'</button></div>';
+  const b=document.getElementById('btn-w-ov');
+  if(b)b.addEventListener('click',()=>{if(S.waterAdded||S.waterAnim)return;S.waterAnim=true;S.waterLevel=0;sv();renderSetup();playWaterFlow();});
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════════════════ */
+document.getElementById('tab-bar').addEventListener('click',function(e){
+  const btn=e.target.closest('.tab');if(!btn)return;
+  const name=btn.dataset.tab;
+  document.querySelectorAll('#app .sc').forEach(s=>s.classList.remove('v'));
+  document.querySelectorAll('#app .tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('s-'+name).classList.add('v');btn.classList.add('on');
+  if(name==='market')renderMarket();
+  if(name==='plants')renderPlants();
+  if(name==='myfish')renderFishList();
+  if(name==='deco')renderDeco();
+  if(name==='upgrades')renderUpgrades();
+  if(name==='achievements')renderAchievements();
+  if(name==='stats')renderStats();
+});
+
+document.getElementById('audio-btn').addEventListener('click',toggleAudio);
+document.getElementById('btn-clean').addEventListener('click',function(){
+  if(S.coins<20){showAl('myfish','Not enough coins!','warn');return;}
+  coin(-20);S.poopLevel=0;S.totalCleans=(S.totalCleans||0)+1;addXP(3);recalcWater();sv();showAl('myfish','Tank cleaned!','ok');renderFishList();
+});
+
+/* ═══════════════════════════════════════════════════════════
+   SHOP
+═══════════════════════════════════════════════════════════ */
+function renderShop(){
+  document.getElementById('shop-g').innerHTML=EQ.map(e=>{
+    const o=S.owned[e.id];
+    return'<div class="item"><div style="font-size:24px;margin-bottom:4px;color:var(--gold)">'+e.icon+'</div>'+
+      '<div class="iname">'+e.name+'</div><div class="idesc">'+e.desc+'</div>'+
+      '<div class="iprice">'+e.price+' coins</div>'+
+      (o?'<div class="owned">✓ Owned</div>':'<button data-eq="'+e.id+'" '+(S.coins<e.price?'disabled':'')+'>Buy</button>')+
+      '</div>';
+  }).join('');
+  document.getElementById('shop-g').querySelectorAll('[data-eq]').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const id=this.dataset.eq;const e=EQ.find(x=>x.id===id);
+      if(!e||S.owned[id]||S.coins<e.price)return;
+      coin(-e.price);S.owned[id]=true;addXP(10);sv();recalcWater();
+      showAl('shop','Got '+e.name+'!','ok');renderShop();renderHUD();renderSetup();checkAch();
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MARKET — rare fish refresh every 7 days
+═══════════════════════════════════════════════════════════ */
+function getMarketRares(){
+  const refreshDay=Math.floor(S.day/7)*7;
+  if(S._marketRareDay!==refreshDay||!S._marketRares){
+    S._marketRareDay=refreshDay;
+    const rares=FISH_DEF.filter(f=>f.rarity==='rare'||f.rarity==='super_rare');
+    S._marketRares=[];
+    rares.forEach(r=>{if(Math.random()<(r.rarity==='super_rare'?0.25:0.5))S._marketRares.push(r.id);});
+    if(!S._marketRares.length)S._marketRares=[rares[0].id];
+    sv();
+  }
+  return S._marketRares;
+}
+
+function renderMarket(){
+  if(!S.waterAdded||avgW()<60){
+    document.getElementById('fish-g').innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">'+(S.waterAdded?'Water quality too low (60+). Add more equipment!':'Add water first.')+'</div>';
+    document.getElementById('market-note').textContent='';return;
+  }
+  const cap=getTankCap();const full=S.fish.length>=cap;
+  const nextRefresh=Math.ceil(S.day/7)*7;
+  document.getElementById('market-note').textContent=full?'Tank full! Upgrade for more room.':'Rare fish refresh on Day '+nextRefresh+'.';
+  const rareIds=getMarketRares();
+  const avail=[...FISH_DEF.filter(f=>f.rarity==='common'||f.rarity==='uncommon'),...FISH_DEF.filter(f=>rareIds.includes(f.id))];
+  const grid=document.getElementById('fish-g');grid.innerHTML='';
+  avail.forEach(f=>{
+    const div=document.createElement('div');div.className='item';
+    div.appendChild(makeFishCanvas(f.id,42));
+    const isR=f.rarity==='rare';const isSR=f.rarity==='super_rare';
+    div.innerHTML+=(isSR?'<div class="super-rare-tag">★★ SUPER RARE</div>':isR?'<div class="rare-tag">★ RARE</div>':'')+
+      '<div class="iname">'+f.name+'</div><div class="idesc">'+f.desc+'</div>'+
+      '<div style="font-size:10px;color:var(--muted);margin-bottom:3px">'+f.temp+'</div>'+
+      '<div class="iprice">'+f.price+' coins</div>'+
+      '<button data-fish="'+f.id+'" '+(S.coins<f.price||full?'disabled':'')+'>Buy</button>';
+    grid.appendChild(div);
+  });
+  grid.querySelectorAll('[data-fish]').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const id=this.dataset.fish;const cat=FISH_DEF.find(f=>f.id===id);
+      if(!cat||S.coins<cat.price||S.fish.length>=cap)return;
+      coin(-cat.price);const name=NAMES[Math.floor(Math.random()*NAMES.length)];
+      S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});
+      S.totalFishBought=(S.totalFishBought||0)+1;addXP(5);sv();
+      showAl('market',name+' the '+cat.name+' added!','ok');renderMarket();renderHUD();checkAch();
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PLANTS — refresh every 5 days
+═══════════════════════════════════════════════════════════ */
+function getPlantRares(){
+  const refreshDay=Math.floor(S.day/5)*5;
+  if(S._plantRareDay!==refreshDay||!S._plantRares){
+    S._plantRareDay=refreshDay;
+    const rares=PLANTS_DEF.filter(p=>p.rarity==='rare'||p.rarity==='super_rare');
+    S._plantRares=[];
+    rares.forEach(r=>{if(Math.random()<(r.rarity==='super_rare'?0.3:0.6))S._plantRares.push(r.id);});
+    sv();
+  }
+  return S._plantRares||[];
+}
+
+function renderPlants(){
+  const rareIds=getPlantRares();
+  const nextRefresh=Math.ceil(S.day/5)*5;
+  document.getElementById('plant-note').textContent='Rare plants refresh on Day '+nextRefresh+'. Plants improve water quality!';
+  const avail=[...PLANTS_DEF.filter(p=>p.rarity==='common'||p.rarity==='uncommon'),...PLANTS_DEF.filter(p=>rareIds.includes(p.id))];
+  const grid=document.getElementById('plant-g');grid.innerHTML='';
+  avail.forEach(p=>{
+    const planted=(S.plantSeeds||[]).some(x=>x.id===p.id);
+    const div=document.createElement('div');div.className='item';
+    div.appendChild(drawPlantCanvas(p.id,36));
+    const isR=p.rarity==='rare';const isSR=p.rarity==='super_rare';
+    div.innerHTML+=(isSR?'<div class="super-rare-tag">★★ SUPER RARE</div>':isR?'<div class="rare-tag">★ RARE</div>':'')+
+      '<div class="iname">'+p.name+'</div><div class="idesc">'+p.desc+'</div>'+
+      '<div class="iprice">'+p.price+' coins</div>'+
+      (planted?'<div class="owned">✓ Growing</div>':'<button data-plant="'+p.id+'" '+(S.coins<p.price?'disabled':'')+'>Plant</button>');
+    grid.appendChild(div);
+  });
+  grid.querySelectorAll('[data-plant]').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const id=this.dataset.plant;const pdef=PLANTS_DEF.find(x=>x.id===id);
+      if(!pdef||S.coins<pdef.price)return;
+      coin(-pdef.price);addXP(5);
+      if(!S.plantSeeds)S.plantSeeds=[];
+      const W=document.getElementById('TC').width||600;
+      const pc=PLANT_COLORS[id]||PLANT_COLORS.vallis;
+      S.plantSeeds.push({id,x:W*(0.05+Math.random()*0.88),maxH:40+Math.random()*60,swayOff:Math.random()*Math.PI*2});
+      sv();recalcWater();showAl('plants',pdef.name+' planted!','ok');renderPlants();checkAch();
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DECORATIONS — rare refresh every 10 days
+═══════════════════════════════════════════════════════════ */
+function getDecoRares(){
+  const refreshDay=Math.floor(S.day/10)*10;
+  if(S._decoRareDay!==refreshDay||!S._decoRares){
+    S._decoRareDay=refreshDay;
+    const rares=DECO_DEF.filter(d=>d.rarity==='rare'||d.rarity==='super_rare');
+    S._decoRares=[];
+    rares.forEach(r=>{if(Math.random()<(r.rarity==='super_rare'?0.3:0.6))S._decoRares.push(r.id);});
+    sv();
+  }
+  return S._decoRares||[];
+}
+
+function renderDeco(){
+  const rareIds=getDecoRares();
+  const nextRefresh=Math.ceil(S.day/10)*10;
+  document.getElementById('deco-note').textContent='Rare decorations refresh on Day '+nextRefresh+'.';
+  const avail=[...DECO_DEF.filter(d=>d.rarity==='common'),...DECO_DEF.filter(d=>rareIds.includes(d.id))];
+  const grid=document.getElementById('deco-g');grid.innerHTML='';
+  avail.forEach(d=>{
+    const placed=(S.decos||[]).some(x=>x.id===d.id);
+    const div=document.createElement('div');div.className='item';
+    div.innerHTML='<div style="height:38px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;">'+drawDecoPreview(d.id)+'</div>'+
+      (d.rarity==='super_rare'?'<div class="super-rare-tag">★★ SUPER RARE</div>':d.rarity==='rare'?'<div class="rare-tag">★ RARE</div>':'')+
+      '<div class="iname">'+d.name+'</div><div class="idesc">'+d.desc+'</div>'+
+      '<div class="iprice">'+d.price+' coins</div>'+
+      (placed?'<div class="owned">✓ Placed</div>':'<button data-deco="'+d.id+'" '+(S.coins<d.price?'disabled':'')+'>Place</button>');
+    grid.appendChild(div);
+  });
+  grid.querySelectorAll('[data-deco]').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const id=this.dataset.deco;const dd=DECO_DEF.find(x=>x.id===id);
+      if(!dd||S.coins<dd.price)return;
+      coin(-dd.price);addXP(5);if(!S.decos)S.decos=[];
+      S.decos.push({id,x:Math.random()*0.8+0.05});sv();showAl('deco',dd.name+' placed!','ok');renderDeco();checkAch();
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   MY FISH
+═══════════════════════════════════════════════════════════ */
+function renderFishList(){
+  const list=document.getElementById('fish-list');
+  if(!S.fish.length){list.innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">No fish yet. Visit the Fish Market!</div>';return;}
+  const col=v=>v>70?'#4ade80':v>40?'#FFB300':'#ff6b6b';
+  list.innerHTML='';
+  S.fish.forEach(f=>{
+    const div=document.createElement('div');div.className='fcard';
+    div.appendChild(makeFishCanvas(f.id,36,f.stage));
+    const info=document.createElement('div');info.className='finfo';
+    const dis=f.disease?DISEASES.find(d=>d.id===f.disease):null;const mood=getFishMood(f);
+    info.innerHTML='<div class="fname">'+f.name+' <span style="font-size:9px;color:var(--muted)">'+f.id+'</span> <span>'+(MOOD_EMOTES[mood]||'')+'</span></div>'+
+      '<div><span class="ftag ftag-'+(f.stage==='baby'?'baby':'adult')+'">'+f.stage+'</span>'+(f.diseased&&dis?'<span class="ftag ftag-sick">'+dis.name+'</span>':'')+
+      '<span class="ftag ftag-age">day '+f.age+'</span></div>'+
+      '<div class="row" style="margin-top:4px;margin-bottom:0"><div class="lbl" style="width:48px;font-size:11px">HP</div><div style="flex:1"><div class="bar"><div class="fill" style="width:'+f.health+'%;background:'+col(f.health)+'"></div></div></div><div class="val" style="color:'+col(f.health)+';font-size:10px">'+f.health+'</div></div>'+
+      '<div class="row" style="margin-bottom:0"><div class="lbl" style="width:48px;font-size:11px">Hunger</div><div style="flex:1"><div class="bar"><div class="fill" style="width:'+f.hunger+'%;background:'+col(f.hunger)+'"></div></div></div><div class="val" style="color:'+col(f.hunger)+';font-size:10px">'+f.hunger+'</div></div>';
+    div.appendChild(info);
+    const btns=document.createElement('div');btns.className='fbtns';
+    const fb=document.createElement('button');fb.textContent='Feed';
+    fb.addEventListener('click',e=>{e.stopPropagation();f.hunger=Math.min(100,f.hunger+40);S.totalFeeds=(S.totalFeeds||0)+1;addXP(1);sv();renderFishList();showAl('myfish',f.name+' fed!','ok');checkAch();});
+    btns.appendChild(fb);
+    if(f.diseased&&dis){
+      const tb=document.createElement('button');tb.textContent='Treat ('+dis.cureCost+')';
+      tb.addEventListener('click',e=>{e.stopPropagation();if(S.coins<dis.cureCost){showAl('myfish','Not enough coins!','warn');return;}coin(-dis.cureCost);f.diseased=false;f.disease=null;f.health=Math.min(100,f.health+25);S.totalCured=(S.totalCured||0)+1;addXP(5);sv();renderFishList();showAl('myfish',f.name+' cured!','ok');checkAch();});
+      btns.appendChild(tb);
+    }
+    const rb=document.createElement('button');rb.textContent='Rename';
+    rb.addEventListener('click',e=>{e.stopPropagation();const nn=prompt('New name:',f.name);if(nn&&nn.trim()){f.name=nn.trim();sv();renderFishList();}});
+    btns.appendChild(rb);
+    div.appendChild(btns);
+    div.addEventListener('click',()=>{f.hunger=Math.min(100,f.hunger+10);S.totalFeeds=(S.totalFeeds||0)+1;sv();renderFishList();});
+    list.appendChild(div);
+  });
+}
+
+function renderUpgrades(){
+  const list=document.getElementById('upgrade-list');let html='';
+  TANK_SIZES.forEach((t,i)=>{
+    const cur=i===(S.tankSize||0);const bought=i<=(S.tankSize||0);const next=i===(S.tankSize||0)+1;
+    html+='<div class="upgrade-card" style="'+(cur?'border-color:var(--green);':'')+'">'+
+      '<div class="up-icon">'+(i===0?'🏠':i===1?'🏡':i===2?'🏘':'🏰')+'</div>'+
+      '<div class="up-info"><div class="up-name">'+t.name+' Tank <span style="font-size:11px;color:var(--muted)">('+t.capacity+' fish)</span></div>'+
+      (cur?'<div style="font-size:11px;color:var(--green);margin-top:2px;">✓ Current</div>':bought?'<div style="font-size:11px;color:var(--green);margin-top:2px;">✓ Unlocked</div>':'<div class="up-price">'+t.cost+' coins</div>')+'</div>'+
+      (next&&!bought?'<button class="btn" style="font-size:12px;padding:6px 12px;" data-upgrade="'+i+'" '+(S.coins<t.cost?'disabled':'')+'>Upgrade</button>':'')+'</div>';
+  });
+  list.innerHTML=html;
+  list.querySelectorAll('[data-upgrade]').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const idx=parseInt(this.dataset.upgrade);const t=TANK_SIZES[idx];
+      if(S.coins<t.cost)return;coin(-t.cost);S.tankSize=idx;addXP(30);sv();
+      showAl('upgrades','Tank upgraded to '+t.name+'!','ok');renderUpgrades();updateTankBadge();renderHUD();checkAch();
+    });
+  });
+}
+
+function renderAchievements(){
+  const done=S.achievements||[];
+  document.getElementById('ach-list').innerHTML=ACHIEVEMENTS.map(a=>{
+    const d=done.includes(a.id);
+    return'<div class="ach-card '+(d?'done':'')+'"><div class="ach-icon">'+a.icon+'</div>'+
+      '<div class="ach-info"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div>'+
+      '<div class="ach-reward">+'+a.reward+' coins</div></div>'+
+      (d?'<div class="ach-check">✓</div>':'')+'</div>';
+  }).join('');
+}
+
+function renderStats(){
+  const avg=S.fish.length?Math.round(S.fish.reduce((a,f)=>a+f.health,0)/S.fish.length):0;
+  document.getElementById('stats-content').innerHTML=
+    '<div class="stat-box">'+
+    [['Days',S.day],['Fish',S.fish.length],['Species',new Set(S.fish.map(f=>f.id)).size],
+     ['Bought',S.totalFishBought||0],['Bred',S.totalBred||0],['Deaths',S.totalDeaths||0],
+     ['Cured',S.totalCured||0],['Fed',S.totalFeeds||0],['Earned',S.totalEarned||0],
+     ['Spent',S.totalSpent||0],['Avg HP',avg],['Best Streak',S.maxDaysWithoutDeath||0]]
+    .map(([l,v])=>'<div class="stat-item"><div class="stat-val">'+v+'</div><div class="stat-label">'+l+'</div></div>').join('')+
+    '</div><div class="btn-row" style="margin-top:12px;"><button class="btn" style="background:var(--red);font-size:12px;" id="btn-reset">Reset Game</button></div>';
+  document.getElementById('btn-reset').addEventListener('click',function(){
+    const area=this.parentElement;
+    area.innerHTML='<div style="font-size:13px;color:#ff6b6b;margin-bottom:8px;">⚠ Erase all progress?</div>'+
+      '<div style="display:flex;gap:8px;"><button class="btn" style="background:var(--red);font-size:12px;" id="btn-reset-yes">Yes</button>'+
+      '<button class="btn" style="background:#ffffff22;font-size:12px;" id="btn-reset-no">Cancel</button></div>';
+    document.getElementById('btn-reset-yes').addEventListener('click',()=>{localStorage.removeItem('aq8');location.reload();});
+    document.getElementById('btn-reset-no').addEventListener('click',renderStats);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TANK RENDERING
+═══════════════════════════════════════════════════════════ */
+function initPlants(){
+  const W=document.getElementById('TC').width||600;
+  const defaults=['vallis','moss','cabomba','vallis','crypt','hornwort','anubias'];
+  S.plantSeeds=defaults.map((id,i)=>{
+    const pc=PLANT_COLORS[id]||PLANT_COLORS.vallis;
+    return{id,x:W*(0.04+i*0.14),maxH:35+Math.random()*50,swayOff:Math.random()*Math.PI*2};
+  });sv();
+}
+function getPlantH(p){return Math.min(p.maxH,4+(S.plantAge||0)*0.8);}
+
+function drawPlant(ctx,p,t,W,H){
+  const pc=PLANT_COLORS[p.id]||PLANT_COLORS.vallis;
+  const h=getPlantH(p)*3;
+  const base=Math.round(H*0.75);
+  const sw=Math.sin(t*0.5+p.swayOff)*4;
+  const sc=3;
+  if(pc.shape==='ball'){
+    const by=base-h*0.6;const bx=Math.round(p.x+sw*0.5);
+    for(let r=0;r<h*0.6;r+=sc){ctx.fillStyle=pc.leaf[Math.floor(r/h*3)%3];ctx.fillRect(bx-Math.round(h*0.4),by+r,Math.round(h*0.8),sc);}
+    ctx.fillStyle=pc.stem;ctx.fillRect(bx-sc,base-h*0.5,sc*2,h*0.5);
+    return;
+  }
+  ctx.fillStyle=pc.stem;
+  for(let i=0;i<h;i+=sc){ctx.fillRect(Math.round(p.x+sw*(i/h))-sc,base-i,sc*2,sc);}
+  if(pc.shape==='feather'){
+    for(let i=sc*2;i<h;i+=sc*5){
+      const wx=sw*(i/h);
+      ctx.fillStyle=pc.leaf[Math.floor(i/h*3)%3];
+      ctx.fillRect(Math.round(p.x+wx)-sc*4,base-i,sc*3,sc);
+      ctx.fillRect(Math.round(p.x+wx)+sc,base-i,sc*3,sc);
+      if(i>h*0.3){ctx.fillRect(Math.round(p.x+wx)-sc*6,base-i+sc,sc*3,sc);ctx.fillRect(Math.round(p.x+wx)+sc*3,base-i+sc,sc*3,sc);}
+    }
+  } else if(pc.shape==='rosette'){
+    for(let l=0;l<6;l++){
+      const angle=(l/6)*Math.PI*2+sw*0.05;
+      const lx=Math.round(p.x+Math.cos(angle)*h*0.4+sw*0.5);
+      const ly=Math.round(base-Math.abs(Math.sin(angle))*h*0.5-h*0.2);
+      ctx.fillStyle=pc.leaf[l%3];
+      ctx.fillRect(lx-sc*3,ly,sc*6,sc*2);ctx.fillRect(lx-sc*4,ly+sc,sc*8,sc*2);ctx.fillRect(lx-sc*3,ly+sc*3,sc*6,sc*2);
+    }
+  } else {
+    const leaves=[[0,h],[sc*2,h*0.7],[-sc*2,h*0.5],[sc*3,h*0.35],[-sc*2,h*0.2]];
+    leaves.forEach(([lx,ly])=>{
+      const wx=sw*(ly/h);ctx.fillStyle=pc.leaf[Math.floor(ly/h*3)%3];
+      ctx.fillRect(Math.round(p.x+lx+wx)-sc*4,Math.round(base-ly)-sc,sc*8,sc*2);
+      ctx.fillRect(Math.round(p.x+lx+wx)-sc*5,Math.round(base-ly)+sc,sc*10,sc*2);
+      ctx.fillRect(Math.round(p.x+lx+wx)-sc*4,Math.round(base-ly)+sc*3,sc*8,sc*2);
+    });
+  }
+}
+
+let fishAnim=[],raf,poopParticles=[],foodPellets=[],deathParticles=[],splashParticles=[],tankRipples=[];
+
+function dropFood(){
+  if(!S.fish.length)return;
+  playFeed();
+  const fx=15+Math.random()*70;
+  for(let i=0;i<4;i++)foodPellets.push({x:fx+i*3-4,y:3,vx:(Math.random()-0.5)*0.4,vy:0.1+Math.random()*0.1,eaten:false,age:0});
+  showFeedParticles();
+  S.totalFeeds=(S.totalFeeds||0)+1;addXP(1);sv();checkAch();
+}
+
+function showFeedParticles(){
+  const tank=document.querySelector('.tank-outer');
+  for(let i=0;i<6;i++){const p=document.createElement('div');p.className='feed-particle';p.textContent='•';p.style.color='#FFB300';p.style.left=(20+Math.random()*60)+'%';p.style.top='3px';p.style.animationDelay=(Math.random()*0.4)+'s';tank.appendChild(p);setTimeout(()=>p.remove(),1500);}
+}
+
+document.getElementById('TC').addEventListener('click',function(e){
+  const rect=this.getBoundingClientRect();
+  const cx=(e.clientX-rect.left)/rect.width*100;
+  const cy=(e.clientY-rect.top)/rect.height*100;
+  tankRipples.push({x:e.clientX-rect.left,y:e.clientY-rect.top,r:0,alpha:0.5});
+  let hit=false;
+  fishAnim.forEach(a=>{
+    if(Math.hypot(a.x-cx,a.y-cy)<9){
+      hit=true;a.clickAnim=20;playBubble();
+      const fish=S.fish.find(f=>f.uid===a.uid);
+      if(fish){fish.hunger=Math.min(100,fish.hunger+10);sv();renderFishList();}
+      const W=this.width;const H=336;
+      for(let i=0;i<8;i++)splashParticles.push({x:a.x/100*W,y:a.y/100*H,vx:(Math.random()-0.5)*3,vy:-Math.random()*3,life:25,color:'#B3E5FC'});
+    }
+  });
+  if(!hit){S.clickFeed=(S.clickFeed||0)+1;if(S.clickFeed%5===0&&S.fish.length)dropFood();}
+});
+
+function syncAnim(){
+  const ex=new Map(fishAnim.map(a=>[a.uid,a]));
+  fishAnim=S.fish.map(f=>{
+    const a=ex.get(f.uid);if(a){a.stage=f.stage;return a;}
+    const cat=FISH_DEF.find(d=>d.id===f.id);
+    const pb=PERSONALITY_BEHAVIOR[cat?.personality]||PERSONALITY_BEHAVIOR.curious;
+    return{uid:f.uid,id:f.id,stage:f.stage||'adult',
+      x:15+Math.random()*70,y:15+Math.random()*60,
+      dx:(Math.random()<0.5?1:-1)*(0.08+Math.random()*0.1)*pb.speedMult,
+      dy:(Math.random()<0.5?1:-1)*(0.03+Math.random()*0.06),
+      wobble:Math.random()*Math.PI*2,poopCooldown:Math.random()*200,
+      emoteTimer:0,clickAnim:0};
+  });
+}
+
+function drawTank(){
+  const canvas=document.getElementById('TC');if(!canvas)return;
+  const W=canvas.parentElement.clientWidth||640;
+  if(canvas.width!==W)canvas.width=W;
+  const H=336;const ctx=canvas.getContext('2d');
+  cancelAnimationFrame(raf);
+
+  function frame(){
+    const t=Date.now()/1000;
+    ctx.clearRect(0,0,W,H);
+
+    if(!S.waterAdded&&!S.waterAnim){
+      ctx.fillStyle='#1a237e';ctx.fillRect(0,0,W,H);
+      ctx.fillStyle='#3949AB';ctx.font='bold 13px monospace';ctx.textAlign='center';
+      ctx.fillText('[ EMPTY TANK ]',W/2,H/2-12);
+      ctx.fillStyle='#5C6BC0';ctx.font='11px monospace';
+      ctx.fillText('buy equipment & add water',W/2,H/2+12);
+      raf=requestAnimationFrame(frame);return;
+    }
+
+    if(S.waterAnim){
+      S.waterLevel=Math.min(100,(S.waterLevel||0)+0.4);
+      if(S.waterLevel>=100){S.waterAnim=false;S.waterAdded=true;recalcWater();if(!S.plantSeeds||!S.plantSeeds.length)initPlants();sv();renderSetup();renderHUD();}
+      ctx.fillStyle='#0a1628';ctx.fillRect(0,0,W,H);
+      const wh=Math.round(S.waterLevel/100*H);const wy=H-wh;
+      ctx.fillStyle='#0a2d6e';ctx.fillRect(0,wy,W,wh);
+      ctx.fillStyle='rgba(100,180,255,0.3)';
+      for(let i=0;i<8;i++)ctx.fillRect(Math.round(W*0.07+i*(W*0.12)+Math.sin(t*4+i)*8),wy,Math.round(W*0.08),4);
+      ctx.fillStyle='#90CAF9';ctx.font='bold 12px monospace';ctx.textAlign='center';
+      ctx.fillText('filling... '+Math.round(S.waterLevel)+'%',W/2,Math.max(20,wy-10));
+      if(Math.random()<0.3)playBubble();
+      raf=requestAnimationFrame(frame);return;
+    }
+
+    const hour=Math.floor((S.gameTime%1440)/60);
+    const isNight=hour<6||hour>=20;const isDawn=hour>=5&&hour<8;const isDusk=hour>=18&&hour<21;
+    const nightAlpha=isNight?0.55:isDawn||isDusk?0.25:0;
+
+    [[0,65,'#0d1b4b'],[65,125,'#0d2258'],[125,185,'#0a2d6e'],[185,245,'#0a3580'],[245,300,'#0d3d8f'],[300,336,'#0a4499']].forEach(([y1,y2,c])=>{ctx.fillStyle=c;ctx.fillRect(0,y1,W,y2-y1);});
+
+    if(S.owned.light&&!isNight){
+      ctx.save();ctx.globalAlpha=0.06;
+      for(let i=0;i<5;i++){const rx=W*(0.1+i*0.2)+Math.sin(t*0.25+i)*15;ctx.fillStyle='#B3E5FC';ctx.beginPath();ctx.moveTo(rx-14,0);ctx.lineTo(rx+14,0);ctx.lineTo(rx+55,H);ctx.lineTo(rx-55,H);ctx.closePath();ctx.fill();}
+      ctx.restore();
+    }
+
+    ctx.save();ctx.globalAlpha=0.12;
+    for(let i=0;i<18;i++){const cx=W*(0.02+i*0.06)+Math.sin(t*0.5+i*1.1)*8;const cy=H*0.65+Math.cos(t*0.4+i)*8;ctx.fillStyle='#81D4FA';ctx.fillRect(Math.round(cx),Math.round(cy),4,2);}
+    ctx.restore();
+
+    const flY=Math.round(H*0.75);
+
+    if(S.plantSeeds&&S.plantSeeds.length)S.plantSeeds.forEach(p=>drawPlant(ctx,p,t,W,H));
+
+    if(S.decos&&S.decos.length)S.decos.forEach(d=>{ctx.save();drawDecoSprite(ctx,d.id,Math.round(d.x*W)-14,flY-28,4);ctx.restore();});
+
+    if(S.owned.gravel){
+      ctx.fillStyle='#D7CCC8';ctx.fillRect(0,flY,W,H-flY);
+      ctx.fillStyle='#BCAAA4';ctx.fillRect(0,flY,W,5);
+      [.04,.11,.19,.27,.35,.44,.53,.61,.69,.77,.85,.92].forEach((rx,i)=>{
+        ctx.fillStyle=['#8D6E63','#795548','#A1887F','#8D6E63','#BCAAA4','#795548','#A1887F','#8D6E63','#795548','#A1887F','#8D6E63','#795548'][i];
+        ctx.fillRect(Math.round(rx*W)-5,flY+6,10,6);ctx.fillRect(Math.round(rx*W)-7,flY+10,14,5);
+      });
+    } else {ctx.fillStyle='#546E7A';ctx.fillRect(0,flY,W,H-flY);ctx.fillStyle='#455A64';ctx.fillRect(0,flY,W,4);}
+
+    if(S.owned.airpump){
+      const bubbleT=t;
+      for(let i=0;i<12;i++){
+        const bx=W*0.04+(i%6)*14+Math.sin(bubbleT*0.5+i)*6;
+        const by=flY-((bubbleT*18+i*22)%flY);
+        const r=i%3===0?4:i%2===0?3:2;
+        ctx.strokeStyle='rgba(179,229,252,0.55)';ctx.lineWidth=1.5;
+        ctx.beginPath();ctx.arc(bx,by,r,0,Math.PI*2);ctx.stroke();
+        ctx.fillStyle='rgba(255,255,255,0.1)';ctx.beginPath();ctx.arc(bx-1,by-1,r*0.5,0,Math.PI*2);ctx.fill();
+      }
+    }
+
+    if(S.decos&&S.decos.some(d=>d.id==='volcano')){
+      const vd=S.decos.find(d=>d.id==='volcano');const vx=Math.round(vd.x*W);
+      for(let i=0;i<5;i++){ctx.fillStyle='rgba(255,87,34,0.4)';ctx.beginPath();ctx.arc(vx+Math.sin(t*2+i*1.5)*10,flY-25-((t*28+i*18)%45),3,0,Math.PI*2);ctx.fill();}
+    }
+    if(S.decos&&S.decos.some(d=>d.id==='crystal')){
+      const cd=S.decos.find(d=>d.id==='crystal');const cx=Math.round(cd.x*W);
+      ctx.save();ctx.globalAlpha=0.3+Math.sin(t*2)*0.15;
+      ctx.fillStyle='#E040FB';ctx.fillRect(cx-3,flY-35,6,6);
+      ctx.fillStyle='#00BCD4';ctx.fillRect(cx+8,flY-28,4,4);
+      ctx.restore();
+    }
+
+    poopParticles=poopParticles.filter(p=>{p.y+=p.vy;p.vy+=0.04;p.life--;if(p.life<=0||p.y>flY)return false;ctx.fillStyle='#5D4037';ctx.globalAlpha=p.life/80;ctx.fillRect(Math.round(p.x),Math.round(p.y),3,3);ctx.globalAlpha=1;return true;});
+    tankRipples=tankRipples.filter(r=>{r.r+=1.8;r.alpha-=0.018;if(r.alpha<=0)return false;ctx.save();ctx.globalAlpha=r.alpha;ctx.strokeStyle='#B3E5FC';ctx.lineWidth=1;ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,Math.PI*2);ctx.stroke();ctx.restore();return true;});
+    splashParticles=splashParticles.filter(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.1;p.life--;if(p.life<=0)return false;ctx.fillStyle=p.color;ctx.globalAlpha=p.life/30;ctx.fillRect(Math.round(p.x),Math.round(p.y),3,3);ctx.globalAlpha=1;return true;});
+
+    foodPellets=foodPellets.filter(fp=>{
+      if(fp.eaten)return false;
+      fp.y+=fp.vy;fp.x+=fp.vx;fp.vy+=0.006;fp.age++;
+      if(fp.y>flY/100*100-4){fp.y=flY/100*100-4;fp.vy*=-0.2;fp.vx*=0.8;}
+      if(fp.age>700)return false;
+      const px=Math.round(fp.x/100*W);const py=Math.round(fp.y/100*H);
+      ctx.fillStyle='#FFB300';ctx.globalAlpha=0.9;ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+      return true;
+    });
+
+    deathParticles=deathParticles.filter(p=>{
+      p.x+=p.vx;p.y+=p.vy;p.vy-=0.05;p.vx*=0.97;p.life--;if(p.life<=0)return false;
+      ctx.save();ctx.globalAlpha=p.life/p.maxLife;
+      ctx.translate(Math.round(p.x/100*W),Math.round(p.y/100*H));
+      if(p.flip){ctx.scale(-1,1);ctx.translate(-p.sp.w*p.sc,0);}
+      p.sp.p.forEach(([x,y,c])=>{ctx.fillStyle=c;ctx.fillRect(x*p.sc,y*p.sc,p.sc,p.sc);});
+      ctx.restore();return true;
+    });
+
+    syncAnim();
+    fishAnim.forEach(a=>{
+      a.wobble+=0.03;
+      const fish=S.fish.find(f=>f.uid===a.uid);
+      const cat=FISH_DEF.find(d=>d.id===a.id);
+      const pb=PERSONALITY_BEHAVIOR[cat?.personality]||PERSONALITY_BEHAVIOR.curious;
+      const ns=isNight?0.4:1;
+      const hunger=fish?.hunger||50;
+
+      let chasing=false;
+      if(foodPellets.length>0){
+        let nearest=null,nearestD=9999;
+        foodPellets.forEach(fp=>{if(fp.eaten)return;const d=Math.hypot(a.x-fp.x,a.y-(fp.y/100*100));if(d<nearestD){nearestD=d;nearest=fp;}});
+        if(nearest&&nearestD<65){
+          const urgency=Math.max(0.4,(100-hunger)/60)*(pb.foodMult||1)*ns;
+          const spd=0.28*urgency;
+          const dx=nearest.x-a.x;const dy=(nearest.y/100*100)-a.y;
+          const dist=Math.hypot(dx,dy)||1;
+          a.dx=dx/dist*spd;a.dy=dy/dist*spd;chasing=true;
+          if(nearestD<5){nearest.eaten=true;if(fish){fish.hunger=Math.min(100,fish.hunger+(hunger<30?35:20));sv();}for(let i=0;i<8;i++)splashParticles.push({x:a.x/100*W,y:a.y/100*H,vx:(Math.random()-0.5)*3,vy:-Math.random()*2.5,life:22,color:'#FFB300'});renderFishList();}
+        }
+      }
+
+      if(!chasing){
+        if(pb.aggro&&Math.random()<0.002*ns){
+          const others=fishAnim.filter(o=>o.uid!==a.uid&&Math.hypot(o.x-a.x,o.y-a.y)<35);
+          if(others.length){const tgt=others[0];a.dx=(tgt.x-a.x)/Math.hypot(tgt.x-a.x,tgt.y-a.y)*0.2*ns;a.dy=(tgt.y-a.y)/Math.hypot(tgt.x-a.x,tgt.y-a.y)*0.12*ns;const v=fishAnim.find(o=>o.uid===tgt.uid);if(v){const vc=FISH_DEF.find(d=>d.id===v.id);if(PERSONALITY_BEHAVIOR[vc?.personality]?.flees){v.dx=-(a.x-v.x)/Math.hypot(a.x-v.x,a.y-v.y)*0.22*ns;v.dy=-(a.y-v.y)/Math.hypot(a.x-v.x,a.y-v.y)*0.12*ns;}}}
+        } else {
+          if(Math.random()<pb.changeDir*ns){a.dx=(Math.random()-0.5)*0.24*pb.speedMult*ns;}
+          if(Math.random()<pb.changeDir*0.5*ns){a.dy=(Math.random()-0.5)*0.12*ns;}
+        }
+      }
+
+      a.x+=a.dx;a.y+=a.dy+Math.sin(a.wobble)*0.03;
+      if(a.x<2){a.x=2;a.dx=Math.abs(a.dx);}if(a.x>93){a.x=93;a.dx=-Math.abs(a.dx);}
+      if(a.y<3){a.y=3;a.dy=Math.abs(a.dy);}if(a.y>73){a.y=73;a.dy=-Math.abs(a.dy);}
+
+      a.poopCooldown=(a.poopCooldown||0)-1;
+      if(a.poopCooldown<=0&&cat&&Math.random()<cat.poop*0.01){
+        poopParticles.push({x:Math.round(a.x/100*W),y:Math.round(a.y/100*H),vy:0.6+Math.random()*0.5,life:80});
+        S.poopLevel=Math.min(100,(S.poopLevel||0)+0.5);a.poopCooldown=160+Math.random()*220;
+      }
+
+      if(a.clickAnim>0){
+        a.clickAnim--;const px2=Math.round(a.x/100*W);const py2=Math.round(a.y/100*H);
+        ctx.save();ctx.globalAlpha=a.clickAnim/20;ctx.strokeStyle='#FFD700';ctx.lineWidth=2;
+        ctx.beginPath();ctx.arc(px2,py2,a.clickAnim*1.3,0,Math.PI*2);ctx.stroke();ctx.restore();
+      }
+
+      const sp=a.stage==='baby'?getBabySprite(a.id):getSprite(a.id);
+      const sc=a.stage==='baby'?3:5;
+      const px=Math.round(a.x/100*W);const py=Math.round(a.y/100*H);
+      ctx.save();ctx.translate(px,py-sp.h*sc/2);
+      if(a.dx<0){ctx.scale(-1,1);ctx.translate(-sp.w*sc,0);}
+      sp.p.forEach(([x,y,c])=>{ctx.fillStyle=c;ctx.fillRect(x*sc,y*sc,sc,sc);});
+      ctx.restore();
+
+      a.emoteTimer=(a.emoteTimer||0)+1;
+      if(a.emoteTimer%180<50){
+        const mood=fish?getFishMood(fish):'content';const em=MOOD_EMOTES[mood];
+        if(em){ctx.save();ctx.globalAlpha=0.8;ctx.fillStyle=mood==='hungry'?'#FFB300':mood==='scared'?'#ff6b6b':mood==='happy'?'#ff6b9d':'#B3E5FC';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText(em,px+sp.w*sc/2,py-sp.h*sc/2-5);ctx.restore();}
+      }
+    });
+
+    if(nightAlpha>0){
+      ctx.save();ctx.globalAlpha=nightAlpha;ctx.fillStyle='#001030';ctx.fillRect(0,0,W,H);ctx.restore();
+      if(isNight){ctx.save();ctx.globalAlpha=0.7;for(let i=0;i<14;i++){ctx.fillStyle='#E1F5FE';ctx.fillRect(Math.round(W*(0.03+((i*73)%94)*0.01)),Math.round(H*0.04+((i*37)%52)*H*0.005),2,2);}ctx.restore();}
+    }
+    ctx.save();ctx.globalAlpha=0.06;ctx.fillStyle='#fff';ctx.fillRect(0,0,12,H);ctx.fillRect(W-10,0,10,H);ctx.restore();
+
+    if(S.owned.airpump&&Math.random()<0.02)playBubble();
+
+    raf=requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+/* ═══════════════════════════════════════════════════════════
+   GAME LOOP
+═══════════════════════════════════════════════════════════ */
 let lastTickTime=Date.now();
-function gameLoop(){const now=Date.now();const realMs=now-lastTickTime;const msPerGameDay=3600000;const msPerGameMin=msPerGameDay/1440;const gameMins=realMs/msPerGameMin;S.gameTime=(S.gameTime||480)+gameMins;S.day=1+Math.floor(S.gameTime/1440);
-if(Math.floor(S.gameTime/1440)>Math.floor((S.gameTime-gameMins)/1440))onNewDay();
-S.plantAge+=(gameMins/1440)*2;
-if(S.waterTested){S.poopLevel=Math.max(0,S.poopLevel-(S.owned.filter2?0.03:S.owned.filter?0.015:0)*gameMins/60);recalcWater();}
-lastTickTime=now;const h=Math.floor((S.gameTime%1440)/60);const m=Math.floor(S.gameTime%60);document.getElementById('time-display').textContent='Day '+S.day+' — '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');renderHUD();if(Math.random()<0.001*gameMins)sv();setTimeout(gameLoop,500);}
+function gameLoop(){
+  const now=Date.now();const realMs=now-lastTickTime;
+  const msPerGameDay=3600000;const msPerGameMin=msPerGameDay/1440;const gameMins=realMs/msPerGameMin;
+  S.gameTime=(S.gameTime||480)+gameMins;S.day=1+Math.floor(S.gameTime/1440);
+  if(Math.floor(S.gameTime/1440)>Math.floor((S.gameTime-gameMins)/1440))onNewDay();
+  S.plantAge+=(gameMins/1440)*2;
+  if(S.waterAdded){S.poopLevel=Math.max(0,S.poopLevel-(S.owned.filter2?0.04:S.owned.filter?0.02:0)*gameMins/60);recalcWater();}
+  lastTickTime=now;
+  const h=Math.floor((S.gameTime%1440)/60);const m=Math.floor(S.gameTime%60);
+  document.getElementById('time-display').textContent='Day '+S.day+' — '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  renderHUD();if(Math.random()<0.001*gameMins)sv();
+  setTimeout(gameLoop,500);
+}
 
-function onNewDay(){coin(10);addXP(5);showAl('global','New day! +10 coins, +5 XP','ok');let deathToday=false;
-if(S.owned.autofeeder){S.fish.forEach(f=>{f.hunger=Math.min(100,f.hunger+25);});showAl('global','Auto Feeder activated!','ok');}
-S.fish.forEach(f=>{f.hunger=Math.max(0,f.hunger-20);f.age+=1;if(f.age>=10&&f.stage==='baby')f.stage='adult';if(f.hunger<20)f.health=Math.max(0,f.health-15);
-if(avgW()<50&&!f.diseased&&Math.random()<(S.owned.uv?0.08:0.15)){const dis=DISEASES[Math.floor(Math.random()*DISEASES.length)];f.diseased=true;f.disease=dis.id;showAl('global',f.name+' caught '+dis.name+'!','bad');}
-if(f.diseased){const dis=DISEASES.find(d=>d.id===f.disease);if(dis)f.health=Math.max(0,f.health-dis.damage/2);}
-if(f.health<=0){S.fish=S.fish.filter(x=>x.uid!==f.uid);S.totalDeaths=(S.totalDeaths||0)+1;deathToday=true;showAl('global',f.name+' has died...','bad');}});
-if(!deathToday&&S.fish.length>0){S.daysWithoutDeath=(S.daysWithoutDeath||0)+1;if(S.daysWithoutDeath>(S.maxDaysWithoutDeath||0))S.maxDaysWithoutDeath=S.daysWithoutDeath;}else if(deathToday)S.daysWithoutDeath=0;
-const groups={};S.fish.forEach(f=>{groups[f.id]=groups[f.id]||[];groups[f.id].push(f);});Object.keys(groups).forEach(id=>{const cat=FISH_DEF.find(c=>c.id===id);if(!cat||!cat.breedable||groups[id].filter(f=>f.stage==='adult').length<2||avgW()<75)return;if(Math.random()<0.06&&S.fish.length<getTankCap()){const name=NAMES[Math.floor(Math.random()*NAMES.length)];S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});S.totalBred=(S.totalBred||0)+1;showAl('global','Baby '+cat.name+' ('+name+') was born!','ok');addXP(10);}});
-S._marketRares=null;sv();renderFishList();checkAch();}
+function onNewDay(){
+  coin(10);addXP(5);showAl('global','New day! +10 coins','ok');
+  S._marketRares=null;S._decoRares=null;S._plantRares=null;
+  let deathToday=false;
+  if(S.owned.autofeeder){S.fish.forEach(f=>{f.hunger=Math.min(100,f.hunger+25);});}
+  S.fish.forEach(f=>{
+    f.hunger=Math.max(0,f.hunger-20);f.age+=1;if(f.age>=10&&f.stage==='baby')f.stage='adult';
+    if(f.hunger<20)f.health=Math.max(0,f.health-15);
+    if(avgW()<50&&!f.diseased&&Math.random()<(S.owned.uv?0.08:0.15)){
+      const dis=DISEASES[Math.floor(Math.random()*DISEASES.length)];f.diseased=true;f.disease=dis.id;showAl('global',f.name+' caught '+dis.name+'!','bad');
+    }
+    if(f.diseased){const dis=DISEASES.find(d=>d.id===f.disease);if(dis)f.health=Math.max(0,f.health-dis.damage/2);}
+    if(f.health<=0){
+      const anim=fishAnim.find(a=>a.uid===f.uid);
+      if(anim){const sp=f.stage==='baby'?getBabySprite(f.id):getSprite(f.id);for(let i=0;i<6;i++)deathParticles.push({x:anim.x,y:anim.y,vx:(Math.random()-0.5)*0.9,vy:-0.4-Math.random()*0.6,sp,sc:f.stage==='baby'?3:5,flip:Math.random()<0.5,life:60,maxLife:60});}
+      S.fish=S.fish.filter(x=>x.uid!==f.uid);S.totalDeaths=(S.totalDeaths||0)+1;deathToday=true;showAl('global',f.name+' has died...','bad');
+    }
+  });
+  if(!deathToday&&S.fish.length>0){S.daysWithoutDeath=(S.daysWithoutDeath||0)+1;if(S.daysWithoutDeath>(S.maxDaysWithoutDeath||0))S.maxDaysWithoutDeath=S.daysWithoutDeath;}else if(deathToday)S.daysWithoutDeath=0;
+  const groups={};S.fish.forEach(f=>{groups[f.id]=groups[f.id]||[];groups[f.id].push(f);});
+  Object.keys(groups).forEach(id=>{
+    const cat=FISH_DEF.find(c=>c.id===id);if(!cat||!cat.breedable||groups[id].filter(f=>f.stage==='adult').length<2||avgW()<75)return;
+    if(Math.random()<0.06&&S.fish.length<getTankCap()){const name=NAMES[Math.floor(Math.random()*NAMES.length)];S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});S.totalBred=(S.totalBred||0)+1;showAl('global','Baby '+cat.name+' ('+name+') was born!','ok');addXP(10);}
+  });
+  sv();renderFishList();checkAch();
+}
 
-ld();lastTickTime=Date.now();document.getElementById('CD').textContent='Coins: '+S.coins;document.getElementById('LD').textContent='Lv. '+(S.level||1)+' ('+(S.xp||0)+' XP)';updateTankBadge();renderShop();renderHUD();if(S.waterTested&&(!S.plantSeeds||!S.plantSeeds.length))initPlants();setTimeout(drawTank,80);setTimeout(gameLoop,500);
+/* ═══════════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════════ */
+ld();
+lastTickTime=Date.now();
+document.getElementById('CD').textContent='Coins: '+S.coins;
+document.getElementById('LD').textContent='Lv. '+S.level;
+updateTankBadge();
+renderShop();renderHUD();recalcWater();renderWaterBar();renderSetup();
+if(S.waterAdded&&(!S.plantSeeds||!S.plantSeeds.length))initPlants();
+document.getElementById('audio-btn').classList.toggle('on',audioEnabled);
+setTimeout(drawTank,80);
+setTimeout(gameLoop,500);
+setTimeout(()=>{getAudio();startBGM();},1500);
 </script>
 </body>
 </html>
