@@ -116,7 +116,7 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
     <div class="top-bar-right">
       <button class="audio-btn" id="audio-btn">♪ ON</button>
       <div class="level-display" id="LD">Lv. 1</div>
-      <div class="coins-display" id="CD">Coins: 500</div>
+      <div class="coins-display" id="CD">Coins: 5000</div>
     </div>
   </div>
   <div class="tank-outer"><canvas id="TC" height="336"></canvas><div class="tank-overlay" id="tank-setup-overlay"></div></div>
@@ -281,20 +281,22 @@ function toggleAudio(){
    DATA DEFINITIONS
 ═══════════════════════════════════════════════════════════ */
 const FISH_DEF=[
-  {id:'guppy',    name:'Guppy',        price:15,  desc:'Hardy & colorful',  temp:'24-28°C',hardiness:5,breedable:true, personality:'curious',    poop:0.3, rarity:'common'},
-  {id:'betta',    name:'Betta',         price:30,  desc:'Flowing fins',      temp:'26-30°C',hardiness:3,breedable:false,personality:'territorial', poop:0.25,rarity:'common'},
-  {id:'neon',     name:'Neon Tetra',    price:12,  desc:'Electric stripe',   temp:'22-26°C',hardiness:4,breedable:true, personality:'shy',        poop:0.2, rarity:'common'},
-  {id:'goldfish', name:'Goldfish',      price:20,  desc:'Classic round body',temp:'18-22°C',hardiness:5,breedable:true, personality:'greedy',     poop:0.5, rarity:'common'},
-  {id:'angel',    name:'Angelfish',     price:45,  desc:'Tall diamond shape',temp:'25-29°C',hardiness:3,breedable:true, personality:'proud',      poop:0.3, rarity:'uncommon'},
-  {id:'pleco',    name:'Pleco',         price:35,  desc:'Flat algae eater',  temp:'23-27°C',hardiness:5,breedable:false,personality:'peaceful',   poop:0.2, rarity:'common'},
-  {id:'discus',   name:'Discus',        price:80,  desc:'Round royal fish',  temp:'28-32°C',hardiness:2,breedable:true, personality:'sensitive',  poop:0.35,rarity:'uncommon'},
-  {id:'zebra',    name:'Zebra Danio',   price:10,  desc:'Bold black stripes',temp:'18-24°C',hardiness:5,breedable:true, personality:'playful',   poop:0.2, rarity:'common'},
-  {id:'clown',    name:'Clownfish',     price:60,  desc:'Orange white bands',temp:'24-28°C',hardiness:3,breedable:false,personality:'curious',    poop:0.25,rarity:'uncommon'},
-  {id:'arowana',  name:'Arowana',       price:200, desc:'Golden dragon fish', temp:'26-30°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.4, rarity:'rare'},
-  {id:'axolotl',  name:'Axolotl',       price:150, desc:'Pink feathery gills',temp:'16-20°C',hardiness:3,breedable:true, personality:'curious',   poop:0.3, rarity:'rare'},
-  {id:'seahorse', name:'Seahorse',      price:120, desc:'Upright slow mover',temp:'22-26°C',hardiness:2,breedable:true, personality:'shy',        poop:0.15,rarity:'rare'},
-  {id:'manta',    name:'Manta Ray',     price:350, desc:'Gliding giant ray',  temp:'24-28°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.3, rarity:'super_rare'},
-  {id:'dragon',   name:'Dragon Goby',   price:280, desc:'Fierce eel-like',   temp:'25-29°C',hardiness:2,breedable:false,personality:'territorial', poop:0.35,rarity:'super_rare'},
+  // yMin/yMax = % of tank height (0=top, 73=floor). social: schooling/solitary/anemone/shy/normal
+  // moveStyle: cruise/idle_burst/hover/normal. feedLayer: surface/mid/bottom/none
+  {id:'guppy',    name:'Guppy',        price:15,  desc:'Hardy & colorful',  temp:'24-28°C',hardiness:5,breedable:true, personality:'curious',    poop:0.3, rarity:'common',     yMin:4, yMax:35,social:'schooling', moveStyle:'normal',      feedLayer:'surface'},
+  {id:'betta',    name:'Betta',         price:30,  desc:'Flowing fins',      temp:'26-30°C',hardiness:3,breedable:false,personality:'territorial', poop:0.25,rarity:'common',     yMin:15,yMax:55,social:'solitary',  moveStyle:'normal',      feedLayer:'mid'},
+  {id:'neon',     name:'Neon Tetra',    price:12,  desc:'Electric stripe',   temp:'22-26°C',hardiness:4,breedable:true, personality:'shy',        poop:0.2, rarity:'common',     yMin:5, yMax:40,social:'schooling', moveStyle:'normal',      feedLayer:'mid'},
+  {id:'goldfish', name:'Goldfish',      price:20,  desc:'Classic round body',temp:'18-22°C',hardiness:5,breedable:true, personality:'greedy',     poop:0.5, rarity:'common',     yMin:10,yMax:60,social:'normal',    moveStyle:'normal',      feedLayer:'surface'},
+  {id:'angel',    name:'Angelfish',     price:45,  desc:'Tall diamond shape',temp:'25-29°C',hardiness:3,breedable:true, personality:'proud',      poop:0.3, rarity:'uncommon',   yMin:30,yMax:68,social:'normal',    moveStyle:'normal',      feedLayer:'mid'},
+  {id:'pleco',    name:'Pleco',         price:35,  desc:'Flat algae eater',  temp:'23-27°C',hardiness:5,breedable:false,personality:'peaceful',   poop:0.2, rarity:'common',     yMin:55,yMax:73,social:'normal',    moveStyle:'idle_burst',  feedLayer:'bottom'},
+  {id:'discus',   name:'Discus',        price:80,  desc:'Round royal fish',  temp:'28-32°C',hardiness:2,breedable:true, personality:'sensitive',  poop:0.35,rarity:'uncommon',   yMin:20,yMax:60,social:'normal',    moveStyle:'normal',      feedLayer:'mid'},
+  {id:'zebra',    name:'Zebra Danio',   price:10,  desc:'Bold black stripes',temp:'18-24°C',hardiness:5,breedable:true, personality:'playful',    poop:0.2, rarity:'common',     yMin:3, yMax:45,social:'schooling', moveStyle:'normal',      feedLayer:'surface'},
+  {id:'clown',    name:'Clownfish',     price:60,  desc:'Orange white bands',temp:'24-28°C',hardiness:3,breedable:false,personality:'curious',    poop:0.25,rarity:'uncommon',   yMin:20,yMax:65,social:'anemone',   moveStyle:'normal',      feedLayer:'mid'},
+  {id:'arowana',  name:'Arowana',       price:200, desc:'Golden dragon fish', temp:'26-30°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.4, rarity:'rare',       yMin:3, yMax:73,social:'normal',    moveStyle:'cruise',      feedLayer:'surface'},
+  {id:'axolotl',  name:'Axolotl',       price:150, desc:'Pink feathery gills',temp:'16-20°C',hardiness:3,breedable:true, personality:'curious',   poop:0.3, rarity:'rare',       yMin:40,yMax:73,social:'shy',       moveStyle:'idle_burst',  feedLayer:'bottom'},
+  {id:'seahorse', name:'Seahorse',      price:120, desc:'Upright slow mover',temp:'22-26°C',hardiness:2,breedable:true, personality:'shy',        poop:0.15,rarity:'rare',       yMin:15,yMax:70,social:'shy',       moveStyle:'hover',       feedLayer:'mid'},
+  {id:'manta',    name:'Manta Ray',     price:350, desc:'Gliding giant ray',  temp:'24-28°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.3, rarity:'super_rare', yMin:3, yMax:73,social:'normal',    moveStyle:'cruise',      feedLayer:'mid'},
+  {id:'dragon',   name:'Dragon Goby',   price:280, desc:'Fierce eel-like',   temp:'25-29°C',hardiness:2,breedable:false,personality:'territorial', poop:0.35,rarity:'super_rare', yMin:40,yMax:73,social:'solitary',  moveStyle:'cruise',      feedLayer:'bottom'},
 ];
 
 const PLANTS_DEF=[
@@ -314,56 +316,53 @@ const PLANTS_DEF=[
 ];
 
 const DECO_DEF=[
-  {id:'rock1',    name:'Smooth Rock',    price:25, desc:'Natural stone',      rarity:'common'},
-  {id:'rock2',    name:'Dragon Stone',   price:40, desc:'Jagged peak rock',   rarity:'common'},
-  {id:'driftwood',name:'Driftwood',      price:35, desc:'Sunken aged wood',   rarity:'common'},
-  {id:'coral1',   name:'Brain Coral',    price:50, desc:'Pink brain coral',   rarity:'common'},
-  {id:'coral2',   name:'Fan Coral',      price:45, desc:'Cyan fan coral',     rarity:'common'},
-  {id:'treasure', name:'Treasure Chest', price:30, desc:'Classic chest',      rarity:'common'},
-  {id:'castle',   name:'Mini Castle',    price:55, desc:'Fairy tale vibes',   rarity:'common'},
-  {id:'shell',    name:'Giant Shell',    price:20, desc:'Ocean keepsake',     rarity:'common'},
-  {id:'anchor',   name:'Old Anchor',     price:60, desc:'Rustic shipwreck',   rarity:'common'},
-  {id:'volcano',  name:'Mini Volcano',   price:70, desc:'Bubble eruptions',   rarity:'common'},
-  {id:'statue',   name:'Buddha Statue',  price:120,desc:'Rare ancient statue',rarity:'rare'},
-  {id:'pagoda',   name:'Stone Pagoda',   price:150,desc:'Japanese pagoda',    rarity:'rare'},
-  {id:'mermaid',  name:'Mermaid Figure', price:180,desc:'Mystical mermaid',   rarity:'super_rare'},
-  {id:'sunken',   name:'Sunken Ship',    price:200,desc:'Shipwreck ruin',     rarity:'super_rare'},
-  {id:'crystal',  name:'Crystal Cluster',price:250,desc:'Glowing crystals',   rarity:'super_rare'},
+  {id:'spider_wood',  name:'Spider Wood',    price:35, desc:'Spindly root branches',  rarity:'common'},
+  {id:'seiryu',       name:'Seiryu Stone',   price:40, desc:'Layered grey rock',       rarity:'common'},
+  {id:'dragon_stone', name:'Dragon Stone',   price:45, desc:'Porous orange rock',      rarity:'common'},
+  {id:'brain_coral',  name:'Brain Coral',    price:50, desc:'Pink brain coral',        rarity:'common'},
+  {id:'fan_coral',    name:'Fan Coral',      price:45, desc:'Cyan fan coral',          rarity:'common'},
+  {id:'treasure',     name:'Treasure Chest', price:30, desc:'Gold coins spilling out', rarity:'common'},
+  {id:'castle',       name:'Mini Castle',    price:55, desc:'Stone fortress',          rarity:'common'},
+  {id:'conch',        name:'Conch Shell',    price:20, desc:'Spiral sea shell',        rarity:'common'},
+  {id:'lava_rock',    name:'Lava Rock',      price:60, desc:'Porous volcanic stone',   rarity:'common'},
+  {id:'volcano',      name:'Mini Volcano',   price:70, desc:'Erupting lava vents',     rarity:'common'},
+  {id:'pagoda',       name:'Stone Pagoda',   price:150,desc:'Japanese pagoda',         rarity:'rare'},
+  {id:'sunken',       name:'Sunken Ship',    price:200,desc:'Tilted shipwreck',        rarity:'super_rare'},
+  {id:'mermaid',      name:'Mermaid',        price:180,desc:'Mystical mermaid statue', rarity:'rare'},
+  {id:'crystal',      name:'Crystal Cluster',price:250,desc:'Glowing crystal spires',  rarity:'super_rare'},
 ];
 
 const EQ=[
-  {id:'filter',    name:'Filter',         icon:'⚙',  price:60,  desc:'Cleans water',         upgrades:'filter2'},
-  {id:'filter2',   name:'Pro Filter',     icon:'⚙',  price:120, desc:'Superior filter',       requires:'filter'},
-  {id:'heater',    name:'Heater',         icon:'🌡', price:50,  desc:'Stable temp',           upgrades:'heater2'},
-  {id:'heater2',   name:'Pro Heater',     icon:'🔥', price:90,  desc:'Perfect temp',          requires:'heater'},
-  {id:'airpump',   name:'Air Pump',       icon:'〇', price:35,  desc:'O₂ bubbles',            upgrades:'airpump2'},
-  {id:'airpump2',  name:'Power Pump',     icon:'💨', price:80,  desc:'Rich O₂ + fast flow',   requires:'airpump'},
-  {id:'gravel',    name:'Gravel & Sand',  icon:'◼',  price:30,  desc:'Natural floor'},
-  {id:'light',     name:'LED Light',      icon:'✦',  price:45,  desc:'Day/night cycle'},
-  {id:'dechlorinator',name:'Dechlorinator',icon:'❋', price:20,  desc:'Safe tap water'},
-  {id:'autofeeder',name:'Auto Feeder',    icon:'⊛',  price:100, desc:'Daily auto-feed'},
-  {id:'uv',        name:'UV Sterilizer',  icon:'☀',  price:80,  desc:'Reduces disease'},
+  {id:'filter',   name:'Filter',        icon:'⚙',  price:60,  desc:'Cleans NH₃ & water',    upgrades:'filter2'},
+  {id:'filter2',  name:'Pro Filter',    icon:'⚙',  price:120, desc:'Superior filtration',    requires:'filter'},
+  {id:'heater',   name:'Heater',        icon:'🌡', price:50,  desc:'Stable temperature',     upgrades:'heater2'},
+  {id:'heater2',  name:'Pro Heater',    icon:'🔥', price:90,  desc:'Perfect temperature',    requires:'heater'},
+  {id:'airpump',  name:'Air Pump',      icon:'〇', price:35,  desc:'O₂ bubbles',             upgrades:'airpump2'},
+  {id:'airpump2', name:'Power Pump',    icon:'💨', price:80,  desc:'Rich O₂ + fast flow',    requires:'airpump'},
+  {id:'gravel',   name:'Gravel & Sand', icon:'◼',  price:30,  desc:'Natural sandy floor'},
+  {id:'light',    name:'LED Light',     icon:'✦',  price:45,  desc:'Plants grow faster'},
+  {id:'co2',      name:'CO₂ System',    icon:'🫧', price:90,  desc:'Boosts pH & plant growth'},
+  {id:'backdrop', name:'Backdrop',      icon:'🖼', price:60,  desc:'Decorative background'},
 ];
 
-// 10 aquatic creatures (non-fish) — bottom-dwelling, unique pixel sprites
+// 10 aquatic creatures — all have yMin/yMax, moveStyle, feedLayer, social
 const CREATURES_DEF=[
-  {id:'shrimp',    name:'Cherry Shrimp',  price:18,  desc:'Algae cleaner',       temp:'20-26°C',rarity:'common',    personality:'peaceful',    poop:0.1},
-  {id:'snail',     name:'Nerite Snail',   price:15,  desc:'Glass scrubber',      temp:'20-28°C',rarity:'common',    personality:'peaceful',    poop:0.1},
-  {id:'crab',      name:'Fiddler Crab',   price:25,  desc:'Active scavenger',    temp:'22-28°C',rarity:'common',    personality:'curious',     poop:0.15},
-  {id:'crayfish',  name:'Blue Crayfish',  price:40,  desc:'Bold bottom dweller', temp:'18-25°C',rarity:'common',    personality:'territorial', poop:0.2},
-  {id:'turtle',    name:'Baby Turtle',    price:80,  desc:'Slow & ancient',      temp:'24-30°C',rarity:'uncommon',  personality:'peaceful',    poop:0.25},
-  {id:'frog',      name:'Dwarf Frog',     price:30,  desc:'Tiny amphibian',      temp:'22-27°C',rarity:'common',    personality:'curious',     poop:0.1},
-  {id:'eel',       name:'Fire Eel',       price:120, desc:'Burrowing serpent',   temp:'24-28°C',rarity:'rare',      personality:'shy',         poop:0.2},
-  {id:'starfish',  name:'Starfish',       price:90,  desc:'Slow star creeper',   temp:'22-26°C',rarity:'rare',      personality:'peaceful',    poop:0.05},
-  {id:'jellyfish', name:'Moon Jellyfish', price:200, desc:'Ethereal drifter',    temp:'20-26°C',rarity:'super_rare',personality:'majestic',    poop:0.05},
-  {id:'octopus',   name:'Baby Octopus',   price:250, desc:'Genius shapeshifter', temp:'20-24°C',rarity:'super_rare',personality:'curious',     poop:0.15},
+  {id:'shrimp',    name:'Cherry Shrimp',  price:18,  desc:'Algae cleaner',       temp:'20-26°C',rarity:'common',    personality:'peaceful',    poop:0.1,  yMin:60,yMax:75,social:'schooling', moveStyle:'jump',       feedLayer:'bottom', benthic:true},
+  {id:'snail',     name:'Nerite Snail',   price:15,  desc:'Glass scrubber',      temp:'20-28°C',rarity:'common',    personality:'peaceful',    poop:0.1,  yMin:72,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
+  {id:'crab',      name:'Fiddler Crab',   price:25,  desc:'Active scavenger',    temp:'22-28°C',rarity:'common',    personality:'curious',     poop:0.15, yMin:68,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'bottom', benthic:true},
+  {id:'crayfish',  name:'Blue Crayfish',  price:40,  desc:'Bold bottom dweller', temp:'18-25°C',rarity:'common',    personality:'territorial', poop:0.2,  yMin:65,yMax:75,social:'solitary',  moveStyle:'idle_burst', feedLayer:'bottom', benthic:true},
+  {id:'turtle',    name:'Baby Turtle',    price:80,  desc:'Slow & ancient',      temp:'24-30°C',rarity:'uncommon',  personality:'peaceful',    poop:0.25, yMin:45,yMax:74,social:'normal',    moveStyle:'normal',     feedLayer:'mid'},
+  {id:'frog',      name:'Dwarf Frog',     price:30,  desc:'Tiny amphibian',      temp:'22-27°C',rarity:'common',    personality:'curious',     poop:0.1,  yMin:55,yMax:75,social:'normal',    moveStyle:'jump',       feedLayer:'bottom', benthic:true},
+  {id:'eel',       name:'Fire Eel',       price:120, desc:'Burrowing serpent',   temp:'24-28°C',rarity:'rare',      personality:'shy',         poop:0.2,  yMin:50,yMax:74,social:'shy',       moveStyle:'cruise',     feedLayer:'bottom'},
+  {id:'starfish',  name:'Starfish',       price:90,  desc:'Slow star creeper',   temp:'22-26°C',rarity:'rare',      personality:'peaceful',    poop:0.05, yMin:73,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
+  {id:'jellyfish', name:'Moon Jellyfish', price:200, desc:'Ethereal drifter',    temp:'20-26°C',rarity:'super_rare',personality:'majestic',    poop:0.05, yMin:5, yMax:55,social:'normal',    moveStyle:'hover',      feedLayer:'none'},
+  {id:'octopus',   name:'Baby Octopus',   price:250, desc:'Genius shapeshifter', temp:'20-24°C',rarity:'super_rare',personality:'curious',     poop:0.15, yMin:40,yMax:74,social:'shy',       moveStyle:'idle_burst', feedLayer:'mid'},
 ];
 
 const STEPS=[
   {label:'Filter',     ids:['filter','filter2']},
   {label:'Heater',     ids:['heater','heater2']},
   {label:'Gravel/Sand',ids:['gravel']},
-  {label:'Dechlorinator',ids:['dechlorinator']},
 ];
 
 const TANK_SIZES=[
@@ -383,7 +382,7 @@ const DISEASES=[
 
 const NAMES=['Bubbles','Nemo','Dory','Flash','Goldie','Zigzag','Pixel','Splash','Finn','Pearl','Luna','Comet','Mochi','Pebble','Ripple','Tide','Coral','Shimmer','Dart','Echo','Neptune','Azure','Biscuit','Tofu','Mango','Storm','Poppy','Whisker','Noodle','Poseidon'];
 
-const MOOD_EMOTES={happy:'♥',hungry:'…',sleepy:'zzZ',lonely:'...',scared:'!?',playful:'~',content:'♪'};
+const MOOD_EMOTES={happy:'♥',hungry:'…',sleepy:'zzZ',lonely:'...',scared:'!?',playful:'~',content:'♪',warning:'⚠',home:'♥'};
 
 const PERSONALITY_BEHAVIOR={
   curious:    {speedMult:1.1,changeDir:0.004,foodMult:1.0},
@@ -396,6 +395,25 @@ const PERSONALITY_BEHAVIOR={
   playful:    {speedMult:1.2,changeDir:0.006,foodMult:1.1},
   majestic:   {speedMult:0.8,changeDir:0.001,foodMult:0.8},
 };
+
+// Unified per-species config (works for both fish and creatures)
+// sc = pixel scale in tank, speedX/speedY = base velocity, idleTime for idle_burst
+function getSpeciesCfg(id,isCreature){
+  const def=isCreature?CREATURES_DEF.find(d=>d.id===id):FISH_DEF.find(d=>d.id===id);
+  if(!def)return{yMin:5,yMax:73,sc:isCreature?4:6,moveStyle:'normal',social:'normal',feedLayer:'mid'};
+  const pb=PERSONALITY_BEHAVIOR[def.personality]||PERSONALITY_BEHAVIOR.peaceful;
+  const baseSpd=(isCreature?0.04:0.06)*( pb.speedMult||1);
+  return{
+    yMin:def.yMin,yMax:def.yMax,
+    sc:3,// unified pixel size
+    moveStyle:def.moveStyle||'normal',
+    social:def.social||'normal',
+    feedLayer:def.feedLayer||'mid',
+    speedX:baseSpd,speedY:baseSpd*0.5,
+    changeDir:pb.changeDir||0.003,
+    aggro:!!pb.aggro,flees:!!pb.flees,foodMult:pb.foodMult||1,
+  };
+}
 
 const ACHIEVEMENTS=[
   {id:'first_fish',  name:'First Splash',   icon:'🐟',desc:'Buy your first fish',   reward:25, check:s=>s.fish.length>=1},
@@ -786,350 +804,364 @@ function drawPlantCanvas(id,size){
 /* ═══════════════════════════════════════════════════════════
    DECO SPRITES
 ═══════════════════════════════════════════════════════════ */
-function drawDecoSprite(ctx,id,ox,oy,sc){
-// All decorations redrawn at 2x detail (larger pixel grids, more shading, more realistic)
-const D={
-// SMOOTH ROCK — rounded natural stone with moss patches and depth shading
-rock1:[
-  [2,5,'#546E7A'],[3,4,'#607D8B'],[4,3,'#78909C'],[5,3,'#78909C'],[6,4,'#607D8B'],[7,5,'#546E7A'],
-  [1,6,'#607D8B'],[2,6,'#90A4AE'],[3,5,'#B0BEC5'],[4,5,'#CFD8DC'],[5,5,'#B0BEC5'],[6,5,'#90A4AE'],[7,6,'#78909C'],
-  [1,7,'#78909C'],[2,7,'#B0BEC5'],[3,6,'#CFD8DC'],[4,6,'#ECEFF1'],[5,6,'#CFD8DC'],[6,6,'#B0BEC5'],[7,7,'#78909C'],[8,7,'#546E7A'],
-  [0,8,'#546E7A'],[1,8,'#90A4AE'],[2,8,'#B0BEC5'],[3,7,'#CFD8DC'],[4,7,'#ECEFF1'],[5,7,'#CFD8DC'],[6,7,'#B0BEC5'],[7,8,'#90A4AE'],[8,8,'#607D8B'],
-  [0,9,'#607D8B'],[1,9,'#78909C'],[2,9,'#90A4AE'],[3,8,'#B0BEC5'],[4,8,'#CFD8DC'],[5,8,'#B0BEC5'],[6,8,'#90A4AE'],[7,9,'#78909C'],[8,9,'#546E7A'],
-  [1,10,'#455A64'],[2,10,'#607D8B'],[3,9,'#78909C'],[4,9,'#90A4AE'],[5,9,'#78909C'],[6,9,'#607D8B'],[7,10,'#455A64'],
-  [2,11,'#37474F'],[3,10,'#546E7A'],[4,10,'#607D8B'],[5,10,'#546E7A'],[6,11,'#37474F'],
-  // moss patches
-  [3,5,'#4CAF50'],[4,4,'#43A047'],[5,4,'#4CAF50'],
-  [2,7,'#388E3C'],[3,6,'#4CAF50'],
-  // highlight
-  [4,6,'#FFFFFF'],[3,7,'#ECEFF1'],
-],
-// DRAGON STONE — dramatic jagged volcanic peak with crevices
-rock2:[
-  [4,0,'#37474F'],[5,0,'#455A64'],
-  [3,1,'#37474F'],[4,1,'#546E7A'],[5,1,'#455A64'],[6,1,'#37474F'],
-  [2,2,'#455A64'],[3,2,'#607D8B'],[4,2,'#546E7A'],[5,2,'#607D8B'],[6,2,'#455A64'],[7,2,'#37474F'],
-  [1,3,'#37474F'],[2,3,'#546E7A'],[3,3,'#78909C'],[4,3,'#607D8B'],[5,3,'#78909C'],[6,3,'#546E7A'],[7,3,'#455A64'],[8,3,'#37474F'],
-  [0,4,'#37474F'],[1,4,'#546E7A'],[2,4,'#78909C'],[3,4,'#90A4AE'],[4,4,'#78909C'],[5,4,'#90A4AE'],[6,4,'#78909C'],[7,4,'#546E7A'],[8,4,'#455A64'],[9,4,'#37474F'],
-  [0,5,'#455A64'],[1,5,'#607D8B'],[2,5,'#78909C'],[3,5,'#90A4AE'],[4,5,'#B0BEC5'],[5,5,'#90A4AE'],[6,5,'#78909C'],[7,5,'#607D8B'],[8,5,'#546E7A'],[9,5,'#37474F'],
-  [0,6,'#37474F'],[1,6,'#546E7A'],[2,6,'#607D8B'],[3,6,'#78909C'],[4,6,'#90A4AE'],[5,6,'#78909C'],[6,6,'#607D8B'],[7,6,'#546E7A'],[8,6,'#37474F'],
-  [1,7,'#37474F'],[2,7,'#455A64'],[3,7,'#546E7A'],[4,7,'#607D8B'],[5,7,'#546E7A'],[6,7,'#455A64'],[7,7,'#37474F'],
-  // crevice shadows
-  [4,3,'#263238'],[5,4,'#263238'],[3,5,'#263238'],
-  // highlight ridge
-  [4,2,'#78909C'],[5,3,'#90A4AE'],[3,4,'#B0BEC5'],
-],
-// DRIFTWOOD — gnarled ancient branch with grain detail
-driftwood:[
-  [0,4,'#3E2723'],[1,3,'#4E342E'],[2,3,'#5D4037'],[3,4,'#4E342E'],
-  [0,5,'#4E342E'],[1,4,'#6D4C41'],[2,4,'#795548'],[3,5,'#6D4C41'],[4,5,'#5D4037'],[5,4,'#4E342E'],[6,4,'#5D4037'],[7,5,'#4E342E'],
-  [0,6,'#5D4037'],[1,5,'#795548'],[2,5,'#8D6E63'],[3,6,'#795548'],[4,6,'#6D4C41'],[5,5,'#6D4C41'],[6,5,'#795548'],[7,6,'#6D4C41'],[8,5,'#5D4037'],[9,5,'#4E342E'],
-  [1,6,'#6D4C41'],[2,6,'#8D6E63'],[3,7,'#6D4C41'],[4,7,'#795548'],[5,6,'#8D6E63'],[6,6,'#8D6E63'],[7,7,'#795548'],[8,6,'#6D4C41'],[9,6,'#5D4037'],
-  [2,7,'#795548'],[3,8,'#5D4037'],[4,8,'#6D4C41'],[5,7,'#795548'],[6,7,'#795548'],[7,8,'#6D4C41'],[8,7,'#5D4037'],
-  [3,9,'#4E342E'],[4,9,'#5D4037'],[5,8,'#6D4C41'],[6,8,'#5D4037'],[7,9,'#4E342E'],
-  // bark texture grain
-  [1,5,'#A1887F'],[5,6,'#A1887F'],[3,6,'#A1887F'],
-  // knot holes
-  [2,5,'#263238'],[6,6,'#263238'],
-  // highlight along top
-  [1,4,'#8D6E63'],[4,5,'#8D6E63'],[8,5,'#8D6E63'],
-  // small branch stub
-  [0,5,'#5D4037'],[0,6,'#4E342E'],
-],
-// BRAIN CORAL — rounded bumpy brain-like structure, pinkish ridges
-coral1:[
-  [3,1,'#C2185B'],[4,1,'#D81B60'],[5,1,'#C2185B'],
-  [2,2,'#D81B60'],[3,2,'#E91E63'],[4,2,'#F06292'],[5,2,'#E91E63'],[6,2,'#D81B60'],
-  [1,3,'#E91E63'],[2,3,'#F06292'],[3,3,'#F48FB1'],[4,3,'#FCE4EC'],[5,3,'#F48FB1'],[6,3,'#F06292'],[7,3,'#E91E63'],
-  [1,4,'#D81B60'],[2,4,'#F06292'],[3,4,'#F48FB1'],[4,4,'#FFFFFF'],[5,4,'#F48FB1'],[6,4,'#F06292'],[7,4,'#D81B60'],
-  [1,5,'#E91E63'],[2,5,'#EC407A'],[3,5,'#F06292'],[4,5,'#F48FB1'],[5,5,'#F06292'],[6,5,'#EC407A'],[7,5,'#E91E63'],
-  [2,6,'#C2185B'],[3,6,'#D81B60'],[4,6,'#E91E63'],[5,6,'#D81B60'],[6,6,'#C2185B'],
-  [2,7,'#AD1457'],[3,7,'#C2185B'],[4,7,'#AD1457'],[5,7,'#C2185B'],[6,7,'#AD1457'],
-  [3,8,'#880E4F'],[4,8,'#AD1457'],[5,8,'#880E4F'],
-  // brain ridge texture
-  [2,3,'#AD1457'],[4,3,'#AD1457'],[6,3,'#AD1457'],
-  [3,5,'#C2185B'],[5,5,'#C2185B'],
-  // highlight dome
-  [4,3,'#FFFFFF'],[3,4,'#FFF9C4'],
-],
-// FAN CORAL — tall spreading fan with delicate branches
-coral2:[
-  [4,0,'#006064'],[5,0,'#00838F'],
-  [3,1,'#006064'],[4,1,'#00838F'],[5,1,'#0097A7'],[6,1,'#00838F'],
-  [2,2,'#00838F'],[3,2,'#0097A7'],[4,2,'#00ACC1'],[5,2,'#00BCD4'],[6,2,'#0097A7'],[7,2,'#00838F'],
-  [1,3,'#0097A7'],[2,3,'#00ACC1'],[3,3,'#00BCD4'],[4,3,'#26C6DA'],[5,3,'#00BCD4'],[6,3,'#00ACC1'],[7,3,'#0097A7'],[8,3,'#006064'],
-  [1,4,'#00838F'],[2,4,'#00BCD4'],[3,4,'#26C6DA'],[4,4,'#80DEEA'],[5,4,'#26C6DA'],[6,4,'#00BCD4'],[7,4,'#00838F'],
-  [0,5,'#006064'],[1,5,'#0097A7'],[2,5,'#00ACC1'],[3,5,'#00BCD4'],[4,5,'#26C6DA'],[5,5,'#00BCD4'],[6,5,'#00ACC1'],[7,5,'#0097A7'],[8,5,'#006064'],
-  [1,6,'#006064'],[2,6,'#00838F'],[3,6,'#0097A7'],[4,6,'#00ACC1'],[5,6,'#0097A7'],[6,6,'#00838F'],[7,6,'#006064'],
-  [3,7,'#004D40'],[4,7,'#006064'],[5,7,'#004D40'],
-  [4,8,'#004D40'],
-  // fan membrane highlights
-  [3,3,'#E0F7FA'],[5,3,'#E0F7FA'],[4,4,'#E0F7FA'],
-  // stem
-  [4,8,'#00695C'],[4,9,'#004D40'],
-],
-// TREASURE CHEST — detailed open chest spilling gold
-treasure:[
-  // lid (open)
-  [1,0,'#4E342E'],[2,0,'#6D4C41'],[3,0,'#795548'],[4,0,'#6D4C41'],[5,0,'#6D4C41'],[6,0,'#4E342E'],
-  [0,1,'#3E2723'],[1,1,'#5D4037'],[2,1,'#8D6E63'],[3,1,'#A1887F'],[4,1,'#8D6E63'],[5,1,'#795548'],[6,1,'#5D4037'],[7,1,'#3E2723'],
-  // gold lock on lid
-  [3,0,'#FFD700'],[4,0,'#FFC107'],
-  // chest body
-  [0,3,'#4E342E'],[1,3,'#6D4C41'],[2,3,'#795548'],[3,3,'#8D6E63'],[4,3,'#795548'],[5,3,'#6D4C41'],[6,3,'#5D4037'],[7,3,'#3E2723'],
-  [0,4,'#3E2723'],[1,4,'#5D4037'],[2,4,'#6D4C41'],[3,4,'#795548'],[4,4,'#6D4C41'],[5,4,'#5D4037'],[6,4,'#4E342E'],[7,4,'#3E2723'],
-  [0,5,'#4E342E'],[1,5,'#5D4037'],[2,5,'#6D4C41'],[3,5,'#795548'],[4,5,'#6D4C41'],[5,5,'#5D4037'],[6,5,'#3E2723'],[7,5,'#2E1F18'],
-  [0,6,'#2E1F18'],[1,6,'#3E2723'],[2,6,'#4E342E'],[3,6,'#5D4037'],[4,6,'#4E342E'],[5,6,'#3E2723'],[6,6,'#2E1F18'],
-  // spilling gold coins
-  [2,2,'#FFD700'],[3,2,'#FFC107'],[4,2,'#FFD700'],[5,2,'#FFD700'],
-  [1,2,'#FFA000'],[6,2,'#FFA000'],
-  [2,3,'#FFD700'],[5,3,'#FFC107'],
-  // gems
-  [3,2,'#E040FB'],[5,2,'#00E5FF'],
-  // metal bands
-  [0,4,'#78909C'],[7,4,'#78909C'],
-  [3,5,'#FFD700'],// lock
-],
-// CASTLE — detailed castle with towers, battlements, windows, door arch
-castle:[
-  // left tower top
-  [0,0,'#546E7A'],[1,0,'#607D8B'],[0,1,'#455A64'],[1,1,'#546E7A'],[2,1,'#607D8B'],
-  // right tower top
-  [9,0,'#546E7A'],[10,0,'#607D8B'],[9,1,'#455A64'],[10,1,'#546E7A'],[8,1,'#607D8B'],
-  // battlements center
-  [3,1,'#78909C'],[4,1,'#607D8B'],[5,1,'#546E7A'],[6,1,'#607D8B'],[7,1,'#78909C'],
-  [3,2,'#90A4AE'],[4,2,'#B0BEC5'],[5,2,'#CFD8DC'],[6,2,'#B0BEC5'],[7,2,'#90A4AE'],
-  // tower walls
-  [0,2,'#607D8B'],[1,2,'#78909C'],[2,2,'#78909C'],[0,3,'#546E7A'],[1,3,'#607D8B'],[2,3,'#78909C'],
-  [8,2,'#78909C'],[9,2,'#78909C'],[10,2,'#607D8B'],[8,3,'#78909C'],[9,3,'#607D8B'],[10,3,'#546E7A'],
-  // main wall
-  [2,3,'#90A4AE'],[3,3,'#B0BEC5'],[4,3,'#CFD8DC'],[5,3,'#B0BEC5'],[6,3,'#CFD8DC'],[7,3,'#B0BEC5'],[8,3,'#90A4AE'],
-  [2,4,'#78909C'],[3,4,'#90A4AE'],[4,4,'#B0BEC5'],[5,4,'#CFD8DC'],[6,4,'#B0BEC5'],[7,4,'#90A4AE'],[8,4,'#78909C'],
-  // tower windows (dark with glow)
-  [1,3,'#263238'],[9,3,'#263238'],
-  [1,4,'#1A237E'],[9,4,'#1A237E'],// blue glow windows
-  // center windows
-  [3,4,'#263238'],[7,4,'#263238'],
-  [4,4,'#1565C0'],[6,4,'#1565C0'],
-  // gate arch
-  [4,5,'#263238'],[5,5,'#263238'],[6,5,'#263238'],
-  [4,6,'#263238'],[5,6,'#1A237E'],[6,6,'#263238'],
+// NEW DECO SPRITES — all 15, pixel arrays [x,y,color], drawn from base up (y=0 is bottom row)
+// Each sprite has: w (grid cols), h (grid rows), p (pixels), sc (default tank scale)
+function drawDecoSprite(ctx,id,ox,baseY,sc){
+const P=sc;
+function px(x,y,c){ctx.fillStyle=c;ctx.fillRect(ox+x*P,baseY-y*P,P,P);}
+
+const sprites={
+
+// SPIDER WOOD — multi-branch root wood radiating upward
+spider_wood:()=>{
+  const C={d1:'#1C0F0A',d2:'#2E1810',d3:'#3E2318',d4:'#4A2B1A',m1:'#5D3820',m2:'#6D4428',m3:'#7B5030',m4:'#8B5E38',l1:'#9B6E42',l2:'#A87C4E',g1:'#1B5E20',g2:'#2E7D32',g3:'#388E3C'};
   // base
-  [1,5,'#607D8B'],[2,5,'#78909C'],[3,5,'#90A4AE'],[7,5,'#90A4AE'],[8,5,'#78909C'],[9,5,'#607D8B'],[10,5,'#546E7A'],
-  [0,5,'#546E7A'],[0,6,'#455A64'],[1,6,'#546E7A'],[2,6,'#607D8B'],[3,6,'#78909C'],[7,6,'#78909C'],[8,6,'#607D8B'],[9,6,'#546E7A'],[10,6,'#455A64'],
-  // highlights
-  [3,2,'#ECEFF1'],[5,2,'#ECEFF1'],[7,2,'#ECEFF1'],
-],
-// SHELL — large detailed nautilus/conch shell with spiral detail
-shell:[
-  [4,0,'#FFF176'],[5,0,'#FFEE58'],
-  [2,1,'#FFF9C4'],[3,1,'#FFF176'],[4,1,'#FFEE58'],[5,1,'#FFE082'],[6,1,'#FFEE58'],[7,1,'#FFF176'],
-  [1,2,'#FFF176'],[2,2,'#FFEE58'],[3,2,'#FFE082'],[4,2,'#FFD54F'],[5,2,'#FFE082'],[6,2,'#FFE082'],[7,2,'#FFEE58'],[8,2,'#FFF176'],
-  [0,3,'#FFEE58'],[1,3,'#FFE082'],[2,3,'#FFD54F'],[3,3,'#FFC107'],[4,3,'#FFD54F'],[5,3,'#FFE082'],[6,3,'#FFD54F'],[7,3,'#FFE082'],[8,3,'#FFEE58'],[9,3,'#FFF176'],
-  [0,4,'#FFE082'],[1,4,'#FFD54F'],[2,4,'#FFC107'],[3,4,'#FFB300'],[4,4,'#FFC107'],[5,4,'#FFD54F'],[6,4,'#FFC107'],[7,4,'#FFD54F'],[8,4,'#FFE082'],[9,4,'#FFEE58'],
-  [1,5,'#FFD54F'],[2,5,'#FFC107'],[3,5,'#FFB300'],[4,5,'#FFA000'],[5,5,'#FFB300'],[6,5,'#FFA000'],[7,5,'#FFB300'],[8,5,'#FFD54F'],
-  [2,6,'#FFC107'],[3,6,'#FFB300'],[4,6,'#FFA000'],[5,6,'#FF8F00'],[6,6,'#FFA000'],[7,6,'#FFC107'],
-  [3,7,'#FFB300'],[4,7,'#FF8F00'],[5,7,'#FF6F00'],[6,7,'#FFB300'],
-  [4,8,'#FF8F00'],[5,8,'#FF6F00'],
-  // spiral center
-  [4,3,'#F9A825'],[3,4,'#F57F17'],
-  // highlight
-  [3,1,'#FFFFFF'],[4,1,'#FFFDE7'],
-  // ridges
-  [2,3,'#F9A825'],[6,4,'#F9A825'],[8,4,'#FFF9C4'],
-],
-// ANCHOR — detailed naval anchor with chain and barnacles
-anchor:[
-  [4,0,'#37474F'],[5,0,'#455A64'],[6,0,'#37474F'],
-  [4,1,'#455A64'],[5,1,'#546E7A'],[6,1,'#455A64'],
-  // ring at top
-  [3,1,'#607D8B'],[7,1,'#607D8B'],
-  [2,2,'#546E7A'],[3,2,'#78909C'],[4,2,'#546E7A'],[5,2,'#546E7A'],[6,2,'#78909C'],[7,2,'#546E7A'],[8,2,'#546E7A'],
-  // shaft
-  [5,2,'#607D8B'],[5,3,'#78909C'],[5,4,'#607D8B'],[5,5,'#546E7A'],[5,6,'#607D8B'],[5,7,'#546E7A'],
-  // crossbar
-  [1,3,'#455A64'],[2,3,'#546E7A'],[3,3,'#607D8B'],[4,3,'#546E7A'],[6,3,'#546E7A'],[7,3,'#607D8B'],[8,3,'#546E7A'],[9,3,'#455A64'],
-  // flukes
-  [2,6,'#37474F'],[3,6,'#455A64'],[4,6,'#546E7A'],[6,6,'#546E7A'],[7,6,'#455A64'],[8,6,'#37474F'],
-  [1,7,'#263238'],[2,7,'#37474F'],[3,7,'#455A64'],[4,7,'#37474F'],[6,7,'#37474F'],[7,7,'#455A64'],[8,7,'#37474F'],[9,7,'#263238'],
-  // barnacles
-  [2,5,'#78909C'],[8,5,'#78909C'],
-  [2,6,'#607D8B'],[8,6,'#607D8B'],
-  // chain
-  [5,0,'#90A4AE'],[5,1,'#78909C'],
-  // rust streaks
-  [5,4,'#795548'],[5,6,'#6D4C41'],
-  // highlight
-  [5,2,'#B0BEC5'],[3,3,'#90A4AE'],[7,3,'#90A4AE'],
-],
-// VOLCANO — erupting volcano with glowing lava flow, rocks, steam
-volcano:[
-  // peak with glow
-  [5,0,'#E53935'],[6,0,'#EF5350'],[5,1,'#FF5722'],[6,1,'#FF7043'],[7,1,'#E53935'],
-  [4,2,'#BF360C'],[5,2,'#D84315'],[6,2,'#E64A19'],[7,2,'#BF360C'],
-  [3,3,'#BF360C'],[4,3,'#D84315'],[5,3,'#E64A19'],[6,3,'#D84315'],[7,3,'#BF360C'],[8,3,'#A33200'],
-  [2,4,'#8D6E63'],[3,4,'#A1887F'],[4,4,'#795548'],[5,4,'#D84315'],[6,4,'#795548'],[7,4,'#A1887F'],[8,4,'#8D6E63'],[9,4,'#6D4C41'],
-  [1,5,'#795548'],[2,5,'#8D6E63'],[3,5,'#A1887F'],[4,5,'#8D6E63'],[5,5,'#795548'],[6,5,'#8D6E63'],[7,5,'#A1887F'],[8,5,'#8D6E63'],[9,5,'#795548'],[10,5,'#6D4C41'],
-  [0,6,'#6D4C41'],[1,6,'#795548'],[2,6,'#8D6E63'],[3,6,'#795548'],[4,6,'#6D4C41'],[5,6,'#795548'],[6,6,'#8D6E63'],[7,6,'#795548'],[8,6,'#6D4C41'],[9,6,'#5D4037'],[10,6,'#4E342E'],
-  [0,7,'#5D4037'],[1,7,'#6D4C41'],[2,7,'#795548'],[3,7,'#6D4C41'],[4,7,'#5D4037'],[5,7,'#6D4C41'],[6,7,'#5D4037'],[7,7,'#6D4C41'],[8,7,'#5D4037'],[9,7,'#4E342E'],[10,7,'#3E2723'],
-  // lava flows
-  [5,2,'#FF3D00'],[6,2,'#FF6D00'],[5,3,'#FF5722'],[6,3,'#FF6D00'],[7,3,'#FF3D00'],
-  [4,4,'#FF5722'],[5,4,'#FF6D00'],[6,4,'#FF5722'],
-  // smoke vent at top
-  [5,0,'#FFA726'],[6,0,'#FFCC02'],
-  // rock highlights
-  [2,5,'#BCAAA4'],[7,5,'#BCAAA4'],
-  // ash
-  [3,4,'#B0BEC5'],[8,4,'#B0BEC5'],
-],
-// STATUE — Greek/Roman column statue with face, robes, detail
-statue:[
-  // head & crown
-  [4,0,'#ECEFF1'],[5,0,'#CFD8DC'],[6,0,'#ECEFF1'],
-  [3,1,'#CFD8DC'],[4,1,'#F5F5F5'],[5,1,'#FFFFFF'],[6,1,'#F5F5F5'],[7,1,'#CFD8DC'],
-  // face features
-  [4,2,'#ECEFF1'],[5,2,'#FFFFFF'],[6,2,'#ECEFF1'],
-  [4,2,'#455A64'],[6,2,'#455A64'],// eyes
-  [5,3,'#CFD8DC'],// nose area
-  // torso/robes
-  [3,3,'#B0BEC5'],[4,3,'#CFD8DC'],[5,3,'#ECEFF1'],[6,3,'#CFD8DC'],[7,3,'#B0BEC5'],
-  [2,4,'#90A4AE'],[3,4,'#B0BEC5'],[4,4,'#CFD8DC'],[5,4,'#E0E0E0'],[6,4,'#CFD8DC'],[7,4,'#B0BEC5'],[8,4,'#90A4AE'],
-  [2,5,'#78909C'],[3,5,'#90A4AE'],[4,5,'#B0BEC5'],[5,5,'#CFD8DC'],[6,5,'#B0BEC5'],[7,5,'#90A4AE'],[8,5,'#78909C'],
-  // column/base
-  [3,6,'#B0BEC5'],[4,6,'#CFD8DC'],[5,6,'#E0E0E0'],[6,6,'#CFD8DC'],[7,6,'#B0BEC5'],
-  [2,7,'#90A4AE'],[3,7,'#B0BEC5'],[4,7,'#CFD8DC'],[5,7,'#B0BEC5'],[6,7,'#90A4AE'],[7,7,'#78909C'],
-  [1,8,'#78909C'],[2,8,'#90A4AE'],[3,8,'#B0BEC5'],[4,8,'#CFD8DC'],[5,8,'#B0BEC5'],[6,8,'#90A4AE'],[7,8,'#78909C'],[8,8,'#607D8B'],
-  // robe drape lines
-  [4,4,'#B0BEC5'],[6,5,'#B0BEC5'],
-  // moss on base
-  [2,8,'#4CAF50'],[7,8,'#388E3C'],
-  // highlight
-  [5,1,'#FFFFFF'],[5,4,'#FFFFFF'],
-  // shadow
-  [2,4,'#607D8B'],[8,5,'#607D8B'],
-],
-// PAGODA — ornate Asian pagoda with tiered roofs, red accent
-pagoda:[
-  // spire
-  [5,0,'#78909C'],[6,0,'#90A4AE'],
-  // top tier roof
-  [3,1,'#546E7A'],[4,1,'#607D8B'],[5,1,'#78909C'],[6,1,'#90A4AE'],[7,1,'#78909C'],[8,1,'#607D8B'],
-  [2,2,'#455A64'],[3,2,'#546E7A'],[4,2,'#78909C'],[5,2,'#90A4AE'],[6,2,'#B0BEC5'],[7,2,'#90A4AE'],[8,2,'#78909C'],[9,2,'#546E7A'],
-  // top tier walls
-  [4,3,'#FF5722'],[5,3,'#FF7043'],[6,3,'#FF5722'],
-  [3,3,'#90A4AE'],[4,3,'#B0BEC5'],[5,3,'#CFD8DC'],[6,3,'#B0BEC5'],[7,3,'#90A4AE'],
-  [3,4,'#78909C'],[4,4,'#FF5722'],[5,4,'#FF7043'],[6,4,'#FF5722'],[7,4,'#78909C'],
-  // mid roof
-  [1,5,'#546E7A'],[2,5,'#607D8B'],[3,5,'#78909C'],[4,5,'#90A4AE'],[5,5,'#B0BEC5'],[6,5,'#90A4AE'],[7,5,'#78909C'],[8,5,'#607D8B'],[9,5,'#546E7A'],
-  [1,6,'#455A64'],[2,6,'#546E7A'],[3,6,'#78909C'],[4,6,'#90A4AE'],[5,6,'#B0BEC5'],[6,6,'#90A4AE'],[7,6,'#78909C'],[8,6,'#546E7A'],[9,6,'#455A64'],
-  // base walls
-  [3,7,'#FF5722'],[4,7,'#FF7043'],[5,7,'#FF8A65'],[6,7,'#FF7043'],[7,7,'#FF5722'],
-  [2,7,'#90A4AE'],[3,7,'#B0BEC5'],[4,7,'#CFD8DC'],[5,7,'#CFD8DC'],[6,7,'#CFD8DC'],[7,7,'#B0BEC5'],[8,7,'#90A4AE'],
-  // door
-  [5,7,'#263238'],[5,8,'#1A237E'],
-  // base platform
-  [1,8,'#607D8B'],[2,8,'#78909C'],[3,8,'#90A4AE'],[4,8,'#B0BEC5'],[5,8,'#CFD8DC'],[6,8,'#B0BEC5'],[7,8,'#90A4AE'],[8,8,'#78909C'],[9,8,'#607D8B'],
-  // upturned roof corners
-  [1,5,'#D84315'],[9,5,'#D84315'],[1,6,'#D84315'],[9,6,'#D84315'],
-  [1,2,'#D84315'],[9,2,'#D84315'],
-  // lantern
-  [5,4,'#FFCA28'],[5,3,'#FFD54F'],
-],
-// MERMAID — beautiful mermaid with flowing hair, seashell top, shimmering tail
-mermaid:[
-  // hair flowing
-  [2,0,'#FF8A65'],[3,0,'#FF7043'],[4,0,'#FF8A65'],[5,0,'#FF6F00'],[6,0,'#FF8A65'],[8,0,'#FF8A65'],[9,0,'#FF7043'],
-  [1,1,'#FF7043'],[2,1,'#FF8A65'],[3,1,'#FFCCBC'],[4,1,'#FFE0B2'],[5,1,'#FFCCBC'],[6,1,'#FF8A65'],[7,1,'#FF7043'],
-  // face
-  [3,2,'#FFCCBC'],[4,2,'#FFE0B2'],[5,2,'#FFCCBC'],[6,2,'#FFCCBC'],
-  [3,2,'#5D4037'],[6,2,'#5D4037'],// eyes
-  [4,2,'#F48FB1'],// lips
-  // shell top
-  [3,3,'#F48FB1'],[4,3,'#FCE4EC'],[5,3,'#F48FB1'],
-  [2,3,'#FFCCBC'],[3,3,'#FFCCBC'],[6,3,'#FFCCBC'],[7,3,'#FFCCBC'],
-  [3,4,'#EC407A'],[4,4,'#F48FB1'],[5,4,'#EC407A'],
-  // arms
-  [1,3,'#FFCCBC'],[2,3,'#FFCCBC'],[7,3,'#FFCCBC'],[8,3,'#FFCCBC'],
-  // tail upper
-  [3,5,'#00ACC1'],[4,5,'#00BCD4'],[5,5,'#26C6DA'],[6,5,'#00BCD4'],[7,5,'#00ACC1'],
-  [2,6,'#0097A7'],[3,6,'#00ACC1'],[4,6,'#00BCD4'],[5,6,'#4DD0E1'],[6,6,'#00BCD4'],[7,6,'#0097A7'],
-  // scales detail
-  [3,5,'#006064'],[5,5,'#006064'],
-  [4,6,'#006064'],[6,6,'#006064'],
-  // tail lower
-  [3,7,'#00838F'],[4,7,'#0097A7'],[5,7,'#00838F'],
-  [2,8,'#006064'],[3,8,'#00838F'],[4,8,'#006064'],[5,8,'#00838F'],[6,8,'#006064'],
-  // fin
-  [1,8,'#00ACC1'],[7,8,'#00ACC1'],[0,9,'#0097A7'],[8,9,'#0097A7'],
-  [2,9,'#006064'],[3,9,'#00838F'],[4,9,'#006064'],[5,9,'#00838F'],
-  // shimmer dots
-  [4,5,'#E0F7FA'],[4,7,'#E0F7FA'],[6,6,'#80DEEA'],
-],
-// SUNKEN SHIP — detailed shipwreck with hull, porthole, broken mast
-sunken:[
-  // mast (broken)
-  [3,0,'#5D4037'],[3,1,'#6D4C41'],[3,2,'#795548'],[4,2,'#6D4C41'],
-  // sail remnant
-  [4,1,'#ECEFF1'],[5,1,'#CFD8DC'],[6,1,'#B0BEC5'],
-  // hull upper
-  [0,3,'#4E342E'],[1,3,'#5D4037'],[2,3,'#6D4C41'],[3,3,'#795548'],[4,3,'#8D6E63'],[5,3,'#795548'],[6,3,'#6D4C41'],[7,3,'#5D4037'],[8,3,'#4E342E'],[9,3,'#3E2723'],[10,3,'#4E342E'],[11,3,'#3E2723'],
-  // hull body
-  [0,4,'#3E2723'],[1,4,'#4E342E'],[2,4,'#5D4037'],[3,4,'#6D4C41'],[4,4,'#795548'],[5,4,'#8D6E63'],[6,4,'#795548'],[7,4,'#6D4C41'],[8,4,'#5D4037'],[9,4,'#4E342E'],[10,4,'#3E2723'],[11,4,'#4E342E'],
-  [1,5,'#3E2723'],[2,5,'#4E342E'],[3,5,'#5D4037'],[4,5,'#6D4C41'],[5,5,'#795548'],[6,5,'#6D4C41'],[7,5,'#5D4037'],[8,5,'#4E342E'],[9,5,'#3E2723'],[10,5,'#3E2723'],
-  [2,6,'#2E1F18'],[3,6,'#3E2723'],[4,6,'#4E342E'],[5,6,'#5D4037'],[6,6,'#4E342E'],[7,6,'#3E2723'],[8,6,'#2E1F18'],
-  // portholes
-  [4,4,'#0D47A1'],[7,4,'#0D47A1'],
-  [4,4,'#1565C0'],[7,4,'#1565C0'],
-  [4,3,'#78909C'],[7,3,'#78909C'],// porthole rim
-  // deck boards
-  [3,3,'#8D6E63'],[5,3,'#8D6E63'],[7,3,'#8D6E63'],[9,3,'#8D6E63'],
-  // barnacles & seaweed
-  [1,5,'#4CAF50'],[9,5,'#388E3C'],[2,6,'#43A047'],
-  [0,4,'#607D8B'],[11,4,'#607D8B'],// barnacles
-  // anchor chain
-  [10,3,'#90A4AE'],[11,3,'#78909C'],
-  // water line highlight
-  [2,3,'#B0BEC5'],[5,3,'#B0BEC5'],
-],
-// CRYSTAL FORMATION — dramatic crystal cluster with multiple colors and glint
-crystal:[
-  // main tall crystal
-  [5,0,'#E1F5FE'],[6,0,'#B3E5FC'],
-  [4,1,'#B3E5FC'],[5,1,'#FFFFFF'],[6,1,'#E1F5FE'],[7,1,'#B3E5FC'],
-  [4,2,'#80DEEA'],[5,2,'#E1F5FE'],[6,2,'#FFFFFF'],[7,2,'#80DEEA'],
-  [3,3,'#4DD0E1'],[4,3,'#80DEEA'],[5,3,'#B3E5FC'],[6,3,'#E1F5FE'],[7,3,'#80DEEA'],[8,3,'#4DD0E1'],
-  // secondary crystals
-  [2,2,'#CE93D8'],[3,2,'#E040FB'],
-  [1,3,'#AB47BC'],[2,3,'#CE93D8'],[3,3,'#E040FB'],
-  [8,2,'#80CBC4'],[9,2,'#4DB6AC'],
-  [8,3,'#4DB6AC'],[9,3,'#26A69A'],[10,3,'#80CBC4'],
-  // base crystal mass
-  [2,4,'#80DEEA'],[3,4,'#B3E5FC'],[4,4,'#E1F5FE'],[5,4,'#FFFFFF'],[6,4,'#E1F5FE'],[7,4,'#B3E5FC'],[8,4,'#80DEEA'],
-  [1,5,'#4DD0E1'],[2,5,'#80DEEA'],[3,5,'#B3E5FC'],[4,5,'#E1F5FE'],[5,5,'#FFFFFF'],[6,5,'#E1F5FE'],[7,5,'#B3E5FC'],[8,5,'#80DEEA'],[9,5,'#4DD0E1'],
-  [1,6,'#26C6DA'],[2,6,'#4DD0E1'],[3,6,'#80DEEA'],[4,6,'#B3E5FC'],[5,6,'#E1F5FE'],[6,6,'#B3E5FC'],[7,6,'#80DEEA'],[8,6,'#4DD0E1'],[9,6,'#26C6DA'],
-  // gem highlights/glints
-  [5,1,'#FFFFFF'],[6,2,'#FFFFFF'],[5,4,'#FFFFFF'],
-  // purple accent inner
-  [5,3,'#E040FB'],[6,3,'#CE93D8'],
-  // base glow
-  [3,6,'#E040FB'],[7,6,'#00BCD4'],
-],
+  [[10,0,C.d2],[11,0,C.d3],[12,0,C.d4],[13,0,C.m1],[14,0,C.m2],[15,0,C.m2],[16,0,C.m1],[17,0,C.d4],[18,0,C.d3],[19,0,C.d2],
+   [9,1,C.d2],[10,1,C.d3],[11,1,C.d4],[12,1,C.m1],[13,1,C.m2],[14,1,C.m3],[15,1,C.m3],[16,1,C.m2],[17,1,C.m1],[18,1,C.d4],[19,1,C.d3],[20,1,C.d2],
+   [9,2,C.d3],[10,2,C.d4],[11,2,C.m1],[12,2,C.m2],[13,2,C.m3],[14,2,C.m4],[15,2,C.l1],[16,2,C.m4],[17,2,C.m3],[18,2,C.m2],[19,2,C.m1],[20,2,C.d4],[21,2,C.d3],
+   [8,3,C.d3],[9,3,C.d4],[10,3,C.m1],[11,3,C.m2],[12,3,C.m3],[13,3,C.m4],[14,3,C.l1],[15,3,C.l2],[16,3,C.l1],[17,3,C.m4],[18,3,C.m3],[19,3,C.m2],[20,3,C.m1],[21,3,C.d4],
+   [8,4,C.d4],[9,4,C.m1],[10,4,C.m2],[11,4,C.m3],[12,4,C.m4],[13,4,C.l1],[14,4,C.l2],[15,4,C.l2],[16,4,C.l1],[17,4,C.m4],[18,4,C.m3],[19,4,C.m2],[20,4,C.m1],[21,4,C.d4],
+  // far left branch
+   [7,5,C.d3],[8,5,C.d4],[9,5,C.m1],[10,5,C.m2],[11,5,C.m1],
+   [5,6,C.d3],[6,6,C.d4],[7,6,C.m1],[8,6,C.m2],[9,6,C.m1],
+   [3,7,C.d3],[4,7,C.d4],[5,7,C.m1],[6,7,C.m1],
+   [1,8,C.d2],[2,8,C.d3],[3,8,C.d4],[4,8,C.m1],
+   [0,9,C.d1],[1,9,C.d2],[2,9,C.d4],
+   [0,10,C.d1],[1,10,C.d2],
+   [0,11,C.d1],
+  // left-mid branch
+   [11,5,C.d3],[12,5,C.m1],[13,5,C.m2],[14,5,C.m1],
+   [9,6,C.d3],[10,6,C.d4],[11,6,C.m1],[12,6,C.m2],
+   [7,7,C.d3],[8,7,C.d4],[9,7,C.m1],[10,7,C.m1],
+   [5,8,C.d3],[6,8,C.d4],[7,8,C.m1],
+   [4,9,C.d2],[5,9,C.d3],[6,9,C.d4],
+   [3,10,C.d2],[4,10,C.d3],
+   [2,11,C.d1],[3,11,C.d2],
+   [2,12,C.d1],[1,13,C.d1],
+  // center branch (tallest)
+   [13,5,C.d3],[14,5,C.m1],[15,5,C.m2],[16,5,C.m1],[17,5,C.d4],
+   [13,6,C.d3],[14,6,C.m1],[15,6,C.m2],[16,6,C.m1],
+   [13,7,C.d3],[14,7,C.m1],[15,7,C.m1],[16,7,C.d4],
+   [13,8,C.d3],[14,8,C.m1],[15,8,C.m1],
+   [13,9,C.d2],[14,9,C.m1],[15,9,C.d4],
+   [13,10,C.d2],[14,10,C.d4],
+   [13,11,C.d2],[14,11,C.d3],
+   [12,12,C.d2],[13,12,C.d3],
+   [12,13,C.d1],[13,13,C.d2],
+   [11,14,C.d1],[12,14,C.d2],
+   [11,15,C.d1],[12,15,C.d1],
+   [11,16,C.d1],[11,17,C.d1],
+   [10,17,C.d1],[10,18,C.d1],[9,19,C.d1],
+   [12,16,C.d1],[13,15,C.d1],
+  // right-mid branch
+   [17,5,C.d3],[18,5,C.m1],[19,5,C.m2],[20,5,C.m1],[21,5,C.d3],
+   [18,6,C.d3],[19,6,C.m1],[20,6,C.m2],[21,6,C.m1],[22,6,C.d3],
+   [19,7,C.d3],[20,7,C.m1],[21,7,C.m1],[22,7,C.d3],[23,7,C.d2],
+   [20,8,C.d3],[21,8,C.m1],[22,8,C.d4],[23,8,C.d3],
+   [21,9,C.d3],[22,9,C.d4],[23,9,C.d3],[24,9,C.d2],
+   [22,10,C.d3],[23,10,C.d3],[24,10,C.d2],
+   [23,11,C.d2],[24,11,C.d2],[25,11,C.d1],
+   [24,12,C.d2],[25,12,C.d1],
+   [25,13,C.d1],[26,13,C.d1],
+   [26,14,C.d1],[26,15,C.d1],
+  // far right branch
+   [20,5,C.d2],[21,5,C.d3],[22,5,C.m1],[23,5,C.d4],
+   [22,6,C.d2],[23,6,C.d3],[24,6,C.m1],[25,6,C.d4],
+   [24,7,C.d2],[25,7,C.d3],[26,7,C.d3],
+   [26,8,C.d2],[27,8,C.d3],[28,8,C.d2],
+   [28,9,C.d2],[29,9,C.d2],[30,9,C.d1],
+   [30,10,C.d1],[31,10,C.d1],
+   [31,11,C.d1],[31,12,C.d1],
+  // ground roots
+   [7,0,C.d2],[6,0,C.d1],[5,0,C.d1],[4,1,C.d2],[3,1,C.d1],[2,1,C.d1],
+   [22,0,C.d2],[23,0,C.d2],[24,0,C.d1],[25,0,C.d1],[25,1,C.d2],[26,1,C.d1],
+  // moss
+   [10,4,C.g2],[11,5,C.g3],[12,5,C.g2],[14,4,C.g2],[15,5,C.g3],[9,5,C.g1]
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// SEIRYU STONE — layered angular grey-white with crevices
+seiryu:()=>{
+  [[6,16,'#B0BEC5'],[7,17,'#CFD8DC'],[8,18,'#ECEFF1'],[9,17,'#CFD8DC'],[10,16,'#B0BEC5'],
+   [5,15,'#90A4AE'],[6,15,'#B0BEC5'],[7,16,'#CFD8DC'],[8,17,'#FFFFFF'],[9,16,'#CFD8DC'],[10,15,'#B0BEC5'],[11,15,'#90A4AE'],
+   [7,15,'#ECEFF1'],[8,16,'#FFFFFF'],[9,15,'#ECEFF1'],
+   [3,14,'#78909C'],[4,14,'#90A4AE'],[5,14,'#B0BEC5'],[6,14,'#CFD8DC'],[7,14,'#ECEFF1'],[8,15,'#FFFFFF'],[9,14,'#ECEFF1'],[10,14,'#CFD8DC'],[11,14,'#B0BEC5'],[12,14,'#90A4AE'],[13,14,'#78909C'],
+   [3,13,'#37474F'],[4,13,'#263238'],[5,13,'#263238'],[6,13,'#37474F'],[7,13,'#455A64'],[9,13,'#455A64'],[10,13,'#37474F'],[11,13,'#263238'],[12,13,'#37474F'],
+   [1,12,'#607D8B'],[2,12,'#78909C'],[3,12,'#90A4AE'],[4,12,'#B0BEC5'],[5,12,'#CFD8DC'],[6,12,'#ECEFF1'],[7,12,'#CFD8DC'],[8,12,'#B0BEC5'],[9,12,'#CFD8DC'],[10,12,'#B0BEC5'],[11,12,'#90A4AE'],[12,12,'#78909C'],[13,12,'#607D8B'],[14,12,'#546E7A'],
+   [1,11,'#546E7A'],[2,11,'#607D8B'],[3,11,'#78909C'],[4,11,'#90A4AE'],[5,11,'#B0BEC5'],[6,11,'#CFD8DC'],[7,11,'#ECEFF1'],[8,11,'#CFD8DC'],[9,11,'#B0BEC5'],[10,11,'#90A4AE'],[11,11,'#78909C'],[12,11,'#607D8B'],[13,11,'#546E7A'],
+   [4,12,'#ECEFF1'],[7,11,'#FFFFFF'],[5,11,'#CFD8DC'],
+   [1,10,'#263238'],[2,10,'#37474F'],[3,10,'#263238'],[4,10,'#37474F'],[5,10,'#455A64'],[6,10,'#546E7A'],[7,10,'#607D8B'],[8,10,'#546E7A'],[9,10,'#455A64'],[10,10,'#37474F'],[11,10,'#263238'],[12,10,'#37474F'],[13,10,'#263238'],
+   [0,9,'#546E7A'],[1,9,'#607D8B'],[2,9,'#78909C'],[3,9,'#90A4AE'],[4,9,'#B0BEC5'],[5,9,'#CFD8DC'],[6,9,'#ECEFF1'],[7,9,'#FFFFFF'],[8,9,'#ECEFF1'],[9,9,'#CFD8DC'],[10,9,'#B0BEC5'],[11,9,'#90A4AE'],[12,9,'#78909C'],[13,9,'#607D8B'],[14,9,'#546E7A'],
+   [0,8,'#455A64'],[1,8,'#546E7A'],[2,8,'#607D8B'],[3,8,'#78909C'],[4,8,'#90A4AE'],[5,8,'#B0BEC5'],[6,8,'#CFD8DC'],[7,8,'#ECEFF1'],[8,8,'#CFD8DC'],[9,8,'#B0BEC5'],[10,8,'#90A4AE'],[11,8,'#78909C'],[12,8,'#607D8B'],[13,8,'#546E7A'],[14,8,'#455A64'],
+   [0,7,'#37474F'],[1,7,'#455A64'],[2,7,'#546E7A'],[3,7,'#607D8B'],[4,7,'#78909C'],[5,7,'#90A4AE'],[6,7,'#B0BEC5'],[7,7,'#CFD8DC'],[8,7,'#B0BEC5'],[9,7,'#90A4AE'],[10,7,'#78909C'],[11,7,'#607D8B'],[12,7,'#546E7A'],[13,7,'#455A64'],[14,7,'#37474F'],
+   [1,6,'#37474F'],[2,6,'#455A64'],[3,6,'#546E7A'],[4,6,'#607D8B'],[5,6,'#78909C'],[6,6,'#90A4AE'],[7,6,'#B0BEC5'],[8,6,'#90A4AE'],[9,6,'#78909C'],[10,6,'#607D8B'],[11,6,'#546E7A'],[12,6,'#455A64'],[13,6,'#37474F'],
+   [2,5,'#263238'],[3,5,'#37474F'],[4,5,'#455A64'],[5,5,'#546E7A'],[6,5,'#607D8B'],[7,5,'#78909C'],[8,5,'#607D8B'],[9,5,'#546E7A'],[10,5,'#455A64'],[11,5,'#37474F'],[12,5,'#263238'],
+   [3,13,'#2E7D32'],[7,10,'#388E3C'],[5,10,'#2E7D32']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// DRAGON STONE (Ohko) — orange-brown porous
+dragon_stone:()=>{
+  [[4,14,'#5D3A1A'],[5,15,'#7B5230'],[6,16,'#8B6038'],[7,16,'#9B7040'],[8,15,'#8B6038'],[9,14,'#7B5230'],
+   [3,13,'#6D4428'],[4,13,'#8B6038'],[5,14,'#9B7040'],[6,15,'#A87C48'],[7,15,'#9B7040'],[8,14,'#8B6038'],[9,13,'#7B5230'],[10,13,'#6D4428'],
+   [5,13,'#2E1810'],[7,14,'#1C0F0A'],[9,14,'#2E1810'],
+   [2,12,'#5D3A1A'],[3,12,'#7B5230'],[4,12,'#9B7040'],[5,12,'#A87C48'],[6,13,'#B88C50'],[7,13,'#A87C48'],[8,13,'#9B7040'],[9,12,'#8B6038'],[10,12,'#7B5230'],[11,12,'#5D3A1A'],
+   [3,11,'#6D4428'],[4,11,'#8B6038'],[5,11,'#9B7040'],[6,12,'#A87C48'],[7,12,'#9B7040'],[8,12,'#8B6038'],[9,11,'#7B5230'],[10,11,'#6D4428'],
+   [4,12,'#1C0F0A'],[6,11,'#2E1810'],[8,11,'#1C0F0A'],
+   [1,10,'#5D3A1A'],[2,10,'#6D4428'],[3,10,'#8B6038'],[4,10,'#9B7040'],[5,10,'#A87C48'],[6,10,'#B88C50'],[7,10,'#C89858'],[8,10,'#B88C50'],[9,10,'#9B7040'],[10,10,'#8B6038'],[11,10,'#6D4428'],[12,10,'#5D3A1A'],
+   [1,9,'#4A2B1A'],[2,9,'#5D3A1A'],[3,9,'#7B5230'],[4,9,'#9B7040'],[5,9,'#A87C48'],[6,9,'#B88C50'],[7,9,'#C89858'],[8,9,'#B88C50'],[9,9,'#A87C48'],[10,9,'#8B6038'],[11,9,'#6D4428'],[12,9,'#5D3A1A'],
+   [3,10,'#2E1810'],[5,9,'#1C0F0A'],[8,10,'#2E1810'],[10,9,'#1C0F0A'],
+   [0,8,'#4A2B1A'],[1,8,'#5D3A1A'],[2,8,'#6D4428'],[3,8,'#8B6038'],[4,8,'#9B7040'],[5,8,'#A87C48'],[6,8,'#B88C50'],[7,8,'#9B7040'],[8,8,'#A87C48'],[9,8,'#9B7040'],[10,8,'#8B6038'],[11,8,'#6D4428'],[12,8,'#5D3A1A'],[13,8,'#4A2B1A'],
+   [0,7,'#3E2318'],[1,7,'#4A2B1A'],[2,7,'#5D3A1A'],[3,7,'#7B5230'],[4,7,'#8B6038'],[5,7,'#9B7040'],[6,7,'#A87C48'],[7,7,'#9B7040'],[8,7,'#8B6038'],[9,7,'#7B5230'],[10,7,'#6D4428'],[11,7,'#5D3A1A'],[12,7,'#4A2B1A'],[13,7,'#3E2318'],
+   [2,8,'#2E1810'],[6,7,'#1C0F0A'],[9,8,'#2E1810'],[11,7,'#1C0F0A'],
+   [1,6,'#3E2318'],[2,6,'#4A2B1A'],[3,6,'#5D3A1A'],[4,6,'#7B5230'],[5,6,'#8B6038'],[6,6,'#9B7040'],[7,6,'#8B6038'],[8,6,'#7B5230'],[9,6,'#5D3A1A'],[10,6,'#4A2B1A'],[11,6,'#3E2318'],
+   [2,5,'#3E2318'],[3,5,'#4A2B1A'],[4,5,'#5D3A1A'],[5,5,'#6D4428'],[6,5,'#7B5230'],[7,5,'#6D4428'],[8,5,'#5D3A1A'],[9,5,'#4A2B1A'],[10,5,'#3E2318'],
+   [3,4,'#2E1810'],[4,4,'#3E2318'],[5,4,'#4A2B1A'],[6,4,'#5D3A1A'],[7,4,'#4A2B1A'],[8,4,'#3E2318'],[9,4,'#2E1810']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// BRAIN CORAL
+brain_coral:()=>{
+  [[4,14,'#AD1457'],[5,15,'#C2185B'],[6,16,'#D81B60'],[7,17,'#E91E63'],[8,18,'#F06292'],[9,17,'#E91E63'],[10,16,'#D81B60'],[11,15,'#C2185B'],[12,14,'#AD1457'],
+   [3,13,'#C2185B'],[4,13,'#D81B60'],[5,14,'#E91E63'],[6,15,'#F06292'],[7,16,'#F48FB1'],[8,17,'#FCE4EC'],[9,16,'#F48FB1'],[10,15,'#F06292'],[11,14,'#E91E63'],[12,13,'#D81B60'],[13,13,'#C2185B'],
+   [6,14,'#880E4F'],[8,15,'#880E4F'],[10,14,'#880E4F'],[5,13,'#880E4F'],[9,13,'#880E4F'],
+   [2,12,'#AD1457'],[3,12,'#C2185B'],[4,12,'#D81B60'],[5,12,'#E91E63'],[6,13,'#F06292'],[7,14,'#F48FB1'],[8,14,'#FCE4EC'],[9,13,'#F48FB1'],[10,13,'#F06292'],[11,12,'#E91E63'],[12,12,'#D81B60'],[13,12,'#C2185B'],[14,12,'#AD1457'],
+   [2,11,'#C2185B'],[3,11,'#D81B60'],[4,11,'#E91E63'],[5,11,'#F06292'],[6,12,'#F48FB1'],[7,13,'#FCE4EC'],[8,13,'#F48FB1'],[9,12,'#F06292'],[10,12,'#E91E63'],[11,11,'#D81B60'],[12,11,'#C2185B'],[13,11,'#AD1457'],
+   [3,12,'#880E4F'],[7,12,'#880E4F'],[11,12,'#880E4F'],[5,11,'#6A0F3A'],[9,11,'#6A0F3A'],
+   [1,10,'#AD1457'],[2,10,'#C2185B'],[3,10,'#D81B60'],[4,10,'#E91E63'],[5,10,'#F06292'],[6,11,'#F48FB1'],[7,11,'#F06292'],[8,12,'#F48FB1'],[9,11,'#F06292'],[10,10,'#E91E63'],[11,10,'#D81B60'],[12,10,'#C2185B'],[13,10,'#AD1457'],
+   [1,9,'#C2185B'],[2,9,'#D81B60'],[3,9,'#E91E63'],[4,9,'#F06292'],[5,9,'#E91E63'],[6,10,'#F06292'],[7,10,'#F48FB1'],[8,11,'#F06292'],[9,10,'#E91E63'],[10,9,'#D81B60'],[11,9,'#C2185B'],[12,9,'#AD1457'],
+   [0,8,'#AD1457'],[1,8,'#C2185B'],[2,8,'#D81B60'],[3,8,'#E91E63'],[4,8,'#F06292'],[5,8,'#F48FB1'],[6,8,'#F06292'],[7,9,'#F48FB1'],[8,9,'#F06292'],[9,8,'#E91E63'],[10,8,'#D81B60'],[11,8,'#C2185B'],[12,8,'#AD1457'],
+   [0,7,'#880E4F'],[1,7,'#AD1457'],[2,7,'#C2185B'],[3,7,'#D81B60'],[4,7,'#E91E63'],[5,7,'#D81B60'],[6,7,'#E91E63'],[7,8,'#D81B60'],[8,8,'#E91E63'],[9,7,'#D81B60'],[10,7,'#C2185B'],[11,7,'#AD1457'],[12,7,'#880E4F'],
+   [1,6,'#880E4F'],[2,6,'#AD1457'],[3,6,'#C2185B'],[4,6,'#D81B60'],[5,6,'#C2185B'],[6,6,'#D81B60'],[7,7,'#C2185B'],[8,7,'#D81B60'],[9,6,'#C2185B'],[10,6,'#AD1457'],[11,6,'#880E4F'],
+   [2,5,'#6A0F3A'],[3,5,'#880E4F'],[4,5,'#AD1457'],[5,5,'#C2185B'],[6,5,'#AD1457'],[7,6,'#C2185B'],[8,6,'#AD1457'],[9,5,'#880E4F'],[10,5,'#6A0F3A'],
+   [3,4,'#4A0526'],[4,4,'#6A0F3A'],[5,4,'#880E4F'],[6,4,'#6A0F3A'],[7,5,'#880E4F'],[8,5,'#6A0F3A'],[9,4,'#4A0526'],
+   [7,17,'#FFFFFF'],[8,16,'#FCE4EC'],[7,14,'#FCE4EC']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// FAN CORAL
+fan_coral:()=>{
+  [[5,9,'#004D40'],[5,8,'#00695C'],[5,7,'#00838F'],[5,6,'#006064'],[6,6,'#006064'],
+   [2,5,'#00838F'],[3,5,'#0097A7'],[4,5,'#00ACC1'],[5,5,'#00BCD4'],[6,5,'#00ACC1'],[7,5,'#0097A7'],[8,5,'#006064'],
+   [1,4,'#0097A7'],[2,4,'#00ACC1'],[3,4,'#00BCD4'],[4,4,'#26C6DA'],[5,4,'#4DD0E1'],[6,4,'#26C6DA'],[7,4,'#00BCD4'],[8,4,'#00ACC1'],[9,4,'#0097A7'],
+   [0,3,'#006064'],[1,3,'#0097A7'],[2,3,'#00BCD4'],[3,3,'#26C6DA'],[4,3,'#80DEEA'],[5,3,'#4DD0E1'],[6,3,'#26C6DA'],[7,3,'#00BCD4'],[8,3,'#0097A7'],[9,3,'#00838F'],[10,3,'#006064'],
+   [1,2,'#00838F'],[2,2,'#00ACC1'],[3,2,'#26C6DA'],[4,2,'#4DD0E1'],[5,2,'#80DEEA'],[6,2,'#4DD0E1'],[7,2,'#26C6DA'],[8,2,'#00ACC1'],[9,2,'#00838F'],
+   [2,1,'#006064'],[3,1,'#0097A7'],[4,1,'#00BCD4'],[5,1,'#26C6DA'],[6,1,'#00BCD4'],[7,1,'#0097A7'],[8,1,'#006064'],
+   [3,0,'#004D40'],[4,0,'#006064'],[5,0,'#0097A7'],[6,0,'#006064'],[7,0,'#004D40'],
+   [3,3,'#E0F7FA'],[5,3,'#E0F7FA'],[7,3,'#E0F7FA'],[4,4,'#E0F7FA'],[6,4,'#E0F7FA'],
+   [4,9,'#00695C'],[4,10,'#004D40']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// TREASURE CHEST
+treasure:()=>{
+  [[1,11,'#3E2723'],[2,11,'#4E342E'],[3,11,'#5D4037'],[4,11,'#6D4C41'],[5,11,'#795548'],[6,11,'#8D6E63'],[7,11,'#795548'],[8,11,'#6D4C41'],
+   [0,10,'#2E1F18'],[1,10,'#3E2723'],[2,10,'#4E342E'],[3,10,'#5D4037'],[4,10,'#8D6E63'],[5,10,'#A1887F'],[6,10,'#8D6E63'],[7,10,'#6D4C41'],[8,10,'#5D4037'],
+   [3,11,'#FFD700'],[4,11,'#FFC107'],[1,11,'#607D8B'],[8,11,'#607D8B'],
+   [2,9,'#FFD700'],[3,9,'#FFC107'],[4,9,'#FFD700'],[5,9,'#FFD700'],[6,9,'#FFC107'],[7,9,'#FFD700'],
+   [1,9,'#FFA000'],[8,9,'#FFA000'],
+   [3,10,'#FFD700'],[6,10,'#FFC107'],
+   [3,9,'#E040FB'],[6,9,'#00E5FF'],[5,10,'#FF1744'],
+   [0,8,'#4E342E'],[1,8,'#5D4037'],[2,8,'#6D4C41'],[3,8,'#795548'],[4,8,'#8D6E63'],[5,8,'#795548'],[6,8,'#6D4C41'],[7,8,'#5D4037'],[8,8,'#4E342E'],
+   [0,7,'#3E2723'],[1,7,'#4E342E'],[2,7,'#5D4037'],[3,7,'#6D4C41'],[4,7,'#795548'],[5,7,'#8D6E63'],[6,7,'#795548'],[7,7,'#6D4C41'],[8,7,'#5D4037'],[9,7,'#4E342E'],
+   [0,6,'#2E1F18'],[1,6,'#3E2723'],[2,6,'#4E342E'],[3,6,'#5D4037'],[4,6,'#6D4C41'],[5,6,'#795548'],[6,6,'#6D4C41'],[7,6,'#5D4037'],[8,6,'#4E342E'],[9,6,'#3E2723'],
+   [1,5,'#2E1F18'],[2,5,'#3E2723'],[3,5,'#4E342E'],[4,5,'#5D4037'],[5,5,'#4E342E'],[6,5,'#3E2723'],[7,5,'#2E1F18'],[8,5,'#3E2723'],
+   [0,7,'#607D8B'],[9,7,'#607D8B'],[4,6,'#FFD700']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// CASTLE
+castle:()=>{
+  [[0,18,'#455A64'],[1,18,'#546E7A'],[0,17,'#37474F'],[1,17,'#455A64'],[2,17,'#546E7A'],
+   [3,18,'#546E7A'],[3,17,'#607D8B'],[2,18,'#607D8B'],
+   [11,18,'#455A64'],[12,18,'#546E7A'],[11,17,'#37474F'],[12,17,'#455A64'],[10,17,'#546E7A'],
+   [9,18,'#546E7A'],[9,17,'#607D8B'],[10,18,'#607D8B'],
+   [4,17,'#607D8B'],[5,17,'#78909C'],[8,17,'#607D8B'],
+   [4,16,'#78909C'],[5,16,'#90A4AE'],[6,16,'#B0BEC5'],[7,16,'#90A4AE'],[8,16,'#78909C'],
+   [0,16,'#546E7A'],[1,16,'#607D8B'],[2,16,'#607D8B'],[0,15,'#455A64'],[1,15,'#546E7A'],[2,15,'#607D8B'],
+   [10,16,'#607D8B'],[11,16,'#607D8B'],[12,16,'#546E7A'],[10,15,'#607D8B'],[11,15,'#546E7A'],[12,15,'#455A64'],
+   [1,16,'#1A237E'],[11,16,'#1A237E'],[1,15,'#283593'],[11,15,'#283593'],
+   [3,15,'#78909C'],[4,15,'#90A4AE'],[5,15,'#B0BEC5'],[6,15,'#CFD8DC'],[7,15,'#B0BEC5'],[8,15,'#90A4AE'],[9,15,'#78909C'],
+   [3,14,'#607D8B'],[4,14,'#78909C'],[5,14,'#90A4AE'],[6,14,'#B0BEC5'],[7,14,'#90A4AE'],[8,14,'#78909C'],[9,14,'#607D8B'],
+   [2,13,'#546E7A'],[3,13,'#607D8B'],[4,13,'#78909C'],[5,13,'#90A4AE'],[6,13,'#B0BEC5'],[7,13,'#90A4AE'],[8,13,'#78909C'],[9,13,'#607D8B'],[10,13,'#546E7A'],
+   [4,14,'#1565C0'],[8,14,'#1565C0'],[5,13,'#1A237E'],[7,13,'#1A237E'],
+   [5,12,'#263238'],[6,12,'#1A237E'],[7,12,'#263238'],
+   [5,11,'#1A237E'],[6,11,'#0D47A1'],[7,11,'#1A237E'],
+   [5,10,'#263238'],[6,10,'#1A237E'],[7,10,'#263238'],
+   [2,12,'#546E7A'],[3,12,'#607D8B'],[4,12,'#78909C'],[8,12,'#78909C'],[9,12,'#607D8B'],[10,12,'#546E7A'],
+   [1,11,'#455A64'],[2,11,'#546E7A'],[3,11,'#607D8B'],[4,11,'#78909C'],[8,11,'#78909C'],[9,11,'#607D8B'],[10,11,'#546E7A'],[11,11,'#455A64'],
+   [0,10,'#37474F'],[1,10,'#455A64'],[2,10,'#546E7A'],[3,10,'#607D8B'],[4,10,'#78909C'],[8,10,'#78909C'],[9,10,'#607D8B'],[10,10,'#546E7A'],[11,10,'#455A64'],[12,10,'#37474F'],
+   [0,9,'#37474F'],[1,9,'#455A64'],[2,9,'#546E7A'],[3,9,'#607D8B'],[4,9,'#78909C'],[5,9,'#6D4C41'],[6,9,'#795548'],[7,9,'#6D4C41'],[8,9,'#78909C'],[9,9,'#607D8B'],[10,9,'#546E7A'],[11,9,'#455A64'],[12,9,'#37474F'],
+   [2,10,'#388E3C'],[10,10,'#2E7D32'],[1,9,'#2E7D32']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// CONCH SHELL
+conch:()=>{
+  [[8,18,'#FFF9C4'],[9,18,'#FFEE58'],[7,17,'#FFEE58'],[8,17,'#FFE082'],[9,17,'#FFD54F'],[10,17,'#FFEE58'],
+   [6,16,'#FFE082'],[7,16,'#FFD54F'],[8,16,'#FFC107'],[9,16,'#FFD54F'],[10,16,'#FFE082'],[11,16,'#FFF9C4'],
+   [5,15,'#FFD54F'],[6,15,'#FFC107'],[7,15,'#FFB300'],[8,15,'#FFC107'],[9,15,'#FFD54F'],[10,15,'#FFE082'],[11,15,'#FFD54F'],[12,15,'#FFE082'],
+   [4,14,'#FFC107'],[5,14,'#FFB300'],[6,14,'#FFA000'],[7,14,'#FFB300'],[8,14,'#FFC107'],[9,14,'#FFD54F'],[10,14,'#FFC107'],[11,14,'#FFB300'],[12,14,'#FFC107'],[13,14,'#FFD54F'],
+   [3,13,'#FFB300'],[4,13,'#FFA000'],[5,13,'#FF8F00'],[6,13,'#FFA000'],[7,13,'#FFB300'],[8,13,'#FFA000'],[9,13,'#FFB300'],[10,13,'#FFC107'],[11,13,'#FFB300'],[12,13,'#FFA000'],[13,13,'#FFB300'],
+   [2,12,'#FFB300'],[3,12,'#FF8F00'],[4,12,'#FF6F00'],[5,12,'#FF8F00'],[6,12,'#FFA000'],[7,12,'#FF8F00'],[8,12,'#F48FB1'],[9,12,'#FCE4EC'],[10,12,'#F48FB1'],[11,12,'#FF8F00'],[12,12,'#FFB300'],
+   [2,11,'#FF8F00'],[3,11,'#FF6F00'],[4,11,'#FF8F00'],[5,11,'#FFA000'],[6,11,'#F48FB1'],[7,11,'#FCE4EC'],[8,11,'#FFFFFF'],[9,11,'#FCE4EC'],[10,11,'#F48FB1'],[11,11,'#FF8F00'],
+   [3,10,'#FF6F00'],[4,10,'#FF8F00'],[5,10,'#F48FB1'],[6,10,'#FCE4EC'],[7,10,'#FFFFFF'],[8,10,'#FCE4EC'],[9,10,'#F48FB1'],[10,10,'#FF8F00'],
+   [4,9,'#FF8F00'],[5,9,'#FFA000'],[6,9,'#F48FB1'],[7,9,'#FCE4EC'],[8,9,'#F48FB1'],[9,9,'#FF8F00'],
+   [5,8,'#FFB300'],[6,8,'#FFA000'],[7,8,'#FF8F00'],[8,8,'#FFA000'],
+   [6,7,'#FFB300'],[7,7,'#FFA000'],[7,6,'#FF8F00'],
+   [6,15,'#F9A825'],[10,14,'#F9A825'],[9,17,'#FFFFFF'],[10,15,'#FFF9C4']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// LAVA ROCK
+lava_rock:()=>{
+  [[3,12,'#5D1A1A'],[4,13,'#7B2020'],[5,14,'#8B2525'],[6,14,'#7B2020'],[7,13,'#5D1A1A'],
+   [2,11,'#6D2020'],[3,11,'#8B2525'],[4,12,'#A02828'],[5,13,'#B23030'],[6,13,'#A02828'],[7,12,'#8B2525'],[8,11,'#6D2020'],
+   [1,10,'#5D1A1A'],[2,10,'#7B2020'],[3,10,'#9B2C2C'],[4,11,'#B23030'],[5,12,'#C43434'],[6,12,'#B23030'],[7,11,'#9B2C2C'],[8,10,'#7B2020'],[9,10,'#5D1A1A'],
+   [0,9,'#4A1414'],[1,9,'#6D2020'],[2,9,'#8B2525'],[3,9,'#A02828'],[4,10,'#B23030'],[5,11,'#C43434'],[6,11,'#B23030'],[7,10,'#A02828'],[8,9,'#8B2525'],[9,9,'#6D2020'],[10,9,'#4A1414'],
+   [0,8,'#5D1A1A'],[1,8,'#7B2020'],[2,8,'#9B2C2C'],[3,8,'#A02828'],[4,9,'#B23030'],[5,10,'#C43434'],[6,10,'#B23030'],[7,9,'#A02828'],[8,8,'#8B2525'],[9,8,'#6D2020'],[10,8,'#5D1A1A'],
+   [1,7,'#4A1414'],[2,7,'#6D2020'],[3,7,'#7B2020'],[4,8,'#9B2C2C'],[5,9,'#A02828'],[6,9,'#9B2C2C'],[7,8,'#7B2020'],[8,7,'#6D2020'],[9,7,'#4A1414'],
+   [2,6,'#3E1010'],[3,6,'#5D1A1A'],[4,7,'#6D2020'],[5,8,'#7B2020'],[6,8,'#6D2020'],[7,7,'#5D1A1A'],[8,6,'#3E1010'],
+   [3,5,'#2E0808'],[4,6,'#4A1414'],[5,7,'#5D1A1A'],[6,7,'#4A1414'],[7,6,'#2E0808'],
+   [3,10,'#B71C1C'],[6,9,'#C62828'],[2,8,'#AD1717'],
+   [3,10,'#1C0404'],[5,11,'#1C0404'],[8,10,'#1C0404'],[2,8,'#1C0404'],[6,9,'#0E0202'],[9,8,'#1C0404'],[4,7,'#1C0404'],[7,8,'#0E0202'],[4,6,'#1C0404'],[5,6,'#0E0202']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// VOLCANO
+volcano:()=>{
+  [[4,18,'#FF3D00'],[5,18,'#FF6D00'],[6,19,'#FFAB40'],[7,18,'#FF6D00'],[8,18,'#FF3D00'],
+   [3,17,'#E53935'],[4,17,'#FF5722'],[5,17,'#FF7043'],[6,18,'#FF9800'],[7,17,'#FF7043'],[8,17,'#FF5722'],[9,17,'#E53935'],
+   [3,16,'#D32F2F'],[4,16,'#E53935'],[5,16,'#FF5722'],[6,17,'#FF7043'],[7,16,'#FF5722'],[8,16,'#E53935'],[9,16,'#D32F2F'],
+   [2,15,'#795548'],[3,15,'#8D6E63'],[4,15,'#A1887F'],[5,15,'#BCAAA4'],[6,15,'#FF5722'],[7,15,'#A1887F'],[8,15,'#8D6E63'],[9,15,'#795548'],[10,15,'#6D4C41'],
+   [1,14,'#6D4C41'],[2,14,'#795548'],[3,14,'#8D6E63'],[4,14,'#A1887F'],[5,14,'#8D6E63'],[6,14,'#FF5722'],[7,14,'#8D6E63'],[8,14,'#795548'],[9,14,'#6D4C41'],[10,14,'#5D4037'],[11,14,'#4E342E'],
+   [0,13,'#5D4037'],[1,13,'#6D4C41'],[2,13,'#795548'],[3,13,'#8D6E63'],[4,13,'#795548'],[5,13,'#6D4C41'],[6,13,'#795548'],[7,13,'#8D6E63'],[8,13,'#795548'],[9,13,'#6D4C41'],[10,13,'#5D4037'],[11,13,'#4E342E'],[12,13,'#3E2723'],
+   [0,12,'#4E342E'],[1,12,'#5D4037'],[2,12,'#6D4C41'],[3,12,'#795548'],[4,12,'#6D4C41'],[5,12,'#5D4037'],[6,12,'#6D4C41'],[7,12,'#795548'],[8,12,'#6D4C41'],[9,12,'#5D4037'],[10,12,'#4E342E'],[11,12,'#3E2723'],[12,12,'#2E1F18'],
+   [0,11,'#3E2723'],[1,11,'#4E342E'],[2,11,'#5D4037'],[3,11,'#6D4C41'],[4,11,'#5D4037'],[5,11,'#4E342E'],[6,11,'#5D4037'],[7,11,'#6D4C41'],[8,11,'#5D4037'],[9,11,'#4E342E'],[10,11,'#3E2723'],[11,11,'#2E1F18'],
+   [5,15,'#FF5722'],[6,14,'#FF3D00'],[6,13,'#FF5722'],[5,12,'#E53935'],
+   [8,15,'#FF3D00'],[8,14,'#E53935'],
+   [2,14,'#B0BEC5'],[9,13,'#90A4AE']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// PAGODA
+pagoda:()=>{
+  [[5,20,'#607D8B'],[6,21,'#78909C'],[7,20,'#607D8B'],
+   [3,19,'#B71C1C'],[4,19,'#D32F2F'],[5,19,'#E53935'],[6,19,'#EF9A9A'],[7,19,'#E53935'],[8,19,'#D32F2F'],[9,19,'#B71C1C'],
+   [2,18,'#C62828'],[3,18,'#D32F2F'],[4,18,'#607D8B'],[5,18,'#78909C'],[6,18,'#90A4AE'],[7,18,'#78909C'],[8,18,'#607D8B'],[9,18,'#D32F2F'],[10,18,'#C62828'],
+   [4,17,'#546E7A'],[5,17,'#607D8B'],[6,17,'#78909C'],[7,17,'#607D8B'],[8,17,'#546E7A'],
+   [4,16,'#455A64'],[5,16,'#546E7A'],[6,16,'#FFCA28'],[7,16,'#546E7A'],[8,16,'#455A64'],
+   [3,15,'#B71C1C'],[4,15,'#D32F2F'],[5,15,'#E53935'],[6,15,'#EF9A9A'],[7,15,'#E53935'],[8,15,'#D32F2F'],[9,15,'#B71C1C'],
+   [2,14,'#C62828'],[3,14,'#D32F2F'],[4,14,'#607D8B'],[5,14,'#78909C'],[6,14,'#90A4AE'],[7,14,'#B0BEC5'],[8,14,'#90A4AE'],[9,14,'#78909C'],[10,14,'#607D8B'],[11,14,'#D32F2F'],[12,14,'#C62828'],
+   [4,13,'#455A64'],[5,13,'#546E7A'],[6,13,'#607D8B'],[7,13,'#546E7A'],[8,13,'#455A64'],
+   [4,12,'#37474F'],[5,12,'#455A64'],[6,12,'#263238'],[7,12,'#455A64'],[8,12,'#37474F'],
+   [3,11,'#B71C1C'],[4,11,'#D32F2F'],[5,11,'#E53935'],[6,11,'#EF9A9A'],[7,11,'#E53935'],[8,11,'#D32F2F'],[9,11,'#B71C1C'],[10,11,'#C62828'],
+   [1,10,'#C62828'],[2,10,'#D32F2F'],[3,10,'#607D8B'],[4,10,'#78909C'],[5,10,'#90A4AE'],[6,10,'#B0BEC5'],[7,10,'#CFD8DC'],[8,10,'#B0BEC5'],[9,10,'#90A4AE'],[10,10,'#78909C'],[11,10,'#607D8B'],[12,10,'#D32F2F'],[13,10,'#C62828'],
+   [3,9,'#455A64'],[4,9,'#546E7A'],[5,9,'#607D8B'],[6,9,'#78909C'],[7,9,'#607D8B'],[8,9,'#546E7A'],[9,9,'#455A64'],
+   [3,8,'#37474F'],[4,8,'#455A64'],[5,8,'#546E7A'],[6,8,'#37474F'],[7,8,'#546E7A'],[8,8,'#455A64'],[9,8,'#37474F'],
+   [1,7,'#37474F'],[2,7,'#455A64'],[3,7,'#546E7A'],[4,7,'#607D8B'],[5,7,'#78909C'],[6,7,'#90A4AE'],[7,7,'#78909C'],[8,7,'#607D8B'],[9,7,'#546E7A'],[10,7,'#455A64'],[11,7,'#37474F'],
+   [0,6,'#263238'],[1,6,'#37474F'],[2,6,'#455A64'],[3,6,'#546E7A'],[4,6,'#607D8B'],[5,6,'#78909C'],[6,6,'#90A4AE'],[7,6,'#78909C'],[8,6,'#607D8B'],[9,6,'#546E7A'],[10,6,'#455A64'],[11,6,'#37474F'],[12,6,'#263238'],
+   [1,14,'#E53935'],[13,14,'#E53935'],[2,10,'#E53935'],[12,10,'#E53935']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// SUNKEN SHIP (tilted)
+sunken:()=>{
+  [[5,20,'#5D4037'],[6,19,'#6D4C41'],[7,18,'#795548'],[8,17,'#6D4C41'],[9,16,'#5D4037'],
+   [7,19,'#ECEFF1'],[8,18,'#E0E0E0'],[9,17,'#CFD8DC'],[10,16,'#BDBDBD'],[8,19,'#CFD8DC'],[9,18,'#BDBDBD'],
+   [2,15,'#4E342E'],[3,15,'#5D4037'],[4,15,'#6D4C41'],[5,15,'#795548'],[6,15,'#8D6E63'],[7,15,'#795548'],[8,15,'#6D4C41'],[9,15,'#5D4037'],[10,14,'#4E342E'],[11,14,'#3E2723'],
+   [2,14,'#3E2723'],[3,14,'#4E342E'],[4,14,'#5D4037'],[5,14,'#6D4C41'],[6,14,'#795548'],[7,14,'#8D6E63'],[8,14,'#795548'],[9,14,'#6D4C41'],[10,13,'#5D4037'],[11,13,'#4E342E'],[12,13,'#3E2723'],
+   [3,13,'#3E2723'],[4,13,'#4E342E'],[5,13,'#5D4037'],[6,13,'#6D4C41'],[7,13,'#795548'],[8,13,'#6D4C41'],[9,13,'#5D4037'],[10,12,'#4E342E'],[11,12,'#3E2723'],[12,12,'#2E1F18'],
+   [4,12,'#2E1F18'],[5,12,'#3E2723'],[6,12,'#4E342E'],[7,12,'#5D4037'],[8,12,'#4E342E'],[9,12,'#3E2723'],[10,11,'#2E1F18'],[11,11,'#1C1008'],
+   [4,14,'#0D47A1'],[7,13,'#0D47A1'],[4,13,'#78909C'],[7,12,'#78909C'],
+   [3,15,'#8D6E63'],[6,15,'#8D6E63'],[9,14,'#6D4C41'],
+   [4,11,'#2E1F18'],[5,11,'#1C1008'],[6,11,'#2E1F18'],
+   [3,13,'#607D8B'],[11,12,'#607D8B'],[5,12,'#388E3C'],[9,11,'#2E7D32'],
+   [2,14,'#90A4AE'],[1,13,'#78909C'],[1,12,'#90A4AE'],[0,11,'#78909C']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// MERMAID
+mermaid:()=>{
+  [[2,18,'#FF8A65'],[3,18,'#FF7043'],[4,18,'#FF8A65'],[5,18,'#FF6F00'],[7,18,'#FF8A65'],
+   [1,17,'#FF7043'],[2,17,'#FF8A65'],[3,17,'#FFCCBC'],[4,17,'#FFE0B2'],[5,17,'#FFCCBC'],[6,17,'#FF8A65'],[7,17,'#FF7043'],
+   [3,16,'#FFCCBC'],[4,16,'#FFE0B2'],[5,16,'#FFCCBC'],
+   [3,16,'#5D4037'],[5,16,'#5D4037'],[4,16,'#FF80AB'],
+   [2,15,'#FFCCBC'],[3,15,'#FFCCBC'],[3,16,'#FFCCBC'],
+   [3,15,'#F48FB1'],[4,15,'#FCE4EC'],[5,15,'#F48FB1'],
+   [3,14,'#EC407A'],[4,14,'#F48FB1'],[5,14,'#EC407A'],
+   [4,13,'#FFCCBC'],[5,13,'#FFE0B2'],[6,13,'#FFCCBC'],[7,14,'#FFCCBC'],
+   [3,12,'#00ACC1'],[4,12,'#00BCD4'],[5,12,'#26C6DA'],[6,12,'#00BCD4'],[7,12,'#00ACC1'],
+   [3,11,'#0097A7'],[4,11,'#00ACC1'],[5,11,'#4DD0E1'],[6,11,'#00ACC1'],[7,11,'#0097A7'],[8,11,'#006064'],
+   [4,10,'#006064'],[5,10,'#0097A7'],[6,10,'#00ACC1'],[7,10,'#0097A7'],[8,10,'#006064'],[9,10,'#004D40'],
+   [5,9,'#006064'],[6,9,'#00838F'],[7,9,'#0097A7'],[8,9,'#006064'],[9,9,'#004D40'],
+   [3,10,'#00BCD4'],[2,9,'#00ACC1'],[10,10,'#00BCD4'],[11,10,'#0097A7'],
+   [2,8,'#0097A7'],[3,8,'#00838F'],[10,9,'#0097A7'],[11,9,'#006064'],
+   [9,12,'#546E7A'],[10,12,'#607D8B'],[10,11,'#78909C'],[11,11,'#607D8B'],[11,12,'#546E7A'],
+   [9,13,'#455A64'],[10,13,'#546E7A'],[11,13,'#455A64'],
+   [5,12,'#E0F7FA'],[4,11,'#E0F7FA']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
+
+// CRYSTAL CLUSTER
+crystal:()=>{
+  [[6,18,'#E3F2FD'],[7,19,'#F5F5F5'],
+   [5,17,'#B3E5FC'],[6,17,'#E3F2FD'],[7,18,'#FFFFFF'],[8,17,'#E3F2FD'],
+   [5,16,'#81D4FA'],[6,16,'#B3E5FC'],[7,17,'#E3F2FD'],[8,16,'#B3E5FC'],[9,16,'#81D4FA'],
+   [4,15,'#4FC3F7'],[5,15,'#81D4FA'],[6,15,'#B3E5FC'],[7,16,'#E3F2FD'],[8,15,'#B3E5FC'],[9,15,'#81D4FA'],[10,15,'#4FC3F7'],
+   [2,16,'#9C27B0'],[3,17,'#AB47BC'],[1,15,'#7B1FA2'],[2,15,'#9C27B0'],[3,16,'#CE93D8'],[4,16,'#AB47BC'],
+   [1,14,'#6A1B9A'],[2,14,'#7B1FA2'],[3,15,'#9C27B0'],[4,15,'#CE93D8'],
+   [2,13,'#6A1B9A'],[3,14,'#7B1FA2'],[4,14,'#9C27B0'],
+   [10,16,'#00838F'],[11,17,'#00ACC1'],[10,15,'#006064'],[11,16,'#00838F'],[12,15,'#00ACC1'],
+   [11,14,'#006064'],[12,14,'#00838F'],[12,13,'#00695C'],
+   [2,12,'#6A1B9A'],[3,12,'#7B1FA2'],[4,12,'#9C27B0'],[5,12,'#CE93D8'],[6,12,'#B3E5FC'],[7,12,'#E3F2FD'],[8,12,'#B3E5FC'],[9,12,'#4DD0E1'],[10,12,'#00ACC1'],[11,12,'#006064'],[12,12,'#004D40'],
+   [1,11,'#4A148C'],[2,11,'#6A1B9A'],[3,11,'#9C27B0'],[4,11,'#B39DDB'],[5,11,'#81D4FA'],[6,11,'#B3E5FC'],[7,11,'#E3F2FD'],[8,11,'#B3E5FC'],[9,11,'#80DEEA'],[10,11,'#00BCD4'],[11,11,'#00838F'],[12,11,'#006064'],
+   [1,10,'#4A148C'],[2,10,'#6A1B9A'],[3,10,'#7B1FA2'],[4,10,'#9575CD'],[5,10,'#64B5F6'],[6,10,'#81D4FA'],[7,10,'#B3E5FC'],[8,10,'#81D4FA'],[9,10,'#4DD0E1'],[10,10,'#26C6DA'],[11,10,'#00838F'],[12,10,'#006064'],
+   [2,9,'#4A148C'],[3,9,'#5E35B1'],[4,9,'#7B1FA2'],[5,9,'#4FC3F7'],[6,9,'#29B6F6'],[7,9,'#4FC3F7'],[8,9,'#4DD0E1'],[9,9,'#26C6DA'],[10,9,'#00ACC1'],[11,9,'#006064'],
+   [7,18,'#FFFFFF'],[6,16,'#FFFFFF'],[7,13,'#E3F2FD']
+  ].forEach(([x,y,c])=>px(x,y,c));
+},
 };
-const px=D[id]||D.rock1;
-px.forEach(([x,y,c])=>{ctx.fillStyle=c;ctx.fillRect(ox+x*sc,oy+y*sc,sc,sc);});
+
+const fn=sprites[id]||sprites.seiryu;
+fn();
 }
 
+// Per-deco config: how wide/tall the sprite is (for centering/burial)
+const DECO_SPRITE_CFG={
+  spider_wood:{w:32,h:20,halfW:16,yMin:0},
+  seiryu:     {w:15,h:19,halfW:7, yMin:5},
+  dragon_stone:{w:14,h:17,halfW:7,yMin:4},
+  brain_coral: {w:15,h:19,halfW:7,yMin:4},
+  fan_coral:   {w:11,h:10,halfW:5,yMin:0},
+  treasure:    {w:10,h:12,halfW:5,yMin:5},
+  castle:      {w:13,h:19,halfW:6,yMin:9},
+  conch:       {w:14,h:19,halfW:7,yMin:6},
+  lava_rock:   {w:11,h:15,halfW:5,yMin:5},
+  volcano:     {w:13,h:20,halfW:6,yMin:11},
+  pagoda:      {w:14,h:22,halfW:7,yMin:6},
+  sunken:      {w:13,h:21,halfW:6,yMin:11},
+  mermaid:     {w:12,h:19,halfW:6,yMin:8},
+  crystal:     {w:13,h:20,halfW:6,yMin:9},
+};
+
+// Preview for shop (60×60 canvas)
 function drawDecoPreview(id){
-  const c=document.createElement('canvas');c.width=56;c.height=56;
-  c.style.width='56px';c.style.height='56px';c.style.imageRendering='pixelated';
-  drawDecoSprite(c.getContext('2d'),id,2,2,4);return c.outerHTML;
+  const c=document.createElement('canvas');c.width=60;c.height=60;
+  c.style.width='60px';c.style.height='60px';c.style.imageRendering='pixelated';
+  const ctx=c.getContext('2d');
+  ctx.fillStyle='#0a2d6e';ctx.fillRect(0,0,60,60);
+  drawDecoSprite(ctx,id,2,56,2);
+  return c.outerHTML;
 }
+
+
 
 /* ═══════════════════════════════════════════════════════════
    STATE
 ═══════════════════════════════════════════════════════════ */
 let S={
-  coins:500,owned:{},waterAdded:false,waterLevel:0,waterAnim:false,
+  coins:5000,owned:{},waterAdded:false,waterLevel:0,waterAnim:false,
   waterTested:true,waterScore:{},fish:[],uid:0,day:1,
   plantAge:0,plantSeeds:[],decos:[],gameTime:8*60,poopLevel:0,
   tankSize:0,xp:0,level:1,achievements:[],
@@ -1152,11 +1184,22 @@ function avgW(){const v=Object.values(S.waterScore||{});if(!v.length)return 0;re
 function getWaterTemp(){return S.owned.heater2?27:S.owned.heater?25:18;}
 function getDef(f){return f.isCreature?CREATURES_DEF.find(d=>d.id===f.id):FISH_DEF.find(d=>d.id===f.id);}
 function getFishMood(f){
-  if(f.hunger<25)return'hungry';if(f.health<40)return'scared';if(f.diseased)return'scared';
-  const hour=Math.floor((S.gameTime%1440)/60);if(hour>=21||hour<6)return'sleepy';
-  if(S.fish.filter(x=>x.id===f.id).length===1&&getDef(f)?.personality==='shy')return'lonely';
+  if(f.hunger<25)return'hungry';
+  if(f.health<40||f.diseased)return'scared';
+  const hour=Math.floor((S.gameTime%1440)/60);
+  if(hour>=21||hour<6)return'sleepy';
+  const def=getDef(f);
+  // Social moods
+  if(def?.social==='schooling'){
+    const sameSpecies=S.fish.filter(x=>x.id===f.id&&x.uid!==f.uid).length;
+    if(sameSpecies===0)return'lonely';
+  }
+  if(def?.social==='solitary'){
+    const nearby=S.fish.filter(x=>x.uid!==f.uid).length;
+    if(nearby>0&&Math.random()<0.1)return'warning';// irritated by company
+  }
   if(f.hunger>80&&f.health>80)return'happy';
-  if(getDef(f)?.personality==='playful')return'playful';
+  if(def?.personality==='playful')return'playful';
   return'content';
 }
 
@@ -1168,13 +1211,13 @@ function recalcWater(){
   const pp=Math.round(S.poopLevel*0.4);
   const fb=(S.owned.filter2?35:S.owned.filter?25:0);
   const pb=Math.min(15,Math.floor((S.plantSeeds||[]).length*2));
-  const uv=S.owned.uv?8:0;
+  const co2=S.owned.co2?12:0;
   S.waterScore={
-    ph:     Math.min(100,Math.max(0,65+(S.owned.dechlorinator?20:0)+(S.owned.filter||S.owned.filter2?5:0)+pb-pp+uv)),
-    ammonia:Math.min(100,Math.max(0,55+fb+pb-Math.round(pp*1.2)+uv)),
+    ph:     Math.min(100,Math.max(0,80+(S.owned.filter||S.owned.filter2?5:0)+pb+co2-pp)),
+    ammonia:Math.min(100,Math.max(0,65+fb+pb-Math.round(pp*1.2))),
     oxygen: Math.min(100,Math.max(0,45+(S.owned.airpump2?45:S.owned.airpump?30:0)+(S.owned.filter||S.owned.filter2?10:0)+pb)),
     temp:   Math.min(100,Math.max(0,55+(S.owned.heater2?40:S.owned.heater?32:0))),
-    clarity:Math.min(100,Math.max(0,45+fb+(S.owned.gravel?18:0)-pp+uv)),
+    clarity:Math.min(100,Math.max(0,50+fb+(S.owned.gravel?18:0)-pp)),
   };
   Object.keys(S.waterScore).forEach(k=>{S.waterScore[k]=Math.round(S.waterScore[k]);});
   renderWaterBar();
@@ -1578,15 +1621,15 @@ function makeCreatureCanvas(id,size){
 // Per-creature scale (pixels per grid unit in tank) and movement traits
 const CREATURE_CONFIG={
   shrimp:    {sc:3, speedX:0.10, speedY:0.06, yMin:65, yMax:75, wobble:true,  static:false},
-  snail:     {sc:3, speedX:0.02, speedY:0,    yMin:73, yMax:75, wobble:false, static:true },// very slow, floor only
-  crab:      {sc:4, speedX:0.08, speedY:0,    yMin:71, yMax:75, wobble:false, static:false},
-  crayfish:  {sc:4, speedX:0.05, speedY:0,    yMin:71, yMax:75, wobble:false, static:false},
-  turtle:    {sc:5, speedX:0.04, speedY:0.02, yMin:60, yMax:74, wobble:true,  static:false},
+  snail:     {sc:3, speedX:0.02, speedY:0,    yMin:73, yMax:75, wobble:false, static:true },
+  crab:      {sc:3, speedX:0.08, speedY:0,    yMin:71, yMax:75, wobble:false, static:false},
+  crayfish:  {sc:3, speedX:0.05, speedY:0,    yMin:71, yMax:75, wobble:false, static:false},
+  turtle:    {sc:3, speedX:0.04, speedY:0.02, yMin:60, yMax:74, wobble:true,  static:false},
   frog:      {sc:3, speedX:0.12, speedY:0.08, yMin:62, yMax:75, wobble:true,  static:false},
-  eel:       {sc:4, speedX:0.15, speedY:0.04, yMin:55, yMax:74, wobble:true,  static:false},
-  starfish:  {sc:5, speedX:0.01, speedY:0,    yMin:73, yMax:75, wobble:false, static:true },// almost stationary
-  jellyfish: {sc:5, speedX:0.03, speedY:0.05, yMin:10, yMax:65, wobble:true,  static:false},// floats high
-  octopus:   {sc:5, speedX:0.08, speedY:0.05, yMin:50, yMax:74, wobble:true,  static:false},
+  eel:       {sc:3, speedX:0.15, speedY:0.04, yMin:55, yMax:74, wobble:true,  static:false},
+  starfish:  {sc:3, speedX:0.01, speedY:0,    yMin:73, yMax:75, wobble:false, static:true },
+  jellyfish: {sc:3, speedX:0.03, speedY:0.05, yMin:10, yMax:65, wobble:true,  static:false},
+  octopus:   {sc:3, speedX:0.08, speedY:0.05, yMin:50, yMax:74, wobble:true,  static:false},
 };
 function getCreatureScale(id){return (CREATURE_CONFIG[id]||{sc:4}).sc;}
 
@@ -1657,7 +1700,20 @@ function renderPlants(){
         const minDist=occupied.length?Math.min(...occupied.map(ox=>Math.abs(cx-ox))):1;
         if(minDist>bestScore){bestScore=minDist;bestX=cx;}
       }
-      S.plantSeeds.push({id,x:bestX*W,maxH:40+Math.random()*60,swayOff:Math.random()*Math.PI*2});
+      // depth: same species share one depth zone; new species get emptiest zone
+      const depthZones=[0.2,0.5,0.8];
+      const existingSame=(S.plantSeeds||[]).find(x=>x.id===id);
+      let plantDepth;
+      if(existingSame){
+        plantDepth=existingSame.d||0.5;
+      } else {
+        const usedDepths=(S.plantSeeds||[]).map(x=>x.d||0.5);
+        let bestZone=0.5,bestZoneScore=-1;
+        depthZones.forEach(z=>{const minD=usedDepths.length?Math.min(...usedDepths.map(ud=>Math.abs(ud-z))):1;if(minD>bestZoneScore){bestZoneScore=minD;bestZone=z;}});
+        plantDepth=bestZone;
+      }
+      // maxH × 0.8 (20% smaller overall)
+      S.plantSeeds.push({id,x:bestX*W,maxH:(40+Math.random()*60)*0.8,swayOff:Math.random()*Math.PI*2,d:plantDepth});
       sv();recalcWater();showAl('plants',pdef.name+' planted!','ok');renderPlants();checkAch();
     });
   });
@@ -1719,7 +1775,13 @@ function renderDeco(){
           :1;
         if(minDist>bestScore){bestScore=minDist;bestX=cx;}
       }
-      S.decos.push({id,x:bestX});sv();showAl('deco',dd.name+' placed!','ok');renderDeco();checkAch();
+      // depth: 0.2=back, 0.5=mid, 0.8=front — pick the emptiest depth zone
+const usedDepths=(S.decos||[]).map(d=>d.d||0.5);
+const zones=[0.22,0.42,0.62,0.78];
+let bestDepth=zones[Math.floor(Math.random()*zones.length)];
+let bestDepthScore=-1;
+zones.forEach(z=>{const minD=usedDepths.length?Math.min(...usedDepths.map(ud=>Math.abs(ud-z))):1;if(minD>bestDepthScore){bestDepthScore=minD;bestDepth=z;}});
+S.decos.push({id,x:bestX,d:bestDepth});sv();showAl('deco',dd.name+' placed!','ok');renderDeco();checkAch();
     });
   });
 }
@@ -1989,20 +2051,26 @@ function animateWaterChange(){
 }
 function initPlants(){
   const W=document.getElementById('TC').width||600;
-  const defaults=['vallis','moss','cabomba','vallis','crypt','hornwort','anubias'];
-  S.plantSeeds=defaults.map((id,i)=>{
-    const pc=PLANT_COLORS[id]||PLANT_COLORS.vallis;
-    return{id,x:W*(0.04+i*0.14),maxH:35+Math.random()*50,swayOff:Math.random()*Math.PI*2};
+  const defaults=[
+    {id:'vallis',  d:0.2},{id:'moss',   d:0.5},{id:'cabomba',d:0.8},
+    {id:'vallis',  d:0.2},{id:'crypt',  d:0.5},{id:'hornwort',d:0.8},{id:'anubias',d:0.5}
+  ];
+  S.plantSeeds=defaults.map((entry,i)=>{
+    return{id:entry.id,x:W*(0.04+i*0.14),maxH:(35+Math.random()*50)*0.8,swayOff:Math.random()*Math.PI*2,d:entry.d};
   });sv();
 }
 function getPlantH(p){return Math.min(p.maxH,4+(S.plantAge||0)*0.8);}
 
-function drawPlant(ctx,p,t,W,H){
+function drawPlant(ctx,p,t,W,H,baseY){
   const pc=PLANT_COLORS[p.id]||PLANT_COLORS.vallis;
-  const h=getPlantH(p)*3;
-  const base=Math.round(H*0.75);
-  const sw=Math.sin(t*0.5+p.swayOff)*4;
+  const depth=p.d||0.5;
+  // sc=3 for all (unified), but height scaled by depth for perspective
   const sc=3;
+  const depthHMult=0.7+depth*0.6;// back=0.82, mid=1.0, front=1.18
+  const h=getPlantH(p)*sc*depthHMult;
+  const base=baseY!==undefined?baseY:Math.round(H*0.75);
+  const swayAmp=2+depth*3;// front sways more
+  const sw=Math.sin(t*0.5+p.swayOff)*swayAmp;
   if(pc.shape==='ball'){
     const by=base-h*0.6;const bx=Math.round(p.x+sw*0.5);
     for(let r=0;r<h*0.6;r+=sc){ctx.fillStyle=pc.leaf[Math.floor(r/h*3)%3];ctx.fillRect(bx-Math.round(h*0.4),by+r,Math.round(h*0.8),sc);}
@@ -2065,8 +2133,15 @@ document.getElementById('TC').addEventListener('click',function(e){
       hit=true;a.clickAnim=20;playBubble();
       const fish=S.fish.find(f=>f.uid===a.uid);
       if(fish){fish.hunger=Math.min(100,fish.hunger+10);sv();renderFishList();}
-      const W=this.width;const H=336;
-      for(let i=0;i<8;i++)splashParticles.push({x:a.x/100*W,y:a.y/100*H,vx:(Math.random()-0.5)*3,vy:-Math.random()*3,life:25,color:'#B3E5FC'});
+      const cfg=getSpeciesCfg(a.id,a.isCreature);
+      const W2=this.width;const H2=336;
+      // Shy fish flee on click
+      if(cfg.social==='shy'||cfg.flees){
+        const fleeDir=a.x<50?1:-1;
+        a.dx=fleeDir*cfg.speedX*4;a.dy=-cfg.speedY*2;
+        a.scaredTimer=90;
+      }
+      for(let i=0;i<8;i++)splashParticles.push({x:a.x/100*W2,y:a.y/100*H2,vx:(Math.random()-0.5)*3,vy:-Math.random()*3,life:25,color:'#B3E5FC'});
     }
   });
   if(!hit){S.clickFeed=(S.clickFeed||0)+1;if(S.clickFeed%5===0&&S.fish.length)dropFood();}
@@ -2075,24 +2150,26 @@ document.getElementById('TC').addEventListener('click',function(e){
 function syncAnim(){
   const ex=new Map(fishAnim.map(a=>[a.uid,a]));
   fishAnim=S.fish.map(f=>{
-    const a=ex.get(f.uid);if(a){a.stage=f.stage;a.isCreature=f.isCreature;return a;}
-    const cat=getDef(f);
-    const pb=PERSONALITY_BEHAVIOR[cat?.personality]||PERSONALITY_BEHAVIOR.peaceful;
-    if(f.isCreature){
-      const cc=CREATURE_CONFIG[f.id]||{sc:4,speedX:0.05,speedY:0,yMin:65,yMax:75,wobble:false};
-      return{uid:f.uid,id:f.id,stage:'adult',isCreature:true,
-        x:15+Math.random()*70,y:cc.yMin+Math.random()*(cc.yMax-cc.yMin),
-        dx:(Math.random()<0.5?1:-1)*cc.speedX,dy:(Math.random()-0.5)*cc.speedY,
-        wobble:Math.random()*Math.PI*2,poopCooldown:Math.random()*200,
-        emoteTimer:0,clickAnim:0};
-    }
-    const speedMult=pb.speedMult||1;
-    return{uid:f.uid,id:f.id,stage:f.stage||'adult',isCreature:false,
-      x:15+Math.random()*70,y:15+Math.random()*60,
-      dx:(Math.random()<0.5?1:-1)*(0.04+Math.random()*0.06)*speedMult,
-      dy:(Math.random()<0.5?1:-1)*(0.01+Math.random()*0.03),
-      wobble:Math.random()*Math.PI*2,poopCooldown:Math.random()*200,
-      emoteTimer:0,clickAnim:0};
+    const a=ex.get(f.uid);
+    if(a){a.stage=f.stage;a.isCreature=!!f.isCreature;return a;}
+    const cfg=getSpeciesCfg(f.id,!!f.isCreature);
+    const def2=getDef(f);
+    const isBenthic=!!def2?.benthic;
+    const yStart=cfg.yMin+Math.random()*(cfg.yMax-cfg.yMin);
+    const creatureDepth=isBenthic?([0.2,0.5,0.8][Math.floor(Math.random()*3)]):null;
+    return{
+      uid:f.uid,id:f.id,stage:f.stage||'adult',isCreature:!!f.isCreature,
+      isBenthic,depth:creatureDepth,
+      x:10+Math.random()*80,y:yStart,
+      dx:(Math.random()<0.5?1:-1)*cfg.speedX,
+      dy:(Math.random()-0.5)*cfg.speedY,
+      wobble:Math.random()*Math.PI*2,
+      poopCooldown:Math.random()*200,
+      emoteTimer:0,clickAnim:0,
+      idleTimer:0,
+      scaredTimer:0,
+      homeDecoX:null,
+    };
   });
 }
 
@@ -2135,6 +2212,12 @@ function drawTank(){
     const nightAlpha=isNight?0.55:isDawn||isDusk?0.25:0;
 
     [[0,65,'#0d1b4b'],[65,125,'#0d2258'],[125,185,'#0a2d6e'],[185,245,'#0a3580'],[245,300,'#0d3d8f'],[300,336,'#0a4499']].forEach(([y1,y2,c])=>{ctx.fillStyle=c;ctx.fillRect(0,y1,W,y2-y1);});
+    // Backdrop tint overlay
+    if(S.owned.backdrop){
+      const backdropThemes=['#1a0a3a','#003320','#2a1500','#001a2a'];
+      const bi=(S.backdropIdx||0)%backdropThemes.length;
+      ctx.save();ctx.globalAlpha=0.18;ctx.fillStyle=backdropThemes[bi];ctx.fillRect(0,0,W,H);ctx.restore();
+    }
 
     if(S.owned.light&&!isNight){
       ctx.save();ctx.globalAlpha=0.06;
@@ -2173,19 +2256,56 @@ function drawTank(){
       ctx.fillStyle=grad2;ctx.fillRect(0,flY,W,20);
     }
 
-    // Plants drawn AFTER floor so they sit on top of sand/gravel
-    if(S.plantSeeds&&S.plantSeeds.length)S.plantSeeds.forEach(p=>drawPlant(ctx,p,t,W,H));
+    // Unified back-to-front render: plants + decos sorted by depth
+    {
+      const sandH=H-flY;
+      const items=[];
+      // collect plants
+      (S.plantSeeds||[]).forEach(p=>items.push({type:'plant',depth:p.d||0.5,data:p}));
+      // collect decos
+      (S.decos||[]).forEach(d=>items.push({type:'deco',depth:d.d||0.5,data:d}));
+      // sort back→front
+      items.sort((a,b)=>a.depth-b.depth);
 
-    // Draw decos ON TOP of floor, base of sprite aligned to floor surface
-    if(S.decos&&S.decos.length){
-      S.decos.forEach(d=>{
-        // Each sprite's pixel grid height: sprites are ~10 rows * sc(4) = 40px tall
-        // We want the bottom row to sit exactly at flY
-        const spritePixelRows=10;const sc=4;
-        const spriteH=spritePixelRows*sc;
-        const dx=Math.round(d.x*W)-Math.round(11*sc/2);// center horizontally (~11px wide grid)
-        const dy=flY-spriteH;
-        ctx.save();drawDecoSprite(ctx,d.id,dx,dy,sc);ctx.restore();
+      items.forEach(item=>{
+        const depth=item.depth;
+        const embedY=Math.round(depth*sandH*0.55);
+        const baseY=flY+embedY;
+
+        if(item.type==='plant'){
+          const p=item.data;
+          // root burial: sand pixels at base
+          const px2=Math.round(p.x);
+          const burialCols=['#BCAAA4','#C8BDB8','#8D6E63'];
+          for(let i=-9;i<=9;i+=3){
+            ctx.fillStyle=burialCols[Math.abs(i/3)%3];
+            ctx.fillRect(px2+i,baseY,3,4+Math.abs(i)*0.3);
+          }
+          drawPlant(ctx,p,t,W,H,baseY);
+        } else {
+          const d=item.data;
+          const sc=3;
+          const cfg=DECO_SPRITE_CFG[d.id]||{halfW:6,yMin:0};
+          const cx=Math.round(d.x*W);
+          const ox=cx-cfg.halfW*sc;
+          const visualBaseY=baseY-(cfg.yMin||0)*sc;
+          ctx.save();
+          const shadowR=cfg.halfW*sc*0.85;
+          ctx.globalAlpha=0.45;
+          const sg=ctx.createRadialGradient(cx,visualBaseY,1,cx,visualBaseY,shadowR);
+          sg.addColorStop(0,'rgba(0,0,0,0.7)');sg.addColorStop(1,'rgba(0,0,0,0)');
+          ctx.fillStyle=sg;
+          ctx.beginPath();ctx.ellipse(cx,visualBaseY,shadowR,4,0,0,Math.PI*2);ctx.fill();
+          ctx.globalAlpha=1;
+          drawDecoSprite(ctx,d.id,ox,baseY,sc);
+          const burialW=cfg.halfW*2*sc;
+          const burialCols=['#BCAAA4','#C8BDB8','#D7CCC8','#8D6E63','#795548'];
+          for(let i=0;i<burialW;i+=sc){
+            ctx.fillStyle=burialCols[Math.floor(i/sc)%burialCols.length];
+            ctx.fillRect(ox+i,visualBaseY,sc,sc+Math.floor(i/sc)%2*2);
+          }
+          ctx.restore();
+        }
       });
     }
 
@@ -2201,16 +2321,25 @@ function drawTank(){
       }
     }
 
+    // Volcano lava particles — depth-aware position
     if(S.decos&&S.decos.some(d=>d.id==='volcano')){
-      const vd=S.decos.find(d=>d.id==='volcano');const vx=Math.round(vd.x*W);
-      for(let i=0;i<5;i++){ctx.fillStyle='rgba(255,87,34,0.4)';ctx.beginPath();ctx.arc(vx+Math.sin(t*2+i*1.5)*10,flY-25-((t*28+i*18)%45),3,0,Math.PI*2);ctx.fill();}
+      S.decos.filter(d=>d.id==='volcano').forEach(vd=>{
+        const depth=vd.d||0.5;const sc=3;
+        const vx=Math.round(vd.x*W);const vy=flY+Math.round(depth*(H-flY)*0.55);
+        const spriteH=20*sc;
+        for(let i=0;i<4;i++){ctx.fillStyle='rgba(255,87,34,0.5)';ctx.beginPath();ctx.arc(vx+Math.sin(t*2+i*1.5)*(4+sc),vy-spriteH-((t*22+i*14)%(spriteH*0.5)),2+depth,0,Math.PI*2);ctx.fill();}
+      });
     }
+    // Crystal shimmer
     if(S.decos&&S.decos.some(d=>d.id==='crystal')){
-      const cd=S.decos.find(d=>d.id==='crystal');const cx=Math.round(cd.x*W);
-      ctx.save();ctx.globalAlpha=0.3+Math.sin(t*2)*0.15;
-      ctx.fillStyle='#E040FB';ctx.fillRect(cx-3,flY-35,6,6);
-      ctx.fillStyle='#00BCD4';ctx.fillRect(cx+8,flY-28,4,4);
-      ctx.restore();
+      S.decos.filter(d=>d.id==='crystal').forEach(cd=>{
+        const depth=cd.d||0.5;const sc=3;
+        const cx=Math.round(cd.x*W);const cy=flY+Math.round(depth*(H-flY)*0.55)-20*sc;
+        ctx.save();ctx.globalAlpha=(0.25+Math.sin(t*2)*0.15)*depth;
+        ctx.fillStyle='#E040FB';ctx.fillRect(cx-sc,cy,sc*2,sc*2);
+        ctx.fillStyle='#00BCD4';ctx.fillRect(cx+sc*2,cy+sc*3,sc,sc);
+        ctx.restore();
+      });
     }
 
     poopParticles=poopParticles.filter(p=>{p.y+=p.vy;p.vy+=0.04;p.life--;if(p.life<=0||p.y>flY)return false;ctx.fillStyle='#5D4037';ctx.globalAlpha=p.life/80;ctx.fillRect(Math.round(p.x),Math.round(p.y),3,3);ctx.globalAlpha=1;return true;});
@@ -2240,89 +2369,183 @@ function drawTank(){
     fishAnim.forEach(a=>{
       a.wobble+=0.03;
       const fish=S.fish.find(f=>f.uid===a.uid);
-      const cat=getDef(fish||{id:a.id,isCreature:a.isCreature});
-      const pb=PERSONALITY_BEHAVIOR[cat?.personality]||PERSONALITY_BEHAVIOR.peaceful;
-      const ns=isNight?0.4:1;
+      const cfg=getSpeciesCfg(a.id,a.isCreature);
+      const ns=isNight?0.35:1;
       const hunger=fish?.hunger||50;
 
+      // ── Night: all drift toward their yMax (settle down) ──
+      const nightYMax=isNight?Math.min(cfg.yMax,cfg.yMin+(cfg.yMax-cfg.yMin)*0.8):cfg.yMax;
+      const nightYMin=isNight?Math.max(cfg.yMin,cfg.yMin+(cfg.yMax-cfg.yMin)*0.4):cfg.yMin;
+
+      // ── FEEDING LAYER: filter food pellets by feedLayer ──
       let chasing=false;
-      if(foodPellets.length>0&&!a.isCreature){
+      if(foodPellets.length>0&&cfg.feedLayer!=='none'){
         let nearest=null,nearestD=9999;
-        foodPellets.forEach(fp=>{if(fp.eaten)return;const d=Math.hypot(a.x-fp.x,a.y-(fp.y/100*100));if(d<nearestD){nearestD=d;nearest=fp;}});
-        if(nearest&&nearestD<65){
-          const urgency=Math.max(0.4,(100-hunger)/60)*(pb.foodMult||1)*ns;
-          const spd=0.28*urgency;
-          const dx=nearest.x-a.x;const dy=(nearest.y/100*100)-a.y;
-          const dist=Math.hypot(dx,dy)||1;
-          a.dx=dx/dist*spd;a.dy=dy/dist*spd;chasing=true;
-          if(nearestD<5){nearest.eaten=true;if(fish){fish.hunger=Math.min(100,fish.hunger+(hunger<30?35:20));sv();}for(let i=0;i<8;i++)splashParticles.push({x:a.x/100*W,y:a.y/100*H,vx:(Math.random()-0.5)*3,vy:-Math.random()*2.5,life:22,color:'#FFB300'});renderFishList();}
+        foodPellets.forEach(fp=>{
+          if(fp.eaten)return;
+          const fpYpct=fp.y/100*100;
+          // Layer gating
+          if(cfg.feedLayer==='surface'&&fpYpct>30)return;
+          if(cfg.feedLayer==='bottom'&&fpYpct<55)return;
+          if(cfg.feedLayer==='mid'&&(fpYpct<10||fpYpct>65))return;
+          const d=Math.hypot(a.x-fp.x,a.y-fpYpct);
+          if(d<nearestD){nearestD=d;nearest=fp;}
+        });
+        if(nearest&&nearestD<70){
+          const urgency=Math.max(0.4,(100-hunger)/60)*(cfg.foodMult)*ns;
+          const spd=0.25*urgency;
+          const ddx=nearest.x-a.x;const ddy=(nearest.y/100*100)-a.y;
+          const dist=Math.hypot(ddx,ddy)||1;
+          a.dx=ddx/dist*spd;a.dy=ddy/dist*spd;chasing=true;
+          if(nearestD<6){
+            nearest.eaten=true;
+            if(fish){fish.hunger=Math.min(100,fish.hunger+(hunger<30?35:20));sv();}
+            for(let i=0;i<8;i++)splashParticles.push({x:a.x/100*W,y:a.y/100*H,vx:(Math.random()-0.5)*3,vy:-Math.random()*2.5,life:22,color:'#FFB300'});
+            renderFishList();
+          }
         }
       }
 
       if(!chasing){
-        let decorInteract=false;
-        if(S.decos&&S.decos.length&&Math.random()<0.003*ns){
-          const tgtDeco=S.decos[Math.floor(Math.random()*S.decos.length)];
-          const decoX=tgtDeco.x*100;const decoY=73;
-          const dx2=decoX-a.x;const dy2=decoY-a.y;
-          const dist2=Math.hypot(dx2,dy2)||1;
-          if(dist2<50){
-            a.dx=dx2/dist2*0.15*ns;a.dy=dy2/dist2*0.08*ns;
-            a._decorTimer=(a._decorTimer||0)+1;
-            if(a._decorTimer>80)a._decorTimer=0;
-            decorInteract=true;
+        // ── SCARED TIMER: shy fish flee after click ──
+        if(a.scaredTimer>0){
+          a.scaredTimer--;
+          // keep fleeing toward corner
+        } else {
+
+          // ── SOCIAL: SCHOOLING — move toward nearest same-species ──
+          if(cfg.social==='schooling'&&Math.random()<0.008*ns){
+            const same=fishAnim.filter(o=>o.uid!==a.uid&&o.id===a.id);
+            if(same.length){
+              const tgt=same[Math.floor(Math.random()*same.length)];
+              const d=Math.hypot(tgt.x-a.x,tgt.y-a.y);
+              if(d>12){// only pull if not already close
+                a.dx+=(tgt.x-a.x)/d*0.04*ns;
+                a.dy+=(tgt.y-a.y)/d*0.025*ns;
+              }
+            }
           }
-        }
-        if(!decorInteract){
-          a._decorTimer=0;
-          if(pb.aggro&&Math.random()<0.002*ns){
-            const others=fishAnim.filter(o=>o.uid!==a.uid&&Math.hypot(o.x-a.x,o.y-a.y)<35);
-            if(others.length){const tgt=others[0];a.dx=(tgt.x-a.x)/Math.hypot(tgt.x-a.x,tgt.y-a.y)*0.2*ns;a.dy=(tgt.y-a.y)/Math.hypot(tgt.x-a.x,tgt.y-a.y)*0.12*ns;const v=fishAnim.find(o=>o.uid===tgt.uid);if(v){const vc=getDef({id:v.id,isCreature:v.isCreature});if(PERSONALITY_BEHAVIOR[vc?.personality]?.flees){v.dx=-(a.x-v.x)/Math.hypot(a.x-v.x,a.y-v.y)*0.22*ns;v.dy=-(a.y-v.y)/Math.hypot(a.x-v.x,a.y-v.y)*0.12*ns;}}}
+
+          // ── SOCIAL: SOLITARY — betta attacks when others close ──
+          if(cfg.social==='solitary'&&cfg.aggro&&Math.random()<0.002*ns){
+            const others=fishAnim.filter(o=>o.uid!==a.uid&&Math.hypot(o.x-a.x,o.y-a.y)<30);
+            if(others.length){
+              const tgt=others[0];
+              const d=Math.hypot(tgt.x-a.x,tgt.y-a.y)||1;
+              a.dx=(tgt.x-a.x)/d*0.22*ns;a.dy=(tgt.y-a.y)/d*0.12*ns;
+              const v=fishAnim.find(o=>o.uid===tgt.uid);
+              if(v){const vc=getSpeciesCfg(v.id,v.isCreature);if(vc.flees){v.dx=-(a.x-v.x)/d*0.28*ns;v.dy=-(a.y-v.y)/d*0.14*ns;v.scaredTimer=60;}}
+            }
+          }
+
+          // ── SOCIAL: ANEMONE — clownfish orbits nearest coral deco ──
+          if(cfg.social==='anemone'&&S.decos&&S.decos.length){
+            const coral=S.decos.find(d=>d.id==='brain_coral'||d.id==='fan_coral');
+            if(coral){
+              if(a.homeDecoX===null)a.homeDecoX=coral.x*100;
+              const orbitR=8;const angle=t*0.8+a.wobble;
+              const tx=a.homeDecoX+Math.cos(angle)*orbitR;
+              const ty=cfg.yMin+(cfg.yMax-cfg.yMin)*0.6+Math.sin(angle)*4;
+              a.dx+=(tx-a.x)*0.04*ns;a.dy+=(ty-a.y)*0.03*ns;
+            }
+          }
+
+          // ── MOVE STYLES ──
+          if(cfg.moveStyle==='cruise'){
+            // Large lazy arcs — change direction very rarely
+            if(Math.random()<0.001*ns){a.dx=(Math.random()<0.5?1:-1)*cfg.speedX*1.2;}
+            if(Math.random()<0.0005*ns){a.dy=(Math.random()-0.5)*cfg.speedY*0.5;}
+          } else if(cfg.moveStyle==='idle_burst'){
+            a.idleTimer=(a.idleTimer||0)+1;
+            if(a.idleTimer<80){
+              // Idle: slow to stop
+              a.dx*=0.92;a.dy*=0.92;
+            } else if(a.idleTimer<90){
+              // Burst: sudden move
+              a.dx=(Math.random()<0.5?1:-1)*cfg.speedX*2.5;
+              a.dy=(Math.random()-0.5)*cfg.speedY*1.5;
+            } else if(a.idleTimer>110){
+              a.idleTimer=0;
+            }
+          } else if(cfg.moveStyle==='hover'){
+            // Seahorse/jellyfish: mostly vertical drift, tiny horizontal
+            a.dy=Math.sin(t*0.6+a.wobble)*0.04;
+            if(Math.random()<0.003*ns)a.dx=(Math.random()-0.5)*cfg.speedX*0.4;
+          } else if(cfg.moveStyle==='jump'){
+            // Shrimp/frog: occasional sudden burst then stop
+            a.idleTimer=(a.idleTimer||0)+1;
+            if(a.idleTimer>60&&Math.random()<0.03*ns){
+              a.dx=(Math.random()<0.5?1:-1)*cfg.speedX*4;
+              a.dy=-cfg.speedY*3;// jump up slightly
+              a.idleTimer=0;
+            } else {
+              a.dx*=0.88;a.dy*=0.88;
+            }
           } else {
-            const spMult=a.isCreature?0.5:(pb.speedMult||1);
-            if(Math.random()<(pb.changeDir||0.003)*ns){a.dx=(Math.random()-0.5)*0.24*spMult*ns;}
-            if(Math.random()<(pb.changeDir||0.003)*0.5*ns){a.dy=(Math.random()-0.5)*0.12*ns;}
+            // Normal: random direction changes
+            if(Math.random()<cfg.changeDir*ns){a.dx=(Math.random()-0.5)*cfg.speedX*2;}
+            if(Math.random()<cfg.changeDir*0.5*ns){a.dy=(Math.random()-0.5)*cfg.speedY*2;}
           }
         }
       }
 
-      a.x+=a.dx;
-      if(a.isCreature){
-        const cc=CREATURE_CONFIG[a.id]||{yMin:65,yMax:75,wobble:false,static:false};
-        if(!cc.static)a.y+=a.dy+(cc.wobble?Math.sin(a.wobble)*0.02:0);
-        if(a.x<2){a.x=2;a.dx=Math.abs(a.dx);}if(a.x>93){a.x=93;a.dx=-Math.abs(a.dx);}
-        if(a.y<cc.yMin){a.y=cc.yMin;a.dy=Math.abs(a.dy);}
-        if(a.y>cc.yMax){a.y=cc.yMax;a.dy=-Math.abs(a.dy);}
-      } else {
-        a.y+=a.dy+Math.sin(a.wobble)*0.03;
-        if(a.x<2){a.x=2;a.dx=Math.abs(a.dx);}if(a.x>93){a.x=93;a.dx=-Math.abs(a.dx);}
-        if(a.y<3){a.y=3;a.dy=Math.abs(a.dy);}if(a.y>73){a.y=73;a.dy=-Math.abs(a.dy);}
-      }
+      // ── PLECO special: nibble animation at bottom (wobble more) ──
+      const wobbleAdd=(a.id==='pleco'&&a.y>65)?Math.sin(a.wobble*3)*0.05:Math.sin(a.wobble)*0.03;
 
+      // ── POSITION UPDATE with layer bounds ──
+      a.x+=a.dx;
+      a.y+=a.dy+wobbleAdd;
+      if(a.x<2){a.x=2;a.dx=Math.abs(a.dx);}
+      if(a.x>93){a.x=93;a.dx=-Math.abs(a.dx);}
+      if(a.y<nightYMin){a.y=nightYMin;a.dy=Math.abs(a.dy);}
+      if(a.y>nightYMax){a.y=nightYMax;a.dy=-Math.abs(a.dy);}
+
+      // ── POOP ──
       a.poopCooldown=(a.poopCooldown||0)-1;
-      if(a.poopCooldown<=0&&cat&&Math.random()<(cat.poop||0.2)*0.01){
+      const def2=getDef(fish||{id:a.id,isCreature:a.isCreature});
+      if(a.poopCooldown<=0&&def2&&Math.random()<(def2.poop||0.1)*0.01){
         poopParticles.push({x:Math.round(a.x/100*W),y:Math.round(a.y/100*H),vy:0.6+Math.random()*0.5,life:80});
         S.poopLevel=Math.min(100,(S.poopLevel||0)+0.5);a.poopCooldown=160+Math.random()*220;
       }
 
+      // ── CLICK ANIM ──
       if(a.clickAnim>0){
         a.clickAnim--;const px2=Math.round(a.x/100*W);const py2=Math.round(a.y/100*H);
         ctx.save();ctx.globalAlpha=a.clickAnim/20;ctx.strokeStyle='#FFD700';ctx.lineWidth=2;
         ctx.beginPath();ctx.arc(px2,py2,a.clickAnim*1.3,0,Math.PI*2);ctx.stroke();ctx.restore();
       }
 
+      // ── DRAW SPRITE ──
       const sp=a.isCreature?getCreatureSprite(a.id):(a.stage==='baby'?getBabySprite(a.id):getSprite(a.id));
-      const sc=a.isCreature?getCreatureScale(a.id):(a.stage==='baby'?3:6);
-      const px=Math.round(a.x/100*W);const py=Math.round(a.y/100*H);
-      ctx.save();ctx.translate(px,py-sp.h*sc/2);
+      const sc=a.isBenthic?(a.depth>0.6?3:2):(a.isCreature?getCreatureScale(a.id):(a.stage==='baby'?2:3));
+      let px,py;
+      if(a.isBenthic){
+        // benthic: fixed to sand surface, depth controls y position in sand area
+        const sandH=H-flY;
+        const embedY=Math.round((a.depth||0.5)*sandH*0.4);
+        px=Math.round(a.x/100*W);
+        py=flY+embedY-sp.h*sc;// sit ON sand surface
+        // override y movement — only x matters
+        a.y=75;// keep logic bounds happy
+      } else {
+        px=Math.round(a.x/100*W);py=Math.round(a.y/100*H);
+      }
+      ctx.save();ctx.translate(px,py);
       if(a.dx<0){ctx.scale(-1,1);ctx.translate(-sp.w*sc,0);}
       sp.p.forEach(([x,y,c])=>{ctx.fillStyle=c;ctx.fillRect(x*sc,y*sc,sc,sc);});
       ctx.restore();
 
+      // ── MOOD EMOTE ──
       a.emoteTimer=(a.emoteTimer||0)+1;
-      if(a.emoteTimer%180<50){
-        const mood=fish?getFishMood(fish):'content';const em=MOOD_EMOTES[mood];
-        if(em){ctx.save();ctx.globalAlpha=0.8;ctx.fillStyle=mood==='hungry'?'#FFB300':mood==='scared'?'#ff6b6b':mood==='happy'?'#ff6b9d':'#B3E5FC';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText(em,px+sp.w*sc/2,py-sp.h*sc/2-5);ctx.restore();}
+      if(a.emoteTimer%200<60){
+        const mood=fish?getFishMood(fish):'content';
+        const em=MOOD_EMOTES[mood]||'';
+        if(em){
+          const ec=mood==='hungry'?'#FFB300':mood==='scared'||mood==='warning'?'#ff6b6b':mood==='happy'||mood==='home'?'#ff6b9d':mood==='lonely'?'#B3E5FC':'#B3E5FC';
+          const emoteY=a.isBenthic?py-6:py-sp.h*sc/2-6;
+          ctx.save();ctx.globalAlpha=0.85;ctx.fillStyle=ec;ctx.font='10px monospace';ctx.textAlign='center';
+          ctx.fillText(em,px+sp.w*sc/2,emoteY);ctx.restore();
+        }
       }
     });
 
@@ -2348,7 +2571,7 @@ function gameLoop(){
   const msPerGameDay=3600000;const msPerGameMin=msPerGameDay/1440;const gameMins=realMs/msPerGameMin;
   S.gameTime=(S.gameTime||480)+gameMins;S.day=1+Math.floor(S.gameTime/1440);
   if(Math.floor(S.gameTime/1440)>Math.floor((S.gameTime-gameMins)/1440))onNewDay();
-  S.plantAge+=(gameMins/1440)*2;
+  const ledMult=S.owned.light?1:0.15;const co2Mult=S.owned.co2?1.5:1;S.plantAge+=(gameMins/1440)*2*ledMult*co2Mult;
   if(S.waterAdded){S.poopLevel=Math.max(0,S.poopLevel-(S.owned.filter2?0.04:S.owned.filter?0.02:0)*gameMins/60);recalcWater();}
   lastTickTime=now;
   const h=Math.floor((S.gameTime%1440)/60);const m=Math.floor(S.gameTime%60);
@@ -2362,11 +2585,11 @@ function onNewDay(){
   coin(10);addXP(5);showAl('global','New day! +10 coins','ok');
   S._marketRares=null;S._decoRares=null;S._plantRares=null;
   let deathToday=false;
-  if(S.owned.autofeeder){S.fish.forEach(f=>{f.hunger=Math.min(100,f.hunger+25);});}
+  // autofeeder removed
   S.fish.forEach(f=>{
     f.hunger=Math.max(0,f.hunger-20);f.age+=1;if(f.age>=10&&f.stage==='baby')f.stage='adult';
     if(f.hunger<20)f.health=Math.max(0,f.health-15);
-    if(avgW()<50&&!f.diseased&&Math.random()<(S.owned.uv?0.08:0.15)){
+    if(avgW()<50&&!f.diseased&&Math.random()<0.15){
       const dis=DISEASES[Math.floor(Math.random()*DISEASES.length)];f.diseased=true;f.disease=dis.id;showAl('global',f.name+' caught '+dis.name+'!','bad');
     }
     if(f.diseased){const dis=DISEASES.find(d=>d.id===f.disease);if(dis)f.health=Math.max(0,f.health-dis.damage/2);}
@@ -2403,5 +2626,22 @@ setTimeout(()=>{getAudio();startBGM();},1500);
 </body>
 </html>
 <!-- v1.1 更新内容：1.背景音乐循环时间加倍(32→64拍)，tempo放慢(0.48→0.72)，加入低通滤波、和弦衬底和水泡ping，营造水底悠闲感。2.鱼食面积缩小(radius 4→2)，掉落速度减慢至原来的30%(vy/vx/gravity均×0.3)。3.初始不自动生成植物，植物只能从商店购买。4.全部decoration重新绘制，像素网格扩大约2倍，增加更多细节(阴影、高光、纹理、苔藓、锈迹等)，预览画布扩大至56×56。5.鱼会随机游向附近的装饰物进行互动(靠近调查行为)。-->
+<!-- v2.1 更新内容：
+1. Bug修复：castle yMin 6→9，fan_coral yMin 6→0，影子现在精准贴合底部
+2. 设备重构：去掉 AutoFeeder/UV/Dechlorinator，新增 CO₂(🫧加速植物生长+pH+12) 和 Backdrop(🖼背景板视觉主题)
+3. LED正式影响植物生长：无LED极慢(×0.15)，有LED正常(×1)，CO₂额外×1.5
+4. Tank Setup条件：去掉Dechlorinator，改为Filter+Heater+Gravel
+5. 水质重新平衡：pH基础65→80，NH₃基础55→65，去掉UV/Dechlorinator加成，CO₂给pH+12
+6. 植物景深系统：同种植物同一depth层(0.2/0.5/0.8)，买植物时按种类分配；maxH×0.8整体缩小20%；depth影响高度(前排高后排矮)；摇摆幅度前排更大
+7. 植物和装饰物统一排序渲染：一起按depth后→前排序，前排遮后排，真实空间感
+8. 植物根部嵌入沙地：随depth嵌入，底部沙色掩埋
+9. 底栖生物(shrimp/snail/crab/crayfish/frog/starfish)固定在沙地面，随机depth，前排sc=3后排sc=2
+10. Backdrop背景板：四种颜色主题覆盖水体背景
+-->
+<!-- v2.0 更新内容：统一所有元素的像素格大小为3px/格。鱼adult: 6→3, baby: 3→2, 生物: 各不同(3/4/5)→全部3, 装饰: 2-3→全部3, 植物: 已是3保持不变。去掉装饰的景深scale差异（只保留depth控制嵌入深度，不再影响大小）。所有元素视觉比例统一。-->
+<!-- v1.10 更新内容：修复装饰物与阴影之间的空隙。根因是每个精灵的y=0行没有像素，视觉底部实际在baseY-(yMin*sc)处。DECO_SPRITE_CFG新增yMin字段，阴影和沙土掩埋都移到visualBaseY=baseY-yMin*sc，完全贴合精灵实际底部。-->
+<!-- v1.9 更新内容：缩小所有装饰物（scale从3/4/5改为2/2/3），阴影椭圆改为紧贴底部baseY而不是偏下4px，消除"悬空"感。-->
+<!-- v1.8 更新内容：1.全部15种装饰物像素图案完全重绘，参考真实鱼缸产品（CKFishworld/biOrb/Petco/Zoox）：Spider Wood蜘蛛木(多枝根系)、Seiryu Stone青龙石(层叠纹理)、Dragon Stone龙石(橙棕多孔)、Brain Coral脑珊瑚、Fan Coral扇珊瑚、Treasure Chest宝箱(溢金)、Castle城堡(发光窗)、Conch Shell法螺(螺旋)、Lava Rock熔岩石(孔洞)、Volcano火山(岩浆)、Pagoda宝塔(三层红瓦)、Sunken Ship沉船(倾斜)、Mermaid美人鱼、Crystal水晶群(三色)。2.装饰物放置系统改为前后景深：后排sc=3小、中排sc=4、前排sc=5大，自动营造空间感。3.底部嵌入沙地：每个装饰物按深度嵌入沙地，底部沙色像素掩埋，径向阴影投射。4.不再贴着水线，而是在整块沙地内分散放置。5.更新了clownfish的珊瑚互动ID、火山粒子和水晶闪光特效。-->
+<!-- v1.7 更新内容：全面加入生物习性系统。1.活动层：每种鱼/生物有独立yMin/yMax，上层鱼(guppy/neon/zebra)在顶部，底层鱼(pleco/axolotl/snail/crab)贴底，夜晚所有生物下沉休息。2.社交习性：schooling(群居)群体靠拢/离群显示孤独表情；solitary(独居)betta/crayfish攻击靠近者，被攻击方逃跑；anemone(依附)clownfish绕珊瑚环游；shy(害羞)seahorse/axolotl/eel被点击后逃窜。3.运动模式：cruise大弧线(arowana/manta/eel)；idle_burst停顿后爆发(pleco/crab/snail)；hover轻微上下漂(seahorse/jellyfish)；jump弹跳(shrimp/frog)；normal默认。4.喂食层：surface只吃漂浮食物(guppy/goldfish/zebra)；bottom只吃沉底食物(pleco/crab)；mid中层拦截；none不吃投喂(starfish/snail/jellyfish)自动补充饱食度。5.pleco在底部有啃食抖动动画。6.所有社交状态实时显示对应表情。-->
 <!-- v1.6 更新内容：Tank Upgrades完全整合进Equipment Shop面板，移除独立的upgrade-list div；设备grid、已拥有设备条、Tank Upgrades三段在同一容器内顺序渲染，无需单独调用renderUpgrades()。-->
 <!-- v1.5 更新内容：1.鱼的渲染比例从5提升到6（约+30%），所有14种鱼的像素精灵完全重绘，更细致真实（鳍、条纹、鳞片光泽、正确体型比例）。2.10种生物各有独立运动配置：snail/starfish几乎静止在底部；jellyfish在水中高处漂浮；eel快速蜿蜒；shrimp/frog在底层活跃跳动；turtle/octopus中层慢游；y轴范围、速度均按各生物特点定制。3.沙砾/底部改用透明渐变叠加水底颜色，消除水底硬边界，看起来自然融入水中。-->
