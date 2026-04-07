@@ -1,136 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Aquarium</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Zen Aquarium 🐟</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
-*{box-sizing:border-box;margin:0;padding:0;image-rendering:pixelated;}
+*{box-sizing:border-box;margin:0;padding:0;image-rendering:pixelated;-webkit-tap-highlight-color:transparent;}
 :root{
   --deep:#0a1628;--mid:#0d2258;--light:#0a3580;
   --green:#1D9E75;--gold:#FFB300;--red:#E53935;--blue:#0288D1;
-  --panel:#ffffff12;--border:#ffffff22;--text:#e8f4f8;--muted:#7ba8c4;
+  --panel:#ffffff0a;--border:#ffffff18;--text:#e8f4f8;--muted:#7ba8c4;
   --font:'VT323',monospace;--pfont:'Press Start 2P',monospace;
 }
-body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:16px;min-height:100vh;}
-#app{max-width:900px;margin:0 auto;padding:.5rem;}
-.game-title{font-family:var(--pfont);font-size:11px;color:var(--gold);text-align:center;padding:8px 0 4px;letter-spacing:2px;text-shadow:0 0 10px #FFB30066;}
-.game-title::after{content:'';display:block;width:60%;height:1px;background:linear-gradient(90deg,transparent,#FFB30044,transparent);margin:6px auto 0;}
-.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:6px;flex-wrap:wrap;}
-.top-bar-left{display:flex;align-items:center;gap:8px;}
-.top-bar-right{display:flex;align-items:center;gap:6px;}
-.tank-outer{border:3px solid #1a237e;border-radius:10px;overflow:hidden;margin-bottom:6px;position:relative;box-shadow:0 0 20px rgba(10,53,128,0.4);}
-#TC{display:block;width:100%;image-rendering:pixelated;cursor:pointer;}
-.hud{display:flex;gap:5px;margin-bottom:6px;flex-wrap:wrap;}
-.hud-stat{background:var(--panel);border:1px solid var(--border);border-radius:6px;padding:4px 8px;font-size:14px;flex:1;min-width:70px;text-align:center;color:var(--muted);cursor:default;}
-.hud-stat b{display:block;font-size:17px;color:var(--text);}
-.hud-stat.warn b{color:#FFB300;}.hud-stat.bad b{color:#E53935;}.hud-stat.good b{color:#1D9E75;}
-.hud-stat.clickable{cursor:pointer;transition:background .2s;}.hud-stat.clickable:hover{background:#ffffff22;}
-.tabs{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap;}
-.tab{padding:6px 10px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--muted);cursor:pointer;font-size:12px;font-family:var(--font);transition:all .2s;position:relative;}
+html,body{height:100%;overflow:hidden;touch-action:manipulation;}
+body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:16px;}
+#app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto;overflow:hidden;}
+.game-title{font-family:var(--pfont);font-size:10px;color:var(--gold);text-align:center;padding:6px 0 3px;letter-spacing:2px;text-shadow:0 0 10px #FFB30044;flex-shrink:0;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:0 8px;gap:4px;flex-shrink:0;}
+.top-bar-left{display:flex;align-items:center;gap:6px;}
+.top-bar-right{display:flex;align-items:center;gap:4px;}
+.tank-outer{border:2px solid #1a237e;border-radius:8px;overflow:hidden;position:relative;box-shadow:0 0 20px rgba(10,53,128,0.3);flex:1;min-height:0;}
+#TC{display:block;width:100%;height:100%;image-rendering:pixelated;cursor:pointer;}
+.status-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:4px 8px;font-size:13px;color:var(--muted);flex-shrink:0;min-height:28px;}
+.status-bar .water-mood{font-size:13px;color:var(--text);}
+.bottom-area{flex-shrink:0;max-height:38%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 6px 6px;}
+.tabs{display:flex;gap:3px;padding:4px 6px;flex-shrink:0;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--muted);cursor:pointer;font-size:11px;font-family:var(--font);transition:all .2s;white-space:nowrap;flex-shrink:0;}
 .tab:hover{background:#ffffff18;}.tab.on{background:var(--green);color:#fff;border-color:var(--green);}
-.tab .notif{position:absolute;top:-4px;right:-4px;width:8px;height:8px;background:var(--red);border-radius:50%;animation:pulse 1.5s infinite;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.tab .notif{position:absolute;top:-3px;right:-3px;width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 .sc{display:none;}.sc.v{display:block;animation:fadeIn .2s ease-out;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:7px;}
-.item{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:9px;text-align:center;transition:all .2s;}
-.item:hover{border-color:#ffffff44;background:#ffffff10;}
-.item canvas{display:block;margin:0 auto 4px;image-rendering:pixelated;}
-.iname{font-size:13px;color:var(--text);margin-bottom:2px;}.idesc{font-size:10px;color:var(--muted);margin-bottom:4px;}
-.iprice{font-size:12px;color:var(--gold);margin-bottom:5px;}
-.item button{padding:5px 8px;font-size:11px;border:1px solid var(--border);border-radius:6px;background:#ffffff15;color:var(--text);cursor:pointer;font-family:var(--font);width:100%;transition:all .2s;}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:6px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:5px;}
+.item{background:#ffffff06;border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;transition:all .2s;}
+.item:hover{border-color:#ffffff33;background:#ffffff0c;}
+.item canvas{display:block;margin:0 auto 3px;image-rendering:pixelated;}
+.iname{font-size:12px;color:var(--text);margin-bottom:1px;}.idesc{font-size:9px;color:var(--muted);margin-bottom:3px;}
+.iprice{font-size:11px;color:var(--gold);margin-bottom:4px;}
+.item button{padding:4px 6px;font-size:10px;border:1px solid var(--border);border-radius:6px;background:#ffffff10;color:var(--text);cursor:pointer;font-family:var(--font);width:100%;transition:all .2s;}
 .item button:hover{background:var(--green);border-color:var(--green);color:#fff;}
-.item button:disabled{opacity:.35;cursor:not-allowed;}
-.owned{font-size:10px;color:var(--green);background:#1D9E7522;padding:2px 7px;border-radius:20px;display:inline-block;margin-top:3px;}
-.rare-tag{font-size:9px;color:#E040FB;background:#E040FB22;padding:1px 5px;border-radius:8px;display:inline-block;margin-bottom:2px;animation:shimmer 2s infinite;}
-.super-rare-tag{font-size:9px;color:#FFD700;background:#FFD70022;padding:1px 5px;border-radius:8px;display:inline-block;margin-bottom:2px;animation:shimmer 1.5s infinite;}
+.item button:disabled{opacity:.3;cursor:not-allowed;}
+.owned{font-size:9px;color:var(--green);background:#1D9E7522;padding:1px 5px;border-radius:12px;display:inline-block;margin-top:2px;}
+.rare-tag{font-size:8px;color:#E040FB;background:#E040FB22;padding:1px 4px;border-radius:6px;display:inline-block;margin-bottom:1px;animation:shimmer 2s infinite;}
+.super-rare-tag{font-size:8px;color:#FFD700;background:#FFD70022;padding:1px 4px;border-radius:6px;display:inline-block;margin-bottom:1px;animation:shimmer 1.5s infinite;}
 @keyframes shimmer{0%,100%{opacity:1;}50%{opacity:0.5;}}
-.bar{height:7px;background:#ffffff15;border-radius:20px;overflow:hidden;margin-top:3px;}
+.bar{height:5px;background:#ffffff10;border-radius:20px;overflow:hidden;margin-top:2px;}
 .fill{height:100%;border-radius:20px;transition:width .4s;}
-.row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
-.lbl{font-size:13px;color:var(--muted);width:95px;flex-shrink:0;}.val{font-size:12px;font-weight:500;width:28px;text-align:right;}
-.btn{padding:8px 16px;background:var(--green);color:#fff;border:none;border-radius:7px;cursor:pointer;font-size:14px;font-family:var(--font);transition:all .2s;}
+.row{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.lbl{font-size:12px;color:var(--muted);width:80px;flex-shrink:0;}.val{font-size:11px;font-weight:500;width:24px;text-align:right;}
+.btn{padding:6px 12px;background:var(--green);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-family:var(--font);transition:all .2s;}
 .btn:hover{background:#0F6E56;}.btn:disabled{opacity:.4;cursor:not-allowed;}
-.btn-row{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap;}
-.al{padding:7px 11px;border-radius:7px;font-size:13px;margin-bottom:7px;animation:slideIn .3s ease-out;}
-@keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
+.btn-row{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;}
+.al{padding:5px 9px;border-radius:6px;font-size:12px;margin-bottom:5px;animation:slideIn .3s ease-out;}
+@keyframes slideIn{from{opacity:0;transform:translateX(-6px);}to{opacity:1;transform:translateX(0);}}
 .ok{background:#1D9E7522;color:#4ade80;border:1px solid #1D9E7544;}
 .warn{background:#FFB30022;color:#FFB300;border:1px solid #FFB30044;}
 .bad{background:#E5393522;color:#ff6b6b;border:1px solid #E5393544;}
-.stitle{font-family:var(--pfont);font-size:9px;letter-spacing:1px;color:var(--text);margin-bottom:8px;}
-.fcard{display:flex;align-items:center;gap:9px;padding:8px;margin-bottom:6px;background:#ffffff08;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;}
-.fcard:hover{border-color:var(--green);background:#ffffff10;}
-.finfo{flex:1;}.fname{font-size:14px;color:var(--text);}
-.ftag{font-size:10px;padding:1px 6px;border-radius:10px;display:inline-block;margin-right:3px;margin-top:2px;}
-.ftag-baby{background:#0288D122;color:#4FC3F7;}.ftag-adult{background:#1D9E7522;color:#4ade80;}
-.ftag-sick{background:#E5393522;color:#ff6b6b;}.ftag-age{background:#FFB30022;color:#FFB300;}.ftag-mood{background:#CE93D822;color:#CE93D8;}
-.fbtns{display:flex;flex-direction:column;gap:3px;}
-.fbtns button{font-size:10px;padding:3px 8px;border:1px solid var(--border);border-radius:5px;background:#ffffff10;cursor:pointer;font-family:var(--font);color:var(--text);}
+.stitle{font-family:var(--pfont);font-size:8px;letter-spacing:1px;color:var(--text);margin-bottom:6px;}
+.fcard{display:flex;align-items:center;gap:7px;padding:6px;margin-bottom:4px;background:#ffffff06;border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:all .2s;}
+.fcard:hover{border-color:var(--green);background:#ffffff0c;}
+.finfo{flex:1;}.fname{font-size:13px;color:var(--text);}
+.ftag{font-size:9px;padding:1px 5px;border-radius:8px;display:inline-block;margin-right:2px;margin-top:1px;}
+.ftag-happy{background:#1D9E7522;color:#4ade80;}.ftag-calm{background:#0288D122;color:#4FC3F7;}
+.ftag-idle{background:#FFB30022;color:#FFB300;}.ftag-age{background:#CE93D822;color:#CE93D8;}
+.ftag-mood{background:#CE93D822;color:#CE93D8;}
+.fbtns{display:flex;flex-direction:column;gap:2px;}
+.fbtns button{font-size:9px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;background:#ffffff08;cursor:pointer;font-family:var(--font);color:var(--text);}
 .fbtns button:hover{background:var(--green);color:#fff;}
-.coins-display{font-family:var(--pfont);font-size:9px;color:var(--gold);background:#FFB30015;border:1px solid #FFB30033;padding:5px 10px;border-radius:7px;white-space:nowrap;}
-.level-display{font-family:var(--pfont);font-size:9px;color:#CE93D8;background:#CE93D815;border:1px solid #CE93D833;padding:5px 10px;border-radius:7px;white-space:nowrap;}
-.tank-size-badge{font-size:10px;color:var(--blue);background:#0288D122;border:1px solid #0288D133;padding:2px 8px;border-radius:10px;white-space:nowrap;}
-.audio-btn{font-family:var(--pfont);font-size:8px;padding:5px 8px;border:1px solid var(--border);border-radius:7px;background:var(--panel);color:var(--muted);cursor:pointer;}
+.coins-display{font-family:var(--pfont);font-size:8px;color:var(--gold);background:#FFB30012;border:1px solid #FFB30028;padding:4px 8px;border-radius:6px;white-space:nowrap;}
+.level-display{font-family:var(--pfont);font-size:8px;color:#CE93D8;background:#CE93D812;border:1px solid #CE93D828;padding:4px 8px;border-radius:6px;white-space:nowrap;}
+.tank-size-badge{font-size:9px;color:var(--blue);background:#0288D118;border:1px solid #0288D128;padding:2px 6px;border-radius:8px;white-space:nowrap;}
+.audio-btn{font-family:var(--pfont);font-size:7px;padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--muted);cursor:pointer;}
 .audio-btn.on{color:#4ade80;border-color:#1D9E7544;}
-.ach-card{display:flex;align-items:center;gap:10px;padding:8px 10px;margin-bottom:5px;background:#ffffff08;border:1px solid var(--border);border-radius:8px;}
-.ach-card.done{border-color:#1D9E7544;background:#1D9E7511;}
-.ach-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0;}
-.ach-info{flex:1;}.ach-name{font-size:13px;color:var(--text);}.ach-desc{font-size:11px;color:var(--muted);margin-top:1px;}
-.ach-reward{font-size:10px;color:var(--gold);margin-top:2px;}.ach-check{color:#4ade80;font-size:16px;}
-.ach-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1a1a2e;border:2px solid var(--gold);border-radius:12px;padding:12px 20px;z-index:9999;display:flex;align-items:center;gap:10px;box-shadow:0 0 30px #FFB30044;transition:transform .5s cubic-bezier(.34,1.56,.64,1);font-family:var(--font);}
+.ach-card{display:flex;align-items:center;gap:8px;padding:6px 8px;margin-bottom:4px;background:#ffffff06;border:1px solid var(--border);border-radius:7px;}
+.ach-card.done{border-color:#1D9E7544;background:#1D9E7509;}
+.ach-icon{font-size:18px;width:28px;text-align:center;flex-shrink:0;}
+.ach-info{flex:1;}.ach-name{font-size:12px;color:var(--text);}.ach-desc{font-size:10px;color:var(--muted);margin-top:1px;}
+.ach-reward{font-size:9px;color:var(--gold);margin-top:1px;}.ach-check{color:#4ade80;font-size:14px;}
+.ach-popup{position:fixed;top:12px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1a1a2e;border:2px solid var(--gold);border-radius:10px;padding:10px 16px;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 0 30px #FFB30044;transition:transform .5s cubic-bezier(.34,1.56,.64,1);font-family:var(--font);}
 .ach-popup.show{transform:translateX(-50%) translateY(0);}
-.ach-popup .ach-text{color:var(--gold);font-size:13px;}.ach-popup .ach-sub{color:var(--muted);font-size:11px;}
-.stat-box{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.stat-item{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:10px;text-align:center;}
-.stat-val{font-size:12px;color:var(--gold);font-family:var(--pfont);}.stat-label{font-size:12px;color:var(--muted);margin-top:4px;}
-.upgrade-card{background:#ffffff08;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
-.upgrade-card .up-icon{font-size:22px;width:36px;text-align:center;}.upgrade-card .up-info{flex:1;}
-.upgrade-card .up-name{font-size:14px;color:var(--text);}.upgrade-card .up-desc{font-size:11px;color:var(--muted);margin-top:2px;}
-.upgrade-card .up-price{font-size:12px;color:var(--gold);margin-top:3px;}
+.ach-popup .ach-text{color:var(--gold);font-size:12px;}.ach-popup .ach-sub{color:var(--muted);font-size:10px;}
+.stat-box{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.stat-item{background:#ffffff06;border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;}
+.stat-val{font-size:11px;color:var(--gold);font-family:var(--pfont);}.stat-label{font-size:11px;color:var(--muted);margin-top:3px;}
+.upgrade-card{background:#ffffff06;border:1px solid var(--border);border-radius:7px;padding:10px;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.upgrade-card .up-icon{font-size:20px;width:30px;text-align:center;}.upgrade-card .up-info{flex:1;}
+.upgrade-card .up-name{font-size:13px;color:var(--text);}.upgrade-card .up-desc{font-size:10px;color:var(--muted);margin-top:1px;}
+.upgrade-card .up-price{font-size:11px;color:var(--gold);margin-top:2px;}
 .feed-particle{position:absolute;pointer-events:none;font-size:10px;animation:feedDrop 1.2s ease-in forwards;}
 @keyframes feedDrop{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(60px);}}
-.coin-fly{position:fixed;pointer-events:none;font-family:var(--pfont);font-size:10px;color:var(--gold);z-index:9999;animation:coinUp 1s ease-out forwards;}
-@keyframes coinUp{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-40px);}}
+.coin-fly{position:fixed;pointer-events:none;font-family:var(--pfont);font-size:9px;color:var(--gold);z-index:9999;animation:coinUp 1s ease-out forwards;}
+@keyframes coinUp{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-30px);}}
 .tank-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:10;}
-.setup-panel{background:rgba(10,22,40,0.88);border:1px solid var(--border);border-radius:12px;padding:14px 18px;width:min(320px,88%);pointer-events:all;}
-.setup-panel .sp-title{font-family:var(--pfont);font-size:9px;color:var(--gold);margin-bottom:10px;text-align:center;letter-spacing:1px;}
-.setup-step{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #ffffff11;font-size:14px;}
+.setup-panel{background:rgba(10,22,40,0.9);border:1px solid var(--border);border-radius:10px;padding:12px 14px;width:min(280px,85%);pointer-events:all;}
+.setup-panel .sp-title{font-family:var(--pfont);font-size:8px;color:var(--gold);margin-bottom:8px;text-align:center;letter-spacing:1px;}
+.setup-step{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid #ffffff0a;font-size:13px;}
 .setup-step:last-of-type{border-bottom:none;}
 .setup-step .ss-label{color:var(--muted);}.setup-step.done .ss-label{color:#4ade80;}
-.water-btn{width:100%;margin-top:10px;padding:9px;background:var(--blue);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:var(--font);font-size:15px;}
+.water-btn{width:100%;margin-top:8px;padding:8px;background:var(--blue);color:#fff;border:none;border-radius:7px;cursor:pointer;font-family:var(--font);font-size:14px;}
 .water-btn:hover{background:#0277BD;}.water-btn:disabled{opacity:.4;cursor:not-allowed;}
-.refresh-note{font-size:11px;color:var(--muted);margin-bottom:8px;text-align:center;}
+.refresh-note{font-size:10px;color:var(--muted);margin-bottom:6px;text-align:center;}
+/* Zen event toast */
+.zen-toast{position:fixed;bottom:20%;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(10,22,40,0.92);border:1px solid #FFB30033;border-radius:10px;padding:10px 18px;z-index:9998;font-size:13px;color:var(--text);text-align:center;opacity:0;transition:all .6s ease-out;pointer-events:none;max-width:280px;}
+.zen-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.zen-toast .toast-title{color:var(--gold);font-size:11px;margin-bottom:4px;font-family:var(--pfont);letter-spacing:1px;}
+/* Collection badge */
+.collection-badge{font-size:9px;color:var(--gold);background:#FFB30015;border:1px solid #FFB30028;padding:2px 6px;border-radius:8px;white-space:nowrap;}
+.hud{display:none;}
+#wq-bar{display:none;}
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="game-title">~ MY AQUARIUM ~</div>
+  <div class="game-title">~ ZEN AQUARIUM ~</div>
   <div class="top-bar">
     <div class="top-bar-left">
-      <div style="font-size:12px;color:var(--muted)" id="time-display">Day 1 — 08:00</div>
+      <div style="font-size:11px;color:var(--muted)" id="time-display">Day 1 — 08:00</div>
       <div class="tank-size-badge" id="tank-badge">Tank: Small</div>
     </div>
     <div class="top-bar-right">
       <button class="audio-btn" id="audio-btn">♪ ON</button>
+      <div class="collection-badge" id="col-badge">📖 0</div>
       <div class="level-display" id="LD">Lv. 1</div>
-      <div class="coins-display" id="CD">Coins: 5000</div>
+      <div class="coins-display" id="CD">Coins: 500</div>
     </div>
   </div>
   <div class="tank-outer"><canvas id="TC" height="336"></canvas><div class="tank-overlay" id="tank-setup-overlay"></div></div>
+  <div class="status-bar" id="status-bar"><span class="water-mood" id="water-mood">🌊 The water is peaceful</span></div>
   <div id="wq-bar"></div>
   <div class="hud" id="HUD"></div>
   <div class="tabs" id="tab-bar">
     <button class="tab on" data-tab="shop">Shop</button>
-    <button class="tab" data-tab="market">Fish Market</button>
+    <button class="tab" data-tab="market">Fish</button>
     <button class="tab" data-tab="creatures">Creatures</button>
     <button class="tab" data-tab="plants">Plants</button>
-    <button class="tab" data-tab="deco">Decorations</button>
-    <button class="tab" data-tab="manage">Management</button>
-    <button class="tab" data-tab="achievements">Quests</button>
+    <button class="tab" data-tab="deco">Decor</button>
+    <button class="tab" data-tab="manage">My Tank</button>
+    <button class="tab" data-tab="achievements">Goals</button>
   </div>
+  <div class="bottom-area">
   <div id="a-global"></div>
   <div class="sc v" id="s-shop">
     <div class="stitle">Equipment Shop</div><div id="a-shop"></div>
@@ -141,29 +152,29 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
   <div class="sc" id="s-plants"><div class="stitle">Plant Shop</div><div class="refresh-note" id="plant-note"></div><div id="a-plants"></div><div class="grid" id="plant-g"></div></div>
   <div class="sc" id="s-deco"><div class="stitle">Decorations</div><div class="refresh-note" id="deco-note"></div><div id="a-deco"></div><div class="grid" id="deco-g"></div></div>
   <div class="sc" id="s-manage">
-    <div class="stitle">Management</div><div id="a-manage"></div>
-    <!-- Tank actions -->
-    <div class="panel" id="manage-actions" style="margin-bottom:8px;">
-      <div class="stitle" style="margin-bottom:8px;">Tank Care</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn" id="btn-changewater" style="background:#0288D1;flex:1;">💧 Change Water</button>
-        <button class="btn" id="btn-clean" style="background:#00897B;flex:1;">🧹 Clean Tank (20🪙)</button>
+    <div class="stitle">My Tank</div><div id="a-manage"></div>
+    <div class="panel" id="manage-actions" style="margin-bottom:6px;">
+      <div class="stitle" style="margin-bottom:6px;">Tank Care</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="btn" id="btn-changewater" style="background:#0288D1;flex:1;font-size:12px;">💧 Change Water</button>
+        <button class="btn" id="btn-clean" style="background:#00897B;flex:1;font-size:12px;">🧹 Clean (20🪙)</button>
       </div>
     </div>
-    <!-- Fish list -->
-    <div class="stitle" style="margin-bottom:6px;">My Creatures</div>
+    <div class="stitle" style="margin-bottom:4px;">My Creatures</div>
     <div id="a-myfish"></div>
     <div id="fish-list"></div>
-    <!-- Mini stats -->
-    <div class="stitle" style="margin-top:12px;margin-bottom:6px;">Stats</div>
+    <div class="stitle" style="margin-top:8px;margin-bottom:4px;">Stats</div>
     <div id="a-stats"></div>
     <div id="stats-content"></div>
   </div>
-  <div class="sc" id="s-achievements"><div class="stitle">Quests</div><div id="a-achievements"></div><div id="ach-list"></div></div>
+  <div class="sc" id="s-achievements"><div class="stitle">Goals</div><div id="a-achievements"></div><div id="ach-list"></div></div>
+  </div>
 </div>
 <div class="ach-popup" id="ach-popup"><div class="ach-icon" id="ach-popup-icon"></div><div><div class="ach-text" id="ach-popup-text"></div><div class="ach-sub" id="ach-popup-sub"></div></div></div>
+<div class="zen-toast" id="zen-toast"><div class="toast-title" id="toast-title"></div><div id="toast-msg"></div></div>
 
 <script>
+
 /* ═══════════════════════════════════════════════════════════
    AUDIO ENGINE - Web Audio API procedural sounds + BGM
 ═══════════════════════════════════════════════════════════ */
@@ -430,7 +441,7 @@ const ACHIEVEMENTS=[
   {id:'super_rare',  name:'Legend',         icon:'👑',desc:'Buy a super rare fish',   reward:200,check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='super_rare')},
   {id:'feed_100',    name:'Generous Soul',  icon:'🍞',desc:'Feed fish 100 times',    reward:50, check:s=>(s.totalFeeds||0)>=100},
   {id:'earn_5000',   name:'Tycoon',         icon:'👛',desc:'Earn 5000 total coins',   reward:150,check:s=>(s.totalEarned||0)>=5000},
-  {id:'no_death_10', name:'Perfect Record', icon:'🌟',desc:'10 days no deaths',       reward:100,check:s=>(s.daysWithoutDeath||0)>=10},
+  {id:'zen_master', name:'Zen Master', icon:'🌟',desc:'Play for 10 peaceful days',  reward:100,check:s=>(s.daysWithoutDeath||0)>=10},
 ];
 
 /* ═══════════════════════════════════════════════════════════
@@ -1161,7 +1172,7 @@ function drawDecoPreview(id){
    STATE
 ═══════════════════════════════════════════════════════════ */
 let S={
-  coins:5000,owned:{},waterAdded:false,waterLevel:0,waterAnim:false,
+  coins:500,owned:{},waterAdded:false,waterLevel:0,waterAnim:false,
   waterTested:true,waterScore:{},fish:[],uid:0,day:1,
   plantAge:0,plantSeeds:[],decos:[],gameTime:8*60,poopLevel:0,
   tankSize:0,xp:0,level:1,achievements:[],
@@ -1171,9 +1182,16 @@ let S={
   _marketRares:null,_marketRareDay:-1,
   _decoRares:null,_decoRareDay:-1,
   _plantRares:null,_plantRareDay:-1,
+  // Zen mode additions
+  lastLoginTime:Date.now(),
+  discoveredSpecies:[],
+  discoveredVariants:[],
+  rarePityCounter:0,
+  daysWithoutVisitor:0,
+  zenEvents:[],
 };
 
-function sv(){try{localStorage.setItem('aq8',JSON.stringify(S));}catch(e){}}
+function sv(){S.lastLoginTime=Date.now();try{localStorage.setItem('aq8',JSON.stringify(S));}catch(e){}}
 function ld(){try{const x=localStorage.getItem('aq8');if(x){Object.assign(S,JSON.parse(x));S.waterTested=true;}}catch(e){}}
 function coin(n){if(n>0)S.totalEarned=(S.totalEarned||0)+n;if(n<0)S.totalSpent=(S.totalSpent||0)+Math.abs(n);S.coins+=n;document.getElementById('CD').textContent='Coins: '+S.coins;if(n>0)coinFlyAnim('+'+n);sv();checkAch();}
 function addXP(n){S.xp=(S.xp||0)+n;const need=S.level*100;if(S.xp>=need){S.xp-=need;S.level++;showAl('global','Level Up! Level '+S.level+'! +25 coins','ok');coin(25);}document.getElementById('LD').textContent='Lv. '+S.level;sv();}
@@ -1184,22 +1202,18 @@ function avgW(){const v=Object.values(S.waterScore||{});if(!v.length)return 0;re
 function getWaterTemp(){return S.owned.heater2?27:S.owned.heater?25:18;}
 function getDef(f){return f.isCreature?CREATURES_DEF.find(d=>d.id===f.id):FISH_DEF.find(d=>d.id===f.id);}
 function getFishMood(f){
-  if(f.hunger<25)return'hungry';
-  if(f.health<40||f.diseased)return'scared';
   const hour=Math.floor((S.gameTime%1440)/60);
   if(hour>=21||hour<6)return'sleepy';
   const def=getDef(f);
-  // Social moods
   if(def?.social==='schooling'){
     const sameSpecies=S.fish.filter(x=>x.id===f.id&&x.uid!==f.uid).length;
     if(sameSpecies===0)return'lonely';
   }
-  if(def?.social==='solitary'){
-    const nearby=S.fish.filter(x=>x.uid!==f.uid).length;
-    if(nearby>0&&Math.random()<0.1)return'warning';// irritated by company
-  }
-  if(f.hunger>80&&f.health>80)return'happy';
+  const ws=getWaterState();
+  if(ws==='lazy')return'content';
   if(def?.personality==='playful')return'playful';
+  if(def?.personality==='shy')return'content';
+  if(Math.random()<0.3)return'happy';
   return'content';
 }
 
@@ -1634,7 +1648,7 @@ const CREATURE_CONFIG={
 function getCreatureScale(id){return (CREATURE_CONFIG[id]||{sc:4}).sc;}
 
 function renderCreatures(){
-  if(!S.waterAdded||avgW()<55){
+  if(!S.waterAdded){
     document.getElementById('creature-g').innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">'+(S.waterAdded?'Water quality too low (55+).':'Add water first.')+'</div>';
     document.getElementById('creature-note').textContent='';return;
   }
@@ -1791,35 +1805,28 @@ S.decos.push({id,x:bestX,d:bestDepth});sv();showAl('deco',dd.name+' placed!','ok
 ═══════════════════════════════════════════════════════════ */
 function renderFishList(){
   const list=document.getElementById('fish-list');
-  if(!S.fish.length){list.innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">No creatures yet.</div>';return;}
-  const col=v=>v>70?'#4ade80':v>40?'#FFB300':'#ff6b6b';
+  if(!S.fish.length){list.innerHTML='<div style="font-size:12px;color:var(--muted);padding:10px">No creatures yet. Visit the Fish Market!</div>';return;}
   list.innerHTML='';
   S.fish.forEach(f=>{
     const isC=f.isCreature;
     const def=isC?CREATURES_DEF.find(d=>d.id===f.id):FISH_DEF.find(d=>d.id===f.id);
     const div=document.createElement('div');div.className='fcard';
-    const canvas=isC?makeCreatureCanvas(f.id,32):makeFishCanvas(f.id,32,f.stage);
+    const canvas=isC?makeCreatureCanvas(f.id,28):makeFishCanvas(f.id,28,f.stage);
     div.appendChild(canvas);
     const info=document.createElement('div');info.className='finfo';
-    const dis=f.disease?DISEASES.find(d=>d.id===f.disease):null;
     const mood=getFishMood(f);
-    info.innerHTML='<div class="fname">'+f.name+' <span style="font-size:9px;color:var(--muted)">'+(def?.name||f.id)+'</span> <span>'+(MOOD_EMOTES[mood]||'')+'</span></div>'+
-      '<div><span class="ftag ftag-'+(f.stage==='baby'?'baby':'adult')+'">'+f.stage+'</span>'+(f.diseased&&dis?'<span class="ftag ftag-sick">'+dis.name+'</span>':'')+
-      '<span class="ftag ftag-age">day '+f.age+'</span></div>'+
-      '<div class="row" style="margin-top:4px;margin-bottom:0"><div class="lbl" style="width:42px;font-size:10px">HP</div><div style="flex:1"><div class="bar"><div class="fill" style="width:'+f.health+'%;background:'+col(f.health)+'"></div></div></div><div class="val" style="color:'+col(f.health)+';font-size:10px">'+f.health+'</div></div>'+
-      '<div class="row" style="margin-bottom:0"><div class="lbl" style="width:42px;font-size:10px">Hunger</div><div style="flex:1"><div class="bar"><div class="fill" style="width:'+f.hunger+'%;background:'+col(f.hunger)+'"></div></div></div><div class="val" style="color:'+col(f.hunger)+';font-size:10px">'+f.hunger+'</div></div>';
+    const moodLabel=mood==='happy'?'Happy':mood==='sleepy'?'Sleepy':mood==='playful'?'Playful':mood==='lonely'?'Lonely':'Calm';
+    const moodClass=mood==='happy'?'happy':mood==='sleepy'?'idle':'calm';
+    info.innerHTML='<div class="fname">'+f.name+' <span style="font-size:8px;color:var(--muted)">'+(def?.name||f.id)+'</span> '+(MOOD_EMOTES[mood]||'')+'</div>'+
+      '<div><span class="ftag ftag-'+moodClass+'">'+moodLabel+'</span>'+
+      '<span class="ftag ftag-age">day '+f.age+'</span></div>';
     div.appendChild(info);
     const btns=document.createElement('div');btns.className='fbtns';
-    if(f.diseased&&dis){
-      const tb=document.createElement('button');tb.textContent='Treat ('+dis.cureCost+')';
-      tb.addEventListener('click',e=>{e.stopPropagation();if(S.coins<dis.cureCost){showAl('manage','Not enough coins!','warn');return;}coin(-dis.cureCost);f.diseased=false;f.disease=null;f.health=Math.min(100,f.health+25);S.totalCured=(S.totalCured||0)+1;addXP(5);sv();renderFishList();showAl('manage',f.name+' cured!','ok');checkAch();});
-      btns.appendChild(tb);
-    }
-    const rb=document.createElement('button');rb.textContent='🌊 Release';
+    const rb=document.createElement('button');rb.textContent='Release';
     rb.style.color='#ff6b6b';
     rb.addEventListener('click',e=>{
       e.stopPropagation();
-      if(!confirm('Release '+f.name+' into the wild?'))return;
+      if(!confirm('Release '+f.name+'?'))return;
       S.fish=S.fish.filter(x=>x.uid!==f.uid);sv();renderFishList();renderHUD();showAl('manage',f.name+' was released.','ok');
     });
     btns.appendChild(rb);
@@ -1866,7 +1873,7 @@ function renderStats(){
   el.innerHTML=
     '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px;">'
     +[['Days',S.day],['Creatures',S.fish.length],['Species',new Set(S.fish.map(f=>f.id)).size],['Avg HP',avg],
-      ['Bought',S.totalFishBought||0],['Bred',S.totalBred||0],['Deaths',S.totalDeaths||0],['Cured',S.totalCured||0],
+      ['Bought',S.totalFishBought||0],['Bred',S.totalBred||0],['Days',S.daysWithoutDeath||0],['Cured',S.totalCured||0],
       ['Fed',S.totalFeeds||0],['Earned',S.totalEarned||0],['Spent',S.totalSpent||0],['Streak',S.maxDaysWithoutDeath||0]]
     .map(([l,v])=>'<div class="stat-item" style="padding:6px;"><div class="stat-val" style="font-size:10px;">'+v+'</div><div class="stat-label" style="font-size:10px;">'+l+'</div></div>').join('')
     +'</div>'
@@ -2177,7 +2184,7 @@ function drawTank(){
   const canvas=document.getElementById('TC');if(!canvas)return;
   const W=canvas.parentElement.clientWidth||640;
   if(canvas.width!==W)canvas.width=W;
-  const H=336;const ctx=canvas.getContext('2d');
+  const H=canvas.height||336;canvas.height=canvas.parentElement.clientHeight||336;const ctx=canvas.getContext('2d');
   cancelAnimationFrame(raf);
 
   function frame(){
@@ -2582,30 +2589,35 @@ function gameLoop(){
 
 function onNewDay(){
   if(S._waterChangeCooldown>0)S._waterChangeCooldown=Math.max(0,(S._waterChangeCooldown||0)-1);
-  coin(10);addXP(5);showAl('global','New day! +10 coins','ok');
+  coin(10);addXP(5);
   S._marketRares=null;S._decoRares=null;S._plantRares=null;
-  let deathToday=false;
-  // autofeeder removed
+  // Zen: no death, no disease, no hunger penalty
   S.fish.forEach(f=>{
-    f.hunger=Math.max(0,f.hunger-20);f.age+=1;if(f.age>=10&&f.stage==='baby')f.stage='adult';
-    if(f.hunger<20)f.health=Math.max(0,f.health-15);
-    if(avgW()<50&&!f.diseased&&Math.random()<0.15){
-      const dis=DISEASES[Math.floor(Math.random()*DISEASES.length)];f.diseased=true;f.disease=dis.id;showAl('global',f.name+' caught '+dis.name+'!','bad');
-    }
-    if(f.diseased){const dis=DISEASES.find(d=>d.id===f.disease);if(dis)f.health=Math.max(0,f.health-dis.damage/2);}
-    if(f.health<=0){
-      const anim=fishAnim.find(a=>a.uid===f.uid);
-      if(anim){const sp=f.stage==='baby'?getBabySprite(f.id):getSprite(f.id);for(let i=0;i<6;i++)deathParticles.push({x:anim.x,y:anim.y,vx:(Math.random()-0.5)*0.9,vy:-0.4-Math.random()*0.6,sp,sc:f.stage==='baby'?3:5,flip:Math.random()<0.5,life:60,maxLife:60});}
-      S.fish=S.fish.filter(x=>x.uid!==f.uid);S.totalDeaths=(S.totalDeaths||0)+1;deathToday=true;showAl('global',f.name+' has died...','bad');
-    }
+    f.age+=1;if(f.age>=10&&f.stage==='baby')f.stage='adult';
+    // Mood recovers naturally
+    f.health=Math.min(100,(f.health||80)+5);
+    f.hunger=Math.min(100,(f.hunger||80)+3);
   });
-  if(!deathToday&&S.fish.length>0){S.daysWithoutDeath=(S.daysWithoutDeath||0)+1;if(S.daysWithoutDeath>(S.maxDaysWithoutDeath||0))S.maxDaysWithoutDeath=S.daysWithoutDeath;}else if(deathToday)S.daysWithoutDeath=0;
+  S.daysWithoutDeath=(S.daysWithoutDeath||0)+1;
+  if(S.daysWithoutDeath>(S.maxDaysWithoutDeath||0))S.maxDaysWithoutDeath=S.daysWithoutDeath;
+  // Zen breeding (gentler)
   const groups={};S.fish.forEach(f=>{groups[f.id]=groups[f.id]||[];groups[f.id].push(f);});
   Object.keys(groups).forEach(id=>{
-    const cat=FISH_DEF.find(c=>c.id===id);if(!cat||!cat.breedable||groups[id].filter(f=>f.stage==='adult').length<2||avgW()<75)return;
-    if(Math.random()<0.06&&S.fish.length<getTankCap()){const name=NAMES[Math.floor(Math.random()*NAMES.length)];S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});S.totalBred=(S.totalBred||0)+1;showAl('global','Baby '+cat.name+' ('+name+') was born!','ok');addXP(10);}
+    const cat=FISH_DEF.find(c=>c.id===id);if(!cat||!cat.breedable||groups[id].filter(f=>f.stage==='adult').length<2)return;
+    if(Math.random()<0.08&&S.fish.length<getTankCap()){
+      const name=NAMES[Math.floor(Math.random()*NAMES.length)];
+      S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});
+      S.totalBred=(S.totalBred||0)+1;
+      showZenToast('🥚 New Life','A baby '+cat.name+' ('+name+') appeared!');
+      addXP(10);
+      discoverSpecies(id);
+    }
   });
-  sv();renderFishList();checkAch();
+  // Zen daily event
+  triggerZenEvent();
+  // Water auto-recovers
+  S.poopLevel=Math.max(0,S.poopLevel-5);recalcWater();
+  sv();renderFishList();checkAch();updateWaterMood();updateCollectionBadge();
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -2622,26 +2634,154 @@ document.getElementById('audio-btn').classList.toggle('on',audioEnabled);
 setTimeout(drawTank,80);
 setTimeout(gameLoop,500);
 setTimeout(()=>{getAudio();startBGM();},1500);
+
+/* ═══════════════════════════════════════════════════════════
+   ZEN SYSTEMS - Offline, Events, Collection, Visitor
+═══════════════════════════════════════════════════════════ */
+function showZenToast(title,msg){
+  const t=document.getElementById('zen-toast');
+  document.getElementById('toast-title').textContent=title;
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+function getWaterState(){
+  const w=avgW();
+  if(w>75)return'clear';
+  if(w>45)return'natural';
+  return'lazy';
+}
+
+function updateWaterMood(){
+  const el=document.getElementById('water-mood');if(!el)return;
+  const ws=getWaterState();
+  const fishCount=S.fish.length;
+  const hour=Math.floor((S.gameTime%1440)/60);
+  const isNight=hour>=21||hour<6;
+  let msg='';
+  if(!S.waterAdded){msg='🌊 Set up your tank to begin';
+  }else if(fishCount===0){msg='🌊 The water is calm and waiting';
+  }else if(isNight){msg='🌙 The tank is quiet... fish are resting';
+  }else if(ws==='clear'){
+    const msgs=['🌊 Crystal clear water, fish are happy','✨ Everything feels peaceful','🐟 The tank is thriving'];
+    msg=msgs[Math.floor(S.gameTime/100)%msgs.length];
+  }else if(ws==='natural'){msg='🌊 The water has a natural feel';
+  }else{msg='💤 The tank feels a bit quiet today';}
+  el.textContent=msg;
+}
+
+function discoverSpecies(id){
+  if(!S.discoveredSpecies)S.discoveredSpecies=[];
+  if(!S.discoveredSpecies.includes(id)){
+    S.discoveredSpecies.push(id);sv();
+    updateCollectionBadge();
+  }
+}
+
+function updateCollectionBadge(){
+  const el=document.getElementById('col-badge');if(!el)return;
+  const total=(S.discoveredSpecies||[]).length;
+  el.textContent='📖 '+total;
+}
+
+function triggerZenEvent(){
+  if(!S.fish.length)return;
+  const r=Math.random();
+  if(r<0.50){
+    // Natural event - pure visual/message
+    const msgs=['Fish are swimming in sync for a moment','A gentle current ripples through the tank','Bubbles dance upward in a spiral','Light shifts across the water surface'];
+    showZenToast('🌊 Moment',msgs[Math.floor(Math.random()*msgs.length)]);
+  }else if(r<0.80){
+    // Eco event
+    const msgs=['Plants seem a bit taller today','The ecosystem feels balanced'];
+    S.plantAge+=(Math.random()*2);
+    showZenToast('🌿 Growth',msgs[Math.floor(Math.random()*msgs.length)]);
+  }else if(r<0.95){
+    // Reward event
+    const amt=5+Math.floor(Math.random()*15);
+    coin(amt);
+    showZenToast('✨ Found','Discovered '+amt+' coins among the pebbles');
+  }else{
+    // Rare event!
+    S.rarePityCounter=0;
+    const rareTypes=['A shimmer of unusual color flashes by','A mysterious shadow passes through','The water glows for just a moment'];
+    showZenToast('⭐ Rare Moment',rareTypes[Math.floor(Math.random()*rareTypes.length)]);
+    // Give bonus
+    coin(25);addXP(15);
+  }
+}
+
+function processOffline(){
+  if(!S.lastLoginTime)return;
+  const now=Date.now();
+  const hours=(now-S.lastLoginTime)/3600000;
+  if(hours<0.05)return; // less than 3 minutes
+  
+  // Water auto-recovers
+  S.poopLevel=Math.max(0,S.poopLevel-Math.floor(hours*3));
+  recalcWater();
+  
+  // Fish grow
+  const daysOffline=hours/24;
+  S.fish.forEach(f=>{
+    f.age+=Math.floor(daysOffline);
+    if(f.age>=10&&f.stage==='baby')f.stage='adult';
+    f.health=Math.min(100,(f.health||80)+Math.floor(hours));
+    f.hunger=Math.min(100,(f.hunger||80)+Math.floor(hours*0.5));
+  });
+  
+  // Plants grow
+  S.plantAge+=(hours*0.1);
+  
+  // Offline events
+  const eventCount=Math.min(3,Math.floor(hours/2)+Math.floor(Math.random()*2));
+  if(eventCount>0&&S.fish.length>0){
+    let summary=[];
+    for(let i=0;i<eventCount;i++){
+      const r=Math.random();
+      if(r<0.4){summary.push('The tank stayed peaceful');}
+      else if(r<0.7){
+        S.plantAge+=1;
+        summary.push('Plants grew a little');
+      }else if(r<0.9){
+        const amt=5+Math.floor(Math.random()*10);
+        coin(amt);
+        summary.push('Found '+amt+' coins');
+      }else{
+        // Try breed
+        if(S.fish.length>=2&&S.fish.length<getTankCap()){
+          const breedable=S.fish.filter(f=>{const d=getDef(f);return d?.breedable&&f.stage==='adult';});
+          if(breedable.length>=2){
+            const parent=breedable[Math.floor(Math.random()*breedable.length)];
+            const name=NAMES[Math.floor(Math.random()*NAMES.length)];
+            S.fish.push({id:parent.id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});
+            S.totalBred=(S.totalBred||0)+1;
+            summary.push('A baby fish was born: '+name+'!');
+            discoverSpecies(parent.id);
+          }
+        }
+      }
+    }
+    if(hours>0.5&&summary.length>0){
+      const h=Math.floor(hours);const m=Math.floor((hours%1)*60);
+      const timeStr=h>0?(h+'h '+m+'m'):(m+' min');
+      showZenToast('🌅 While you were away ('+timeStr+')',summary.join(' · '));
+    }
+  }
+  
+  S.lastLoginTime=now;
+  sv();syncAnim();renderFishList();updateWaterMood();updateCollectionBadge();
+}
+
+// Run offline processing on load
+setTimeout(processOffline,200);
+// Discover existing fish
+setTimeout(()=>{S.fish.forEach(f=>discoverSpecies(f.id));updateCollectionBadge();},300);
+// Update water mood regularly
+setInterval(updateWaterMood,5000);
+
+
 </script>
 </body>
 </html>
-<!-- v1.1 更新内容：1.背景音乐循环时间加倍(32→64拍)，tempo放慢(0.48→0.72)，加入低通滤波、和弦衬底和水泡ping，营造水底悠闲感。2.鱼食面积缩小(radius 4→2)，掉落速度减慢至原来的30%(vy/vx/gravity均×0.3)。3.初始不自动生成植物，植物只能从商店购买。4.全部decoration重新绘制，像素网格扩大约2倍，增加更多细节(阴影、高光、纹理、苔藓、锈迹等)，预览画布扩大至56×56。5.鱼会随机游向附近的装饰物进行互动(靠近调查行为)。-->
-<!-- v2.1 更新内容：
-1. Bug修复：castle yMin 6→9，fan_coral yMin 6→0，影子现在精准贴合底部
-2. 设备重构：去掉 AutoFeeder/UV/Dechlorinator，新增 CO₂(🫧加速植物生长+pH+12) 和 Backdrop(🖼背景板视觉主题)
-3. LED正式影响植物生长：无LED极慢(×0.15)，有LED正常(×1)，CO₂额外×1.5
-4. Tank Setup条件：去掉Dechlorinator，改为Filter+Heater+Gravel
-5. 水质重新平衡：pH基础65→80，NH₃基础55→65，去掉UV/Dechlorinator加成，CO₂给pH+12
-6. 植物景深系统：同种植物同一depth层(0.2/0.5/0.8)，买植物时按种类分配；maxH×0.8整体缩小20%；depth影响高度(前排高后排矮)；摇摆幅度前排更大
-7. 植物和装饰物统一排序渲染：一起按depth后→前排序，前排遮后排，真实空间感
-8. 植物根部嵌入沙地：随depth嵌入，底部沙色掩埋
-9. 底栖生物(shrimp/snail/crab/crayfish/frog/starfish)固定在沙地面，随机depth，前排sc=3后排sc=2
-10. Backdrop背景板：四种颜色主题覆盖水体背景
--->
-<!-- v2.0 更新内容：统一所有元素的像素格大小为3px/格。鱼adult: 6→3, baby: 3→2, 生物: 各不同(3/4/5)→全部3, 装饰: 2-3→全部3, 植物: 已是3保持不变。去掉装饰的景深scale差异（只保留depth控制嵌入深度，不再影响大小）。所有元素视觉比例统一。-->
-<!-- v1.10 更新内容：修复装饰物与阴影之间的空隙。根因是每个精灵的y=0行没有像素，视觉底部实际在baseY-(yMin*sc)处。DECO_SPRITE_CFG新增yMin字段，阴影和沙土掩埋都移到visualBaseY=baseY-yMin*sc，完全贴合精灵实际底部。-->
-<!-- v1.9 更新内容：缩小所有装饰物（scale从3/4/5改为2/2/3），阴影椭圆改为紧贴底部baseY而不是偏下4px，消除"悬空"感。-->
-<!-- v1.8 更新内容：1.全部15种装饰物像素图案完全重绘，参考真实鱼缸产品（CKFishworld/biOrb/Petco/Zoox）：Spider Wood蜘蛛木(多枝根系)、Seiryu Stone青龙石(层叠纹理)、Dragon Stone龙石(橙棕多孔)、Brain Coral脑珊瑚、Fan Coral扇珊瑚、Treasure Chest宝箱(溢金)、Castle城堡(发光窗)、Conch Shell法螺(螺旋)、Lava Rock熔岩石(孔洞)、Volcano火山(岩浆)、Pagoda宝塔(三层红瓦)、Sunken Ship沉船(倾斜)、Mermaid美人鱼、Crystal水晶群(三色)。2.装饰物放置系统改为前后景深：后排sc=3小、中排sc=4、前排sc=5大，自动营造空间感。3.底部嵌入沙地：每个装饰物按深度嵌入沙地，底部沙色像素掩埋，径向阴影投射。4.不再贴着水线，而是在整块沙地内分散放置。5.更新了clownfish的珊瑚互动ID、火山粒子和水晶闪光特效。-->
-<!-- v1.7 更新内容：全面加入生物习性系统。1.活动层：每种鱼/生物有独立yMin/yMax，上层鱼(guppy/neon/zebra)在顶部，底层鱼(pleco/axolotl/snail/crab)贴底，夜晚所有生物下沉休息。2.社交习性：schooling(群居)群体靠拢/离群显示孤独表情；solitary(独居)betta/crayfish攻击靠近者，被攻击方逃跑；anemone(依附)clownfish绕珊瑚环游；shy(害羞)seahorse/axolotl/eel被点击后逃窜。3.运动模式：cruise大弧线(arowana/manta/eel)；idle_burst停顿后爆发(pleco/crab/snail)；hover轻微上下漂(seahorse/jellyfish)；jump弹跳(shrimp/frog)；normal默认。4.喂食层：surface只吃漂浮食物(guppy/goldfish/zebra)；bottom只吃沉底食物(pleco/crab)；mid中层拦截；none不吃投喂(starfish/snail/jellyfish)自动补充饱食度。5.pleco在底部有啃食抖动动画。6.所有社交状态实时显示对应表情。-->
-<!-- v1.6 更新内容：Tank Upgrades完全整合进Equipment Shop面板，移除独立的upgrade-list div；设备grid、已拥有设备条、Tank Upgrades三段在同一容器内顺序渲染，无需单独调用renderUpgrades()。-->
-<!-- v1.5 更新内容：1.鱼的渲染比例从5提升到6（约+30%），所有14种鱼的像素精灵完全重绘，更细致真实（鳍、条纹、鳞片光泽、正确体型比例）。2.10种生物各有独立运动配置：snail/starfish几乎静止在底部；jellyfish在水中高处漂浮；eel快速蜿蜒；shrimp/frog在底层活跃跳动；turtle/octopus中层慢游；y轴范围、速度均按各生物特点定制。3.沙砾/底部改用透明渐变叠加水底颜色，消除水底硬边界，看起来自然融入水中。-->
