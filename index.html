@@ -139,6 +139,7 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
     <button class="tab" data-tab="plants">Plants</button>
     <button class="tab" data-tab="deco">Decor</button>
     <button class="tab" data-tab="manage">My Tank</button>
+    <button class="tab" data-tab="codex">Codex</button>
     <button class="tab" data-tab="achievements">Goals</button>
   </div>
   <div class="bottom-area">
@@ -167,6 +168,7 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
     <div id="a-stats"></div>
     <div id="stats-content"></div>
   </div>
+  <div class="sc" id="s-codex"><div class="stitle">Fish Codex</div><div id="codex-progress" style="font-size:11px;color:var(--muted);margin-bottom:6px;"></div><div id="codex-grid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr));"></div></div>
   <div class="sc" id="s-achievements"><div class="stitle">Goals</div><div id="a-achievements"></div><div id="ach-list"></div></div>
   </div>
 </div>
@@ -1303,6 +1305,7 @@ document.getElementById('tab-bar').addEventListener('click',function(e){
   if(name==='manage'){renderFishList();renderStats();}
   if(name==='deco')renderDeco();
   if(name==='achievements')renderAchievements();
+  if(name==='codex')renderCodex();
 });
 
 document.getElementById('audio-btn').addEventListener('click',toggleAudio);
@@ -1416,15 +1419,16 @@ function getMarketRares(){
 }
 
 function renderMarket(){
-  if(!S.waterAdded||avgW()<60){
-    document.getElementById('fish-g').innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">'+(S.waterAdded?'Water quality too low (60+). Add more equipment!':'Add water first.')+'</div>';
+  if(!S.waterAdded){
+    document.getElementById('fish-g').innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">Add water first.</div>';
     document.getElementById('market-note').textContent='';return;
   }
   const cap=getTankCap();const full=S.fish.length>=cap;
   const nextRefresh=Math.ceil(S.day/7)*7;
   document.getElementById('market-note').textContent=full?'Tank full! Upgrade for more room.':'Rare fish refresh on Day '+nextRefresh+'.';
   const rareIds=getMarketRares();
-  const avail=[...FISH_DEF.filter(f=>f.rarity==='common'||f.rarity==='uncommon'),...FISH_DEF.filter(f=>rareIds.includes(f.id))];
+  let avail=[...FISH_DEF.filter(f=>f.rarity==='common'||f.rarity==='uncommon'),...FISH_DEF.filter(f=>rareIds.includes(f.id))];
+  avail=avail.filter(f=>isSpeciesUnlocked(f));
   const grid=document.getElementById('fish-g');grid.innerHTML='';
   avail.forEach(f=>{
     const div=document.createElement('div');div.className='item';
@@ -1442,9 +1446,9 @@ function renderMarket(){
       const id=this.dataset.fish;const cat=FISH_DEF.find(f=>f.id===id);
       if(!cat||S.coins<cat.price||S.fish.length>=cap)return;
       coin(-cat.price);const name=NAMES[Math.floor(Math.random()*NAMES.length)];
-      S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});
-      S.totalFishBought=(S.totalFishBought||0)+1;addXP(5);sv();
-      showAl('market',name+' the '+cat.name+' added!','ok');renderMarket();renderHUD();checkAch();
+      S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid,variant:rollVariant()});
+      S.totalFishBought=(S.totalFishBought||0)+1;addXP(5);discoverSpecies(id);discoverVariant(id,S.fish[S.fish.length-1].variant);sv();
+      showZenToast('🐟 Welcome!',name+' the '+cat.name+' joins your tank');renderMarket();renderHUD();checkAch();
     });
   });
 }
@@ -1649,7 +1653,7 @@ function getCreatureScale(id){return (CREATURE_CONFIG[id]||{sc:4}).sc;}
 
 function renderCreatures(){
   if(!S.waterAdded){
-    document.getElementById('creature-g').innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">'+(S.waterAdded?'Water quality too low (55+).':'Add water first.')+'</div>';
+    document.getElementById('creature-g').innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">Add water first.</div>';
     document.getElementById('creature-note').textContent='';return;
   }
   const cap=getTankCap();const full=(S.fish||[]).length>=cap;
@@ -1672,9 +1676,9 @@ function renderCreatures(){
       if(!cr||S.coins<cr.price||(S.fish||[]).length>=getTankCap())return;
       coin(-cr.price);
       const name=NAMES[Math.floor(Math.random()*NAMES.length)];
-      S.fish.push({id,name,health:100,hunger:100,age:0,stage:'adult',diseased:false,disease:null,uid:++S.uid,isCreature:true});
-      S.totalFishBought=(S.totalFishBought||0)+1;addXP(5);sv();
-      showAl('creatures',name+' the '+cr.name+' added!','ok');renderCreatures();renderHUD();checkAch();
+      S.fish.push({id,name,health:100,hunger:100,age:0,stage:'adult',diseased:false,disease:null,uid:++S.uid,isCreature:true,variant:rollVariant()});
+      S.totalFishBought=(S.totalFishBought||0)+1;addXP(5);discoverSpecies(id);discoverVariant(id,S.fish[S.fish.length-1].variant);sv();
+      showZenToast('🦐 Welcome!',name+' the '+cr.name+' joins your tank');renderCreatures();renderHUD();checkAch();
     });
   });
 }
@@ -1817,8 +1821,11 @@ function renderFishList(){
     const mood=getFishMood(f);
     const moodLabel=mood==='happy'?'Happy':mood==='sleepy'?'Sleepy':mood==='playful'?'Playful':mood==='lonely'?'Lonely':'Calm';
     const moodClass=mood==='happy'?'happy':mood==='sleepy'?'idle':'calm';
-    info.innerHTML='<div class="fname">'+f.name+' <span style="font-size:8px;color:var(--muted)">'+(def?.name||f.id)+'</span> '+(MOOD_EMOTES[mood]||'')+'</div>'+
+    const ptag=getIndividualPersonality(f);
+    const varLabel=f.variant&&f.variant!=='normal'?' <span style="font-size:8px;color:'+{pale:'#B3E5FC',dark:'#5C6BC0',golden:'#FFD700',glow:'#00E5FF'}[f.variant]+'">'+f.variant+'</span>':'';
+    info.innerHTML='<div class="fname">'+f.name+varLabel+' <span style="font-size:8px;color:var(--muted)">'+(def?.name||f.id)+'</span> '+(MOOD_EMOTES[mood]||'')+'</div>'+
       '<div><span class="ftag ftag-'+moodClass+'">'+moodLabel+'</span>'+
+      '<span class="ftag" style="background:#ffffff0a;color:var(--muted)">'+ptag+'</span>'+
       '<span class="ftag ftag-age">day '+f.age+'</span></div>';
     div.appendChild(info);
     const btns=document.createElement('div');btns.className='fbtns';
@@ -1874,7 +1881,7 @@ function renderStats(){
     '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px;">'
     +[['Days',S.day],['Creatures',S.fish.length],['Species',new Set(S.fish.map(f=>f.id)).size],['Avg HP',avg],
       ['Bought',S.totalFishBought||0],['Bred',S.totalBred||0],['Days',S.daysWithoutDeath||0],['Cured',S.totalCured||0],
-      ['Fed',S.totalFeeds||0],['Earned',S.totalEarned||0],['Spent',S.totalSpent||0],['Streak',S.maxDaysWithoutDeath||0]]
+      ['Variants',(S.discoveredVariants||[]).length],['Earned',S.totalEarned||0],['Phase',getTankPhase()],['Streak',S.maxDaysWithoutDeath||0]]
     .map(([l,v])=>'<div class="stat-item" style="padding:6px;"><div class="stat-val" style="font-size:10px;">'+v+'</div><div class="stat-label" style="font-size:10px;">'+l+'</div></div>').join('')
     +'</div>'
     +'<button class="btn" style="background:var(--red);font-size:11px;padding:5px 12px;" id="btn-reset">Reset Game</button>';
@@ -2137,7 +2144,7 @@ document.getElementById('TC').addEventListener('click',function(e){
   let hit=false;
   fishAnim.forEach(a=>{
     if(Math.hypot(a.x-cx,a.y-cy)<9){
-      hit=true;a.clickAnim=20;playBubble();
+      hit=true;a.clickAnim=20;a.followTimer=120;followTarget=a;playBubble();
       const fish=S.fish.find(f=>f.uid===a.uid);
       if(fish){fish.hunger=Math.min(100,fish.hunger+10);sv();renderFishList();}
       const cfg=getSpeciesCfg(a.id,a.isCreature);
@@ -2158,7 +2165,7 @@ function syncAnim(){
   const ex=new Map(fishAnim.map(a=>[a.uid,a]));
   fishAnim=S.fish.map(f=>{
     const a=ex.get(f.uid);
-    if(a){a.stage=f.stage;a.isCreature=!!f.isCreature;return a;}
+    if(a){a.stage=f.stage;a.isCreature=!!f.isCreature;if(!a.followTimer)a.followTimer=0;return a;}
     const cfg=getSpeciesCfg(f.id,!!f.isCreature);
     const def2=getDef(f);
     const isBenthic=!!def2?.benthic;
@@ -2176,6 +2183,7 @@ function syncAnim(){
       idleTimer:0,
       scaredTimer:0,
       homeDecoX:null,
+      spawnAlpha:0,spawnTimer:30,
     };
   });
 }
@@ -2418,6 +2426,12 @@ function drawTank(){
         if(a.scaredTimer>0){
           a.scaredTimer--;
           // keep fleeing toward corner
+        } else if(a.followTimer>0&&a===followTarget&&followTarget.tx!==undefined){
+          // Follow finger/touch
+          a.followTimer--;
+          const ftdx=followTarget.tx-a.x;const ftdy=followTarget.ty-a.y;
+          const ftd=Math.hypot(ftdx,ftdy)||1;
+          a.dx=ftdx/ftd*0.3;a.dy=ftdy/ftd*0.2;
         } else {
 
           // ── SOCIAL: SCHOOLING — move toward nearest same-species ──
@@ -2455,6 +2469,13 @@ function drawTank(){
               const ty=cfg.yMin+(cfg.yMax-cfg.yMin)*0.6+Math.sin(angle)*4;
               a.dx+=(tx-a.x)*0.04*ns;a.dy+=(ty-a.y)*0.03*ns;
             }
+          }
+
+          // ── BOND: bonded fish stay close ──
+          const bondFish=fish?.bondUid?fishAnim.find(o=>o.uid===fish.bondUid):null;
+          if(bondFish&&Math.random()<0.01*ns){
+            const bd=Math.hypot(bondFish.x-a.x,bondFish.y-a.y);
+            if(bd>15){a.dx+=(bondFish.x-a.x)/bd*0.03;a.dy+=(bondFish.y-a.y)/bd*0.02;}
           }
 
           // ── MOVE STYLES ──
@@ -2537,9 +2558,26 @@ function drawTank(){
       } else {
         px=Math.round(a.x/100*W);py=Math.round(a.y/100*H);
       }
-      ctx.save();ctx.translate(px,py);
+      // Spawn fade-in + scale animation
+      if(a.spawnTimer>0){a.spawnTimer--;a.spawnAlpha=Math.min(1,1-a.spawnTimer/30);}
+      const spawnSc=a.spawnAlpha<1?0.8+a.spawnAlpha*0.2:1;
+      ctx.save();ctx.globalAlpha=(a.spawnAlpha!==undefined?a.spawnAlpha:1);
+      ctx.translate(px,py);
+      if(spawnSc<1){ctx.translate(sp.w*sc/2,sp.h*sc/2);ctx.scale(spawnSc,spawnSc);ctx.translate(-sp.w*sc/2,-sp.h*sc/2);}
       if(a.dx<0){ctx.scale(-1,1);ctx.translate(-sp.w*sc,0);}
-      sp.p.forEach(([x,y,c])=>{ctx.fillStyle=c;ctx.fillRect(x*sc,y*sc,sc,sc);});
+      // Color variant tinting
+      const vari=S.fish.find(ff=>ff.uid===a.uid);
+      const vt=vari?.variant||'normal';
+      sp.p.forEach(([x,y,col])=>{
+        let fc=col;
+        if(vt==='pale'){fc=lightenColor(col,40);}
+        else if(vt==='dark'){fc=darkenColor(col,40);}
+        else if(vt==='golden'){fc=tintColor(col,'#FFD700',0.3);}
+        else if(vt==='glow'){fc=tintColor(col,'#00E5FF',0.25);}
+        ctx.fillStyle=fc;ctx.fillRect(x*sc,y*sc,sc,sc);
+      });
+      // Glow effect for glow variants
+      if(vt==='glow'){ctx.globalAlpha=0.15+Math.sin(Date.now()/400)*0.1;ctx.fillStyle='#00E5FF';sp.p.forEach(([x,y])=>{ctx.fillRect(x*sc-1,y*sc-1,sc+2,sc+2);});}
       ctx.restore();
 
       // ── MOOD EMOTE ──
@@ -2555,6 +2593,94 @@ function drawTank(){
         }
       }
     });
+
+    // ── WEATHER EFFECTS (#8) ──
+    const weather=getWeatherEffect();
+    if(weather==='rain'){
+      ctx.save();ctx.globalAlpha=0.15;ctx.fillStyle='#90CAF9';
+      for(let i=0;i<20;i++){
+        const rx=(i*47+Date.now()/50)%W;const ry=(i*31+Date.now()/30)%(H*0.75);
+        ctx.fillRect(rx,ry,1,6);
+      }
+      ctx.restore();
+    }else if(weather==='specialLight'){
+      ctx.save();ctx.globalAlpha=0.06+Math.sin(t*0.2)*0.03;
+      ctx.fillStyle='#FFD54F';ctx.fillRect(0,0,W,H);ctx.restore();
+    }
+
+    // ── ZEN VISUAL EVENTS ──
+    if(zenVisualEvent){
+      zenVisualEvent.timer--;
+      if(zenVisualEvent.timer<=0){zenVisualEvent=null;}
+      else{
+        const zp=zenVisualEvent.timer;
+        ctx.save();
+        if(zenVisualEvent.type==='schoolSync'){
+          // Make all fish briefly align
+          ctx.globalAlpha=0.08*Math.sin(zp/90*Math.PI);
+          ctx.fillStyle='#B3E5FC';ctx.fillRect(0,0,W,H);
+        }else if(zenVisualEvent.type==='lightShift'){
+          ctx.globalAlpha=0.1*Math.sin(zp/120*Math.PI);
+          const lx=W*(0.3+Math.sin(zp*0.05)*0.4);
+          ctx.fillStyle='#FFF9C4';ctx.beginPath();ctx.moveTo(lx-30,0);ctx.lineTo(lx+30,0);ctx.lineTo(lx+60,H);ctx.lineTo(lx-60,H);ctx.closePath();ctx.fill();
+        }else if(zenVisualEvent.type==='bubbleBurst'){
+          ctx.globalAlpha=0.5;ctx.fillStyle='#B3E5FC';
+          for(let i=0;i<12;i++){const bx=W*0.3+Math.random()*W*0.4;const by=H-zp*2-Math.random()*40;ctx.beginPath();ctx.arc(bx,by,2+Math.random()*3,0,Math.PI*2);ctx.fill();}
+        }else if(zenVisualEvent.type==='glow'){
+          ctx.globalAlpha=0.08*Math.sin(zp/150*Math.PI);
+          ctx.fillStyle='#80DEEA';ctx.fillRect(0,0,W,H);
+        }
+        ctx.restore();
+      }
+    }
+
+    // ── VISITOR FISH rendering ──
+    if(visitorFish){
+      visitorFish.timer--;
+      if(visitorFish.timer<=0){visitorFish=null;}
+      else{
+        const vfT=visitorFish.timer;
+        const vfAlpha=vfT>540?((600-vfT)/60):vfT<60?(vfT/60):1;
+        const vfX=15+Math.sin(Date.now()/3000)*35+25;
+        const vfY=20+Math.sin(Date.now()/4000)*15;
+        const vsp=visitorFish.isCreature?getCreatureSprite(visitorFish.id):getSprite(visitorFish.id);
+        const vsc=4;
+        ctx.save();ctx.globalAlpha=vfAlpha*0.85;
+        ctx.translate(Math.round(vfX/100*W),Math.round(vfY/100*H));
+        if(Math.sin(Date.now()/2000)<0){ctx.scale(-1,1);ctx.translate(-vsp.w*vsc,0);}
+        vsp.p.forEach(([x,y,col])=>{
+          ctx.fillStyle=tintColor(col,'#FFD700',0.3);ctx.fillRect(x*vsc,y*vsc,vsc,vsc);
+        });
+        // Glow aura
+        ctx.globalAlpha=0.12+Math.sin(Date.now()/500)*0.06;
+        ctx.fillStyle='#FFD700';
+        vsp.p.forEach(([x,y])=>{ctx.fillRect(x*vsc-1,y*vsc-1,vsc+2,vsc+2);});
+        ctx.restore();
+      }
+    }
+
+    // ── TANK PHASE visual enhancements (#4) ──
+    const phase=getTankPhase();
+    if(phase>=3){
+      // Stable+: extra particle sparkles
+      ctx.save();ctx.globalAlpha=0.04*phase;
+      for(let i=0;i<phase;i++){
+        ctx.fillStyle='#E1F5FE';
+        ctx.fillRect(Math.round(W*(0.1+Math.sin(t*0.3+i*2)*0.4)),Math.round(H*(0.1+Math.cos(t*0.2+i)*0.6)),2,2);
+      }
+      ctx.restore();
+    }
+    if(phase>=4){
+      // Mature+: subtle color overlay
+      ctx.save();ctx.globalAlpha=0.03;ctx.fillStyle='#CE93D8';ctx.fillRect(0,0,W,H);ctx.restore();
+    }
+    if(phase>=5){
+      // Dreamlike: gentle aurora
+      ctx.save();ctx.globalAlpha=0.04+Math.sin(t*0.1)*0.02;
+      const ag=ctx.createLinearGradient(0,0,W,H);
+      ag.addColorStop(0,'#00BCD4');ag.addColorStop(0.5,'#CE93D8');ag.addColorStop(1,'#FFD54F');
+      ctx.fillStyle=ag;ctx.fillRect(0,0,W,H);ctx.restore();
+    }
 
     if(nightAlpha>0){
       ctx.save();ctx.globalAlpha=nightAlpha;ctx.fillStyle='#001030';ctx.fillRect(0,0,W,H);ctx.restore();
@@ -2606,9 +2732,9 @@ function onNewDay(){
     const cat=FISH_DEF.find(c=>c.id===id);if(!cat||!cat.breedable||groups[id].filter(f=>f.stage==='adult').length<2)return;
     if(Math.random()<0.08&&S.fish.length<getTankCap()){
       const name=NAMES[Math.floor(Math.random()*NAMES.length)];
-      S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});
-      S.totalBred=(S.totalBred||0)+1;
-      showZenToast('🥚 New Life','A baby '+cat.name+' ('+name+') appeared!');
+      const bv=rollBreedVariant();S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid,variant:bv});
+      S.totalBred=(S.totalBred||0)+1;discoverVariant(id,bv);
+      if(bv!=='normal')showZenToast('✨ Mutation!','A '+bv+' '+cat.name+' was born!');else showZenToast('🥚 New Life','A baby '+cat.name+' ('+name+') appeared!');
       addXP(10);
       discoverSpecies(id);
     }
@@ -2646,6 +2772,40 @@ function showZenToast(title,msg){
   setTimeout(()=>t.classList.remove('show'),3500);
 }
 
+// Color variant utilities
+function lightenColor(hex,amt){
+  let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  r=Math.min(255,r+amt);g=Math.min(255,g+amt);b=Math.min(255,b+amt);
+  return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+function darkenColor(hex,amt){return lightenColor(hex,-amt);}
+function tintColor(hex,tint,strength){
+  if(!hex||hex.length<7)return hex;
+  let r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+  let tr=parseInt(tint.slice(1,3),16),tg=parseInt(tint.slice(3,5),16),tb=parseInt(tint.slice(5,7),16);
+  r=Math.round(r*(1-strength)+tr*strength);g=Math.round(g*(1-strength)+tg*strength);b=Math.round(b*(1-strength)+tb*strength);
+  return '#'+[r,g,b].map(v=>Math.min(255,Math.max(0,v)).toString(16).padStart(2,'0')).join('');
+}
+
+// Variant system: assign random variant on creation
+const VARIANT_POOL=['normal','normal','normal','normal','normal','normal','normal','pale','pale','dark','dark','golden','glow'];
+function rollVariant(){
+  const r=Math.random();
+  if(r<0.70)return'normal';
+  if(r<0.90)return'pale';
+  if(r<0.97)return'dark';
+  if(r<0.995)return'golden';
+  return'glow';
+}
+function rollBreedVariant(){
+  const r=Math.random();
+  if(r<0.60)return'normal';
+  if(r<0.80)return'pale';
+  if(r<0.92)return'dark';
+  if(r<0.98)return'golden';
+  return'glow';
+}
+
 function getWaterState(){
   const w=avgW();
   if(w>75)return'clear';
@@ -2668,7 +2828,8 @@ function updateWaterMood(){
     msg=msgs[Math.floor(S.gameTime/100)%msgs.length];
   }else if(ws==='natural'){msg='🌊 The water has a natural feel';
   }else{msg='💤 The tank feels a bit quiet today';}
-  el.textContent=msg;
+  const phaseLbl=getTankPhaseLabel();
+  el.textContent=msg+(phaseLbl?' · '+phaseLbl:'');
 }
 
 function discoverSpecies(id){
@@ -2678,39 +2839,157 @@ function discoverSpecies(id){
     updateCollectionBadge();
   }
 }
+function discoverVariant(speciesId,variant){
+  if(!S.discoveredVariants)S.discoveredVariants=[];
+  const key=speciesId+'_'+variant;
+  if(!S.discoveredVariants.includes(key)){
+    S.discoveredVariants.push(key);sv();
+    updateCollectionBadge();
+    if(variant!=='normal')showZenToast('📖 New Variant!','Discovered: '+variant+' '+speciesId);
+  }
+}
 
 function updateCollectionBadge(){
   const el=document.getElementById('col-badge');if(!el)return;
-  const total=(S.discoveredSpecies||[]).length;
-  el.textContent='📖 '+total;
+  const species=(S.discoveredSpecies||[]).length;
+  const variants=(S.discoveredVariants||[]).length;
+  el.textContent='📖 '+species+'sp '+variants+'v';
 }
 
-function triggerZenEvent(){
-  if(!S.fish.length)return;
-  const r=Math.random();
-  if(r<0.50){
-    // Natural event - pure visual/message
-    const msgs=['Fish are swimming in sync for a moment','A gentle current ripples through the tank','Bubbles dance upward in a spiral','Light shifts across the water surface'];
-    showZenToast('🌊 Moment',msgs[Math.floor(Math.random()*msgs.length)]);
-  }else if(r<0.80){
-    // Eco event
-    const msgs=['Plants seem a bit taller today','The ecosystem feels balanced'];
-    S.plantAge+=(Math.random()*2);
-    showZenToast('🌿 Growth',msgs[Math.floor(Math.random()*msgs.length)]);
-  }else if(r<0.95){
-    // Reward event
-    const amt=5+Math.floor(Math.random()*15);
-    coin(amt);
-    showZenToast('✨ Found','Discovered '+amt+' coins among the pebbles');
+// ── TANK EVOLUTION SYSTEM (#4) ──
+function getTankPhase(){
+  const d=S.day||1;const fc=S.fish.length;
+  if(d>=60||fc>=20)return 5;// dreamlike
+  if(d>=30||fc>=15)return 4;// mature
+  if(d>=14||fc>=10)return 3;// stable
+  if(d>=7||fc>=5)return 2;// enriched
+  return 1;// initial
+}
+function getTankPhaseLabel(){
+  const p=getTankPhase();
+  return['','🌱 Starting','🌿 Enriched','🌊 Stable','✨ Mature','💫 Dreamlike'][p];
+}
+
+// ── VISITOR FISH SYSTEM (#1) ──
+let visitorFish=null;let visitorTimer=0;
+function maybeSpawnVisitor(){
+  if(visitorFish||!S.fish.length)return;
+  let chance=0.03;
+  if((S.daysWithoutVisitor||0)>5)chance=0.10;
+  if(Math.random()<chance){
+    const allDefs=[...FISH_DEF,...CREATURES_DEF];
+    const pick=allDefs[Math.floor(Math.random()*allDefs.length)];
+    visitorFish={id:pick.id,name:'Visitor',variant:Math.random()<0.5?'golden':'glow',isCreature:!!pick.benthic,timer:600+Math.floor(Math.random()*600)};
+    visitorTimer=visitorFish.timer;
+    S.daysWithoutVisitor=0;
+    showZenToast('🌟 Rare Visitor!','A mysterious '+pick.name+' is passing through...');
   }else{
-    // Rare event!
-    S.rarePityCounter=0;
-    const rareTypes=['A shimmer of unusual color flashes by','A mysterious shadow passes through','The water glows for just a moment'];
-    showZenToast('⭐ Rare Moment',rareTypes[Math.floor(Math.random()*rareTypes.length)]);
-    // Give bonus
-    coin(25);addXP(15);
+    S.daysWithoutVisitor=(S.daysWithoutVisitor||0)+1;
   }
 }
+
+// ── FISH MEMORY SYSTEM (#7) ──
+function getFishMemory(){
+  if(!S.fish.length)return null;
+  const oldest=S.fish.reduce((a,b)=>a.age>b.age?a:b);
+  const mostBred=S.fish.reduce((a,b)=>{const ab=S.fish.filter(f=>f.id===a.id).length;const bb=S.fish.filter(f=>f.id===b.id).length;return ab>bb?a:b;});
+  return{oldest,mostBred};
+}
+
+// ── PITY / GUARANTEED RARE (#11) ──
+function getRareChance(){
+  const pity=S.rarePityCounter||0;
+  if(pity>=5)return 0.15;
+  return 0.05;
+}
+
+// ── TRIGGER ZEN EVENTS (with visual effects #12,#13) ──
+let zenVisualEvent=null;
+function triggerZenEvent(){
+  if(!S.fish.length)return;
+  S.rarePityCounter=(S.rarePityCounter||0)+1;
+  const rareChance=getRareChance();
+  const r=Math.random();
+  if(r<0.45){
+    // Natural event with VISUAL effect
+    const type=Math.floor(Math.random()*5);
+    if(type===0){
+      zenVisualEvent={type:'schoolSync',timer:90};
+      showZenToast('🌊 Moment','Fish are swimming in sync...');
+    }else if(type===1){
+      zenVisualEvent={type:'lightShift',timer:120};
+      showZenToast('☀️ Light','Sunlight shifts across the water');
+    }else if(type===2){
+      zenVisualEvent={type:'bubbleBurst',timer:60};
+      showZenToast('🫧 Bubbles','A burst of bubbles rises up');
+    }else if(type===3){
+      showZenToast('🌊 Peace','A gentle current ripples through');
+    }else{
+      zenVisualEvent={type:'fishShowcase',timer:100,uid:fishAnim.length?fishAnim[Math.floor(Math.random()*fishAnim.length)].uid:null};
+      showZenToast('🐟 Spotlight','A fish pauses to say hello');
+    }
+  }else if(r<0.75){
+    // Eco event with actual effect
+    const eType=Math.floor(Math.random()*4);
+    if(eType===0){
+      S.plantAge+=(Math.random()*3);
+      showZenToast('🌿 Growth','Plants grew a little taller');
+    }else if(eType===1&&S.fish.length>=2){
+      // Bond two fish
+      const a=S.fish[Math.floor(Math.random()*S.fish.length)];
+      const b=S.fish.find(f=>f.uid!==a.uid);
+      if(b){
+        a.bondUid=b.uid;b.bondUid=a.uid;
+        showZenToast('💕 Bond',a.name+' and '+b.name+' became friends');
+      }
+    }else if(eType===2){
+      showZenToast('🌸 Bloom','A plant is starting to flower');
+      S.plantAge+=2;
+    }else{
+      const grower=S.fish.find(f=>f.stage==='baby');
+      if(grower){grower.age=Math.max(grower.age,9);showZenToast('📏 Growing',grower.name+' is getting bigger!');}
+      else showZenToast('🌿 Balance','The ecosystem feels harmonious');
+    }
+  }else if(r<(0.75+(1-0.75-rareChance))){
+    // Reward event
+    const amt=5+Math.floor(Math.random()*20);
+    coin(amt);
+    showZenToast('✨ Sparkle','Found '+amt+' coins among the pebbles');
+  }else{
+    // RARE event!
+    S.rarePityCounter=0;
+    const rType=Math.floor(Math.random()*4);
+    if(rType===0&&S.fish.length<getTankCap()){
+      // Spawn a mutant fish
+      const base=FISH_DEF[Math.floor(Math.random()*FISH_DEF.length)];
+      const name=NAMES[Math.floor(Math.random()*NAMES.length)];
+      const mv=Math.random()<0.5?'golden':'glow';
+      S.fish.push({id:base.id,name,health:100,hunger:100,age:0,stage:'adult',diseased:false,disease:null,uid:++S.uid,variant:mv});
+      discoverSpecies(base.id);discoverVariant(base.id,mv);
+      showZenToast('⭐ Rare Fish!','A '+mv+' '+base.name+' appeared!');
+    }else if(rType===1){
+      maybeSpawnVisitor();
+      if(!visitorFish){coin(30);showZenToast('⭐ Lucky','Found 30 coins!');}
+    }else{
+      zenVisualEvent={type:'glow',timer:150};
+      coin(25);addXP(15);
+      showZenToast('💫 Magic Moment','The water shimmers with light');
+    }
+  }
+}
+
+// ── FISH FOLLOW FINGER (#5) ──
+let followTarget=null;
+document.addEventListener('touchmove',function(e){
+  if(!followTarget)return;
+  const canvas=document.getElementById('TC');if(!canvas)return;
+  const rect=canvas.getBoundingClientRect();
+  const touch=e.touches[0];
+  followTarget.tx=(touch.clientX-rect.left)/rect.width*100;
+  followTarget.ty=(touch.clientY-rect.top)/rect.height*100;
+},{passive:true});
+document.addEventListener('touchend',function(){followTarget=null;});
+document.addEventListener('mouseup',function(){followTarget=null;});
 
 function processOffline(){
   if(!S.lastLoginTime)return;
@@ -2755,8 +3034,8 @@ function processOffline(){
           if(breedable.length>=2){
             const parent=breedable[Math.floor(Math.random()*breedable.length)];
             const name=NAMES[Math.floor(Math.random()*NAMES.length)];
-            S.fish.push({id:parent.id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});
-            S.totalBred=(S.totalBred||0)+1;
+            const obv=rollBreedVariant();S.fish.push({id:parent.id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid,variant:obv});
+            S.totalBred=(S.totalBred||0)+1;discoverVariant(parent.id,obv);
             summary.push('A baby fish was born: '+name+'!');
             discoverSpecies(parent.id);
           }
@@ -2773,6 +3052,98 @@ function processOffline(){
   S.lastLoginTime=now;
   sv();syncAnim();renderFishList();updateWaterMood();updateCollectionBadge();
 }
+
+// ── CODEX / COLLECTION UI (#3) ──
+function renderCodex(){
+  const grid=document.getElementById('codex-grid');if(!grid)return;
+  const allDefs=[...FISH_DEF,...CREATURES_DEF];
+  const disc=S.discoveredSpecies||[];
+  const discV=S.discoveredVariants||[];
+  const variants=['normal','pale','dark','golden','glow'];
+  const totalPossible=allDefs.length*variants.length;
+  document.getElementById('codex-progress').textContent='Discovered: '+disc.length+'/'+allDefs.length+' species · '+discV.length+'/'+totalPossible+' variants';
+  grid.innerHTML='';
+  allDefs.forEach(def=>{
+    const found=disc.includes(def.id);
+    const div=document.createElement('div');
+    div.className='item';
+    div.style.cssText='padding:6px;cursor:pointer;'+(found?'':'opacity:0.5;filter:grayscale(1);');
+    if(found){
+      const cvs=def.benthic?makeCreatureCanvas(def.id,28):makeFishCanvas(def.id,28,'adult');
+      div.appendChild(cvs);
+    }else{
+      const placeholder=document.createElement('div');
+      placeholder.style.cssText='width:28px;height:28px;margin:0 auto 3px;background:#ffffff08;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#ffffff22;';
+      placeholder.textContent='?';
+      div.appendChild(placeholder);
+    }
+    const name=document.createElement('div');
+    name.className='iname';name.style.fontSize='10px';
+    name.textContent=found?def.name:'???';
+    div.appendChild(name);
+    // Variant dots
+    const dots=document.createElement('div');dots.style.cssText='display:flex;gap:2px;justify-content:center;margin-top:2px;';
+    variants.forEach(v=>{
+      const dot=document.createElement('span');
+      const key=def.id+'_'+v;
+      const has=discV.includes(key);
+      dot.style.cssText='width:6px;height:6px;border-radius:50%;'+(has?'background:'+{normal:'#4ade80',pale:'#B3E5FC',dark:'#5C6BC0',golden:'#FFD700',glow:'#00E5FF'}[v]+';':'background:#ffffff15;');
+      dot.title=v;
+      dots.appendChild(dot);
+    });
+    div.appendChild(dots);
+    grid.appendChild(div);
+  });
+}
+
+// ── WEATHER / SCENE VARIATION (#8) ──
+function getWeatherEffect(){
+  const day=S.day||1;
+  if(day%17===0)return'rain';
+  if(day%23===0)return'specialLight';
+  return'none';
+}
+
+// ── INDIVIDUAL PERSONALITY TAG (#6) ──
+const PERSONALITY_TAGS=['timid','curious','lazy','active','loner','social'];
+function getIndividualPersonality(f){
+  if(f.personalityTag)return f.personalityTag;
+  f.personalityTag=PERSONALITY_TAGS[f.uid%PERSONALITY_TAGS.length];
+  return f.personalityTag;
+}
+
+// ── HIDDEN CONDITIONS FOR VARIANTS (#9) ──
+function checkHiddenConditions(){
+  const hour=Math.floor((S.gameTime%1440)/60);
+  const isNight=hour>=21||hour<6;
+  // Night: dark variants more likely (handled in rollVariant context)
+  // Many fish: schooling variants
+  return{isNight,crowded:S.fish.length>=10};
+}
+
+// ── CONTENT RELEASE SCHEDULE (#17) ──
+function isSpeciesUnlocked(def){
+  const day=S.day||1;
+  if(def.rarity==='common')return true;
+  if(def.rarity==='uncommon')return day>=3;
+  if(def.rarity==='rare')return day>=10;
+  if(def.rarity==='super_rare')return day>=20;
+  return true;
+}
+
+// ── PERIODIC ZEN TICK (every ~30 sec in-game = ~75 real seconds) ──
+let zenTickCounter=0;
+function zenTick(){
+  zenTickCounter++;
+  // Every 5 ticks (~6 min), chance of micro-event
+  if(zenTickCounter%5===0&&S.fish.length>0&&Math.random()<0.3){
+    const micro=['A fish glances your way','Tiny bubbles drift past','The light flickers gently','A plant sways in the current'];
+    updateWaterMood();// refresh mood text
+  }
+  // Check visitor
+  if(zenTickCounter%20===0)maybeSpawnVisitor();
+}
+function scheduleZenTick(){zenTick();setTimeout(scheduleZenTick,45000+Math.random()*60000);}setTimeout(scheduleZenTick,30000);// randomized interval
 
 // Run offline processing on load
 setTimeout(processOffline,200);
