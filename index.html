@@ -138,6 +138,7 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
     <button class="tab" data-tab="creatures">Creatures</button>
     <button class="tab" data-tab="plants">Plants</button>
     <button class="tab" data-tab="deco">Decor</button>
+    <button class="tab" data-tab="backdrops">Backdrop</button>
     <button class="tab" data-tab="manage">My Tank</button>
     <button class="tab" data-tab="codex">Codex</button>
     <button class="tab" data-tab="achievements">Goals</button>
@@ -152,6 +153,7 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
   <div class="sc" id="s-creatures"><div class="stitle">Aquatic Creatures</div><div class="refresh-note" id="creature-note"></div><div id="a-creatures"></div><div class="grid" id="creature-g"></div></div>
   <div class="sc" id="s-plants"><div class="stitle">Plant Shop</div><div class="refresh-note" id="plant-note"></div><div id="a-plants"></div><div class="grid" id="plant-g"></div></div>
   <div class="sc" id="s-deco"><div class="stitle">Decorations</div><div class="refresh-note" id="deco-note"></div><div id="a-deco"></div><div class="grid" id="deco-g"></div></div>
+  <div class="sc" id="s-backdrops"><div class="stitle">Tank Backdrops</div><div id="a-backdrops"></div><div style="font-size:11px;color:var(--muted);margin-bottom:6px;" id="backdrop-current"></div><div class="grid" id="backdrop-g"></div></div>
   <div class="sc" id="s-manage">
     <div class="stitle">My Tank</div><div id="a-manage"></div>
     <div class="panel" id="manage-actions" style="margin-bottom:6px;">
@@ -355,7 +357,6 @@ const EQ=[
   {id:'gravel',   name:'Gravel & Sand', icon:'◼',  price:30,  desc:'Natural sandy floor'},
   {id:'light',    name:'LED Light',     icon:'✦',  price:45,  desc:'Plants grow faster'},
   {id:'co2',      name:'CO₂ System',    icon:'🫧', price:90,  desc:'Boosts pH & plant growth'},
-  {id:'backdrop', name:'Backdrop',      icon:'🖼', price:60,  desc:'Decorative background'},
 ];
 
 // 10 aquatic creatures — all have yMin/yMax, moveStyle, feedLayer, social
@@ -370,6 +371,14 @@ const CREATURES_DEF=[
   {id:'starfish',  name:'Starfish',       price:90,  desc:'Slow star creeper',   temp:'22-26°C',rarity:'rare',      personality:'peaceful',    poop:0.05, yMin:73,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
   {id:'jellyfish', name:'Moon Jellyfish', price:200, desc:'Ethereal drifter',    temp:'20-26°C',rarity:'super_rare',personality:'majestic',    poop:0.05, yMin:5, yMax:55,social:'normal',    moveStyle:'hover',      feedLayer:'none'},
   {id:'octopus',   name:'Baby Octopus',   price:250, desc:'Genius shapeshifter', temp:'20-24°C',rarity:'super_rare',personality:'curious',     poop:0.15, yMin:40,yMax:74,social:'shy',       moveStyle:'idle_burst', feedLayer:'mid'},
+];
+
+const BACKDROP_DEF=[
+  {id:'lake',       name:'Peaceful Lake',     price:40,  rarity:'common',     desc:'Warm green shallows with dappled sunlight'},
+  {id:'ocean',      name:'Open Ocean',        price:80,  rarity:'common',     desc:'Endless deep blue with subtle current'},
+  {id:'coral_reef', name:'Coral Reef',        price:150, rarity:'uncommon',   desc:'Vibrant reef colors shimmer in the light'},
+  {id:'deep_ocean', name:'Deep Abyss',        price:300, rarity:'rare',       desc:'Mysterious darkness with bioluminescence'},
+  {id:'enchanted',  name:'Enchanted Waters',  price:600, rarity:'super_rare', desc:'Magical aurora dances through the water'},
 ];
 
 const STEPS=[
@@ -780,19 +789,20 @@ function makeFishCanvas(id,size,stage){
    PLANT SPRITES
 ═══════════════════════════════════════════════════════════ */
 const PLANT_COLORS={
-  vallis:   {stem:'#2E7D32',leaf:['#43A047','#66BB6A','#81C784'],shape:'tall'},
-  moss:     {stem:'#558B2F',leaf:['#7CB342','#9CCC65','#AED581'],shape:'bush'},
-  amazon:   {stem:'#1565C0',leaf:['#1976D2','#3949AB','#5C6BC0'],shape:'broad'},
-  cabomba:  {stem:'#00695C',leaf:['#00897B','#26A69A','#4DB6AC'],shape:'feather'},
-  crypt:    {stem:'#5D4037',leaf:['#6D4C41','#8D6E63','#A1887F'],shape:'rosette'},
-  hornwort: {stem:'#2E7D32',leaf:['#388E3C','#43A047','#66BB6A'],shape:'feather'},
-  anubias:  {stem:'#1B5E20',leaf:['#2E7D32','#388E3C','#1B5E20'],shape:'broad'},
-  lotus:    {stem:'#880E4F',leaf:['#AD1457','#C2185B','#E91E63'],shape:'broad'},
-  tiger:    {stem:'#6A1B9A',leaf:['#7B1FA2','#AD1457','#C2185B'],shape:'rosette'},
-  buce:     {stem:'#004D40',leaf:['#00695C','#00897B','#00BCD4'],shape:'broad'},
-  pogostemon:{stem:'#880E4F',leaf:['#AD1457','#E91E63','#F48FB1'],shape:'tall'},
-  utricularia:{stem:'#1B5E20',leaf:['#2E7D32','#8BC34A','#CDDC39'],shape:'bush'},
-  marimo:   {stem:'#2E7D32',leaf:['#388E3C','#4CAF50','#66BB6A'],shape:'ball'},
+  // Unified ocean-green palette: dark=#1b3a4b, mid=#2e6f95, light=#61a5c2, highlight=#a9d6e5
+  vallis:   {stem:'#1b4332',leaf:['#2d6a4f','#52b788','#74c69d'],shape:'tall'},
+  moss:     {stem:'#2d6a4f',leaf:['#40916c','#52b788','#74c69d'],shape:'bush'},
+  amazon:   {stem:'#1b3a4b',leaf:['#2e6f95','#457b9d','#61a5c2'],shape:'broad'},
+  cabomba:  {stem:'#1b4332',leaf:['#2d6a4f','#40916c','#74c69d'],shape:'feather'},
+  crypt:    {stem:'#3d405b',leaf:['#4a4e69','#6b705c','#89937a'],shape:'rosette'},
+  hornwort: {stem:'#1b4332',leaf:['#2d6a4f','#52b788','#95d5b2'],shape:'feather'},
+  anubias:  {stem:'#081c15',leaf:['#1b4332','#2d6a4f','#40916c'],shape:'broad'},
+  lotus:    {stem:'#5a3040',leaf:['#7b4060','#9d5080','#c27ba0'],shape:'broad'},
+  tiger:    {stem:'#4a3060',leaf:['#6a4080','#8b60a0','#b090c0'],shape:'rosette'},
+  buce:     {stem:'#1b3a4b',leaf:['#2e6f95','#457b9d','#a9d6e5'],shape:'broad'},
+  pogostemon:{stem:'#5a3040',leaf:['#7b4060','#c27ba0','#e0b0c8'],shape:'tall'},
+  utricularia:{stem:'#1b4332',leaf:['#2d6a4f','#74c69d','#b7e4c7'],shape:'bush'},
+  marimo:   {stem:'#1b4332',leaf:['#2d6a4f','#40916c','#52b788'],shape:'ball'},
 };
 
 function drawPlantCanvas(id,size){
@@ -1194,7 +1204,7 @@ let S={
 };
 
 function sv(){S.lastLoginTime=Date.now();try{localStorage.setItem('aq8',JSON.stringify(S));}catch(e){}}
-function ld(){try{const x=localStorage.getItem('aq8');if(x){Object.assign(S,JSON.parse(x));S.waterTested=true;}}catch(e){}}
+function ld(){try{const x=localStorage.getItem('aq8');if(x){Object.assign(S,JSON.parse(x));S.waterTested=true;if(S.owned&&S.owned.backdrop&&!S.activeBackdrop){S.activeBackdrop='ocean';if(!S.ownedBackdrops)S.ownedBackdrops=['ocean'];delete S.owned.backdrop;}}}catch(e){}}
 function coin(n){if(n>0)S.totalEarned=(S.totalEarned||0)+n;if(n<0)S.totalSpent=(S.totalSpent||0)+Math.abs(n);S.coins+=n;document.getElementById('CD').textContent='Coins: '+S.coins;if(n>0)coinFlyAnim('+'+n);sv();checkAch();}
 function addXP(n){S.xp=(S.xp||0)+n;const need=S.level*100;if(S.xp>=need){S.xp-=need;S.level++;showAl('global','Level Up! Level '+S.level+'! +25 coins','ok');coin(25);}document.getElementById('LD').textContent='Lv. '+S.level;sv();}
 function coinFlyAnim(text){const el=document.createElement('div');el.className='coin-fly';el.textContent=text;const cd=document.getElementById('CD');const r=cd.getBoundingClientRect();el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top-5)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),1000);}
@@ -1306,6 +1316,7 @@ document.getElementById('tab-bar').addEventListener('click',function(e){
   if(name==='deco')renderDeco();
   if(name==='achievements')renderAchievements();
   if(name==='codex')renderCodex();
+  if(name==='backdrops')renderBackdrops();
 });
 
 document.getElementById('audio-btn').addEventListener('click',toggleAudio);
@@ -2092,7 +2103,7 @@ function drawPlant(ctx,p,t,W,H,baseY){
     return;
   }
   ctx.fillStyle=pc.stem;
-  for(let i=0;i<h;i+=sc){ctx.fillRect(Math.round(p.x+sw*(i/h))-sc,base-i,sc*2,sc);}
+  for(let i=0;i<h;i+=sc){ctx.fillRect(Math.round(p.x+sw*(i/h))-sc-1,base-i,sc*3,sc);}
   if(pc.shape==='feather'){
     for(let i=sc*2;i<h;i+=sc*5){
       const wx=sw*(i/h);
@@ -2226,12 +2237,148 @@ function drawTank(){
     const isNight=hour<6||hour>=20;const isDawn=hour>=5&&hour<8;const isDusk=hour>=18&&hour<21;
     const nightAlpha=isNight?0.55:isDawn||isDusk?0.25:0;
 
-    [[0,65,'#0d1b4b'],[65,125,'#0d2258'],[125,185,'#0a2d6e'],[185,245,'#0a3580'],[245,300,'#0d3d8f'],[300,336,'#0a4499']].forEach(([y1,y2,c])=>{ctx.fillStyle=c;ctx.fillRect(0,y1,W,y2-y1);});
-    // Backdrop tint overlay
-    if(S.owned.backdrop){
-      const backdropThemes=['#1a0a3a','#003320','#2a1500','#001a2a'];
-      const bi=(S.backdropIdx||0)%backdropThemes.length;
-      ctx.save();ctx.globalAlpha=0.18;ctx.fillStyle=backdropThemes[bi];ctx.fillRect(0,0,W,H);ctx.restore();
+    // ── SMOOTH WATER GRADIENT — covers full canvas as base layer ──
+    const waterGrad=ctx.createLinearGradient(0,0,0,H);
+    waterGrad.addColorStop(0,'#081830');
+    waterGrad.addColorStop(0.15,'#0c2248');
+    waterGrad.addColorStop(0.35,'#0e2d60');
+    waterGrad.addColorStop(0.55,'#103878');
+    waterGrad.addColorStop(0.72,'#124090');
+    waterGrad.addColorStop(1,'#0e3570');
+    ctx.fillStyle=waterGrad;ctx.fillRect(0,0,W,H);
+    // ── WATER SURFACE SHIMMER ──
+    ctx.save();ctx.globalAlpha=0.15;
+    ctx.strokeStyle='#a9d6e5';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(0,3);
+    for(let i=0;i<W;i+=8){ctx.lineTo(i,3+Math.sin(t*1.2+i*0.02)*1.5);}
+    ctx.stroke();ctx.restore();
+
+    // ── BACKDROP THEME RENDERING — replaces entire water color ──
+    const activeBackdrop=S.activeBackdrop||'none';
+    if(activeBackdrop!=='none'){
+      // Clear and repaint base with theme-specific full gradient
+      ctx.clearRect(0,0,W,H);
+      if(activeBackdrop==='lake'){
+        // LAKE: warm green-brown shallow water, visible sunbeams
+        const lg=ctx.createLinearGradient(0,0,0,H);
+        lg.addColorStop(0,'#1a3020');lg.addColorStop(0.3,'#284830');lg.addColorStop(0.6,'#305838');lg.addColorStop(1,'#283820');
+        ctx.fillStyle=lg;ctx.fillRect(0,0,W,H);
+        // Strong dappled sunlight columns
+        ctx.save();ctx.globalAlpha=0.12;ctx.fillStyle='#c0e890';
+        for(let i=0;i<6;i++){
+          const sx=W*(0.08+i*0.16)+Math.sin(t*0.12+i*1.1)*18;
+          ctx.beginPath();ctx.moveTo(sx-8,0);ctx.lineTo(sx+8,0);ctx.lineTo(sx+35,H*0.7);ctx.lineTo(sx-35,H*0.7);ctx.closePath();ctx.fill();
+        }
+        ctx.restore();
+        // Floating pollen / dust
+        ctx.save();ctx.globalAlpha=0.18;ctx.fillStyle='#e8e0b0';
+        for(let i=0;i<12;i++){
+          const px=(i*89+t*4+Math.sin(t*0.15+i)*20)%W;
+          const py=(i*53+t*6+Math.sin(t*0.1+i*2)*15)%(H*0.7);
+          ctx.fillRect(Math.round(px),Math.round(py),2,2);
+        }
+        ctx.restore();
+      } else if(activeBackdrop==='ocean'){
+        // OCEAN: deep rich blue, strong depth, volumetric light shafts
+        const og=ctx.createLinearGradient(0,0,0,H);
+        og.addColorStop(0,'#041028');og.addColorStop(0.3,'#082050');og.addColorStop(0.6,'#0a2868');og.addColorStop(1,'#061840');
+        ctx.fillStyle=og;ctx.fillRect(0,0,W,H);
+        // Bold light shafts from surface
+        ctx.save();ctx.globalAlpha=0.07;ctx.fillStyle='#6090d0';
+        for(let i=0;i<4;i++){
+          const sx=W*(0.15+i*0.22)+Math.sin(t*0.08+i*2)*25;
+          ctx.beginPath();ctx.moveTo(sx-12,0);ctx.lineTo(sx+12,0);ctx.lineTo(sx+60,H);ctx.lineTo(sx-60,H);ctx.closePath();ctx.fill();
+        }
+        ctx.restore();
+        // Slow horizontal current lines
+        ctx.save();ctx.globalAlpha=0.06;ctx.strokeStyle='#4080b0';ctx.lineWidth=1;
+        for(let i=0;i<8;i++){
+          const sy=H*0.08+i*H*0.1+Math.sin(t*0.06+i)*8;
+          ctx.beginPath();ctx.moveTo(0,sy);
+          for(let x=0;x<W;x+=20){ctx.lineTo(x,sy+Math.sin(t*0.1+x*0.005+i)*4);}
+          ctx.stroke();
+        }
+        ctx.restore();
+      } else if(activeBackdrop==='coral_reef'){
+        // CORAL REEF: bright warm turquoise, colorful bottom glow, vibrant
+        const rg=ctx.createLinearGradient(0,0,0,H);
+        rg.addColorStop(0,'#0a2830');rg.addColorStop(0.3,'#104050');rg.addColorStop(0.6,'#185860');rg.addColorStop(1,'#104838');
+        ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
+        // Bright coral glow patches from bottom — LARGE and visible
+        const cPairs=[['#ff5070',0.1],['#ff9030',0.32],['#50e0a0',0.55],['#d060ff',0.78],['#ffcc40',0.92]];
+        ctx.save();
+        cPairs.forEach(([col,xr])=>{
+          const gx=W*xr+Math.sin(t*0.1+xr*10)*12;
+          ctx.globalAlpha=0.10;
+          const g=ctx.createRadialGradient(gx,H*0.73,4,gx,H*0.73,55);
+          g.addColorStop(0,col);g.addColorStop(1,'transparent');
+          ctx.fillStyle=g;ctx.fillRect(gx-60,H*0.5,120,H*0.4);
+        });
+        ctx.restore();
+        // Warm light from above
+        ctx.save();ctx.globalAlpha=0.05;ctx.fillStyle='#ffe0a0';
+        ctx.fillRect(0,0,W,H*0.3);ctx.restore();
+      } else if(activeBackdrop==='deep_ocean'){
+        // DEEP ABYSS: almost black, bioluminescence is the ONLY light
+        ctx.fillStyle='#020508';ctx.fillRect(0,0,W,H);
+        // Faint deep blue glow from above
+        ctx.save();ctx.globalAlpha=0.15;
+        const dg=ctx.createLinearGradient(0,0,0,H*0.4);
+        dg.addColorStop(0,'#081828');dg.addColorStop(1,'transparent');
+        ctx.fillStyle=dg;ctx.fillRect(0,0,W,H*0.4);ctx.restore();
+        // Large bioluminescent particles with BIG halos
+        ctx.save();
+        for(let i=0;i<20;i++){
+          const bx=(i*73+Math.sin(t*0.06+i*1.1)*40)%W;
+          const by=(i*41+t*2.5+Math.cos(t*0.04+i*0.7)*25)%(H*0.72);
+          const br=1.5+Math.sin(t*0.4+i*0.6)*1;
+          const bColor=['#40e0ff','#30ff90','#d070ff','#ffff50','#ff70a0'][i%5];
+          // Large halo first
+          ctx.globalAlpha=0.04;ctx.fillStyle=bColor;
+          ctx.beginPath();ctx.arc(bx,by,br*12,0,Math.PI*2);ctx.fill();
+          // Medium glow
+          ctx.globalAlpha=0.12;
+          ctx.beginPath();ctx.arc(bx,by,br*4,0,Math.PI*2);ctx.fill();
+          // Core
+          ctx.globalAlpha=0.7;
+          ctx.beginPath();ctx.arc(bx,by,br,0,Math.PI*2);ctx.fill();
+        }
+        ctx.restore();
+      } else if(activeBackdrop==='enchanted'){
+        // ENCHANTED: shifting aurora with color bands flowing across
+        const phase=t*0.06;
+        const eg=ctx.createLinearGradient(0,0,0,H);
+        eg.addColorStop(0,'#0a1030');eg.addColorStop(0.5,'#101838');eg.addColorStop(1,'#080c20');
+        ctx.fillStyle=eg;ctx.fillRect(0,0,W,H);
+        // Aurora bands — wide flowing color ribbons
+        ctx.save();
+        for(let b=0;b<4;b++){
+          const hue=180+b*45+Math.sin(phase+b)*30;
+          const ay=H*(0.1+b*0.15)+Math.sin(t*0.05+b*1.5)*20;
+          ctx.globalAlpha=0.10+Math.sin(t*0.08+b)*0.04;
+          const ag=ctx.createLinearGradient(0,ay-25,0,ay+25);
+          ag.addColorStop(0,'transparent');
+          ag.addColorStop(0.3,'hsl('+hue+',65%,45%)');
+          ag.addColorStop(0.7,'hsl('+((hue+30)%360)+',55%,40%)');
+          ag.addColorStop(1,'transparent');
+          ctx.fillStyle=ag;
+          // Wavy band shape
+          ctx.beginPath();ctx.moveTo(0,ay-20);
+          for(let x=0;x<=W;x+=10){ctx.lineTo(x,ay-20+Math.sin(t*0.04+x*0.008+b)*12);}
+          for(let x=W;x>=0;x-=10){ctx.lineTo(x,ay+20+Math.sin(t*0.04+x*0.008+b+1)*12);}
+          ctx.closePath();ctx.fill();
+        }
+        // Sparkle particles
+        ctx.globalAlpha=0.35;
+        for(let i=0;i<25;i++){
+          const sx=(i*67+Math.sin(t*0.07+i)*25)%W;
+          const sy=(i*43+Math.cos(t*0.05+i*1.3)*20)%(H*0.7);
+          const sr=0.8+Math.sin(t*0.8+i*2)*0.6;
+          ctx.fillStyle='hsl('+(200+i*15)%360+',80%,80%)';
+          ctx.beginPath();ctx.arc(sx,sy,sr,0,Math.PI*2);ctx.fill();
+        }
+        ctx.restore();
+      }
     }
 
     if(S.owned.light&&!isNight){
@@ -2240,35 +2387,53 @@ function drawTank(){
       ctx.restore();
     }
 
-    ctx.save();ctx.globalAlpha=0.12;
-    for(let i=0;i<18;i++){const cx=W*(0.02+i*0.06)+Math.sin(t*0.5+i*1.1)*8;const cy=H*0.65+Math.cos(t*0.4+i)*8;ctx.fillStyle='#81D4FA';ctx.fillRect(Math.round(cx),Math.round(cy),4,2);}
-    ctx.restore();
-
     const flY=Math.round(H*0.75);
 
+    // ── CAUSTIC LIGHT PATTERNS on sand ──
+    ctx.save();ctx.globalAlpha=0.06;
+    for(let i=0;i<12;i++){
+      const cx=W*(0.05+i*0.08)+Math.sin(t*0.3+i*1.7)*12;
+      const cy=flY+10+Math.cos(t*0.25+i*0.9)*8;
+      ctx.fillStyle='#a9d6e5';
+      ctx.beginPath();ctx.ellipse(Math.round(cx),Math.round(cy),8+Math.sin(t*0.4+i)*3,3,Math.sin(t*0.1+i)*0.3,0,Math.PI*2);ctx.fill();
+    }
+    ctx.restore();
+    // ── WATER COLUMN PARTICLES (subtle floating specs) ──
+    ctx.save();ctx.globalAlpha=0.08;
+    for(let i=0;i<10;i++){
+      const px=Math.round((i*97+Math.sin(t*0.2+i)*20)%W);
+      const py=Math.round(20+((i*61+t*8)%(flY-40)));
+      ctx.fillStyle='#e0f0ff';ctx.fillRect(px,py,2,2);
+    }
+    ctx.restore();
+
     if(S.owned.gravel){
-      // 1. Fill entire bottom region with solid sand color
-      ctx.fillStyle='#BCAAA4';ctx.fillRect(0,flY,W,H-flY);
-      // 2. Gradient overlay at waterline edge — blends water color into sand seamlessly
-      const grad=ctx.createLinearGradient(0,flY,0,flY+22);
-      grad.addColorStop(0,'#0a4499');
-      grad.addColorStop(1,'rgba(188,170,164,0)');
-      ctx.fillStyle=grad;ctx.fillRect(0,flY,W,22);
-      // 3. Pebble details
-      [.04,.11,.19,.27,.35,.44,.53,.61,.69,.77,.85,.92].forEach((rx,i)=>{
-        ctx.fillStyle=['#8D6E63','#795548','#A1887F','#6D4C41','#BCAAA4','#795548','#A1887F','#8D6E63','#795548','#A1887F','#8D6E63','#5D4037'][i];
-        ctx.fillRect(Math.round(rx*W)-4,flY+8,9,5);
-        ctx.fillRect(Math.round(rx*W)-6,flY+14,7,4);
-        ctx.fillStyle='#D7CCC8';
-        ctx.fillRect(Math.round(rx*W)-2,flY+10,4,2);
-      });
+      // 1. Sand with long gradient blend into water above
+      const sandGrad=ctx.createLinearGradient(0,flY-15,0,H);
+      sandGrad.addColorStop(0,'rgba(140,120,100,0)');// transparent at top — water shows through
+      sandGrad.addColorStop(0.12,'rgba(140,120,100,0.4)');// soft blend zone
+      sandGrad.addColorStop(0.25,'#a89080');// full sand
+      sandGrad.addColorStop(0.6,'#8d7b6e');
+      sandGrad.addColorStop(1,'#6d5d52');
+      ctx.fillStyle=sandGrad;ctx.fillRect(0,flY-15,W,H-flY+15);
+      // 3. Subtle pebble texture (fewer, more natural)
+      const pebCols=['#7d6d62','#6d5d52','#9d8d80','#5d4d42','#8d7d70'];
+      for(let i=0;i<16;i++){
+        const px=Math.round((i*0.065+0.02)*W+Math.sin(i*3.7)*6);
+        ctx.fillStyle=pebCols[i%pebCols.length];
+        ctx.fillRect(px,flY+6+Math.floor(i%3)*6,6+i%3*2,4);
+        // highlight on top of pebble
+        ctx.fillStyle='#b0a090';ctx.globalAlpha=0.4;
+        ctx.fillRect(px+1,flY+6+Math.floor(i%3)*6,3,2);ctx.globalAlpha=1;
+      }
     } else {
-      // Dark seafloor with same gradient blend at waterline
-      ctx.fillStyle='#37474F';ctx.fillRect(0,flY,W,H-flY);
-      const grad2=ctx.createLinearGradient(0,flY,0,flY+20);
-      grad2.addColorStop(0,'#0a4499');
-      grad2.addColorStop(1,'rgba(55,71,79,0)');
-      ctx.fillStyle=grad2;ctx.fillRect(0,flY,W,20);
+      // Dark seafloor blending from water
+      const floorGrad=ctx.createLinearGradient(0,flY-10,0,H);
+      floorGrad.addColorStop(0,'rgba(30,40,50,0)');
+      floorGrad.addColorStop(0.15,'rgba(30,40,50,0.5)');
+      floorGrad.addColorStop(0.3,'#2a3a45');
+      floorGrad.addColorStop(1,'#1a2a35');
+      ctx.fillStyle=floorGrad;ctx.fillRect(0,flY-10,W,H-flY+10);
     }
 
     // Unified back-to-front render: plants + decos sorted by depth
@@ -2289,13 +2454,13 @@ function drawTank(){
 
         if(item.type==='plant'){
           const p=item.data;
-          // root burial: sand pixels at base
+          // ── IMPROVED ROOT BURIAL: gradient fade into sand ──
           const px2=Math.round(p.x);
-          const burialCols=['#BCAAA4','#C8BDB8','#8D6E63'];
-          for(let i=-9;i<=9;i+=3){
-            ctx.fillStyle=burialCols[Math.abs(i/3)%3];
-            ctx.fillRect(px2+i,baseY,3,4+Math.abs(i)*0.3);
-          }
+          const rootGrad=ctx.createRadialGradient(px2,baseY+2,1,px2,baseY+2,14);
+          rootGrad.addColorStop(0,'rgba(109,93,82,0.7)');
+          rootGrad.addColorStop(1,'rgba(109,93,82,0)');
+          ctx.fillStyle=rootGrad;
+          ctx.fillRect(px2-14,baseY-2,28,10);
           drawPlant(ctx,p,t,W,H,baseY);
         } else {
           const d=item.data;
@@ -2305,20 +2470,32 @@ function drawTank(){
           const ox=cx-cfg.halfW*sc;
           const visualBaseY=baseY-(cfg.yMin||0)*sc;
           ctx.save();
-          const shadowR=cfg.halfW*sc*0.85;
-          ctx.globalAlpha=0.45;
-          const sg=ctx.createRadialGradient(cx,visualBaseY,1,cx,visualBaseY,shadowR);
-          sg.addColorStop(0,'rgba(0,0,0,0.7)');sg.addColorStop(1,'rgba(0,0,0,0)');
+          // ── IMPROVED SHADOW: wider, softer, more natural ──
+          const shadowR=cfg.halfW*sc*1.1;
+          ctx.globalAlpha=0.35;
+          const sg=ctx.createRadialGradient(cx,visualBaseY+2,2,cx,visualBaseY+2,shadowR);
+          sg.addColorStop(0,'rgba(8,16,32,0.6)');sg.addColorStop(0.6,'rgba(8,16,32,0.2)');sg.addColorStop(1,'rgba(8,16,32,0)');
           ctx.fillStyle=sg;
-          ctx.beginPath();ctx.ellipse(cx,visualBaseY,shadowR,4,0,0,Math.PI*2);ctx.fill();
+          ctx.beginPath();ctx.ellipse(cx,visualBaseY+2,shadowR,6,0,0,Math.PI*2);ctx.fill();
           ctx.globalAlpha=1;
+          // ── DRAW DECO with depth-based tint for unified look ──
           drawDecoSprite(ctx,d.id,ox,baseY,sc);
-          const burialW=cfg.halfW*2*sc;
-          const burialCols=['#BCAAA4','#C8BDB8','#D7CCC8','#8D6E63','#795548'];
-          for(let i=0;i<burialW;i+=sc){
-            ctx.fillStyle=burialCols[Math.floor(i/sc)%burialCols.length];
-            ctx.fillRect(ox+i,visualBaseY,sc,sc+Math.floor(i/sc)%2*2);
-          }
+          // ── SOFT DEPTH TINT: radial fade, no hard edges ──
+          const tintAlpha=0.06+depth*0.05;
+          const decoW=cfg.w*sc;const decoH=(cfg.h||16)*sc;
+          const tintG=ctx.createRadialGradient(cx,baseY-decoH/2,decoW*0.2,cx,baseY-decoH/2,decoW*1.2);
+          tintG.addColorStop(0,'rgba(10,53,128,'+tintAlpha+')');
+          tintG.addColorStop(1,'rgba(10,53,128,0)');
+          ctx.fillStyle=tintG;
+          ctx.fillRect(cx-decoW,baseY-decoH-sc,decoW*2,decoH+sc*2);
+          // ── GROUND CONTACT: soft sand mound around base ──
+          const moundW=cfg.halfW*2*sc;
+          const moundG=ctx.createRadialGradient(cx,visualBaseY+1,2,cx,visualBaseY+1,moundW*0.6);
+          moundG.addColorStop(0,'rgba(140,120,100,0.5)');
+          moundG.addColorStop(0.6,'rgba(140,120,100,0.2)');
+          moundG.addColorStop(1,'rgba(140,120,100,0)');
+          ctx.fillStyle=moundG;
+          ctx.beginPath();ctx.ellipse(cx,visualBaseY+2,moundW*0.6,5,0,0,Math.PI*2);ctx.fill();
           ctx.restore();
         }
       });
@@ -3051,6 +3228,115 @@ function processOffline(){
   
   S.lastLoginTime=now;
   sv();syncAnim();renderFishList();updateWaterMood();updateCollectionBadge();
+}
+
+// ── BACKDROP SHOP ──
+function renderBackdrops(){
+  const grid=document.getElementById('backdrop-g');if(!grid)return;
+  const cur=S.activeBackdrop||'none';
+  const owned=S.ownedBackdrops||[];
+  document.getElementById('backdrop-current').textContent=cur==='none'?'No backdrop active':'Active: '+BACKDROP_DEF.find(b=>b.id===cur)?.name;
+  grid.innerHTML='';
+  
+  // "None" option
+  const noneDiv=document.createElement('div');noneDiv.className='item';
+  noneDiv.style.cssText=cur==='none'?'border-color:var(--green);':'';
+  noneDiv.innerHTML='<div style="font-size:24px;margin:8px 0;">🌊</div>'
+    +'<div class="iname">Default</div><div class="idesc">Original water</div>'
+    +'<button data-bd="none" '+(cur==='none'?'disabled':'')+'>'+( cur==='none'?'Active':'Use')+'</button>';
+  grid.appendChild(noneDiv);
+  
+  BACKDROP_DEF.forEach(bd=>{
+    const has=owned.includes(bd.id);
+    const active=cur===bd.id;
+    const div=document.createElement('div');div.className='item';
+    if(active)div.style.borderColor='var(--green)';
+    const isR=bd.rarity==='rare';const isSR=bd.rarity==='super_rare';const isU=bd.rarity==='uncommon';
+    // Preview canvas
+    const pvs=document.createElement('canvas');pvs.width=80;pvs.height=45;
+    pvs.style.cssText='width:80px;height:45px;border-radius:4px;margin:0 auto 4px;display:block;';
+    const pctx=pvs.getContext('2d');
+    drawBackdropPreview(pctx,bd.id,80,45);
+    div.appendChild(pvs);
+    
+    div.innerHTML+=(isSR?'<div class="super-rare-tag">★★ LEGENDARY</div>':isR?'<div class="rare-tag">★ RARE</div>':isU?'<div class="rare-tag" style="color:#4FC3F7;background:#4FC3F722;">UNCOMMON</div>':'')
+      +'<div class="iname">'+bd.name+'</div>'
+      +'<div class="idesc">'+bd.desc+'</div>';
+    if(has){
+      div.innerHTML+='<button data-bd="'+bd.id+'" '+(active?'disabled':'')+'>'+( active?'✓ Active':'Use')+'</button>';
+    }else{
+      div.innerHTML+='<div class="iprice">'+bd.price+' coins</div>'
+        +'<button data-bdbuy="'+bd.id+'" '+(S.coins<bd.price?'disabled':'')+'>Buy</button>';
+    }
+    grid.appendChild(div);
+  });
+  
+  // Event: switch backdrop
+  grid.querySelectorAll('[data-bd]').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      S.activeBackdrop=this.dataset.bd==='none'?'none':this.dataset.bd;
+      sv();renderBackdrops();
+      showZenToast('🖼️ Backdrop','Switched to '+(S.activeBackdrop==='none'?'default':BACKDROP_DEF.find(b=>b.id===S.activeBackdrop)?.name));
+    });
+  });
+  // Event: buy backdrop
+  grid.querySelectorAll('[data-bdbuy]').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const id=this.dataset.bdbuy;
+      const bd=BACKDROP_DEF.find(b=>b.id===id);
+      if(!bd||S.coins<bd.price)return;
+      coin(-bd.price);
+      if(!S.ownedBackdrops)S.ownedBackdrops=[];
+      S.ownedBackdrops.push(id);
+      S.activeBackdrop=id;
+      addXP(15);sv();
+      showZenToast('🖼️ New Backdrop!','Unlocked: '+bd.name);
+      renderBackdrops();checkAch();
+    });
+  });
+}
+
+function drawBackdropPreview(ctx,id,w,h){
+  ctx.clearRect(0,0,w,h);
+  if(id==='lake'){
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#1a3020');g.addColorStop(0.6,'#305838');g.addColorStop(1,'#283820');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    ctx.globalAlpha=0.15;ctx.fillStyle='#c0e890';
+    for(let i=0;i<3;i++){ctx.beginPath();ctx.moveTo(w*0.15+i*w*0.25,0);ctx.lineTo(w*0.2+i*w*0.25+15,h);ctx.lineTo(w*0.1+i*w*0.25-15,h);ctx.closePath();ctx.fill();}
+    ctx.globalAlpha=0.25;ctx.fillStyle='#8d7b6e';ctx.fillRect(0,h*0.8,w,h*0.2);ctx.globalAlpha=1;
+  }else if(id==='ocean'){
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#041028');g.addColorStop(0.6,'#0a2868');g.addColorStop(1,'#061840');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    ctx.globalAlpha=0.1;ctx.fillStyle='#6090d0';
+    for(let i=0;i<2;i++){ctx.beginPath();ctx.moveTo(w*0.2+i*w*0.3,0);ctx.lineTo(w*0.3+i*w*0.3+20,h);ctx.lineTo(w*0.1+i*w*0.3-20,h);ctx.closePath();ctx.fill();}
+    ctx.globalAlpha=1;ctx.fillStyle='#4a3a30';ctx.fillRect(0,h*0.82,w,h*0.18);
+  }else if(id==='coral_reef'){
+    const g=ctx.createLinearGradient(0,0,0,h);
+    g.addColorStop(0,'#0a2830');g.addColorStop(1,'#104838');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+    ctx.fillStyle='#5a4a40';ctx.fillRect(0,h*0.78,w,h*0.22);
+    const cs=['#ff5070','#ff9030','#50e0a0','#d060ff'];
+    cs.forEach((col,i)=>{ctx.globalAlpha=0.2;ctx.fillStyle=col;ctx.beginPath();ctx.arc(w*0.15+i*w*0.23,h*0.73,5+i,0,Math.PI*2);ctx.fill();});
+    ctx.globalAlpha=1;
+  }else if(id==='deep_ocean'){
+    ctx.fillStyle='#020508';ctx.fillRect(0,0,w,h);
+    const dots=[['#40e0ff',0.2,0.3],['#30ff90',0.5,0.4],['#d070ff',0.7,0.25],['#ffff50',0.4,0.55],['#ff70a0',0.8,0.5]];
+    dots.forEach(([col,xr,yr])=>{ctx.globalAlpha=0.6;ctx.fillStyle=col;ctx.beginPath();ctx.arc(w*xr,h*yr,1.5,0,Math.PI*2);ctx.fill();
+      ctx.globalAlpha=0.06;ctx.beginPath();ctx.arc(w*xr,h*yr,10,0,Math.PI*2);ctx.fill();});
+    ctx.globalAlpha=1;ctx.fillStyle='#0a0a10';ctx.fillRect(0,h*0.82,w,h*0.18);
+  }else if(id==='enchanted'){
+    ctx.fillStyle='#0a1030';ctx.fillRect(0,0,w,h);
+    const hues=[180,230,300,340];
+    hues.forEach((hue,i)=>{ctx.globalAlpha=0.12;
+      const ag=ctx.createLinearGradient(0,h*0.1+i*h*0.16,0,h*0.2+i*h*0.16+12);
+      ag.addColorStop(0,'transparent');ag.addColorStop(0.5,'hsl('+hue+',65%,45%)');ag.addColorStop(1,'transparent');
+      ctx.fillStyle=ag;ctx.fillRect(0,h*0.1+i*h*0.16,w,18);});
+    ctx.globalAlpha=0.4;
+    for(let i=0;i<8;i++){ctx.fillStyle='hsl('+(200+i*20)+',80%,80%)';ctx.fillRect(w*(i*0.12+0.04),h*(0.1+i*0.08),1,1);}
+    ctx.globalAlpha=1;ctx.fillStyle='#15102a';ctx.fillRect(0,h*0.82,w,h*0.18);
+  }
 }
 
 // ── CODEX / COLLECTION UI (#3) ──
