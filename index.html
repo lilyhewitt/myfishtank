@@ -20,11 +20,11 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
 .top-bar{display:flex;align-items:center;justify-content:space-between;padding:0 8px;gap:4px;flex-shrink:0;}
 .top-bar-left{display:flex;align-items:center;gap:6px;}
 .top-bar-right{display:flex;align-items:center;gap:4px;}
-.tank-outer{border:2px solid #1a237e;border-radius:8px;overflow:hidden;position:relative;box-shadow:0 0 20px rgba(10,53,128,0.3);flex:1;min-height:0;}
+.tank-outer{border:2px solid #1a237e;border-radius:8px;overflow:hidden;position:relative;box-shadow:0 0 20px rgba(10,53,128,0.3);flex-shrink:0;}
 #TC{display:block;width:100%;height:100%;image-rendering:pixelated;cursor:pointer;}
 .status-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:4px 8px;font-size:13px;color:var(--muted);flex-shrink:0;min-height:28px;}
 .status-bar .water-mood{font-size:13px;color:var(--text);}
-.bottom-area{flex-shrink:0;max-height:38%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 6px 6px;}
+.bottom-area{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 6px 6px;}
 .tabs{display:flex;gap:3px;padding:4px 6px;flex-shrink:0;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;}
 .tabs::-webkit-scrollbar{display:none;}
 .tab{padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--muted);cursor:pointer;font-size:11px;font-family:var(--font);transition:all .2s;white-space:nowrap;flex-shrink:0;}
@@ -70,7 +70,7 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
 .fbtns{display:flex;flex-direction:column;gap:2px;}
 .fbtns button{font-size:9px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;background:#ffffff08;cursor:pointer;font-family:var(--font);color:var(--text);}
 .fbtns button:hover{background:var(--green);color:#fff;}
-.coins-display{font-family:var(--pfont);font-size:8px;color:var(--gold);background:#FFB30012;border:1px solid #FFB30028;padding:4px 8px;border-radius:6px;white-space:nowrap;}
+.shells-display{font-family:var(--pfont);font-size:8px;color:#a9d6e5;background:#a9d6e512;border:1px solid #a9d6e528;padding:4px 8px;border-radius:6px;white-space:nowrap;}
 .level-display{font-family:var(--pfont);font-size:8px;color:#CE93D8;background:#CE93D812;border:1px solid #CE93D828;padding:4px 8px;border-radius:6px;white-space:nowrap;}
 .tank-size-badge{font-size:9px;color:var(--blue);background:#0288D118;border:1px solid #0288D128;padding:2px 6px;border-radius:8px;white-space:nowrap;}
 .audio-btn{font-family:var(--pfont);font-size:7px;padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--muted);cursor:pointer;}
@@ -124,8 +124,8 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
     <div class="top-bar-right">
       <button class="audio-btn" id="audio-btn">♪ ON</button>
       <div class="collection-badge" id="col-badge">📖 0</div>
-      <div class="level-display" id="LD">Lv. 1</div>
-      <div class="coins-display" id="CD">Coins: 500</div>
+      
+      <div class="shells-display" id="CD">🐚 5</div>
     </div>
   </div>
   <div class="tank-outer"><canvas id="TC" height="336"></canvas><div class="tank-overlay" id="tank-setup-overlay"></div></div>
@@ -133,25 +133,16 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
   <div id="wq-bar"></div>
   <div class="hud" id="HUD"></div>
   <div class="tabs" id="tab-bar">
-    <button class="tab on" data-tab="shop">Shop</button>
-    <button class="tab" data-tab="market">Fish</button>
-    <button class="tab" data-tab="creatures">Creatures</button>
-    <button class="tab" data-tab="plants">Plants</button>
-    <button class="tab" data-tab="deco">Decor</button>
+    <button class="tab on" data-tab="market">Add Life</button>
+    <button class="tab" data-tab="deco">Decorate</button>
     <button class="tab" data-tab="backdrops">Backdrop</button>
-    <button class="tab" data-tab="manage">My Tank</button>
     <button class="tab" data-tab="codex">Codex</button>
-    <button class="tab" data-tab="achievements">Goals</button>
+    <button class="tab" data-tab="journal">Journal</button>
+    <button class="tab" data-tab="manage">My Tank</button>
   </div>
   <div class="bottom-area">
   <div id="a-global"></div>
-  <div class="sc v" id="s-shop">
-    <div class="stitle">Equipment Shop</div><div id="a-shop"></div>
-    <div id="shop-g"></div>
-  </div>
-  <div class="sc" id="s-market"><div class="stitle">Fish Market</div><div class="refresh-note" id="market-note"></div><div id="a-market"></div><div class="grid" id="fish-g"></div></div>
-  <div class="sc" id="s-creatures"><div class="stitle">Aquatic Creatures</div><div class="refresh-note" id="creature-note"></div><div id="a-creatures"></div><div class="grid" id="creature-g"></div></div>
-  <div class="sc" id="s-plants"><div class="stitle">Plant Shop</div><div class="refresh-note" id="plant-note"></div><div id="a-plants"></div><div class="grid" id="plant-g"></div></div>
+  <div class="sc v" id="s-market"><div class="stitle">Add Life to Your Tank</div><div class="refresh-note" id="market-note"></div><div id="a-market"></div><div style="font-size:11px;color:var(--muted);margin:4px 0;">Fish</div><div class="grid" id="fish-g"></div><div style="font-size:11px;color:var(--muted);margin:8px 0 4px;" id="creature-note">Creatures</div><div class="grid" id="creature-g"></div><div style="font-size:11px;color:var(--muted);margin:8px 0 4px;" id="plant-note">Plants</div><div class="grid" id="plant-g"></div></div>
   <div class="sc" id="s-deco"><div class="stitle">Decorations</div><div class="refresh-note" id="deco-note"></div><div id="a-deco"></div><div class="grid" id="deco-g"></div></div>
   <div class="sc" id="s-backdrops"><div class="stitle">Tank Backdrops</div><div id="a-backdrops"></div><div style="font-size:11px;color:var(--muted);margin-bottom:6px;" id="backdrop-current"></div><div class="grid" id="backdrop-g"></div></div>
   <div class="sc" id="s-manage">
@@ -160,7 +151,7 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
       <div class="stitle" style="margin-bottom:6px;">Tank Care</div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;">
         <button class="btn" id="btn-changewater" style="background:#0288D1;flex:1;font-size:12px;">💧 Change Water</button>
-        <button class="btn" id="btn-clean" style="background:#00897B;flex:1;font-size:12px;">🧹 Clean (20🪙)</button>
+        <button class="btn" id="btn-clean" style="background:#00897B;flex:1;font-size:12px;">🧹 Clean</button>
       </div>
     </div>
     <div class="stitle" style="margin-bottom:4px;">My Creatures</div>
@@ -171,6 +162,7 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
     <div id="stats-content"></div>
   </div>
   <div class="sc" id="s-codex"><div class="stitle">Fish Codex</div><div id="codex-progress" style="font-size:11px;color:var(--muted);margin-bottom:6px;"></div><div id="codex-grid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr));"></div></div>
+  <div class="sc" id="s-journal"><div class="stitle">Journal</div><div id="journal-list" style="max-height:300px;overflow-y:auto;"></div></div>
   <div class="sc" id="s-achievements"><div class="stitle">Goals</div><div id="a-achievements"></div><div id="ach-list"></div></div>
   </div>
 </div>
@@ -298,87 +290,87 @@ function toggleAudio(){
 const FISH_DEF=[
   // yMin/yMax = % of tank height (0=top, 73=floor). social: schooling/solitary/anemone/shy/normal
   // moveStyle: cruise/idle_burst/hover/normal. feedLayer: surface/mid/bottom/none
-  {id:'guppy',    name:'Guppy',        price:15,  desc:'Hardy & colorful',  temp:'24-28°C',hardiness:5,breedable:true, personality:'curious',    poop:0.3, rarity:'common',     yMin:4, yMax:35,social:'schooling', moveStyle:'normal',      feedLayer:'surface'},
-  {id:'betta',    name:'Betta',         price:30,  desc:'Flowing fins',      temp:'26-30°C',hardiness:3,breedable:false,personality:'territorial', poop:0.25,rarity:'common',     yMin:15,yMax:55,social:'solitary',  moveStyle:'normal',      feedLayer:'mid'},
-  {id:'neon',     name:'Neon Tetra',    price:12,  desc:'Electric stripe',   temp:'22-26°C',hardiness:4,breedable:true, personality:'shy',        poop:0.2, rarity:'common',     yMin:5, yMax:40,social:'schooling', moveStyle:'normal',      feedLayer:'mid'},
-  {id:'goldfish', name:'Goldfish',      price:20,  desc:'Classic round body',temp:'18-22°C',hardiness:5,breedable:true, personality:'greedy',     poop:0.5, rarity:'common',     yMin:10,yMax:60,social:'normal',    moveStyle:'normal',      feedLayer:'surface'},
-  {id:'angel',    name:'Angelfish',     price:45,  desc:'Tall diamond shape',temp:'25-29°C',hardiness:3,breedable:true, personality:'proud',      poop:0.3, rarity:'uncommon',   yMin:30,yMax:68,social:'normal',    moveStyle:'normal',      feedLayer:'mid'},
-  {id:'pleco',    name:'Pleco',         price:35,  desc:'Flat algae eater',  temp:'23-27°C',hardiness:5,breedable:false,personality:'peaceful',   poop:0.2, rarity:'common',     yMin:55,yMax:73,social:'normal',    moveStyle:'idle_burst',  feedLayer:'bottom'},
-  {id:'discus',   name:'Discus',        price:80,  desc:'Round royal fish',  temp:'28-32°C',hardiness:2,breedable:true, personality:'sensitive',  poop:0.35,rarity:'uncommon',   yMin:20,yMax:60,social:'normal',    moveStyle:'normal',      feedLayer:'mid'},
-  {id:'zebra',    name:'Zebra Danio',   price:10,  desc:'Bold black stripes',temp:'18-24°C',hardiness:5,breedable:true, personality:'playful',    poop:0.2, rarity:'common',     yMin:3, yMax:45,social:'schooling', moveStyle:'normal',      feedLayer:'surface'},
-  {id:'clown',    name:'Clownfish',     price:60,  desc:'Orange white bands',temp:'24-28°C',hardiness:3,breedable:false,personality:'curious',    poop:0.25,rarity:'uncommon',   yMin:20,yMax:65,social:'anemone',   moveStyle:'normal',      feedLayer:'mid'},
-  {id:'arowana',  name:'Arowana',       price:200, desc:'Golden dragon fish', temp:'26-30°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.4, rarity:'rare',       yMin:3, yMax:73,social:'normal',    moveStyle:'cruise',      feedLayer:'surface'},
-  {id:'axolotl',  name:'Axolotl',       price:150, desc:'Pink feathery gills',temp:'16-20°C',hardiness:3,breedable:true, personality:'curious',   poop:0.3, rarity:'rare',       yMin:40,yMax:73,social:'shy',       moveStyle:'idle_burst',  feedLayer:'bottom'},
-  {id:'seahorse', name:'Seahorse',      price:120, desc:'Upright slow mover',temp:'22-26°C',hardiness:2,breedable:true, personality:'shy',        poop:0.15,rarity:'rare',       yMin:15,yMax:70,social:'shy',       moveStyle:'hover',       feedLayer:'mid'},
-  {id:'manta',    name:'Manta Ray',     price:350, desc:'Gliding giant ray',  temp:'24-28°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.3, rarity:'super_rare', yMin:3, yMax:73,social:'normal',    moveStyle:'cruise',      feedLayer:'mid'},
-  {id:'dragon',   name:'Dragon Goby',   price:280, desc:'Fierce eel-like',   temp:'25-29°C',hardiness:2,breedable:false,personality:'territorial', poop:0.35,rarity:'super_rare', yMin:40,yMax:73,social:'solitary',  moveStyle:'cruise',      feedLayer:'bottom'},
+  {id:'guppy',    name:'Guppy',        price:0,  desc:'Hardy & colorful',  temp:'24-28°C',hardiness:5,breedable:true, personality:'curious',    poop:0.3, rarity:'common',     yMin:4, yMax:35,social:'schooling', moveStyle:'normal',      feedLayer:'surface'},
+  {id:'betta',    name:'Betta',         price:0,  desc:'Flowing fins',      temp:'26-30°C',hardiness:3,breedable:false,personality:'territorial', poop:0.25,rarity:'common',     yMin:15,yMax:55,social:'solitary',  moveStyle:'normal',      feedLayer:'mid'},
+  {id:'neon',     name:'Neon Tetra',    price:0,  desc:'Electric stripe',   temp:'22-26°C',hardiness:4,breedable:true, personality:'shy',        poop:0.2, rarity:'common',     yMin:5, yMax:40,social:'schooling', moveStyle:'normal',      feedLayer:'mid'},
+  {id:'goldfish', name:'Goldfish',      price:0,  desc:'Classic round body',temp:'18-22°C',hardiness:5,breedable:true, personality:'greedy',     poop:0.5, rarity:'common',     yMin:10,yMax:60,social:'normal',    moveStyle:'normal',      feedLayer:'surface'},
+  {id:'angel',    name:'Angelfish',     price:1,  desc:'Tall diamond shape',temp:'25-29°C',hardiness:3,breedable:true, personality:'proud',      poop:0.3, rarity:'uncommon',   yMin:30,yMax:68,social:'normal',    moveStyle:'normal',      feedLayer:'mid'},
+  {id:'pleco',    name:'Pleco',         price:0,  desc:'Flat algae eater',  temp:'23-27°C',hardiness:5,breedable:false,personality:'peaceful',   poop:0.2, rarity:'common',     yMin:55,yMax:73,social:'normal',    moveStyle:'idle_burst',  feedLayer:'bottom'},
+  {id:'discus',   name:'Discus',        price:1,  desc:'Round royal fish',  temp:'28-32°C',hardiness:2,breedable:true, personality:'sensitive',  poop:0.35,rarity:'uncommon',   yMin:20,yMax:60,social:'normal',    moveStyle:'normal',      feedLayer:'mid'},
+  {id:'zebra',    name:'Zebra Danio',   price:0,  desc:'Bold black stripes',temp:'18-24°C',hardiness:5,breedable:true, personality:'playful',    poop:0.2, rarity:'common',     yMin:3, yMax:45,social:'schooling', moveStyle:'normal',      feedLayer:'surface'},
+  {id:'clown',    name:'Clownfish',     price:1,  desc:'Orange white bands',temp:'24-28°C',hardiness:3,breedable:false,personality:'curious',    poop:0.25,rarity:'uncommon',   yMin:20,yMax:65,social:'anemone',   moveStyle:'normal',      feedLayer:'mid'},
+  {id:'arowana',  name:'Arowana',       price:2, desc:'Golden dragon fish', temp:'26-30°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.4, rarity:'rare',       yMin:3, yMax:73,social:'normal',    moveStyle:'cruise',      feedLayer:'surface'},
+  {id:'axolotl',  name:'Axolotl',       price:2, desc:'Pink feathery gills',temp:'16-20°C',hardiness:3,breedable:true, personality:'curious',   poop:0.3, rarity:'rare',       yMin:40,yMax:73,social:'shy',       moveStyle:'idle_burst',  feedLayer:'bottom'},
+  {id:'seahorse', name:'Seahorse',      price:2, desc:'Upright slow mover',temp:'22-26°C',hardiness:2,breedable:true, personality:'shy',        poop:0.15,rarity:'rare',       yMin:15,yMax:70,social:'shy',       moveStyle:'hover',       feedLayer:'mid'},
+  {id:'manta',    name:'Manta Ray',     price:3, desc:'Gliding giant ray',  temp:'24-28°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.3, rarity:'super_rare', yMin:3, yMax:73,social:'normal',    moveStyle:'cruise',      feedLayer:'mid'},
+  {id:'dragon',   name:'Dragon Goby',   price:3, desc:'Fierce eel-like',   temp:'25-29°C',hardiness:2,breedable:false,personality:'territorial', poop:0.35,rarity:'super_rare', yMin:40,yMax:73,social:'solitary',  moveStyle:'cruise',      feedLayer:'bottom'},
 ];
 
 const PLANTS_DEF=[
-  {id:'vallis',   name:'Vallisneria',   price:20, desc:'Tall ribbon grass',  rarity:'common'},
-  {id:'moss',     name:'Java Moss',      price:15, desc:'Fluffy ground cover',rarity:'common'},
-  {id:'amazon',   name:'Amazon Sword',   price:25, desc:'Wide dark leaves',   rarity:'common'},
-  {id:'cabomba',  name:'Cabomba',        price:22, desc:'Feathery fan plant', rarity:'common'},
-  {id:'crypt',    name:'Cryptocoryne',   price:28, desc:'Rosette brown-green',rarity:'common'},
-  {id:'hornwort', name:'Hornwort',       price:18, desc:'Pine-like stems',    rarity:'common'},
-  {id:'anubias',  name:'Anubias',        price:30, desc:'Dark waxy leaves',   rarity:'common'},
-  {id:'lotus',    name:'Red Lotus',      price:35, desc:'Deep red rosette',   rarity:'uncommon'},
-  {id:'tiger',    name:'Tiger Lotus',    price:40, desc:'Spotted purple-red', rarity:'uncommon'},
-  {id:'buce',     name:'Bucephalandra',  price:55, desc:'Jewel-like leaves',  rarity:'rare'},
-  {id:'pogostemon',name:'Pogostemon',    price:60, desc:'Pink stem plant',    rarity:'rare'},
-  {id:'utricularia',name:'Utricularia',  price:80, desc:'Carnivorous grass!', rarity:'super_rare'},
-  {id:'marimo',   name:'Marimo Ball',    price:90, desc:'Rare moss sphere',   rarity:'super_rare'},
+  {id:'vallis',   name:'Vallisneria',   price:0, desc:'Tall ribbon grass',  rarity:'common'},
+  {id:'moss',     name:'Java Moss',      price:0, desc:'Fluffy ground cover',rarity:'common'},
+  {id:'amazon',   name:'Amazon Sword',   price:0, desc:'Wide dark leaves',   rarity:'common'},
+  {id:'cabomba',  name:'Cabomba',        price:0, desc:'Feathery fan plant', rarity:'common'},
+  {id:'crypt',    name:'Cryptocoryne',   price:0, desc:'Rosette brown-green',rarity:'common'},
+  {id:'hornwort', name:'Hornwort',       price:0, desc:'Pine-like stems',    rarity:'common'},
+  {id:'anubias',  name:'Anubias',        price:0, desc:'Dark waxy leaves',   rarity:'common'},
+  {id:'lotus',    name:'Red Lotus',      price:0, desc:'Deep red rosette',   rarity:'uncommon'},
+  {id:'tiger',    name:'Tiger Lotus',    price:0, desc:'Spotted purple-red', rarity:'uncommon'},
+  {id:'buce',     name:'Bucephalandra',  price:0, desc:'Jewel-like leaves',  rarity:'rare'},
+  {id:'pogostemon',name:'Pogostemon',    price:0, desc:'Pink stem plant',    rarity:'rare'},
+  {id:'utricularia',name:'Utricularia',  price:0, desc:'Carnivorous grass!', rarity:'super_rare'},
+  {id:'marimo',   name:'Marimo Ball',    price:0, desc:'Rare moss sphere',   rarity:'super_rare'},
 ];
 
 const DECO_DEF=[
-  {id:'spider_wood',  name:'Spider Wood',    price:35, desc:'Spindly root branches',  rarity:'common'},
-  {id:'seiryu',       name:'Seiryu Stone',   price:40, desc:'Layered grey rock',       rarity:'common'},
-  {id:'dragon_stone', name:'Dragon Stone',   price:45, desc:'Porous orange rock',      rarity:'common'},
-  {id:'brain_coral',  name:'Brain Coral',    price:50, desc:'Pink brain coral',        rarity:'common'},
-  {id:'fan_coral',    name:'Fan Coral',      price:45, desc:'Cyan fan coral',          rarity:'common'},
-  {id:'treasure',     name:'Treasure Chest', price:30, desc:'Gold coins spilling out', rarity:'common'},
-  {id:'castle',       name:'Mini Castle',    price:55, desc:'Stone fortress',          rarity:'common'},
-  {id:'conch',        name:'Conch Shell',    price:20, desc:'Spiral sea shell',        rarity:'common'},
-  {id:'lava_rock',    name:'Lava Rock',      price:60, desc:'Porous volcanic stone',   rarity:'common'},
-  {id:'volcano',      name:'Mini Volcano',   price:70, desc:'Erupting lava vents',     rarity:'common'},
-  {id:'pagoda',       name:'Stone Pagoda',   price:150,desc:'Japanese pagoda',         rarity:'rare'},
-  {id:'sunken',       name:'Sunken Ship',    price:200,desc:'Tilted shipwreck',        rarity:'super_rare'},
-  {id:'mermaid',      name:'Mermaid',        price:180,desc:'Mystical mermaid statue', rarity:'rare'},
-  {id:'crystal',      name:'Crystal Cluster',price:250,desc:'Glowing crystal spires',  rarity:'super_rare'},
+  {id:'spider_wood',  name:'Spider Wood',    price:0, desc:'Spindly root branches',  rarity:'common'},
+  {id:'seiryu',       name:'Seiryu Stone',   price:0, desc:'Layered grey rock',       rarity:'common'},
+  {id:'dragon_stone', name:'Dragon Stone',   price:0, desc:'Porous orange rock',      rarity:'common'},
+  {id:'brain_coral',  name:'Brain Coral',    price:0, desc:'Pink brain coral',        rarity:'common'},
+  {id:'fan_coral',    name:'Fan Coral',      price:0, desc:'Cyan fan coral',          rarity:'common'},
+  {id:'treasure',     name:'Treasure Chest', price:0, desc:'Gold coins spilling out', rarity:'common'},
+  {id:'castle',       name:'Mini Castle',    price:0, desc:'Stone fortress',          rarity:'common'},
+  {id:'conch',        name:'Conch Shell',    price:0, desc:'Spiral sea shell',        rarity:'common'},
+  {id:'lava_rock',    name:'Lava Rock',      price:0, desc:'Porous volcanic stone',   rarity:'common'},
+  {id:'volcano',      name:'Mini Volcano',   price:0, desc:'Erupting lava vents',     rarity:'common'},
+  {id:'pagoda',       name:'Stone Pagoda',   price:1,desc:'Japanese pagoda',         rarity:'rare'},
+  {id:'sunken',       name:'Sunken Ship',    price:2,desc:'Tilted shipwreck',        rarity:'super_rare'},
+  {id:'mermaid',      name:'Mermaid',        price:1,desc:'Mystical mermaid statue', rarity:'rare'},
+  {id:'crystal',      name:'Crystal Cluster',price:2,desc:'Glowing crystal spires',  rarity:'super_rare'},
 ];
 
 const EQ=[
-  {id:'filter',   name:'Filter',        icon:'⚙',  price:60,  desc:'Cleans NH₃ & water',    upgrades:'filter2'},
-  {id:'filter2',  name:'Pro Filter',    icon:'⚙',  price:120, desc:'Superior filtration',    requires:'filter'},
-  {id:'heater',   name:'Heater',        icon:'🌡', price:50,  desc:'Stable temperature',     upgrades:'heater2'},
-  {id:'heater2',  name:'Pro Heater',    icon:'🔥', price:90,  desc:'Perfect temperature',    requires:'heater'},
-  {id:'airpump',  name:'Air Pump',      icon:'〇', price:35,  desc:'O₂ bubbles',             upgrades:'airpump2'},
-  {id:'airpump2', name:'Power Pump',    icon:'💨', price:80,  desc:'Rich O₂ + fast flow',    requires:'airpump'},
-  {id:'gravel',   name:'Gravel & Sand', icon:'◼',  price:30,  desc:'Natural sandy floor'},
-  {id:'light',    name:'LED Light',     icon:'✦',  price:45,  desc:'Plants grow faster'},
-  {id:'co2',      name:'CO₂ System',    icon:'🫧', price:90,  desc:'Boosts pH & plant growth'},
+  {id:'filter',   name:'Filter',        icon:'⚙',  price:0,  desc:'Cleans NH₃ & water',    upgrades:'filter2'},
+  {id:'filter2',  name:'Pro Filter',    icon:'⚙',  price:0, desc:'Superior filtration',    requires:'filter'},
+  {id:'heater',   name:'Heater',        icon:'🌡', price:0,  desc:'Stable temperature',     upgrades:'heater2'},
+  {id:'heater2',  name:'Pro Heater',    icon:'🔥', price:0,  desc:'Perfect temperature',    requires:'heater'},
+  {id:'airpump',  name:'Air Pump',      icon:'〇', price:0,  desc:'O₂ bubbles',             upgrades:'airpump2'},
+  {id:'airpump2', name:'Power Pump',    icon:'💨', price:0,  desc:'Rich O₂ + fast flow',    requires:'airpump'},
+  {id:'gravel',   name:'Gravel & Sand', icon:'◼',  price:0,  desc:'Natural sandy floor'},
+  {id:'light',    name:'LED Light',     icon:'✦',  price:0,  desc:'Plants grow faster'},
+  {id:'co2',      name:'CO₂ System',    icon:'🫧', price:0,  desc:'Boosts pH & plant growth'},
 ];
 
 // 10 aquatic creatures — all have yMin/yMax, moveStyle, feedLayer, social
 const CREATURES_DEF=[
-  {id:'shrimp',    name:'Cherry Shrimp',  price:18,  desc:'Algae cleaner',       temp:'20-26°C',rarity:'common',    personality:'peaceful',    poop:0.1,  yMin:60,yMax:75,social:'schooling', moveStyle:'jump',       feedLayer:'bottom', benthic:true},
-  {id:'snail',     name:'Nerite Snail',   price:15,  desc:'Glass scrubber',      temp:'20-28°C',rarity:'common',    personality:'peaceful',    poop:0.1,  yMin:72,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
-  {id:'crab',      name:'Fiddler Crab',   price:25,  desc:'Active scavenger',    temp:'22-28°C',rarity:'common',    personality:'curious',     poop:0.15, yMin:68,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'bottom', benthic:true},
-  {id:'crayfish',  name:'Blue Crayfish',  price:40,  desc:'Bold bottom dweller', temp:'18-25°C',rarity:'common',    personality:'territorial', poop:0.2,  yMin:65,yMax:75,social:'solitary',  moveStyle:'idle_burst', feedLayer:'bottom', benthic:true},
-  {id:'turtle',    name:'Baby Turtle',    price:80,  desc:'Slow & ancient',      temp:'24-30°C',rarity:'uncommon',  personality:'peaceful',    poop:0.25, yMin:45,yMax:74,social:'normal',    moveStyle:'normal',     feedLayer:'mid'},
+  {id:'shrimp',    name:'Cherry Shrimp',  price:0,  desc:'Algae cleaner',       temp:'20-26°C',rarity:'common',    personality:'peaceful',    poop:0.1,  yMin:60,yMax:75,social:'schooling', moveStyle:'jump',       feedLayer:'bottom', benthic:true},
+  {id:'snail',     name:'Nerite Snail',   price:0,  desc:'Glass scrubber',      temp:'20-28°C',rarity:'common',    personality:'peaceful',    poop:0.1,  yMin:72,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
+  {id:'crab',      name:'Fiddler Crab',   price:0,  desc:'Active scavenger',    temp:'22-28°C',rarity:'common',    personality:'curious',     poop:0.15, yMin:68,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'bottom', benthic:true},
+  {id:'crayfish',  name:'Blue Crayfish',  price:0,  desc:'Bold bottom dweller', temp:'18-25°C',rarity:'common',    personality:'territorial', poop:0.2,  yMin:65,yMax:75,social:'solitary',  moveStyle:'idle_burst', feedLayer:'bottom', benthic:true},
+  {id:'turtle',    name:'Baby Turtle',    price:1,  desc:'Slow & ancient',      temp:'24-30°C',rarity:'uncommon',  personality:'peaceful',    poop:0.25, yMin:45,yMax:74,social:'normal',    moveStyle:'normal',     feedLayer:'mid'},
   {id:'frog',      name:'Dwarf Frog',     price:30,  desc:'Tiny amphibian',      temp:'22-27°C',rarity:'common',    personality:'curious',     poop:0.1,  yMin:55,yMax:75,social:'normal',    moveStyle:'jump',       feedLayer:'bottom', benthic:true},
-  {id:'eel',       name:'Fire Eel',       price:120, desc:'Burrowing serpent',   temp:'24-28°C',rarity:'rare',      personality:'shy',         poop:0.2,  yMin:50,yMax:74,social:'shy',       moveStyle:'cruise',     feedLayer:'bottom'},
-  {id:'starfish',  name:'Starfish',       price:90,  desc:'Slow star creeper',   temp:'22-26°C',rarity:'rare',      personality:'peaceful',    poop:0.05, yMin:73,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
-  {id:'jellyfish', name:'Moon Jellyfish', price:200, desc:'Ethereal drifter',    temp:'20-26°C',rarity:'super_rare',personality:'majestic',    poop:0.05, yMin:5, yMax:55,social:'normal',    moveStyle:'hover',      feedLayer:'none'},
-  {id:'octopus',   name:'Baby Octopus',   price:250, desc:'Genius shapeshifter', temp:'20-24°C',rarity:'super_rare',personality:'curious',     poop:0.15, yMin:40,yMax:74,social:'shy',       moveStyle:'idle_burst', feedLayer:'mid'},
+  {id:'eel',       name:'Fire Eel',       price:1,  desc:'Burrowing serpent',   temp:'24-28°C',rarity:'rare',      personality:'shy',         poop:0.2,  yMin:50,yMax:74,social:'shy',       moveStyle:'cruise',     feedLayer:'bottom'},
+  {id:'starfish',  name:'Starfish',       price:1,  desc:'Slow star creeper',   temp:'22-26°C',rarity:'rare',      personality:'peaceful',    poop:0.05, yMin:73,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
+  {id:'jellyfish', name:'Moon Jellyfish', price:2,  desc:'Ethereal drifter',    temp:'20-26°C',rarity:'super_rare',personality:'majestic',    poop:0.05, yMin:5, yMax:55,social:'normal',    moveStyle:'hover',      feedLayer:'none'},
+  {id:'octopus',   name:'Baby Octopus',   price:3,  desc:'Genius shapeshifter', temp:'20-24°C',rarity:'super_rare',personality:'curious',     poop:0.15, yMin:40,yMax:74,social:'shy',       moveStyle:'idle_burst', feedLayer:'mid'},
 ];
 
 const BACKDROP_DEF=[
-  {id:'lake',       name:'Peaceful Lake',     price:40,  rarity:'common',     desc:'Warm green shallows with dappled sunlight'},
-  {id:'ocean',      name:'Open Ocean',        price:80,  rarity:'common',     desc:'Endless deep blue with subtle current'},
-  {id:'coral_reef', name:'Coral Reef',        price:150, rarity:'uncommon',   desc:'Vibrant reef colors shimmer in the light'},
-  {id:'deep_ocean', name:'Deep Abyss',        price:300, rarity:'rare',       desc:'Mysterious darkness with bioluminescence'},
-  {id:'enchanted',  name:'Enchanted Waters',  price:600, rarity:'super_rare', desc:'Magical aurora dances through the water'},
+  {id:'lake',       name:'Peaceful Lake',     price:0,  rarity:'common',     desc:'Warm green shallows with dappled sunlight'},
+  {id:'ocean',      name:'Open Ocean',        price:0,  rarity:'common',     desc:'Endless deep blue with subtle current'},
+  {id:'coral_reef', name:'Coral Reef',        price:1, rarity:'uncommon',   desc:'Vibrant reef colors shimmer in the light'},
+  {id:'deep_ocean', name:'Deep Abyss',        price:2, rarity:'rare',       desc:'Mysterious darkness with bioluminescence'},
+  {id:'enchanted',  name:'Enchanted Waters',  price:3, rarity:'super_rare', desc:'Magical aurora dances through the water'},
 ];
 
 const STEPS=[
@@ -445,13 +437,13 @@ const ACHIEVEMENTS=[
   {id:'water_perfect',name:'Crystal Clear', icon:'💧',desc:'90+ water quality',      reward:30, check:s=>avgW()>=90},
   {id:'survive_10',  name:'Veteran',        icon:'📅',desc:'Reach Day 10',           reward:60, check:s=>s.day>=10},
   {id:'survive_30',  name:'Master Keeper',  icon:'🏆',desc:'Reach Day 30',           reward:200,check:s=>s.day>=30},
-  {id:'rich',        name:'Deep Pockets',   icon:'💰',desc:'Have 1000+ coins',       reward:50, check:s=>s.coins>=1000},
+  {id:'calm_days',   name:'Inner Peace',    icon:'🧘',desc:'10 peaceful days',       reward:1, check:s=>(s.day||0)>=10},
   {id:'collector',   name:'Collector',      icon:'📚',desc:'6 different species',    reward:100,check:s=>new Set(s.fish.map(f=>f.id)).size>=6},
   {id:'decorator',   name:'Designer',       icon:'🏰',desc:'Place 5 decorations',    reward:60, check:s=>(s.decos||[]).length>=5},
   {id:'rare_catch',  name:'Rare Catch',     icon:'⭐',desc:'Buy a rare fish',         reward:75, check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='rare')},
   {id:'super_rare',  name:'Legend',         icon:'👑',desc:'Buy a super rare fish',   reward:200,check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='super_rare')},
-  {id:'feed_100',    name:'Generous Soul',  icon:'🍞',desc:'Feed fish 100 times',    reward:50, check:s=>(s.totalFeeds||0)>=100},
-  {id:'earn_5000',   name:'Tycoon',         icon:'👛',desc:'Earn 5000 total coins',   reward:150,check:s=>(s.totalEarned||0)>=5000},
+  {id:'moments_20',  name:'Storyteller',    icon:'📖',desc:'Collect 20 moments',     reward:1, check:s=>(s.moments||[]).length>=20},
+  {id:'naturalist',  name:'Naturalist',     icon:'🌿',desc:'Discover 10 species',    reward:2, check:s=>(s.discoveredSpecies||[]).length>=10},
   {id:'zen_master', name:'Zen Master', icon:'🌟',desc:'Play for 10 peaceful days',  reward:100,check:s=>(s.daysWithoutDeath||0)>=10},
 ];
 
@@ -1184,7 +1176,7 @@ function drawDecoPreview(id){
    STATE
 ═══════════════════════════════════════════════════════════ */
 let S={
-  coins:500,owned:{},waterAdded:false,waterLevel:0,waterAnim:false,
+  coins:5,owned:{filter:true,heater:true,gravel:true,airpump:true,light:true},waterAdded:true,waterLevel:100,waterAnim:false,
   waterTested:true,waterScore:{},fish:[],uid:0,day:1,
   plantAge:0,plantSeeds:[],decos:[],gameTime:8*60,poopLevel:0,
   tankSize:0,xp:0,level:1,achievements:[],
@@ -1205,8 +1197,9 @@ let S={
 
 function sv(){S.lastLoginTime=Date.now();try{localStorage.setItem('aq8',JSON.stringify(S));}catch(e){}}
 function ld(){try{const x=localStorage.getItem('aq8');if(x){Object.assign(S,JSON.parse(x));S.waterTested=true;if(S.owned&&S.owned.backdrop&&!S.activeBackdrop){S.activeBackdrop='ocean';if(!S.ownedBackdrops)S.ownedBackdrops=['ocean'];delete S.owned.backdrop;}}}catch(e){}}
-function coin(n){if(n>0)S.totalEarned=(S.totalEarned||0)+n;if(n<0)S.totalSpent=(S.totalSpent||0)+Math.abs(n);S.coins+=n;document.getElementById('CD').textContent='Coins: '+S.coins;if(n>0)coinFlyAnim('+'+n);sv();checkAch();}
-function addXP(n){S.xp=(S.xp||0)+n;const need=S.level*100;if(S.xp>=need){S.xp-=need;S.level++;showAl('global','Level Up! Level '+S.level+'! +25 coins','ok');coin(25);}document.getElementById('LD').textContent='Lv. '+S.level;sv();}
+function coin(n){S.coins+=n;document.getElementById('CD').textContent='🐚 '+S.coins;sv();}
+function shell(n){coin(n);if(n>0)showZenToast('🐚 Shell','Found a shell on the shore');}
+function addXP(n){/* zen: no XP/levels */}
 function coinFlyAnim(text){const el=document.createElement('div');el.className='coin-fly';el.textContent=text;const cd=document.getElementById('CD');const r=cd.getBoundingClientRect();el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top-5)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),1000);}
 function showAl(z,m,t){const el=document.getElementById('a-'+(z||'global'));if(!el)return;el.innerHTML='<div class="al '+t+'">'+m+'</div>';setTimeout(()=>{if(el)el.innerHTML='';},3000);}
 function getTankCap(){return TANK_SIZES[S.tankSize||0].capacity;}
@@ -1229,8 +1222,8 @@ function getFishMood(f){
   return'content';
 }
 
-function checkAch(){ACHIEVEMENTS.forEach(a=>{if((S.achievements||[]).includes(a.id))return;if(a.check(S)){if(!S.achievements)S.achievements=[];S.achievements.push(a.id);coin(a.reward);addXP(20);showAchPopup(a);sv();}});}
-function showAchPopup(a){const p=document.getElementById('ach-popup');document.getElementById('ach-popup-icon').textContent=a.icon;document.getElementById('ach-popup-text').textContent='Achievement: '+a.name;document.getElementById('ach-popup-sub').textContent=a.desc+' (+'+a.reward+' coins)';p.classList.add('show');setTimeout(()=>p.classList.remove('show'),3500);}
+function checkAch(){ACHIEVEMENTS.forEach(a=>{if((S.achievements||[]).includes(a.id))return;if(a.check(S)){if(!S.achievements)S.achievements=[];S.achievements.push(a.id);if(a.reward>0)coin(Math.ceil(a.reward/50));showAchPopup(a);sv();}});}
+function showAchPopup(a){const p=document.getElementById('ach-popup');document.getElementById('ach-popup-icon').textContent=a.icon;document.getElementById('ach-popup-text').textContent='Achievement: '+a.name;document.getElementById('ach-popup-sub').textContent=a.desc+(a.reward>0?' (+'+a.reward+' 🐚)':'');p.classList.add('show');setTimeout(()=>p.classList.remove('show'),3500);}
 function updateTankBadge(){document.getElementById('tank-badge').textContent='Tank: '+TANK_SIZES[S.tankSize||0].name;}
 
 function recalcWater(){
@@ -1292,6 +1285,7 @@ function renderHUD(){
 function renderSetup(){
   const ov=document.getElementById('tank-setup-overlay');if(!ov)return;
   if(S.waterAdded){ov.innerHTML='';return;}
+  if(S.waterAdded){ov.innerHTML='';return;}
   const ok=STEPS.every(s=>s.ids.some(id=>S.owned[id]));
   ov.innerHTML='<div class="setup-panel"><div class="sp-title">~ TANK SETUP ~</div>'
     +STEPS.map(s=>{const h=s.ids.some(id=>S.owned[id]);return'<div class="setup-step '+(h?'done':'')+'"><span class="ss-label">'+(h?'✓ ':'○ ')+s.label+'</span><span style="font-size:12px;color:'+(h?'#4ade80':'#ff6b6b')+'">'+(h?'Ready':'Missing')+'</span></div>';}).join('')
@@ -1309,21 +1303,20 @@ document.getElementById('tab-bar').addEventListener('click',function(e){
   document.querySelectorAll('#app .sc').forEach(s=>s.classList.remove('v'));
   document.querySelectorAll('#app .tab').forEach(t=>t.classList.remove('on'));
   document.getElementById('s-'+name).classList.add('v');btn.classList.add('on');
-  if(name==='market')renderMarket();
+  if(name==='market'){renderMarket();renderCreatures();renderPlants();}
   if(name==='creatures')renderCreatures();
   if(name==='plants')renderPlants();
   if(name==='manage'){renderFishList();renderStats();}
   if(name==='deco')renderDeco();
   if(name==='achievements')renderAchievements();
   if(name==='codex')renderCodex();
+  if(name==='journal')renderJournal();
   if(name==='backdrops')renderBackdrops();
 });
 
 document.getElementById('audio-btn').addEventListener('click',toggleAudio);
 document.getElementById('btn-clean').addEventListener('click',function(){
-  if(S.coins<20){showAl('manage','Not enough coins!','warn');return;}
-  animateClean();
-  coin(-20);S.poopLevel=0;S.totalCleans=(S.totalCleans||0)+1;addXP(3);recalcWater();sv();showAl('manage','Tank cleaned!','ok');renderFishList();
+  animateClean();S.poopLevel=0;S.totalCleans=(S.totalCleans||0)+1;addXP(3);recalcWater();sv();showAl('manage','Tank cleaned!','ok');renderFishList();
 });
 document.getElementById('btn-changewater').addEventListener('click',function(){
   if(!S.waterAdded){showAl('manage','Add water first!','warn');return;}
@@ -1334,7 +1327,7 @@ document.getElementById('btn-changewater').addEventListener('click',function(){
    SHOP — equipment with upgrade chains + tank upgrades
 ═══════════════════════════════════════════════════════════ */
 function renderShop(){
-  const container=document.getElementById('shop-g');
+  const container=document.getElementById('shop-g');if(!container)return;
   const items=EQ.filter(e=>{
     if(e.requires)return S.owned[e.requires]&&!S.owned[e.id];
     return !S.owned[e.id];
@@ -1352,7 +1345,7 @@ function renderShop(){
         +(isUpgrade?'<div style="font-size:9px;color:#FFB300;margin-bottom:2px;">⬆ UPGRADE from '+prevName+'</div>':'')
         +'<div style="font-size:24px;margin-bottom:4px;color:var(--gold)">'+e.icon+'</div>'
         +'<div class="iname">'+e.name+'</div><div class="idesc">'+e.desc+'</div>'
-        +'<div class="iprice">'+e.price+' coins</div>'
+        +((e.price>0)?'<div class="iprice">'+e.price+' 🐚</div>':'<div style="font-size:10px;color:var(--green);margin-bottom:3px">Free</div>')
         +'<button data-eq="'+e.id+'" '+(S.coins<e.price?'disabled':'')+'>'+(isUpgrade?'Upgrade':'Buy')+'</button>'
         +'</div>';
     }).join('');
@@ -1386,7 +1379,7 @@ function renderShop(){
         ?'<div style="font-size:11px;color:var(--green);margin-top:2px;">\u2713 Current tank</div>'
         :(bought
           ?'<div style="font-size:11px;color:var(--green);margin-top:2px;">\u2713 Unlocked</div>'
-          :'<div class="up-price">'+t.cost+' coins</div>'))
+          :((t.cost>0)?'<div class="up-price">'+t.cost+' 🐚</div>':'<div style="font-size:10px;color:var(--green)">Free</div>')))
       +'</div>'
       +(next&&!bought
         ?'<button class="btn" style="font-size:12px;padding:6px 12px;white-space:nowrap;" data-upgrade="'+i+'" '+(S.coins<t.cost?'disabled':'')+'>Upgrade</button>'
@@ -1665,10 +1658,10 @@ function getCreatureScale(id){return (CREATURE_CONFIG[id]||{sc:4}).sc;}
 function renderCreatures(){
   if(!S.waterAdded){
     document.getElementById('creature-g').innerHTML='<div style="font-size:13px;color:var(--muted);padding:12px">Add water first.</div>';
-    document.getElementById('creature-note').textContent='';return;
+    const cnEl=document.getElementById('creature-note');if(cnEl)cnEl.textContent='';return;
   }
   const cap=getTankCap();const full=(S.fish||[]).length>=cap;
-  document.getElementById('creature-note').textContent=full?'Tank full!':'Aquatic creatures share the tank with your fish.';
+  const cnEl2=document.getElementById('creature-note');if(cnEl2)cnEl2.textContent=full?'Tank full!':'Aquatic creatures share the tank with your fish.';
   const grid=document.getElementById('creature-g');grid.innerHTML='';
   CREATURES_DEF.forEach(cr=>{
     const div=document.createElement('div');div.className='item';
@@ -1709,7 +1702,7 @@ function renderPlants(){
       '<div class="iname">'+p.name+'</div><div class="idesc">'+p.desc+'</div>'+
       '<div class="iprice">'+p.price+' coins</div>'+
       (count>0?'<div class="owned">✓ ×'+count+' Growing</div>':'')+
-      '<button data-plant="'+p.id+'" '+(S.coins<p.price?'disabled':'')+'>Plant</button>';
+      '<button data-plant="'+p.id+'" '+(S.coins<p.price?'disabled':'')+'>Add</button>';
     grid.appendChild(div);
   });
   grid.querySelectorAll('[data-plant]').forEach(btn=>{
@@ -1861,7 +1854,7 @@ function renderUpgrades(){
     html+='<div class="upgrade-card" style="'+(cur?'border-color:var(--green);':'')+'">'+
       '<div class="up-icon">'+(i===0?'🏠':i===1?'🏡':i===2?'🏘':'🏰')+'</div>'+
       '<div class="up-info"><div class="up-name">'+t.name+' Tank <span style="font-size:11px;color:var(--muted)">('+t.capacity+' fish · '+t.decoCap+' decos)</span></div>'+
-      (cur?'<div style="font-size:11px;color:var(--green);margin-top:2px;">✓ Current</div>':bought?'<div style="font-size:11px;color:var(--green);margin-top:2px;">✓ Unlocked</div>':'<div class="up-price">'+t.cost+' coins</div>')+'</div>'+
+      (cur?'<div style="font-size:11px;color:var(--green);margin-top:2px;">✓ Current</div>':bought?'<div style="font-size:11px;color:var(--green);margin-top:2px;">✓ Unlocked</div>':((t.cost>0)?'<div class="up-price">'+t.cost+' 🐚</div>':'<div style="font-size:10px;color:var(--green)">Free</div>'))+'</div>'+
       (next&&!bought?'<button class="btn" style="font-size:12px;padding:6px 12px;" data-upgrade="'+i+'" '+(S.coins<t.cost?'disabled':'')+'>Upgrade</button>':'')+'</div>';
   });
   list.innerHTML=html;
@@ -1892,7 +1885,7 @@ function renderStats(){
     '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:10px;">'
     +[['Days',S.day],['Creatures',S.fish.length],['Species',new Set(S.fish.map(f=>f.id)).size],['Avg HP',avg],
       ['Bought',S.totalFishBought||0],['Bred',S.totalBred||0],['Days',S.daysWithoutDeath||0],['Cured',S.totalCured||0],
-      ['Variants',(S.discoveredVariants||[]).length],['Earned',S.totalEarned||0],['Phase',getTankPhase()],['Streak',S.maxDaysWithoutDeath||0]]
+      ['Variants',(S.discoveredVariants||[]).length],['Moments',(S.moments||[]).length],['Phase',getTankPhase()],['Shells',S.coins]]
     .map(([l,v])=>'<div class="stat-item" style="padding:6px;"><div class="stat-val" style="font-size:10px;">'+v+'</div><div class="stat-label" style="font-size:10px;">'+l+'</div></div>').join('')
     +'</div>'
     +'<button class="btn" style="background:var(--red);font-size:11px;padding:5px 12px;" id="btn-reset">Reset Game</button>';
@@ -2199,16 +2192,38 @@ function syncAnim(){
   });
 }
 
+let tankW=0,tankH=0;
+function resizeTank(){
+  const canvas=document.getElementById('TC');if(!canvas)return;
+  const parent=canvas.parentElement;
+  // Calculate fixed tank height: viewport minus top bar, status bar, tabs, and bottom area
+  const app=document.getElementById('app');
+  const vh=app.clientHeight||window.innerHeight;
+  // Reserve space for: title(25) + topbar(30) + statusbar(28) + tabs(32) + bottom(min 120)
+  const reserved=25+30+28+32+Math.min(vh*0.32,180);
+  const targetH=Math.max(180,Math.floor(vh-reserved));
+  parent.style.height=targetH+'px';
+  tankW=parent.clientWidth||390;
+  tankH=targetH;
+  if(Math.abs(canvas.width-tankW)>2)canvas.width=tankW;
+  if(Math.abs(canvas.height-tankH)>2)canvas.height=tankH;
+}
+window.addEventListener('resize',()=>{resizeTank();});
+setTimeout(resizeTank,50);
+
 function drawTank(){
   const canvas=document.getElementById('TC');if(!canvas)return;
-  const W=canvas.parentElement.clientWidth||640;
-  if(canvas.width!==W)canvas.width=W;
-  const H=canvas.height||336;canvas.height=canvas.parentElement.clientHeight||336;const ctx=canvas.getContext('2d');
+  resizeTank();
+  const W=canvas.width||390;
+  const H=canvas.height||300;
+  const ctx=canvas.getContext('2d');
   cancelAnimationFrame(raf);
 
   function frame(){
     const t=Date.now()/1000;
     ctx.clearRect(0,0,W,H);
+    // Base fill — ensures no transparent areas anywhere
+    ctx.fillStyle='#081830';ctx.fillRect(0,0,W,H);
 
     if(!S.waterAdded&&!S.waterAnim){
       ctx.fillStyle='#1a237e';ctx.fillRect(0,0,W,H);
@@ -2892,7 +2907,8 @@ function gameLoop(){
 
 function onNewDay(){
   if(S._waterChangeCooldown>0)S._waterChangeCooldown=Math.max(0,(S._waterChangeCooldown||0)-1);
-  coin(10);addXP(5);
+  // Zen: occasional shell find
+  if(Math.random()<0.15){coin(1);showZenToast('🐚 Shell','A shell washed ashore');}
   S._marketRares=null;S._decoRares=null;S._plantRares=null;
   // Zen: no death, no disease, no hunger penalty
   S.fish.forEach(f=>{
@@ -2911,6 +2927,7 @@ function onNewDay(){
       const name=NAMES[Math.floor(Math.random()*NAMES.length)];
       const bv=rollBreedVariant();S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid,variant:bv});
       S.totalBred=(S.totalBred||0)+1;discoverVariant(id,bv);
+      addMoment(name+' the '+cat.name+' was born','birth');
       if(bv!=='normal')showZenToast('✨ Mutation!','A '+bv+' '+cat.name+' was born!');else showZenToast('🥚 New Life','A baby '+cat.name+' ('+name+') appeared!');
       addXP(10);
       discoverSpecies(id);
@@ -2928,8 +2945,8 @@ function onNewDay(){
 ═══════════════════════════════════════════════════════════ */
 ld();
 lastTickTime=Date.now();
-document.getElementById('CD').textContent='Coins: '+S.coins;
-document.getElementById('LD').textContent='Lv. '+S.level;
+document.getElementById('CD').textContent='🐚 '+S.coins;
+// LD removed (no levels in zen mode)
 updateTankBadge();
 renderShop();renderHUD();recalcWater();renderWaterBar();renderSetup();
 if(S.waterAdded){}// plants are added only when bought from shop
@@ -3009,19 +3026,32 @@ function updateWaterMood(){
   el.textContent=msg+(phaseLbl?' · '+phaseLbl:'');
 }
 
+// ── MOMENTS SYSTEM: record memorable events ──
+function addMoment(text,type){
+  if(!S.moments)S.moments=[];
+  // Don't add duplicate
+  if(S.moments.length>0&&S.moments[S.moments.length-1].text===text)return;
+  S.moments.push({text,type:type||'event',day:S.day,time:Date.now()});
+  if(S.moments.length>50)S.moments=S.moments.slice(-50);// keep last 50
+  sv();
+}
+
 function discoverSpecies(id){
   if(!S.discoveredSpecies)S.discoveredSpecies=[];
   if(!S.discoveredSpecies.includes(id)){
-    S.discoveredSpecies.push(id);sv();
-    updateCollectionBadge();
+    S.discoveredSpecies.push(id);
+    const sName=(FISH_DEF.find(f=>f.id===id)||CREATURES_DEF.find(f=>f.id===id)||{}).name||id;
+    addMoment('Discovered '+sName+' for the first time','discovery');
+    sv();updateCollectionBadge();
   }
 }
 function discoverVariant(speciesId,variant){
   if(!S.discoveredVariants)S.discoveredVariants=[];
   const key=speciesId+'_'+variant;
   if(!S.discoveredVariants.includes(key)){
-    S.discoveredVariants.push(key);sv();
-    updateCollectionBadge();
+    S.discoveredVariants.push(key);
+    addMoment('Found a '+variant+' variant of '+speciesId,'variant');
+    sv();updateCollectionBadge();
     if(variant!=='normal')showZenToast('📖 New Variant!','Discovered: '+variant+' '+speciesId);
   }
 }
@@ -3060,6 +3090,7 @@ function maybeSpawnVisitor(){
     visitorTimer=visitorFish.timer;
     S.daysWithoutVisitor=0;
     showZenToast('🌟 Rare Visitor!','A mysterious '+pick.name+' is passing through...');
+    addMoment('A rare '+pick.name+' visited the tank','visitor');
   }else{
     S.daysWithoutVisitor=(S.daysWithoutVisitor||0)+1;
   }
@@ -3131,7 +3162,7 @@ function triggerZenEvent(){
     // Reward event
     const amt=5+Math.floor(Math.random()*20);
     coin(amt);
-    showZenToast('✨ Sparkle','Found '+amt+' coins among the pebbles');
+    coin(1);showZenToast('🐚 Drift','A shell drifted in with the current');
   }else{
     // RARE event!
     S.rarePityCounter=0;
@@ -3146,11 +3177,11 @@ function triggerZenEvent(){
       showZenToast('⭐ Rare Fish!','A '+mv+' '+base.name+' appeared!');
     }else if(rType===1){
       maybeSpawnVisitor();
-      if(!visitorFish){coin(30);showZenToast('⭐ Lucky','Found 30 coins!');}
+      if(!visitorFish){coin(1);showZenToast('🐚 Gift','Something shiny was left behind');}
     }else{
       zenVisualEvent={type:'glow',timer:150};
-      coin(25);addXP(15);
-      showZenToast('💫 Magic Moment','The water shimmers with light');
+      coin(1);
+      showZenToast('💫 Magic Moment','The water shimmers... a shell appears');
     }
   }
 }
@@ -3201,9 +3232,8 @@ function processOffline(){
         S.plantAge+=1;
         summary.push('Plants grew a little');
       }else if(r<0.9){
-        const amt=5+Math.floor(Math.random()*10);
-        coin(amt);
-        summary.push('Found '+amt+' coins');
+        if(Math.random()<0.3){coin(1);summary.push('A shell washed in');}
+        else{summary.push('The water stayed calm');}
       }else{
         // Try breed
         if(S.fish.length>=2&&S.fish.length<getTankCap()){
@@ -3339,6 +3369,21 @@ function drawBackdropPreview(ctx,id,w,h){
   }
 }
 
+// ── JOURNAL: Memory Growth ──
+function renderJournal(){
+  const el=document.getElementById('journal-list');if(!el)return;
+  const moments=(S.moments||[]).slice().reverse();
+  if(!moments.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);padding:10px;text-align:center;">Your story has just begun...</div>';return;}
+  el.innerHTML=moments.map(m=>{
+    const icons={discovery:'🐟',variant:'✨',birth:'🥚',event:'🌊',first:'⭐',visitor:'🌟'};
+    const icon=icons[m.type]||'📝';
+    return '<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #ffffff08;">'+
+      '<span style="font-size:14px;flex-shrink:0;">'+icon+'</span>'+
+      '<div style="flex:1;"><div style="font-size:12px;color:var(--text);">'+m.text+'</div>'+
+      '<div style="font-size:9px;color:var(--muted);margin-top:2px;">Day '+m.day+'</div></div></div>';
+  }).join('');
+}
+
 // ── CODEX / COLLECTION UI (#3) ──
 function renderCodex(){
   const grid=document.getElementById('codex-grid');if(!grid)return;
@@ -3366,6 +3411,7 @@ function renderCodex(){
     const name=document.createElement('div');
     name.className='iname';name.style.fontSize='10px';
     name.textContent=found?def.name:'???';
+    if(found){const moment=(S.moments||[]).find(m=>m.type==='discovery'&&m.text.includes(def.name));if(moment){const dayLabel=document.createElement('div');dayLabel.style.cssText='font-size:8px;color:var(--muted);';dayLabel.textContent='Found day '+moment.day;div.appendChild(dayLabel);}}
     div.appendChild(name);
     // Variant dots
     const dots=document.createElement('div');dots.style.cssText='display:flex;gap:2px;justify-content:center;margin-top:2px;';
@@ -3430,6 +3476,18 @@ function zenTick(){
   if(zenTickCounter%20===0)maybeSpawnVisitor();
 }
 function scheduleZenTick(){zenTick();setTimeout(scheduleZenTick,45000+Math.random()*60000);}setTimeout(scheduleZenTick,30000);// randomized interval
+
+// Auto-start: give starter fish if empty
+if(S.fish.length===0&&S.waterAdded){
+  const starters=['guppy','neon','goldfish'];
+  const pick=starters[Math.floor(Math.random()*starters.length)];
+  const name=NAMES[Math.floor(Math.random()*NAMES.length)];
+  S.fish.push({id:pick,name,health:100,hunger:100,age:3,stage:'adult',diseased:false,disease:null,uid:++S.uid,variant:'normal'});
+  discoverSpecies(pick);discoverVariant(pick,'normal');
+  S.moments=S.moments||[];
+  S.moments.push({type:'first',text:name+' the '+pick+' was your first fish',day:S.day});
+  sv();
+}
 
 // Run offline processing on load
 setTimeout(processOffline,200);
