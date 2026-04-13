@@ -10,26 +10,125 @@
 :root{
   --deep:#0a1628;--mid:#0d2258;--light:#0a3580;
   --green:#1D9E75;--gold:#FFB300;--red:#E53935;--blue:#0288D1;
-  --panel:#ffffff0a;--border:#ffffff18;--text:#e8f4f8;--muted:#7ba8c4;
+  --panel:rgba(10,22,40,0.85);--border:#ffffff18;--text:#e8f4f8;--muted:#7ba8c4;
   --font:'VT323',monospace;--pfont:'Press Start 2P',monospace;
 }
 html,body{height:100%;overflow:hidden;touch-action:manipulation;}
-body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:16px;}
-#app{display:flex;flex-direction:column;height:100%;max-width:480px;margin:0 auto;overflow:hidden;}
-.game-title{font-family:var(--pfont);font-size:10px;color:var(--gold);text-align:center;padding:6px 0 3px;letter-spacing:2px;text-shadow:0 0 10px #FFB30044;flex-shrink:0;}
-.top-bar{display:flex;align-items:center;justify-content:space-between;padding:0 8px;gap:4px;flex-shrink:0;}
-.top-bar-left{display:flex;align-items:center;gap:6px;}
-.top-bar-right{display:flex;align-items:center;gap:4px;}
-.tank-outer{border:2px solid #1a237e;border-radius:8px;overflow:hidden;position:relative;box-shadow:0 0 20px rgba(10,53,128,0.3);flex-shrink:0;}
-#TC{display:block;width:100%;height:100%;image-rendering:pixelated;cursor:pointer;}
-.status-bar{display:flex;align-items:center;justify-content:center;gap:8px;padding:4px 8px;font-size:13px;color:var(--muted);flex-shrink:0;min-height:28px;}
-.status-bar .water-mood{font-size:13px;color:var(--text);}
-.bottom-area{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 6px 6px;}
-.tabs{display:flex;gap:3px;padding:4px 6px;flex-shrink:0;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none;}
-.tabs::-webkit-scrollbar{display:none;}
-.tab{padding:5px 8px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--muted);cursor:pointer;font-size:11px;font-family:var(--font);transition:all .2s;white-space:nowrap;flex-shrink:0;}
-.tab:hover{background:#ffffff18;}.tab.on{background:var(--green);color:#fff;border-color:var(--green);}
-.tab .notif{position:absolute;top:-3px;right:-3px;width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite;}
+body{background:#000;color:var(--text);font-family:var(--font);font-size:16px;}
+
+/* ── FULLSCREEN TANK ── */
+#app{position:relative;width:100%;height:100%;max-width:520px;margin:0 auto;overflow:hidden;}
+#TC{position:absolute;top:0;left:0;width:100%;height:100%;image-rendering:pixelated;cursor:pointer;display:block;}
+.tank-overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;}
+
+/* ── FLOATING HUD: fades after 4s ── */
+.float-hud{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:10px 12px 6px;transition:opacity 1s ease;pointer-events:none;}
+.float-hud>*{pointer-events:auto;}
+.float-hud.dim{opacity:0.25;}
+.hud-left,.hud-right{display:flex;align-items:center;gap:6px;}
+.hud-txt{font-size:12px;color:rgba(255,255,255,0.5);}
+.mood-txt{font-size:11px;}
+.hud-pill{font-size:10px;color:var(--muted);background:rgba(255,255,255,0.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.08);padding:3px 8px;border-radius:12px;}
+.hud-pill.shell{color:#a9d6e5;}
+.hud-btn{font-size:12px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.hud-btn:active{transform:scale(0.9);}
+
+/* ── BOTTOM FAB BUTTONS ── */
+.float-btns{position:absolute;bottom:16px;left:0;right:0;z-index:20;display:flex;justify-content:center;gap:12px;padding:0 16px;transition:opacity 1s ease;}
+.float-btns.dim{opacity:0.2;}
+.fab{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:rgba(10,22,40,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;box-shadow:0 2px 12px rgba(0,0,0,0.3);}
+.fab:active{transform:scale(0.88);background:rgba(29,158,117,0.4);}
+.fab.active{background:rgba(29,158,117,0.5);border-color:var(--green);box-shadow:0 0 16px rgba(29,158,117,0.3);}
+
+/* ── SLIDE-UP PANEL ── */
+.panel-overlay{position:absolute;top:0;left:0;right:0;bottom:0;z-index:25;background:rgba(0,0,0,0.4);opacity:0;pointer-events:none;transition:opacity .3s;}
+.panel-overlay.show{opacity:1;pointer-events:auto;}
+.slide-panel{position:absolute;bottom:0;left:0;right:0;z-index:30;background:rgba(8,16,32,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.08);border-radius:16px 16px 0 0;transform:translateY(100%);transition:transform .35s cubic-bezier(0.4,0,0.2,1);max-height:65vh;display:flex;flex-direction:column;}
+.slide-panel.show{transform:translateY(0);}
+.panel-handle{display:flex;justify-content:center;padding:8px 0 4px;cursor:grab;}
+.handle-bar{width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:0 16px 8px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.panel-title{font-family:var(--pfont);font-size:9px;letter-spacing:1px;color:var(--text);}
+.panel-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;}
+.panel-close:active{background:rgba(255,255,255,0.1);}
+.panel-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px 20px;}
+.panel-section{margin-bottom:10px;}
+.section-label{font-size:11px;color:var(--muted);margin:10px 0 4px;padding-bottom:3px;border-bottom:1px solid rgba(255,255,255,0.04);}
+
+/* Tab content: all hidden by default in panel */
+.sc{display:none;}.sc.v{display:block;}
+
+/* ── GRID AND ITEMS (larger touch targets) ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;}
+.item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 8px;text-align:center;transition:all .15s;}
+.item:active{background:rgba(255,255,255,0.08);transform:scale(0.97);}
+.item canvas{display:block;margin:0 auto 4px;image-rendering:pixelated;}
+.iname{font-size:12px;color:var(--text);margin-bottom:2px;}.idesc{font-size:9px;color:var(--muted);margin-bottom:4px;line-height:1.3;}
+.iprice{font-size:11px;color:#a9d6e5;margin-bottom:5px;}
+.item button{padding:8px 10px;font-size:12px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:rgba(29,158,117,0.2);color:var(--text);cursor:pointer;font-family:var(--font);width:100%;transition:all .15s;}
+.item button:active{background:var(--green);transform:scale(0.95);}
+.item button:disabled{opacity:.3;cursor:not-allowed;}
+
+/* ── FISH CARDS ── */
+.fcard{display:flex;align-items:center;gap:8px;padding:8px;margin-bottom:5px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;cursor:pointer;transition:all .15s;}
+.fcard:active{background:rgba(255,255,255,0.08);}
+.finfo{flex:1;}.fname{font-size:13px;color:var(--text);}
+.ftag{font-size:9px;padding:2px 6px;border-radius:8px;display:inline-block;margin-right:3px;margin-top:2px;}
+.ftag-happy{background:#1D9E7522;color:#4ade80;}.ftag-calm{background:#0288D122;color:#4FC3F7;}
+.ftag-idle{background:#FFB30022;color:#FFB300;}.ftag-age{background:#CE93D822;color:#CE93D8;}
+.fbtns{display:flex;flex-direction:column;gap:3px;}
+.fbtns button{font-size:10px;padding:4px 8px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;background:rgba(255,255,255,0.04);cursor:pointer;font-family:var(--font);color:var(--text);}
+.fbtns button:active{background:rgba(255,255,255,0.1);}
+
+/* ── MISC ── */
+.btn{padding:10px 16px;background:var(--green);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-family:var(--font);transition:all .15s;}
+.btn:active{transform:scale(0.95);opacity:0.8;}.btn:disabled{opacity:.4;cursor:not-allowed;}
+.al{padding:6px 10px;border-radius:8px;font-size:12px;margin-bottom:6px;animation:slideIn .3s ease-out;}
+@keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
+.ok{background:#1D9E7522;color:#4ade80;border:1px solid #1D9E7544;}
+.warn{background:#FFB30022;color:#FFB300;border:1px solid #FFB30044;}
+.bad{background:#E5393522;color:#ff6b6b;border:1px solid #E5393544;}
+.stitle{display:none;}
+.refresh-note{font-size:10px;color:var(--muted);margin-bottom:6px;text-align:center;}
+.owned{font-size:9px;color:var(--green);background:#1D9E7522;padding:1px 5px;border-radius:10px;display:inline-block;margin-top:2px;}
+.rare-tag{font-size:8px;color:#E040FB;background:#E040FB22;padding:1px 4px;border-radius:6px;display:inline-block;margin-bottom:1px;animation:shimmer 2s infinite;}
+.super-rare-tag{font-size:8px;color:#FFD700;background:#FFD70022;padding:1px 4px;border-radius:6px;display:inline-block;margin-bottom:1px;animation:shimmer 1.5s infinite;}
+@keyframes shimmer{0%,100%{opacity:1;}50%{opacity:0.5;}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.bar{height:5px;background:#ffffff10;border-radius:20px;overflow:hidden;margin-top:2px;}
+.fill{height:100%;border-radius:20px;transition:width .4s;}
+.row{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
+.lbl{font-size:12px;color:var(--muted);width:80px;flex-shrink:0;}.val{font-size:11px;font-weight:500;width:24px;text-align:right;}
+.btn-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.feed-particle{position:absolute;pointer-events:none;font-size:10px;animation:feedDrop 1.2s ease-in forwards;z-index:15;}
+@keyframes feedDrop{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(60px);}}
+.coin-fly{position:fixed;pointer-events:none;font-family:var(--pfont);font-size:9px;color:#a9d6e5;z-index:9999;animation:coinUp 1s ease-out forwards;}
+@keyframes coinUp{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-30px);}}
+.setup-panel{background:rgba(10,22,40,0.9);border:1px solid var(--border);border-radius:10px;padding:12px 14px;width:min(280px,85%);pointer-events:all;}
+.setup-panel .sp-title{font-family:var(--pfont);font-size:8px;color:var(--gold);margin-bottom:8px;text-align:center;letter-spacing:1px;}
+.setup-step{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid #ffffff0a;font-size:13px;}
+.setup-step:last-of-type{border-bottom:none;}
+.setup-step .ss-label{color:var(--muted);}.setup-step.done .ss-label{color:#4ade80;}
+.water-btn{width:100%;margin-top:8px;padding:8px;background:var(--blue);color:#fff;border:none;border-radius:7px;cursor:pointer;font-family:var(--font);font-size:14px;}
+.water-btn:active{opacity:0.8;}.water-btn:disabled{opacity:.4;cursor:not-allowed;}
+.zen-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);background:rgba(8,16,32,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 22px;z-index:9998;font-size:13px;color:var(--text);text-align:center;opacity:0;transition:all .4s ease-out;pointer-events:none;max-width:260px;}
+.zen-toast.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
+.zen-toast .toast-title{color:var(--gold);font-size:10px;margin-bottom:5px;font-family:var(--pfont);letter-spacing:1px;}
+.ach-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:rgba(10,22,40,0.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,215,0,0.2);border-radius:12px;padding:10px 16px;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:transform .5s cubic-bezier(.34,1.56,.64,1);font-family:var(--font);}
+.ach-popup.show{transform:translateX(-50%) translateY(0);}
+.ach-popup .ach-text{color:var(--gold);font-size:12px;}.ach-popup .ach-sub{color:var(--muted);font-size:10px;}
+.ach-icon{font-size:18px;width:28px;text-align:center;flex-shrink:0;}
+.ach-card{display:flex;align-items:center;gap:8px;padding:8px;margin-bottom:4px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;}
+.ach-card.done{border-color:rgba(29,158,117,0.3);background:rgba(29,158,117,0.06);}
+.ach-info{flex:1;}.ach-name{font-size:12px;color:var(--text);}.ach-desc{font-size:10px;color:var(--muted);margin-top:1px;}
+.ach-reward{font-size:9px;color:var(--gold);margin-top:1px;}.ach-check{color:#4ade80;font-size:14px;}
+.stat-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px;text-align:center;}
+.stat-val{font-size:11px;color:var(--gold);font-family:var(--pfont);}.stat-label{font-size:11px;color:var(--muted);margin-top:3px;}
+.upgrade-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
+.upgrade-card .up-icon{font-size:20px;width:30px;text-align:center;}.upgrade-card .up-info{flex:1;}
+.upgrade-card .up-name{font-size:13px;color:var(--text);}.upgrade-card .up-desc{font-size:10px;color:var(--muted);margin-top:1px;}
+.upgrade-card .up-price{font-size:11px;color:#a9d6e5;margin-top:2px;}
+.shells-display,.coins-display,.level-display,.tank-size-badge,.collection-badge,.game-title,.top-bar,.tabs,.tab,.bottom-area,.hud,.hud-stat{display:none!important;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
 .sc{display:none;}.sc.v{display:block;animation:fadeIn .2s ease-out;}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
@@ -114,58 +213,79 @@ body{background:var(--deep);color:var(--text);font-family:var(--font);font-size:
 </style>
 </head>
 <body>
+<!-- FULLSCREEN TANK -->
 <div id="app">
-  <div class="game-title">~ ZEN AQUARIUM ~</div>
-  <div class="top-bar">
-    <div class="top-bar-left">
-      <div style="font-size:11px;color:var(--muted)" id="time-display">Day 1 — 08:00</div>
-      <div class="tank-size-badge" id="tank-badge">Tank: Small</div>
+  <canvas id="TC"></canvas>
+  <div class="tank-overlay" id="tank-setup-overlay"></div>
+
+  <!-- FLOATING TOP HUD: minimal, fades out -->
+  <div class="float-hud" id="float-hud">
+    <div class="hud-left">
+      <span id="time-display" class="hud-txt">Day 1</span>
+      <span id="water-mood" class="hud-txt mood-txt">🌊</span>
     </div>
-    <div class="top-bar-right">
-      <button class="audio-btn" id="audio-btn">♪ ON</button>
-      <div class="collection-badge" id="col-badge">📖 0</div>
-      
-      <div class="shells-display" id="CD">🐚 5</div>
+    <div class="hud-right">
+      <span id="col-badge" class="hud-pill">📖 0</span>
+      <span id="CD" class="hud-pill shell">🐚 5</span>
+      <button class="hud-btn" id="audio-btn">♪</button>
     </div>
   </div>
-  <div class="tank-outer"><canvas id="TC" height="336"></canvas><div class="tank-overlay" id="tank-setup-overlay"></div></div>
-  <div class="status-bar" id="status-bar"><span class="water-mood" id="water-mood">🌊 The water is peaceful</span></div>
-  <div id="wq-bar"></div>
-  <div class="hud" id="HUD"></div>
-  <div class="tabs" id="tab-bar">
-    <button class="tab on" data-tab="market">Add Life</button>
-    <button class="tab" data-tab="deco">Decorate</button>
-    <button class="tab" data-tab="backdrops">Backdrop</button>
-    <button class="tab" data-tab="codex">Codex</button>
-    <button class="tab" data-tab="journal">Journal</button>
-    <button class="tab" data-tab="manage">My Tank</button>
+
+  <!-- STATUS BAR (invisible, just for JS refs) -->
+  <div id="status-bar" style="display:none"><span id="tank-badge"></span></div>
+  <div id="wq-bar" style="display:none"></div>
+  <div id="HUD" style="display:none"></div>
+
+  <!-- BOTTOM FLOAT BUTTONS -->
+  <div class="float-btns" id="float-btns">
+    <button class="fab" data-panel="market" title="Add Life">🐟</button>
+    <button class="fab" data-panel="deco" title="Decorate">🪨</button>
+    <button class="fab" data-panel="backdrops" title="Backdrop">🎨</button>
+    <button class="fab" data-panel="codex" title="Codex">📖</button>
+    <button class="fab" data-panel="journal" title="Journal">📝</button>
+    <button class="fab" data-panel="manage" title="My Tank">⚙</button>
   </div>
-  <div class="bottom-area">
-  <div id="a-global"></div>
-  <div class="sc v" id="s-market"><div class="stitle">Add Life to Your Tank</div><div class="refresh-note" id="market-note"></div><div id="a-market"></div><div style="font-size:11px;color:var(--muted);margin:4px 0;">Fish</div><div class="grid" id="fish-g"></div><div style="font-size:11px;color:var(--muted);margin:8px 0 4px;" id="creature-note">Creatures</div><div class="grid" id="creature-g"></div><div style="font-size:11px;color:var(--muted);margin:8px 0 4px;" id="plant-note">Plants</div><div class="grid" id="plant-g"></div></div>
-  <div class="sc" id="s-deco"><div class="stitle">Decorations</div><div class="refresh-note" id="deco-note"></div><div id="a-deco"></div><div class="grid" id="deco-g"></div></div>
-  <div class="sc" id="s-backdrops"><div class="stitle">Tank Backdrops</div><div id="a-backdrops"></div><div style="font-size:11px;color:var(--muted);margin-bottom:6px;" id="backdrop-current"></div><div class="grid" id="backdrop-g"></div></div>
-  <div class="sc" id="s-manage">
-    <div class="stitle">My Tank</div><div id="a-manage"></div>
-    <div class="panel" id="manage-actions" style="margin-bottom:6px;">
-      <div class="stitle" style="margin-bottom:6px;">Tank Care</div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;">
-        <button class="btn" id="btn-changewater" style="background:#0288D1;flex:1;font-size:12px;">💧 Change Water</button>
-        <button class="btn" id="btn-clean" style="background:#00897B;flex:1;font-size:12px;">🧹 Clean</button>
+
+  <!-- SLIDE-UP PANEL -->
+  <div class="panel-overlay" id="panel-overlay"></div>
+  <div class="slide-panel" id="slide-panel">
+    <div class="panel-handle" id="panel-handle"><div class="handle-bar"></div></div>
+    <div class="panel-header">
+      <span class="panel-title" id="panel-title">Panel</span>
+      <button class="panel-close" id="panel-close">✕</button>
+    </div>
+    <div class="panel-body" id="panel-body">
+      <!-- Tab content sections -->
+      <div id="a-global"></div>
+      <div class="sc" id="s-market"><div class="refresh-note" id="market-note"></div><div id="a-market"></div><div class="section-label">Fish</div><div class="grid" id="fish-g"></div><div class="section-label" id="creature-note">Creatures</div><div class="grid" id="creature-g"></div><div class="section-label" id="plant-note">Plants</div><div class="grid" id="plant-g"></div></div>
+      <div class="sc" id="s-deco"><div class="refresh-note" id="deco-note"></div><div id="a-deco"></div><div class="grid" id="deco-g"></div></div>
+      <div class="sc" id="s-backdrops"><div id="a-backdrops"></div><div class="section-label" id="backdrop-current"></div><div class="grid" id="backdrop-g"></div></div>
+      <div class="sc" id="s-manage">
+        <div id="a-manage"></div>
+        <div class="panel-section" id="manage-actions">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+            <button class="btn" id="btn-changewater" style="background:#0288D1;flex:1;">💧 Change Water</button>
+            <button class="btn" id="btn-clean" style="background:#00897B;flex:1;">🧹 Clean</button>
+          </div>
+        </div>
+        <div class="section-label">My Creatures</div>
+        <div id="a-myfish"></div>
+        <div id="fish-list"></div>
+        <div class="section-label">Placed Decorations</div>
+        <div id="deco-list"></div>
+        <div class="section-label">Planted Flora</div>
+        <div id="plant-list"></div>
+        <div class="section-label" style="margin-top:12px;">Stats</div>
+        <div id="a-stats"></div>
+        <div id="stats-content"></div>
       </div>
+      <div class="sc" id="s-codex"><div id="codex-progress" class="section-label"></div><div id="codex-grid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div></div>
+      <div class="sc" id="s-journal"><div id="journal-list"></div></div>
+      <div class="sc" id="s-achievements"><div id="a-achievements"></div><div id="ach-list"></div></div>
     </div>
-    <div class="stitle" style="margin-bottom:4px;">My Creatures</div>
-    <div id="a-myfish"></div>
-    <div id="fish-list"></div>
-    <div class="stitle" style="margin-top:8px;margin-bottom:4px;">Stats</div>
-    <div id="a-stats"></div>
-    <div id="stats-content"></div>
-  </div>
-  <div class="sc" id="s-codex"><div class="stitle">Fish Codex</div><div id="codex-progress" style="font-size:11px;color:var(--muted);margin-bottom:6px;"></div><div id="codex-grid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(90px,1fr));"></div></div>
-  <div class="sc" id="s-journal"><div class="stitle">Journal</div><div id="journal-list" style="max-height:300px;overflow-y:auto;"></div></div>
-  <div class="sc" id="s-achievements"><div class="stitle">Goals</div><div id="a-achievements"></div><div id="ach-list"></div></div>
   </div>
 </div>
+
 <div class="ach-popup" id="ach-popup"><div class="ach-icon" id="ach-popup-icon"></div><div><div class="ach-text" id="ach-popup-text"></div><div class="ach-sub" id="ach-popup-sub"></div></div></div>
 <div class="zen-toast" id="zen-toast"><div class="toast-title" id="toast-title"></div><div id="toast-msg"></div></div>
 
@@ -366,11 +486,11 @@ const CREATURES_DEF=[
 ];
 
 const BACKDROP_DEF=[
-  {id:'lake',       name:'Peaceful Lake',     price:0,  rarity:'common',     desc:'Warm green shallows with dappled sunlight'},
-  {id:'ocean',      name:'Open Ocean',        price:0,  rarity:'common',     desc:'Endless deep blue with subtle current'},
-  {id:'coral_reef', name:'Coral Reef',        price:1, rarity:'uncommon',   desc:'Vibrant reef colors shimmer in the light'},
-  {id:'deep_ocean', name:'Deep Abyss',        price:2, rarity:'rare',       desc:'Mysterious darkness with bioluminescence'},
-  {id:'enchanted',  name:'Enchanted Waters',  price:3, rarity:'super_rare', desc:'Magical aurora dances through the water'},
+  {id:'lake',       name:'Peaceful Lake',     price:0,  rarity:'common',     desc:'Sunlit shallows with soft mud and river stones'},
+  {id:'ocean',      name:'Open Ocean',        price:0,  rarity:'common',     desc:'Sandy seabed fading into deep blue distance'},
+  {id:'coral_reef', name:'Coral Reef',        price:1, rarity:'uncommon',   desc:'Living reef floor with warm tropical light'},
+  {id:'deep_ocean', name:'Deep Abyss',        price:2, rarity:'rare',       desc:'Dark ocean trench lit only by living things'},
+  {id:'enchanted',  name:'Enchanted Waters',  price:3, rarity:'super_rare', desc:'Otherworldly depths where light bends and glows'},
 ];
 
 const STEPS=[
@@ -1162,11 +1282,11 @@ const DECO_SPRITE_CFG={
 
 // Preview for shop (60×60 canvas)
 function drawDecoPreview(id){
-  const c=document.createElement('canvas');c.width=60;c.height=60;
-  c.style.width='60px';c.style.height='60px';c.style.imageRendering='pixelated';
+  const c=document.createElement('canvas');c.width=52;c.height=52;
+  c.style.width='52px';c.style.height='52px';c.style.imageRendering='pixelated';
   const ctx=c.getContext('2d');
-  ctx.fillStyle='#0a2d6e';ctx.fillRect(0,0,60,60);
-  drawDecoSprite(ctx,id,2,56,2);
+  ctx.fillStyle='#0a2d6e';ctx.fillRect(0,0,52,52);
+  drawDecoSprite(ctx,id,2,48,2);
   return c.outerHTML;
 }
 
@@ -1200,7 +1320,7 @@ function ld(){try{const x=localStorage.getItem('aq8');if(x){Object.assign(S,JSON
 function coin(n){S.coins+=n;document.getElementById('CD').textContent='🐚 '+S.coins;sv();}
 function shell(n){coin(n);if(n>0)showZenToast('🐚 Shell','Found a shell on the shore');}
 function addXP(n){/* zen: no XP/levels */}
-function coinFlyAnim(text){const el=document.createElement('div');el.className='coin-fly';el.textContent=text;const cd=document.getElementById('CD');const r=cd.getBoundingClientRect();el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top-5)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),1000);}
+function coinFlyAnim(text){const el=document.createElement('div');el.className='coin-fly';el.textContent=text;const cd=document.getElementById('CD');if(!cd)return;const r=cd.getBoundingClientRect();el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top-5)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),1000);}
 function showAl(z,m,t){const el=document.getElementById('a-'+(z||'global'));if(!el)return;el.innerHTML='<div class="al '+t+'">'+m+'</div>';setTimeout(()=>{if(el)el.innerHTML='';},3000);}
 function getTankCap(){return TANK_SIZES[S.tankSize||0].capacity;}
 function avgW(){const v=Object.values(S.waterScore||{});if(!v.length)return 0;return Math.round(v.reduce((a,b)=>a+b,0)/v.length);}
@@ -1224,7 +1344,7 @@ function getFishMood(f){
 
 function checkAch(){ACHIEVEMENTS.forEach(a=>{if((S.achievements||[]).includes(a.id))return;if(a.check(S)){if(!S.achievements)S.achievements=[];S.achievements.push(a.id);if(a.reward>0)coin(Math.ceil(a.reward/50));showAchPopup(a);sv();}});}
 function showAchPopup(a){const p=document.getElementById('ach-popup');document.getElementById('ach-popup-icon').textContent=a.icon;document.getElementById('ach-popup-text').textContent='Achievement: '+a.name;document.getElementById('ach-popup-sub').textContent=a.desc+(a.reward>0?' (+'+a.reward+' 🐚)':'');p.classList.add('show');setTimeout(()=>p.classList.remove('show'),3500);}
-function updateTankBadge(){document.getElementById('tank-badge').textContent='Tank: '+TANK_SIZES[S.tankSize||0].name;}
+function updateTankBadge(){const el=document.getElementById('tank-badge');if(el)el.textContent='Tank: '+TANK_SIZES[S.tankSize||0].name;}
 
 function recalcWater(){
   const pp=Math.round(S.poopLevel*0.4);
@@ -1297,28 +1417,75 @@ function renderSetup(){
 /* ═══════════════════════════════════════════════════════════
    TABS
 ═══════════════════════════════════════════════════════════ */
-document.getElementById('tab-bar').addEventListener('click',function(e){
-  const btn=e.target.closest('.tab');if(!btn)return;
-  const name=btn.dataset.tab;
-  document.querySelectorAll('#app .sc').forEach(s=>s.classList.remove('v'));
-  document.querySelectorAll('#app .tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('s-'+name).classList.add('v');btn.classList.add('on');
+// ── PANEL SYSTEM: slide-up panels ──
+const panelEl=document.getElementById('slide-panel');
+const panelOverlay=document.getElementById('panel-overlay');
+const panelTitleEl=document.getElementById('panel-title');
+let currentPanel=null;
+const PANEL_NAMES={market:'Add Life',deco:'Decorate',backdrops:'Backdrop',codex:'Codex',journal:'Journal',manage:'My Tank'};
+function openPanel(name){
+  if(currentPanel===name){closePanel();return;}
+  currentPanel=name;
+  if(panelTitleEl)panelTitleEl.textContent=PANEL_NAMES[name]||name;
+  document.querySelectorAll('#panel-body .sc').forEach(s=>s.classList.remove('v'));
+  const target=document.getElementById('s-'+name);
+  if(target)target.classList.add('v');
   if(name==='market'){renderMarket();renderCreatures();renderPlants();}
-  if(name==='creatures')renderCreatures();
-  if(name==='plants')renderPlants();
-  if(name==='manage'){renderFishList();renderStats();}
   if(name==='deco')renderDeco();
-  if(name==='achievements')renderAchievements();
+  if(name==='backdrops')renderBackdrops();
   if(name==='codex')renderCodex();
   if(name==='journal')renderJournal();
-  if(name==='backdrops')renderBackdrops();
+  if(name==='manage'){renderFishList();renderPlacedItems();renderStats();}
+  if(panelEl)panelEl.classList.add('show');
+  if(panelOverlay)panelOverlay.classList.add('show');
+  document.querySelectorAll('.fab').forEach(f=>f.classList.remove('active'));
+  const fab=document.querySelector('.fab[data-panel="'+name+'"]');
+  if(fab)fab.classList.add('active');
+}
+function closePanel(){
+  currentPanel=null;
+  if(panelEl)panelEl.classList.remove('show');
+  if(panelOverlay)panelOverlay.classList.remove('show');
+  document.querySelectorAll('.fab').forEach(f=>f.classList.remove('active'));
+}
+const floatBtns=document.getElementById('float-btns');
+if(floatBtns)floatBtns.addEventListener('click',function(e){
+  const fab=e.target.closest('.fab');if(!fab)return;
+  openPanel(fab.dataset.panel);
 });
+const panelCloseBtn=document.getElementById('panel-close');
+if(panelCloseBtn)panelCloseBtn.addEventListener('click',closePanel);
+if(panelOverlay)panelOverlay.addEventListener('click',closePanel);
+let panelTouchY=0;
+const panelHandle=document.getElementById('panel-handle');
+if(panelHandle){
+  panelHandle.addEventListener('touchstart',function(e){panelTouchY=e.touches[0].clientY;});
+  panelHandle.addEventListener('touchmove',function(e){if(e.touches[0].clientY-panelTouchY>40)closePanel();});
+}
+// HUD auto-fade
+let hudTimer=null;
+function resetHudFade(){
+  const hud=document.getElementById('float-hud');
+  const btns=document.getElementById('float-btns');
+  if(hud)hud.classList.remove('dim');
+  if(btns)btns.classList.remove('dim');
+  clearTimeout(hudTimer);
+  hudTimer=setTimeout(function(){
+    if(!currentPanel){
+      if(hud)hud.classList.add('dim');
+      if(btns)btns.classList.add('dim');
+    }
+  },4000);
+}
+document.addEventListener('touchstart',resetHudFade);
+document.addEventListener('mousedown',resetHudFade);
+resetHudFade();
 
-document.getElementById('audio-btn').addEventListener('click',toggleAudio);
-document.getElementById('btn-clean').addEventListener('click',function(){
+const audioBtn=document.getElementById('audio-btn');if(audioBtn)audioBtn.addEventListener('click',toggleAudio);
+const cleanBtn=document.getElementById('btn-clean');if(cleanBtn)cleanBtn.addEventListener('click',function(){
   animateClean();S.poopLevel=0;S.totalCleans=(S.totalCleans||0)+1;addXP(3);recalcWater();sv();showAl('manage','Tank cleaned!','ok');renderFishList();
 });
-document.getElementById('btn-changewater').addEventListener('click',function(){
+const cwBtn=document.getElementById('btn-changewater');if(cwBtn)cwBtn.addEventListener('click',function(){
   if(!S.waterAdded){showAl('manage','Add water first!','warn');return;}
   animateWaterChange();
 });
@@ -1436,7 +1603,9 @@ function renderMarket(){
   const grid=document.getElementById('fish-g');grid.innerHTML='';
   avail.forEach(f=>{
     const div=document.createElement('div');div.className='item';
-    div.appendChild(makeFishCanvas(f.id,42));
+    const fishThumb=makeFishCanvas(f.id,36);
+    const thumbWrap=document.createElement('div');thumbWrap.style.cssText='width:56px;height:56px;display:flex;align-items:center;justify-content:center;margin:0 auto 4px;';thumbWrap.appendChild(fishThumb);
+    div.appendChild(thumbWrap);
     const isR=f.rarity==='rare';const isSR=f.rarity==='super_rare';
     div.innerHTML+=(isSR?'<div class="super-rare-tag">★★ SUPER RARE</div>':isR?'<div class="rare-tag">★ RARE</div>':'')+
       '<div class="iname">'+f.name+'</div><div class="idesc">'+f.desc+'</div>'+
@@ -1665,7 +1834,9 @@ function renderCreatures(){
   const grid=document.getElementById('creature-g');grid.innerHTML='';
   CREATURES_DEF.forEach(cr=>{
     const div=document.createElement('div');div.className='item';
-    div.appendChild(makeCreatureCanvas(cr.id,42));
+    const crThumb=makeCreatureCanvas(cr.id,36);
+    const crWrap=document.createElement('div');crWrap.style.cssText='width:56px;height:56px;display:flex;align-items:center;justify-content:center;margin:0 auto 4px;';crWrap.appendChild(crThumb);
+    div.appendChild(crWrap);
     const isR=cr.rarity==='rare';const isSR=cr.rarity==='super_rare';
     div.innerHTML+=(isSR?'<div class="super-rare-tag">★★ SUPER RARE</div>':isR?'<div class="rare-tag">★ RARE</div>':'')+
       '<div class="iname">'+cr.name+'</div><div class="idesc">'+cr.desc+'</div>'+
@@ -1696,7 +1867,9 @@ function renderPlants(){
   avail.forEach(p=>{
     const count=(S.plantSeeds||[]).filter(x=>x.id===p.id).length;
     const div=document.createElement('div');div.className='item';
-    div.appendChild(drawPlantCanvas(p.id,36));
+    const plThumb=drawPlantCanvas(p.id,36);
+    const plWrap=document.createElement('div');plWrap.style.cssText='width:56px;height:56px;display:flex;align-items:center;justify-content:center;margin:0 auto 4px;';plWrap.appendChild(plThumb);
+    div.appendChild(plWrap);
     const isR=p.rarity==='rare';const isSR=p.rarity==='super_rare';
     div.innerHTML+=(isSR?'<div class="super-rare-tag">★★ SUPER RARE</div>':isR?'<div class="rare-tag">★ RARE</div>':'')+
       '<div class="iname">'+p.name+'</div><div class="idesc">'+p.desc+'</div>'+
@@ -1769,7 +1942,7 @@ function renderDeco(){
   avail.forEach(d=>{
     const placed=(S.decos||[]).some(x=>x.id===d.id);
     const div=document.createElement('div');div.className='item';
-    div.innerHTML='<div style="height:58px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;">'+drawDecoPreview(d.id)+'</div>'+
+    div.innerHTML='<div style="width:56px;height:56px;display:flex;align-items:center;justify-content:center;margin:0 auto 4px;overflow:hidden;">'+drawDecoPreview(d.id)+'</div>'+
       (d.rarity==='super_rare'?'<div class="super-rare-tag">★★ SUPER RARE</div>':d.rarity==='rare'?'<div class="rare-tag">★ RARE</div>':'')+
       '<div class="iname">'+d.name+'</div><div class="idesc">'+d.desc+'</div>'+
       '<div class="iprice">'+d.price+' coins</div>'+
@@ -1811,6 +1984,41 @@ S.decos.push({id,x:bestX,d:bestDepth});sv();showAl('deco',dd.name+' placed!','ok
 /* ═══════════════════════════════════════════════════════════
    MY CREATURES (fish list in management tab)
 ═══════════════════════════════════════════════════════════ */
+function renderPlacedItems(){
+  // Decos
+  const dl=document.getElementById('deco-list');
+  if(dl){
+    if(!(S.decos||[]).length){dl.innerHTML='<div style="font-size:11px;color:var(--muted);padding:6px;">No decorations placed.</div>';}
+    else{
+      dl.innerHTML='';
+      S.decos.forEach((d,i)=>{
+        const def=DECO_DEF.find(x=>x.id===d.id);
+        const row=document.createElement('div');row.className='fcard';
+        row.innerHTML='<div style="font-size:16px;width:28px;text-align:center;">🪨</div><div class="finfo"><div class="fname">'+(def?.name||d.id)+'</div></div>';
+        const rb=document.createElement('button');rb.textContent='Remove';rb.style.cssText='font-size:10px;padding:4px 8px;border:1px solid rgba(255,100,100,0.3);border-radius:6px;background:rgba(255,100,100,0.08);color:#ff6b6b;cursor:pointer;';
+        rb.addEventListener('click',function(e){e.stopPropagation();S.decos.splice(i,1);sv();renderPlacedItems();showZenToast('🪨','Decoration removed');});
+        row.appendChild(rb);dl.appendChild(row);
+      });
+    }
+  }
+  // Plants
+  const pl=document.getElementById('plant-list');
+  if(pl){
+    if(!(S.plantSeeds||[]).length){pl.innerHTML='<div style="font-size:11px;color:var(--muted);padding:6px;">No plants.</div>';}
+    else{
+      pl.innerHTML='';
+      S.plantSeeds.forEach((p,i)=>{
+        const def=PLANTS_DEF.find(x=>x.id===p.id);
+        const row=document.createElement('div');row.className='fcard';
+        row.innerHTML='<div style="font-size:16px;width:28px;text-align:center;">🌿</div><div class="finfo"><div class="fname">'+(def?.name||p.id)+'</div></div>';
+        const rb=document.createElement('button');rb.textContent='Remove';rb.style.cssText='font-size:10px;padding:4px 8px;border:1px solid rgba(255,100,100,0.3);border-radius:6px;background:rgba(255,100,100,0.08);color:#ff6b6b;cursor:pointer;';
+        rb.addEventListener('click',function(e){e.stopPropagation();S.plantSeeds.splice(i,1);sv();renderPlacedItems();showZenToast('🌿','Plant removed');});
+        row.appendChild(rb);pl.appendChild(row);
+      });
+    }
+  }
+}
+
 function renderFishList(){
   const list=document.getElementById('fish-list');
   if(!S.fish.length){list.innerHTML='<div style="font-size:12px;color:var(--muted);padding:10px">No creatures yet. Visit the Fish Market!</div>';return;}
@@ -1833,6 +2041,19 @@ function renderFishList(){
       '<span class="ftag ftag-age">day '+f.age+'</span></div>';
     div.appendChild(info);
     const btns=document.createElement('div');btns.className='fbtns';
+    // Rename button
+    const rnBtn=document.createElement('button');rnBtn.textContent='✏ Rename';
+    rnBtn.addEventListener('click',function(e){
+      e.stopPropagation();
+      const newName=prompt('New name for '+f.name+':',f.name);
+      if(newName&&newName.trim()){
+        const old=f.name;f.name=newName.trim().slice(0,12);sv();renderFishList();
+        addMoment(old+' is now called '+f.name,'event');
+        showZenToast('✏️ Renamed',old+' → '+f.name);
+      }
+    });
+    btns.appendChild(rnBtn);
+    // Release button
     const rb=document.createElement('button');rb.textContent='Release';
     rb.style.color='#ff6b6b';
     rb.addEventListener('click',e=>{
@@ -2088,7 +2309,7 @@ function drawPlant(ctx,p,t,W,H,baseY){
   const h=getPlantH(p)*sc*depthHMult;
   const base=baseY!==undefined?baseY:Math.round(H*0.75);
   const swayAmp=2+depth*3;// front sways more
-  const sw=Math.sin(t*0.5+p.swayOff)*swayAmp;
+  const sw=Math.sin(t*0.35+p.swayOff)*swayAmp+Math.sin(t*0.7+p.swayOff*2)*swayAmp*0.3;// dual-wave for organic feel
   if(pc.shape==='ball'){
     const by=base-h*0.6;const bx=Math.round(p.x+sw*0.5);
     for(let r=0;r<h*0.6;r+=sc){ctx.fillStyle=pc.leaf[Math.floor(r/h*3)%3];ctx.fillRect(bx-Math.round(h*0.4),by+r,Math.round(h*0.8),sc);}
@@ -2136,7 +2357,7 @@ function dropFood(){
 }
 
 function showFeedParticles(){
-  const tank=document.querySelector('.tank-outer');
+  const tank=document.getElementById('app');
   for(let i=0;i<6;i++){const p=document.createElement('div');p.className='feed-particle';p.textContent='•';p.style.color='#FFB300';p.style.left=(20+Math.random()*60)+'%';p.style.top='3px';p.style.animationDelay=(Math.random()*0.4)+'s';tank.appendChild(p);setTimeout(()=>p.remove(),1500);}
 }
 
@@ -2195,27 +2416,20 @@ function syncAnim(){
 let tankW=0,tankH=0;
 function resizeTank(){
   const canvas=document.getElementById('TC');if(!canvas)return;
-  const parent=canvas.parentElement;
-  // Calculate fixed tank height: viewport minus top bar, status bar, tabs, and bottom area
   const app=document.getElementById('app');
-  const vh=app.clientHeight||window.innerHeight;
-  // Reserve space for: title(25) + topbar(30) + statusbar(28) + tabs(32) + bottom(min 120)
-  const reserved=25+30+28+32+Math.min(vh*0.32,180);
-  const targetH=Math.max(180,Math.floor(vh-reserved));
-  parent.style.height=targetH+'px';
-  tankW=parent.clientWidth||390;
-  tankH=targetH;
+  tankW=app.clientWidth||window.innerWidth;
+  tankH=app.clientHeight||window.innerHeight;
+  if(tankW>520)tankW=520;
   if(Math.abs(canvas.width-tankW)>2)canvas.width=tankW;
   if(Math.abs(canvas.height-tankH)>2)canvas.height=tankH;
 }
-window.addEventListener('resize',()=>{resizeTank();});
-setTimeout(resizeTank,50);
+window.addEventListener('resize',resizeTank);
+setTimeout(resizeTank,30);
 
 function drawTank(){
   const canvas=document.getElementById('TC');if(!canvas)return;
-  resizeTank();
   const W=canvas.width||390;
-  const H=canvas.height||300;
+  const H=canvas.height||window.innerHeight||600;
   const ctx=canvas.getContext('2d');
   cancelAnimationFrame(raf);
 
@@ -2268,131 +2482,100 @@ function drawTank(){
     for(let i=0;i<W;i+=8){ctx.lineTo(i,3+Math.sin(t*1.2+i*0.02)*1.5);}
     ctx.stroke();ctx.restore();
 
-    // ── BACKDROP THEME RENDERING — replaces entire water color ──
+    // ── BACKDROP THEME RENDERING — subtle naturalistic backgrounds ──
     const activeBackdrop=S.activeBackdrop||'none';
     if(activeBackdrop!=='none'){
-      // Clear and repaint base with theme-specific full gradient
-      ctx.clearRect(0,0,W,H);
+      ctx.save();
       if(activeBackdrop==='lake'){
-        // LAKE: warm green-brown shallow water, visible sunbeams
+        // LAKE: olive-brown murky water, soft light from above, earthy
         const lg=ctx.createLinearGradient(0,0,0,H);
-        lg.addColorStop(0,'#1a3020');lg.addColorStop(0.3,'#284830');lg.addColorStop(0.6,'#305838');lg.addColorStop(1,'#283820');
-        ctx.fillStyle=lg;ctx.fillRect(0,0,W,H);
-        // Strong dappled sunlight columns
-        ctx.save();ctx.globalAlpha=0.12;ctx.fillStyle='#c0e890';
-        for(let i=0;i<6;i++){
-          const sx=W*(0.08+i*0.16)+Math.sin(t*0.12+i*1.1)*18;
-          ctx.beginPath();ctx.moveTo(sx-8,0);ctx.lineTo(sx+8,0);ctx.lineTo(sx+35,H*0.7);ctx.lineTo(sx-35,H*0.7);ctx.closePath();ctx.fill();
+        lg.addColorStop(0,'#1a2818');lg.addColorStop(0.3,'#1e3020');lg.addColorStop(0.6,'#223828');lg.addColorStop(1,'#1a2818');
+        ctx.globalAlpha=0.5;ctx.fillStyle=lg;ctx.fillRect(0,0,W,H);
+        // Soft dappled light (not strong beams)
+        ctx.globalAlpha=0.04;ctx.fillStyle='#a0c870';
+        for(let i=0;i<5;i++){
+          const sx=W*(0.1+i*0.18)+Math.sin(t*0.08+i*1.3)*15;
+          ctx.beginPath();ctx.ellipse(sx,H*0.2+i*10,25,H*0.25,0,0,Math.PI*2);ctx.fill();
         }
-        ctx.restore();
-        // Floating pollen / dust
-        ctx.save();ctx.globalAlpha=0.18;ctx.fillStyle='#e8e0b0';
-        for(let i=0;i<12;i++){
-          const px=(i*89+t*4+Math.sin(t*0.15+i)*20)%W;
-          const py=(i*53+t*6+Math.sin(t*0.1+i*2)*15)%(H*0.7);
-          ctx.fillRect(Math.round(px),Math.round(py),2,2);
-        }
-        ctx.restore();
-      } else if(activeBackdrop==='ocean'){
-        // OCEAN: deep rich blue, strong depth, volumetric light shafts
-        const og=ctx.createLinearGradient(0,0,0,H);
-        og.addColorStop(0,'#041028');og.addColorStop(0.3,'#082050');og.addColorStop(0.6,'#0a2868');og.addColorStop(1,'#061840');
-        ctx.fillStyle=og;ctx.fillRect(0,0,W,H);
-        // Bold light shafts from surface
-        ctx.save();ctx.globalAlpha=0.07;ctx.fillStyle='#6090d0';
-        for(let i=0;i<4;i++){
-          const sx=W*(0.15+i*0.22)+Math.sin(t*0.08+i*2)*25;
-          ctx.beginPath();ctx.moveTo(sx-12,0);ctx.lineTo(sx+12,0);ctx.lineTo(sx+60,H);ctx.lineTo(sx-60,H);ctx.closePath();ctx.fill();
-        }
-        ctx.restore();
-        // Slow horizontal current lines
-        ctx.save();ctx.globalAlpha=0.06;ctx.strokeStyle='#4080b0';ctx.lineWidth=1;
+        // Floating sediment
+        ctx.globalAlpha=0.07;ctx.fillStyle='#c0b080';
         for(let i=0;i<8;i++){
-          const sy=H*0.08+i*H*0.1+Math.sin(t*0.06+i)*8;
-          ctx.beginPath();ctx.moveTo(0,sy);
-          for(let x=0;x<W;x+=20){ctx.lineTo(x,sy+Math.sin(t*0.1+x*0.005+i)*4);}
-          ctx.stroke();
+          const px=(i*97+t*2.5)%W;const py=(i*61+t*4)%(H*0.68);
+          ctx.fillRect(Math.round(px),Math.round(py),1,1);
         }
-        ctx.restore();
+        ctx.restore();ctx.save();
+      } else if(activeBackdrop==='ocean'){
+        // OCEAN: deep navy with subtle light from above, sandy distant floor
+        const og=ctx.createLinearGradient(0,0,0,H);
+        og.addColorStop(0,'#06142a');og.addColorStop(0.4,'#0a2048');og.addColorStop(0.7,'#0c2855');og.addColorStop(1,'#081838');
+        ctx.globalAlpha=0.45;ctx.fillStyle=og;ctx.fillRect(0,0,W,H);
+        // Gentle light shafts (subtle)
+        ctx.globalAlpha=0.03;ctx.fillStyle='#5080b0';
+        for(let i=0;i<3;i++){
+          const sx=W*(0.2+i*0.28)+Math.sin(t*0.06+i*2)*20;
+          ctx.beginPath();ctx.moveTo(sx-10,0);ctx.lineTo(sx+10,0);ctx.lineTo(sx+45,H*0.8);ctx.lineTo(sx-45,H*0.8);ctx.closePath();ctx.fill();
+        }
       } else if(activeBackdrop==='coral_reef'){
-        // CORAL REEF: bright warm turquoise, colorful bottom glow, vibrant
+        // CORAL REEF: warm turquoise water, subtle warm glow from below
         const rg=ctx.createLinearGradient(0,0,0,H);
-        rg.addColorStop(0,'#0a2830');rg.addColorStop(0.3,'#104050');rg.addColorStop(0.6,'#185860');rg.addColorStop(1,'#104838');
-        ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
-        // Bright coral glow patches from bottom — LARGE and visible
-        const cPairs=[['#ff5070',0.1],['#ff9030',0.32],['#50e0a0',0.55],['#d060ff',0.78],['#ffcc40',0.92]];
-        ctx.save();
+        rg.addColorStop(0,'#082830');rg.addColorStop(0.4,'#0e3a40');rg.addColorStop(0.7,'#124840');rg.addColorStop(1,'#0e3830');
+        ctx.globalAlpha=0.4;ctx.fillStyle=rg;ctx.fillRect(0,0,W,H);
+        // Subtle warm undertone from reef
+        const cPairs=[['#803040',0.15],['#806030',0.4],['#308060',0.65],['#604080',0.85]];
         cPairs.forEach(([col,xr])=>{
-          const gx=W*xr+Math.sin(t*0.1+xr*10)*12;
-          ctx.globalAlpha=0.10;
-          const g=ctx.createRadialGradient(gx,H*0.73,4,gx,H*0.73,55);
+          ctx.globalAlpha=0.03;
+          const g=ctx.createRadialGradient(W*xr,H*0.72,8,W*xr,H*0.72,50);
           g.addColorStop(0,col);g.addColorStop(1,'transparent');
-          ctx.fillStyle=g;ctx.fillRect(gx-60,H*0.5,120,H*0.4);
+          ctx.fillStyle=g;ctx.fillRect(W*xr-55,H*0.55,110,H*0.35);
         });
-        ctx.restore();
-        // Warm light from above
-        ctx.save();ctx.globalAlpha=0.05;ctx.fillStyle='#ffe0a0';
-        ctx.fillRect(0,0,W,H*0.3);ctx.restore();
+        // Warm surface light
+        ctx.globalAlpha=0.03;ctx.fillStyle='#e0c080';ctx.fillRect(0,0,W,H*0.25);
       } else if(activeBackdrop==='deep_ocean'){
-        // DEEP ABYSS: almost black, bioluminescence is the ONLY light
-        ctx.fillStyle='#020508';ctx.fillRect(0,0,W,H);
-        // Faint deep blue glow from above
-        ctx.save();ctx.globalAlpha=0.15;
-        const dg=ctx.createLinearGradient(0,0,0,H*0.4);
-        dg.addColorStop(0,'#081828');dg.addColorStop(1,'transparent');
-        ctx.fillStyle=dg;ctx.fillRect(0,0,W,H*0.4);ctx.restore();
-        // Large bioluminescent particles with BIG halos
-        ctx.save();
-        for(let i=0;i<20;i++){
-          const bx=(i*73+Math.sin(t*0.06+i*1.1)*40)%W;
-          const by=(i*41+t*2.5+Math.cos(t*0.04+i*0.7)*25)%(H*0.72);
-          const br=1.5+Math.sin(t*0.4+i*0.6)*1;
-          const bColor=['#40e0ff','#30ff90','#d070ff','#ffff50','#ff70a0'][i%5];
-          // Large halo first
-          ctx.globalAlpha=0.04;ctx.fillStyle=bColor;
-          ctx.beginPath();ctx.arc(bx,by,br*12,0,Math.PI*2);ctx.fill();
-          // Medium glow
-          ctx.globalAlpha=0.12;
-          ctx.beginPath();ctx.arc(bx,by,br*4,0,Math.PI*2);ctx.fill();
-          // Core
-          ctx.globalAlpha=0.7;
+        // DEEP ABYSS: near-black with rare bioluminescence
+        ctx.globalAlpha=0.6;ctx.fillStyle='#020408';ctx.fillRect(0,0,W,H);
+        // Faint glow from far above
+        ctx.globalAlpha=0.06;
+        const dg=ctx.createLinearGradient(0,0,0,H*0.3);
+        dg.addColorStop(0,'#0a1828');dg.addColorStop(1,'transparent');
+        ctx.fillStyle=dg;ctx.fillRect(0,0,W,H*0.3);
+        // Sparse bioluminescent dots (fewer, subtler)
+        for(let i=0;i<10;i++){
+          const bx=(i*79+Math.sin(t*0.04+i*1.3)*30)%W;
+          const by=(i*53+t*1.5+Math.cos(t*0.03+i)*20)%(H*0.7);
+          const br=1+Math.sin(t*0.3+i*0.7)*0.5;
+          const bColor=['#2090a0','#209060','#8050a0','#a0a040'][i%4];
+          ctx.globalAlpha=0.02;ctx.fillStyle=bColor;
+          ctx.beginPath();ctx.arc(bx,by,br*8,0,Math.PI*2);ctx.fill();
+          ctx.globalAlpha=0.25;
           ctx.beginPath();ctx.arc(bx,by,br,0,Math.PI*2);ctx.fill();
         }
-        ctx.restore();
       } else if(activeBackdrop==='enchanted'){
-        // ENCHANTED: shifting aurora with color bands flowing across
-        const phase=t*0.06;
+        // ENCHANTED: subtle aurora, not overpowering
+        const phase=t*0.04;
         const eg=ctx.createLinearGradient(0,0,0,H);
-        eg.addColorStop(0,'#0a1030');eg.addColorStop(0.5,'#101838');eg.addColorStop(1,'#080c20');
-        ctx.fillStyle=eg;ctx.fillRect(0,0,W,H);
-        // Aurora bands — wide flowing color ribbons
-        ctx.save();
-        for(let b=0;b<4;b++){
-          const hue=180+b*45+Math.sin(phase+b)*30;
-          const ay=H*(0.1+b*0.15)+Math.sin(t*0.05+b*1.5)*20;
-          ctx.globalAlpha=0.10+Math.sin(t*0.08+b)*0.04;
-          const ag=ctx.createLinearGradient(0,ay-25,0,ay+25);
+        eg.addColorStop(0,'#080c1a');eg.addColorStop(0.5,'#0c1020');eg.addColorStop(1,'#060810');
+        ctx.globalAlpha=0.45;ctx.fillStyle=eg;ctx.fillRect(0,0,W,H);
+        // Subtle aurora bands (low opacity, fewer)
+        for(let b=0;b<3;b++){
+          const hue=200+b*50+Math.sin(phase+b)*25;
+          const ay=H*(0.12+b*0.18)+Math.sin(t*0.03+b*1.5)*15;
+          ctx.globalAlpha=0.04+Math.sin(t*0.05+b)*0.02;
+          const ag=ctx.createLinearGradient(0,ay-20,0,ay+20);
           ag.addColorStop(0,'transparent');
-          ag.addColorStop(0.3,'hsl('+hue+',65%,45%)');
-          ag.addColorStop(0.7,'hsl('+((hue+30)%360)+',55%,40%)');
+          ag.addColorStop(0.4,'hsl('+hue+',40%,30%)');
+          ag.addColorStop(0.6,'hsl('+((hue+25)%360)+',35%,28%)');
           ag.addColorStop(1,'transparent');
           ctx.fillStyle=ag;
-          // Wavy band shape
-          ctx.beginPath();ctx.moveTo(0,ay-20);
-          for(let x=0;x<=W;x+=10){ctx.lineTo(x,ay-20+Math.sin(t*0.04+x*0.008+b)*12);}
-          for(let x=W;x>=0;x-=10){ctx.lineTo(x,ay+20+Math.sin(t*0.04+x*0.008+b+1)*12);}
-          ctx.closePath();ctx.fill();
+          ctx.fillRect(0,ay-20,W,40);
         }
-        // Sparkle particles
-        ctx.globalAlpha=0.35;
-        for(let i=0;i<25;i++){
-          const sx=(i*67+Math.sin(t*0.07+i)*25)%W;
-          const sy=(i*43+Math.cos(t*0.05+i*1.3)*20)%(H*0.7);
-          const sr=0.8+Math.sin(t*0.8+i*2)*0.6;
-          ctx.fillStyle='hsl('+(200+i*15)%360+',80%,80%)';
-          ctx.beginPath();ctx.arc(sx,sy,sr,0,Math.PI*2);ctx.fill();
+        // Rare sparkles
+        ctx.globalAlpha=0.15;
+        for(let i=0;i<8;i++){
+          const sx=(i*83+Math.sin(t*0.05+i)*20)%W;
+          const sy=(i*51+Math.cos(t*0.04+i*1.5)*15)%(H*0.65);
+          ctx.fillStyle='hsl('+(200+i*20)%360+',50%,65%)';
+          ctx.beginPath();ctx.arc(sx,sy,0.8,0,Math.PI*2);ctx.fill();
         }
-        ctx.restore();
       }
     }
 
@@ -2479,7 +2662,7 @@ function drawTank(){
           drawPlant(ctx,p,t,W,H,baseY);
         } else {
           const d=item.data;
-          const sc=3;
+          const sc=Math.max(2,Math.round(2+depth*1.5));// back=2, mid=3, front=3-4
           const cfg=DECO_SPRITE_CFG[d.id]||{halfW:6,yMin:0};
           const cx=Math.round(d.x*W);
           const ox=cx-cfg.halfW*sc;
@@ -2516,15 +2699,24 @@ function drawTank(){
       });
     }
 
-    if(S.owned.airpump){
-      const bubbleT=t;
-      for(let i=0;i<12;i++){
-        const bx=W*0.04+(i%6)*14+Math.sin(bubbleT*0.5+i)*6;
-        const by=flY-((bubbleT*18+i*22)%flY);
-        const r=i%3===0?4:i%2===0?3:2;
-        ctx.strokeStyle='rgba(179,229,252,0.55)';ctx.lineWidth=1.5;
-        ctx.beginPath();ctx.arc(bx,by,r,0,Math.PI*2);ctx.stroke();
-        ctx.fillStyle='rgba(255,255,255,0.1)';ctx.beginPath();ctx.arc(bx-1,by-1,r*0.5,0,Math.PI*2);ctx.fill();
+    // ── AMBIENT BUBBLES: varied, organic, always present ──
+    {
+      const bubCount=S.owned.airpump?16:5;
+      for(let i=0;i<bubCount;i++){
+        const speed=8+i*3+(S.owned.airpump?i*2:0);
+        const bx=W*(0.06+(i*0.067)%0.88)+Math.sin(t*0.3+i*1.7)*8;
+        const by=H-((t*speed+i*47)%(H*0.85));
+        const r=1+(i%4)*0.8+(S.owned.airpump?1:0);
+        const wobble=Math.sin(t*0.8+i*2.1)*2;
+        // Bubble body
+        ctx.save();
+        ctx.globalAlpha=0.15+Math.sin(t+i)*0.05;
+        ctx.strokeStyle='rgba(169,214,229,0.6)';ctx.lineWidth=1;
+        ctx.beginPath();ctx.arc(bx+wobble,by,r,0,Math.PI*2);ctx.stroke();
+        // Highlight
+        ctx.fillStyle='rgba(255,255,255,0.15)';
+        ctx.beginPath();ctx.arc(bx+wobble-r*0.3,by-r*0.3,r*0.35,0,Math.PI*2);ctx.fill();
+        ctx.restore();
       }
     }
 
@@ -2752,8 +2944,10 @@ function drawTank(){
       }
       // Spawn fade-in + scale animation
       if(a.spawnTimer>0){a.spawnTimer--;a.spawnAlpha=Math.min(1,1-a.spawnTimer/30);}
+      // Depth-based dimming: fish lower in tank appear slightly darker
+      const fishDepthDim=1-Math.max(0,Math.min(1,(a.y-10)/70))*0.15;
       const spawnSc=a.spawnAlpha<1?0.8+a.spawnAlpha*0.2:1;
-      ctx.save();ctx.globalAlpha=(a.spawnAlpha!==undefined?a.spawnAlpha:1);
+      ctx.save();ctx.globalAlpha=(a.spawnAlpha!==undefined?a.spawnAlpha:1)*fishDepthDim;
       ctx.translate(px,py);
       if(spawnSc<1){ctx.translate(sp.w*sc/2,sp.h*sc/2);ctx.scale(spawnSc,spawnSc);ctx.translate(-sp.w*sc/2,-sp.h*sc/2);}
       if(a.dx<0){ctx.scale(-1,1);ctx.translate(-sp.w*sc,0);}
@@ -2785,6 +2979,19 @@ function drawTank(){
         }
       }
     });
+
+    // ── FOREGROUND LAYER: blurred plant silhouettes ──
+    if((S.plantSeeds||[]).length>2){
+      ctx.save();ctx.globalAlpha=0.06;
+      // Front-left leaf cluster
+      ctx.fillStyle='#1b4332';
+      const fgSway1=Math.sin(t*0.4)*4;
+      ctx.beginPath();ctx.moveTo(-5,H);ctx.quadraticCurveTo(15+fgSway1,H*0.55,8+fgSway1,H*0.4);ctx.quadraticCurveTo(25+fgSway1,H*0.5,35,H);ctx.closePath();ctx.fill();
+      // Front-right leaf
+      const fgSway2=Math.sin(t*0.35+1)*3;
+      ctx.beginPath();ctx.moveTo(W+5,H);ctx.quadraticCurveTo(W-20+fgSway2,H*0.5,W-12+fgSway2,H*0.35);ctx.quadraticCurveTo(W-30+fgSway2,H*0.45,W-40,H);ctx.closePath();ctx.fill();
+      ctx.restore();
+    }
 
     // ── WEATHER EFFECTS (#8) ──
     const weather=getWeatherEffect();
@@ -2874,11 +3081,34 @@ function drawTank(){
       ctx.fillStyle=ag;ctx.fillRect(0,0,W,H);ctx.restore();
     }
 
+    // ── UNDERWATER VIGNETTE ──
+    ctx.save();
+    const vig=ctx.createRadialGradient(W/2,H/2,Math.min(W,H)*0.25,W/2,H/2,Math.max(W,H)*0.7);
+    vig.addColorStop(0,'rgba(0,0,0,0)');
+    vig.addColorStop(1,'rgba(4,8,20,0.35)');
+    ctx.fillStyle=vig;ctx.fillRect(0,0,W,H);
+    ctx.restore();
+
+    // ── SUBTLE BLUE COLOR GRADE (everything "underwater") ──
+    ctx.save();ctx.globalAlpha=0.04;
+    ctx.fillStyle='#1f4e79';ctx.fillRect(0,0,W,H);
+    ctx.restore();
+
+    // ── LIGHT FROM TOP: gradient that fades bottom darker ──
+    ctx.save();ctx.globalAlpha=0.08;
+    const topLight=ctx.createLinearGradient(0,0,0,H);
+    topLight.addColorStop(0,'rgba(160,200,230,0.3)');
+    topLight.addColorStop(0.3,'rgba(160,200,230,0)');
+    topLight.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=topLight;ctx.fillRect(0,0,W,H);
+    ctx.restore();
+
     if(nightAlpha>0){
       ctx.save();ctx.globalAlpha=nightAlpha;ctx.fillStyle='#001030';ctx.fillRect(0,0,W,H);ctx.restore();
       if(isNight){ctx.save();ctx.globalAlpha=0.7;for(let i=0;i<14;i++){ctx.fillStyle='#E1F5FE';ctx.fillRect(Math.round(W*(0.03+((i*73)%94)*0.01)),Math.round(H*0.04+((i*37)%52)*H*0.005),2,2);}ctx.restore();}
     }
-    ctx.save();ctx.globalAlpha=0.06;ctx.fillStyle='#fff';ctx.fillRect(0,0,12,H);ctx.fillRect(W-10,0,10,H);ctx.restore();
+    // Tank glass edge highlight
+    ctx.save();ctx.globalAlpha=0.04;ctx.fillStyle='#a0c8e0';ctx.fillRect(0,0,3,H);ctx.fillRect(W-3,0,3,H);ctx.restore();
 
     if(S.owned.airpump&&Math.random()<0.02)playBubble();
 
@@ -2948,7 +3178,7 @@ lastTickTime=Date.now();
 document.getElementById('CD').textContent='🐚 '+S.coins;
 // LD removed (no levels in zen mode)
 updateTankBadge();
-renderShop();renderHUD();recalcWater();renderWaterBar();renderSetup();
+recalcWater();renderSetup();setTimeout(resizeTank,100);
 if(S.waterAdded){}// plants are added only when bought from shop
 document.getElementById('audio-btn').classList.toggle('on',audioEnabled);
 setTimeout(drawTank,80);
