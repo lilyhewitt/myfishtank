@@ -5,16 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Zen Aquarium 🐟</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
-*{box-sizing:border-box;margin:0;padding:0;image-rendering:pixelated;-webkit-tap-highlight-color:transparent;}
+/* Clean sans-serif fonts — no pixel font */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
-  --deep:#0a1628;--mid:#0d2258;--light:#0a3580;
-  --green:#1D9E75;--gold:#FFB300;--red:#E53935;--blue:#0288D1;
-  --panel:rgba(10,22,40,0.85);--border:#ffffff18;--text:#e8f4f8;--muted:#7ba8c4;
-  --font:'VT323',monospace;--pfont:'Press Start 2P',monospace;
+  --bg-deep:#1f2c33;--bg-mid:#2d4048;--bg-soft:#49636d;
+  --water-top:#5f8fa1;--water-mid:#3f6775;--water-deep:#233740;
+  --panel:rgba(18,28,34,0.58);--panel-strong:rgba(16,24,30,0.82);
+  --line:rgba(255,255,255,0.08);
+  --text:#edf4f3;--muted:#a7b9b8;--soft:#c8d8d6;
+  --accent:#8fb7b3;--accent-2:#9fc7c2;--alert:#d8c7a1;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",sans-serif;
 }
 html,body{height:100%;overflow:hidden;touch-action:manipulation;}
-body{background:#000;color:var(--text);font-family:var(--font);font-size:16px;}
+body{background:var(--bg-deep);color:var(--text);font-family:var(--font);font-size:15px;-webkit-font-smoothing:antialiased;}
 
 /* ── FULLSCREEN TANK ── */
 #app{position:relative;width:100%;height:100%;max-width:520px;margin:0 auto;overflow:hidden;}
@@ -22,194 +25,99 @@ body{background:#000;color:var(--text);font-family:var(--font);font-size:16px;}
 .tank-overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;}
 
 /* ── FLOATING HUD: fades after 4s ── */
-.float-hud{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:10px 12px 6px;transition:opacity 1s ease;pointer-events:none;}
+.float-hud{position:absolute;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:12px 14px 8px;transition:opacity 0.8s ease;pointer-events:none;opacity:0.82;}
 .float-hud>*{pointer-events:auto;}
-.float-hud.dim{opacity:0.25;}
+.float-hud.dim{opacity:0.18;}
 .hud-left,.hud-right{display:flex;align-items:center;gap:6px;}
-.hud-txt{font-size:12px;color:rgba(255,255,255,0.5);}
+.hud-txt{font-size:11px;color:rgba(255,255,255,0.35);font-weight:300;letter-spacing:0.5px;}
 .mood-txt{font-size:11px;}
-.hud-pill{font-size:10px;color:var(--muted);background:rgba(255,255,255,0.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.08);padding:3px 8px;border-radius:12px;}
-.hud-pill.shell{color:#a9d6e5;}
-.hud-btn{font-size:12px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;}
-.hud-btn:active{transform:scale(0.9);}
+.hud-pill{font-size:11px;color:var(--muted);background:rgba(255,255,255,0.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.05);padding:4px 9px;border-radius:999px;font-weight:400;}
+.hud-pill.shell{color:var(--accent);}
+.hud-btn{font-size:11px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(255,255,255,0.04);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:rgba(255,255,255,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.hud-btn:active{opacity:0.5;}
 
 /* ── BOTTOM FAB BUTTONS ── */
 .float-btns{position:absolute;bottom:16px;left:0;right:0;z-index:20;display:flex;justify-content:center;gap:12px;padding:0 16px;transition:opacity 1s ease;}
 .float-btns.dim{opacity:0.2;}
-.fab{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);background:rgba(10,22,40,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;box-shadow:0 2px 12px rgba(0,0,0,0.3);}
-.fab:active{transform:scale(0.88);background:rgba(29,158,117,0.4);}
-.fab.active{background:rgba(29,158,117,0.5);border-color:var(--green);box-shadow:0 0 16px rgba(29,158,117,0.3);}
+.fab{width:52px;height:52px;border-radius:26px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.10);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s ease;box-shadow:0 6px 18px rgba(0,0,0,0.18);}
+.fab:active{transform:scale(0.94);}
+.fab.active{background:rgba(143,183,179,0.18);border-color:rgba(143,183,179,0.26);}
 
 /* ── SLIDE-UP PANEL ── */
-.panel-overlay{position:absolute;top:0;left:0;right:0;bottom:0;z-index:25;background:rgba(0,0,0,0.4);opacity:0;pointer-events:none;transition:opacity .3s;}
+.panel-overlay{position:absolute;top:0;left:0;right:0;bottom:0;z-index:25;background:rgba(0,0,0,0.25);opacity:0;pointer-events:none;transition:opacity .4s ease;}
 .panel-overlay.show{opacity:1;pointer-events:auto;}
-.slide-panel{position:absolute;bottom:0;left:0;right:0;z-index:30;background:rgba(8,16,32,0.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,0.08);border-radius:16px 16px 0 0;transform:translateY(100%);transition:transform .35s cubic-bezier(0.4,0,0.2,1);max-height:65vh;display:flex;flex-direction:column;}
+.slide-panel{position:absolute;bottom:0;left:0;right:0;z-index:30;background:rgba(14,22,27,0.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,0.06);border-radius:20px 20px 0 0;transform:translateY(100%);transition:transform .32s cubic-bezier(0.25,0.8,0.25,1);max-height:65vh;display:flex;flex-direction:column;}
 .slide-panel.show{transform:translateY(0);}
 .panel-handle{display:flex;justify-content:center;padding:8px 0 4px;cursor:grab;}
-.handle-bar{width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;}
+.handle-bar{width:32px;height:4px;background:rgba(255,255,255,0.12);border-radius:2px;}
 .panel-header{display:flex;align-items:center;justify-content:space-between;padding:0 16px 8px;border-bottom:1px solid rgba(255,255,255,0.06);}
-.panel-title{font-family:var(--pfont);font-size:9px;letter-spacing:1px;color:var(--text);}
-.panel-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:4px 8px;border-radius:8px;}
+.panel-title{font-size:13px;color:rgba(255,255,255,0.65);font-weight:600;}
+.panel-close{background:none;border:none;color:rgba(255,255,255,0.3);font-size:16px;cursor:pointer;padding:6px 10px;border-radius:10px;}
 .panel-close:active{background:rgba(255,255,255,0.1);}
 .panel-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 12px 20px;}
 .panel-section{margin-bottom:10px;}
-.section-label{font-size:11px;color:var(--muted);margin:10px 0 4px;padding-bottom:3px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.section-label{font-size:11px;color:rgba(255,255,255,0.3);margin:16px 0 8px;font-weight:400;}
 
 /* Tab content: all hidden by default in panel */
 .sc{display:none;}.sc.v{display:block;}
 
 /* ── GRID AND ITEMS (larger touch targets) ── */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:6px;}
-.item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px 8px;text-align:center;transition:all .15s;}
-.item:active{background:rgba(255,255,255,0.08);transform:scale(0.97);}
+.item{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px;text-align:center;transition:all .25s ease;}
+.item:active{background:rgba(255,255,255,0.06);}
 .item canvas{display:block;margin:0 auto 4px;image-rendering:pixelated;}
-.iname{font-size:12px;color:var(--text);margin-bottom:2px;}.idesc{font-size:9px;color:var(--muted);margin-bottom:4px;line-height:1.3;}
-.iprice{font-size:11px;color:#a9d6e5;margin-bottom:5px;}
-.item button{padding:8px 10px;font-size:12px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;background:rgba(29,158,117,0.2);color:var(--text);cursor:pointer;font-family:var(--font);width:100%;transition:all .15s;}
-.item button:active{background:var(--green);transform:scale(0.95);}
+.iname{font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:2px;font-weight:400;}.idesc{font-size:9px;color:rgba(255,255,255,0.3);margin-bottom:5px;line-height:1.3;}
+.iprice{font-size:11px;color:var(--accent-2);margin-bottom:5px;}
+.item button{padding:8px 10px;font-size:12px;border:1px solid rgba(255,255,255,0.06);border-radius:10px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.6);cursor:pointer;font-family:var(--font);width:100%;transition:all .25s ease;}
+.item button:active{background:rgba(143,183,179,0.2);}
 .item button:disabled{opacity:.3;cursor:not-allowed;}
 
 /* ── FISH CARDS ── */
-.fcard{display:flex;align-items:center;gap:8px;padding:8px;margin-bottom:5px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;cursor:pointer;transition:all .15s;}
-.fcard:active{background:rgba(255,255,255,0.08);}
+.fcard{display:flex;align-items:center;gap:10px;padding:10px;margin-bottom:5px;background:rgba(255,255,255,0.02);border:none;border-radius:12px;cursor:pointer;transition:all .25s ease;}
+.fcard:active{background:rgba(255,255,255,0.05);}
 .finfo{flex:1;}.fname{font-size:13px;color:var(--text);}
-.ftag{font-size:9px;padding:2px 6px;border-radius:8px;display:inline-block;margin-right:3px;margin-top:2px;}
-.ftag-happy{background:#1D9E7522;color:#4ade80;}.ftag-calm{background:#0288D122;color:#4FC3F7;}
-.ftag-idle{background:#FFB30022;color:#FFB300;}.ftag-age{background:#CE93D822;color:#CE93D8;}
+.ftag{font-size:9px;padding:2px 6px;border-radius:6px;display:inline-block;margin-right:3px;margin-top:2px;font-weight:300;}
+.ftag-happy{background:rgba(123,173,165,0.1);color:rgba(143,193,185,0.7);}.ftag-calm{background:rgba(106,154,176,0.1);color:rgba(126,174,196,0.6);}
+.ftag-idle{background:rgba(200,184,144,0.1);color:rgba(200,184,144,0.6);}.ftag-age{background:rgba(180,160,200,0.1);color:rgba(180,160,200,0.5);}
 .fbtns{display:flex;flex-direction:column;gap:3px;}
 .fbtns button{font-size:10px;padding:4px 8px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;background:rgba(255,255,255,0.04);cursor:pointer;font-family:var(--font);color:var(--text);}
 .fbtns button:active{background:rgba(255,255,255,0.1);}
 
 /* ── MISC ── */
-.btn{padding:10px 16px;background:var(--green);color:#fff;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-family:var(--font);transition:all .15s;}
-.btn:active{transform:scale(0.95);opacity:0.8;}.btn:disabled{opacity:.4;cursor:not-allowed;}
+.btn{padding:10px 16px;background:rgba(143,183,179,0.12);color:var(--soft);border:1px solid rgba(143,183,179,0.1);border-radius:10px;cursor:pointer;font-size:14px;font-family:var(--font);transition:all .25s ease;}
+.btn:active{background:rgba(123,173,165,0.3);}.btn:disabled{opacity:.25;cursor:not-allowed;}
 .al{padding:6px 10px;border-radius:8px;font-size:12px;margin-bottom:6px;animation:slideIn .3s ease-out;}
 @keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:translateX(0);}}
-.ok{background:#1D9E7522;color:#4ade80;border:1px solid #1D9E7544;}
-.warn{background:#FFB30022;color:#FFB300;border:1px solid #FFB30044;}
-.bad{background:#E5393522;color:#ff6b6b;border:1px solid #E5393544;}
+.ok{background:rgba(123,173,165,0.1);color:rgba(143,193,185,0.7);border:1px solid rgba(123,173,165,0.1);}
+.warn{background:rgba(200,184,144,0.1);color:rgba(200,184,144,0.6);border:1px solid rgba(200,184,144,0.1);}
+.bad{background:rgba(192,112,112,0.1);color:rgba(192,112,112,0.6);border:1px solid rgba(192,112,112,0.1);}
 .stitle{display:none;}
-.refresh-note{font-size:10px;color:var(--muted);margin-bottom:6px;text-align:center;}
-.owned{font-size:9px;color:var(--green);background:#1D9E7522;padding:1px 5px;border-radius:10px;display:inline-block;margin-top:2px;}
-.rare-tag{font-size:8px;color:#E040FB;background:#E040FB22;padding:1px 4px;border-radius:6px;display:inline-block;margin-bottom:1px;animation:shimmer 2s infinite;}
-.super-rare-tag{font-size:8px;color:#FFD700;background:#FFD70022;padding:1px 4px;border-radius:6px;display:inline-block;margin-bottom:1px;animation:shimmer 1.5s infinite;}
-@keyframes shimmer{0%,100%{opacity:1;}50%{opacity:0.5;}}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
-.bar{height:5px;background:#ffffff10;border-radius:20px;overflow:hidden;margin-top:2px;}
-.fill{height:100%;border-radius:20px;transition:width .4s;}
-.row{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
-.lbl{font-size:12px;color:var(--muted);width:80px;flex-shrink:0;}.val{font-size:11px;font-weight:500;width:24px;text-align:right;}
-.btn-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.refresh-note{font-size:10px;color:rgba(255,255,255,0.25);margin-bottom:8px;text-align:center;}
+.owned{font-size:9px;color:rgba(143,183,179,0.5);background:rgba(143,183,179,0.08);padding:2px 6px;border-radius:6px;display:inline-block;margin-top:2px;}
+.rare-tag{font-size:8px;color:rgba(180,160,200,0.6);background:rgba(180,160,200,0.08);padding:1px 5px;border-radius:4px;display:inline-block;margin-bottom:1px;}
+.super-rare-tag{font-size:8px;color:rgba(200,184,144,0.6);background:rgba(200,184,144,0.08);padding:1px 5px;border-radius:4px;display:inline-block;margin-bottom:1px;}
+/* animations: shimmer/pulse removed — zen mode */
+/* bars/rows removed — zen mode uses mood labels */
+
 .feed-particle{position:absolute;pointer-events:none;font-size:10px;animation:feedDrop 1.2s ease-in forwards;z-index:15;}
 @keyframes feedDrop{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(60px);}}
-.coin-fly{position:fixed;pointer-events:none;font-family:var(--pfont);font-size:9px;color:#a9d6e5;z-index:9999;animation:coinUp 1s ease-out forwards;}
-@keyframes coinUp{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-30px);}}
-.setup-panel{background:rgba(10,22,40,0.9);border:1px solid var(--border);border-radius:10px;padding:12px 14px;width:min(280px,85%);pointer-events:all;}
-.setup-panel .sp-title{font-family:var(--pfont);font-size:8px;color:var(--gold);margin-bottom:8px;text-align:center;letter-spacing:1px;}
-.setup-step{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid #ffffff0a;font-size:13px;}
-.setup-step:last-of-type{border-bottom:none;}
-.setup-step .ss-label{color:var(--muted);}.setup-step.done .ss-label{color:#4ade80;}
-.water-btn{width:100%;margin-top:8px;padding:8px;background:var(--blue);color:#fff;border:none;border-radius:7px;cursor:pointer;font-family:var(--font);font-size:14px;}
-.water-btn:active{opacity:0.8;}.water-btn:disabled{opacity:.4;cursor:not-allowed;}
-.zen-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.9);background:rgba(8,16,32,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:14px 22px;z-index:9998;font-size:13px;color:var(--text);text-align:center;opacity:0;transition:all .4s ease-out;pointer-events:none;max-width:260px;}
+/* coin animations removed */
+/* setup panel removed — tank pre-filled */
+.zen-toast{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.98);background:var(--panel-strong);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.05);border-radius:16px;padding:16px 24px;z-index:9998;font-size:13px;color:var(--soft);text-align:center;opacity:0;transition:opacity .24s ease,transform .3s ease;pointer-events:none;max-width:240px;}
 .zen-toast.show{opacity:1;transform:translate(-50%,-50%) scale(1);}
-.zen-toast .toast-title{color:var(--gold);font-size:10px;margin-bottom:5px;font-family:var(--pfont);letter-spacing:1px;}
-.ach-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:rgba(10,22,40,0.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid rgba(255,215,0,0.2);border-radius:12px;padding:10px 16px;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:transform .5s cubic-bezier(.34,1.56,.64,1);font-family:var(--font);}
+.zen-toast .toast-title{color:var(--alert);font-size:10px;margin-bottom:5px;font-weight:500;}
+.ach-popup{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-50px);background:var(--panel-strong);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.05);border-radius:14px;padding:10px 16px;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 6px 24px rgba(0,0,0,0.12);transition:transform .34s ease;font-family:var(--font);}
 .ach-popup.show{transform:translateX(-50%) translateY(0);}
-.ach-popup .ach-text{color:var(--gold);font-size:12px;}.ach-popup .ach-sub{color:var(--muted);font-size:10px;}
+.ach-popup .ach-text{color:var(--alert);font-size:12px;}.ach-popup .ach-sub{color:var(--muted);font-size:10px;}
 .ach-icon{font-size:18px;width:28px;text-align:center;flex-shrink:0;}
-.ach-card{display:flex;align-items:center;gap:8px;padding:8px;margin-bottom:4px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;}
-.ach-card.done{border-color:rgba(29,158,117,0.3);background:rgba(29,158,117,0.06);}
+.ach-card{display:flex;align-items:center;gap:8px;padding:10px;margin-bottom:4px;background:rgba(255,255,255,0.02);border:none;border-radius:10px;}
+.ach-card.done{background:rgba(123,173,165,0.06);}
 .ach-info{flex:1;}.ach-name{font-size:12px;color:var(--text);}.ach-desc{font-size:10px;color:var(--muted);margin-top:1px;}
-.ach-reward{font-size:9px;color:var(--gold);margin-top:1px;}.ach-check{color:#4ade80;font-size:14px;}
-.stat-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px;text-align:center;}
-.stat-val{font-size:11px;color:var(--gold);font-family:var(--pfont);}.stat-label{font-size:11px;color:var(--muted);margin-top:3px;}
-.upgrade-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:10px;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
-.upgrade-card .up-icon{font-size:20px;width:30px;text-align:center;}.upgrade-card .up-info{flex:1;}
-.upgrade-card .up-name{font-size:13px;color:var(--text);}.upgrade-card .up-desc{font-size:10px;color:var(--muted);margin-top:1px;}
-.upgrade-card .up-price{font-size:11px;color:#a9d6e5;margin-top:2px;}
-.shells-display,.coins-display,.level-display,.tank-size-badge,.collection-badge,.game-title,.top-bar,.tabs,.tab,.bottom-area,.hud,.hud-stat{display:none!important;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
-.sc{display:none;}.sc.v{display:block;animation:fadeIn .2s ease-out;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:6px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:5px;}
-.item{background:#ffffff06;border:1px solid var(--border);border-radius:8px;padding:8px;text-align:center;transition:all .2s;}
-.item:hover{border-color:#ffffff33;background:#ffffff0c;}
-.item canvas{display:block;margin:0 auto 3px;image-rendering:pixelated;}
-.iname{font-size:12px;color:var(--text);margin-bottom:1px;}.idesc{font-size:9px;color:var(--muted);margin-bottom:3px;}
-.iprice{font-size:11px;color:var(--gold);margin-bottom:4px;}
-.item button{padding:4px 6px;font-size:10px;border:1px solid var(--border);border-radius:6px;background:#ffffff10;color:var(--text);cursor:pointer;font-family:var(--font);width:100%;transition:all .2s;}
-.item button:hover{background:var(--green);border-color:var(--green);color:#fff;}
-.item button:disabled{opacity:.3;cursor:not-allowed;}
-.owned{font-size:9px;color:var(--green);background:#1D9E7522;padding:1px 5px;border-radius:12px;display:inline-block;margin-top:2px;}
-.rare-tag{font-size:8px;color:#E040FB;background:#E040FB22;padding:1px 4px;border-radius:6px;display:inline-block;margin-bottom:1px;animation:shimmer 2s infinite;}
-.super-rare-tag{font-size:8px;color:#FFD700;background:#FFD70022;padding:1px 4px;border-radius:6px;display:inline-block;margin-bottom:1px;animation:shimmer 1.5s infinite;}
-@keyframes shimmer{0%,100%{opacity:1;}50%{opacity:0.5;}}
-.bar{height:5px;background:#ffffff10;border-radius:20px;overflow:hidden;margin-top:2px;}
-.fill{height:100%;border-radius:20px;transition:width .4s;}
-.row{display:flex;align-items:center;gap:6px;margin-bottom:5px;}
-.lbl{font-size:12px;color:var(--muted);width:80px;flex-shrink:0;}.val{font-size:11px;font-weight:500;width:24px;text-align:right;}
-.btn{padding:6px 12px;background:var(--green);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px;font-family:var(--font);transition:all .2s;}
-.btn:hover{background:#0F6E56;}.btn:disabled{opacity:.4;cursor:not-allowed;}
-.btn-row{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;}
-.al{padding:5px 9px;border-radius:6px;font-size:12px;margin-bottom:5px;animation:slideIn .3s ease-out;}
-@keyframes slideIn{from{opacity:0;transform:translateX(-6px);}to{opacity:1;transform:translateX(0);}}
-.ok{background:#1D9E7522;color:#4ade80;border:1px solid #1D9E7544;}
-.warn{background:#FFB30022;color:#FFB300;border:1px solid #FFB30044;}
-.bad{background:#E5393522;color:#ff6b6b;border:1px solid #E5393544;}
-.stitle{font-family:var(--pfont);font-size:8px;letter-spacing:1px;color:var(--text);margin-bottom:6px;}
-.fcard{display:flex;align-items:center;gap:7px;padding:6px;margin-bottom:4px;background:#ffffff06;border:1px solid var(--border);border-radius:7px;cursor:pointer;transition:all .2s;}
-.fcard:hover{border-color:var(--green);background:#ffffff0c;}
-.finfo{flex:1;}.fname{font-size:13px;color:var(--text);}
-.ftag{font-size:9px;padding:1px 5px;border-radius:8px;display:inline-block;margin-right:2px;margin-top:1px;}
-.ftag-happy{background:#1D9E7522;color:#4ade80;}.ftag-calm{background:#0288D122;color:#4FC3F7;}
-.ftag-idle{background:#FFB30022;color:#FFB300;}.ftag-age{background:#CE93D822;color:#CE93D8;}
-.ftag-mood{background:#CE93D822;color:#CE93D8;}
-.fbtns{display:flex;flex-direction:column;gap:2px;}
-.fbtns button{font-size:9px;padding:2px 6px;border:1px solid var(--border);border-radius:4px;background:#ffffff08;cursor:pointer;font-family:var(--font);color:var(--text);}
-.fbtns button:hover{background:var(--green);color:#fff;}
-.shells-display{font-family:var(--pfont);font-size:8px;color:#a9d6e5;background:#a9d6e512;border:1px solid #a9d6e528;padding:4px 8px;border-radius:6px;white-space:nowrap;}
-.level-display{font-family:var(--pfont);font-size:8px;color:#CE93D8;background:#CE93D812;border:1px solid #CE93D828;padding:4px 8px;border-radius:6px;white-space:nowrap;}
-.tank-size-badge{font-size:9px;color:var(--blue);background:#0288D118;border:1px solid #0288D128;padding:2px 6px;border-radius:8px;white-space:nowrap;}
-.audio-btn{font-family:var(--pfont);font-size:7px;padding:4px 6px;border:1px solid var(--border);border-radius:6px;background:var(--panel);color:var(--muted);cursor:pointer;}
-.audio-btn.on{color:#4ade80;border-color:#1D9E7544;}
-.ach-card{display:flex;align-items:center;gap:8px;padding:6px 8px;margin-bottom:4px;background:#ffffff06;border:1px solid var(--border);border-radius:7px;}
-.ach-card.done{border-color:#1D9E7544;background:#1D9E7509;}
-.ach-icon{font-size:18px;width:28px;text-align:center;flex-shrink:0;}
-.ach-info{flex:1;}.ach-name{font-size:12px;color:var(--text);}.ach-desc{font-size:10px;color:var(--muted);margin-top:1px;}
-.ach-reward{font-size:9px;color:var(--gold);margin-top:1px;}.ach-check{color:#4ade80;font-size:14px;}
-.ach-popup{position:fixed;top:12px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1a1a2e;border:2px solid var(--gold);border-radius:10px;padding:10px 16px;z-index:9999;display:flex;align-items:center;gap:8px;box-shadow:0 0 30px #FFB30044;transition:transform .5s cubic-bezier(.34,1.56,.64,1);font-family:var(--font);}
-.ach-popup.show{transform:translateX(-50%) translateY(0);}
-.ach-popup .ach-text{color:var(--gold);font-size:12px;}.ach-popup .ach-sub{color:var(--muted);font-size:10px;}
-.stat-box{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
-.stat-item{background:#ffffff06;border:1px solid var(--border);border-radius:6px;padding:8px;text-align:center;}
-.stat-val{font-size:11px;color:var(--gold);font-family:var(--pfont);}.stat-label{font-size:11px;color:var(--muted);margin-top:3px;}
-.upgrade-card{background:#ffffff06;border:1px solid var(--border);border-radius:7px;padding:10px;margin-bottom:5px;display:flex;align-items:center;gap:8px;}
-.upgrade-card .up-icon{font-size:20px;width:30px;text-align:center;}.upgrade-card .up-info{flex:1;}
-.upgrade-card .up-name{font-size:13px;color:var(--text);}.upgrade-card .up-desc{font-size:10px;color:var(--muted);margin-top:1px;}
-.upgrade-card .up-price{font-size:11px;color:var(--gold);margin-top:2px;}
-.feed-particle{position:absolute;pointer-events:none;font-size:10px;animation:feedDrop 1.2s ease-in forwards;}
-@keyframes feedDrop{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(60px);}}
-.coin-fly{position:fixed;pointer-events:none;font-family:var(--pfont);font-size:9px;color:var(--gold);z-index:9999;animation:coinUp 1s ease-out forwards;}
-@keyframes coinUp{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-30px);}}
-.tank-overlay{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;z-index:10;}
-.setup-panel{background:rgba(10,22,40,0.9);border:1px solid var(--border);border-radius:10px;padding:12px 14px;width:min(280px,85%);pointer-events:all;}
-.setup-panel .sp-title{font-family:var(--pfont);font-size:8px;color:var(--gold);margin-bottom:8px;text-align:center;letter-spacing:1px;}
-.setup-step{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid #ffffff0a;font-size:13px;}
-.setup-step:last-of-type{border-bottom:none;}
-.setup-step .ss-label{color:var(--muted);}.setup-step.done .ss-label{color:#4ade80;}
-.water-btn{width:100%;margin-top:8px;padding:8px;background:var(--blue);color:#fff;border:none;border-radius:7px;cursor:pointer;font-family:var(--font);font-size:14px;}
-.water-btn:hover{background:#0277BD;}.water-btn:disabled{opacity:.4;cursor:not-allowed;}
-.refresh-note{font-size:10px;color:var(--muted);margin-bottom:6px;text-align:center;}
-/* Zen event toast */
-.zen-toast{position:fixed;bottom:20%;left:50%;transform:translateX(-50%) translateY(20px);background:rgba(10,22,40,0.92);border:1px solid #FFB30033;border-radius:10px;padding:10px 18px;z-index:9998;font-size:13px;color:var(--text);text-align:center;opacity:0;transition:all .6s ease-out;pointer-events:none;max-width:280px;}
-.zen-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.zen-toast .toast-title{color:var(--gold);font-size:11px;margin-bottom:4px;font-family:var(--pfont);letter-spacing:1px;}
-/* Collection badge */
-.collection-badge{font-size:9px;color:var(--gold);background:#FFB30015;border:1px solid #FFB30028;padding:2px 6px;border-radius:8px;white-space:nowrap;}
-.hud{display:none;}
-#wq-bar{display:none;}
+.ach-reward{font-size:9px;color:var(--alert);margin-top:1px;}.ach-check{color:#4ade80;font-size:14px;}
+.stat-item{background:rgba(255,255,255,0.02);border:none;border-radius:10px;padding:10px;text-align:center;}
+.stat-val{font-size:13px;color:var(--accent);font-weight:500;}.stat-label{font-size:10px;color:rgba(255,255,255,0.3);margin-top:3px;}
+/* upgrade cards removed */
+/* v3.0 — Calm Aquarium UI */
 </style>
 </head>
 <body>
@@ -218,18 +126,19 @@ body{background:#000;color:var(--text);font-family:var(--font);font-size:16px;}
   <canvas id="TC"></canvas>
   <div class="tank-overlay" id="tank-setup-overlay"></div>
 
-  <!-- FLOATING TOP HUD: minimal, fades out -->
+  <!-- FLOATING TOP HUD: minimal -->
   <div class="float-hud" id="float-hud">
     <div class="hud-left">
       <span id="time-display" class="hud-txt">Day 1</span>
-      <span id="water-mood" class="hud-txt mood-txt">🌊</span>
     </div>
     <div class="hud-right">
       <span id="col-badge" class="hud-pill">📖 0</span>
-      <span id="CD" class="hud-pill shell">🐚 5</span>
       <button class="hud-btn" id="audio-btn">♪</button>
     </div>
   </div>
+  <!-- Shell count + mood: shown only in panels -->
+  <span id="CD" style="display:none">🐚 5</span>
+  <span id="water-mood" style="display:none">🌊</span>
 
   <!-- STATUS BAR (invisible, just for JS refs) -->
   <div id="status-bar" style="display:none"><span id="tank-badge"></span></div>
@@ -239,11 +148,9 @@ body{background:#000;color:var(--text);font-family:var(--font);font-size:16px;}
   <!-- BOTTOM FLOAT BUTTONS -->
   <div class="float-btns" id="float-btns">
     <button class="fab" data-panel="market" title="Add Life">🐟</button>
-    <button class="fab" data-panel="deco" title="Decorate">🪨</button>
-    <button class="fab" data-panel="backdrops" title="Backdrop">🎨</button>
-    <button class="fab" data-panel="codex" title="Codex">📖</button>
-    <button class="fab" data-panel="journal" title="Journal">📝</button>
-    <button class="fab" data-panel="manage" title="My Tank">⚙</button>
+    <button class="fab" data-panel="deco" title="Decorate">🎨</button>
+    <button class="fab" data-panel="codex" title="Collection">📖</button>
+    <button class="fab" data-panel="manage" title="Settings">⚙</button>
   </div>
 
   <!-- SLIDE-UP PANEL -->
@@ -258,10 +165,13 @@ body{background:#000;color:var(--text);font-family:var(--font);font-size:16px;}
       <!-- Tab content sections -->
       <div id="a-global"></div>
       <div class="sc" id="s-market"><div class="refresh-note" id="market-note"></div><div id="a-market"></div><div class="section-label">Fish</div><div class="grid" id="fish-g"></div><div class="section-label" id="creature-note">Creatures</div><div class="grid" id="creature-g"></div><div class="section-label" id="plant-note">Plants</div><div class="grid" id="plant-g"></div></div>
-      <div class="sc" id="s-deco"><div class="refresh-note" id="deco-note"></div><div id="a-deco"></div><div class="grid" id="deco-g"></div></div>
-      <div class="sc" id="s-backdrops"><div id="a-backdrops"></div><div class="section-label" id="backdrop-current"></div><div class="grid" id="backdrop-g"></div></div>
+      <div class="sc" id="s-deco"><div class="refresh-note" id="deco-note"></div><div id="a-deco"></div><div class="grid" id="deco-g"></div><div class="section-label">Tank Backdrop</div><div id="a-backdrops"></div><div class="section-label" id="backdrop-current"></div><div class="grid" id="backdrop-g"></div></div>
       <div class="sc" id="s-manage">
         <div id="a-manage"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-size:11px;color:var(--muted);" id="manage-shells"></span>
+          <span style="font-size:11px;color:var(--muted);" id="manage-mood"></span>
+        </div>
         <div class="panel-section" id="manage-actions">
           <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
             <button class="btn" id="btn-changewater" style="background:#0288D1;flex:1;">💧 Change Water</button>
@@ -279,8 +189,7 @@ body{background:#000;color:var(--text);font-family:var(--font);font-size:16px;}
         <div id="a-stats"></div>
         <div id="stats-content"></div>
       </div>
-      <div class="sc" id="s-codex"><div id="codex-progress" class="section-label"></div><div id="codex-grid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div></div>
-      <div class="sc" id="s-journal"><div id="journal-list"></div></div>
+      <div class="sc" id="s-codex"><div id="codex-progress" class="section-label"></div><div id="codex-grid" class="grid" style="grid-template-columns:repeat(auto-fill,minmax(80px,1fr));"></div><div class="section-label" style="margin-top:16px;">Journal</div><div id="journal-list"></div></div>
       <div class="sc" id="s-achievements"><div id="a-achievements"></div><div id="ach-list"></div></div>
     </div>
   </div>
@@ -536,7 +445,7 @@ function getSpeciesCfg(id,isCreature){
   const def=isCreature?CREATURES_DEF.find(d=>d.id===id):FISH_DEF.find(d=>d.id===id);
   if(!def)return{yMin:5,yMax:73,sc:isCreature?4:6,moveStyle:'normal',social:'normal',feedLayer:'mid'};
   const pb=PERSONALITY_BEHAVIOR[def.personality]||PERSONALITY_BEHAVIOR.peaceful;
-  const baseSpd=(isCreature?0.04:0.06)*( pb.speedMult||1);
+  const baseSpd=(isCreature?0.03:0.045)*( pb.speedMult||1);// zen: slower, lazier
   return{
     yMin:def.yMin,yMax:def.yMax,
     sc:3,// unified pixel size
@@ -550,20 +459,20 @@ function getSpeciesCfg(id,isCreature){
 }
 
 const ACHIEVEMENTS=[
-  {id:'first_fish',  name:'First Splash',   icon:'🐟',desc:'Buy your first fish',   reward:25, check:s=>s.fish.length>=1},
-  {id:'five_fish',   name:'School\'s In',   icon:'🐠',desc:'Own 5 fish at once',     reward:50, check:s=>s.fish.length>=5},
-  {id:'ten_fish',    name:'Crowd Control',  icon:'🎏',desc:'Own 10 fish at once',    reward:100,check:s=>s.fish.length>=10},
-  {id:'first_breed', name:'Proud Parent',   icon:'🥚',desc:'Breed a baby fish',      reward:40, check:s=>(s.totalBred||0)>=1},
-  {id:'water_perfect',name:'Crystal Clear', icon:'💧',desc:'90+ water quality',      reward:30, check:s=>avgW()>=90},
-  {id:'survive_10',  name:'Veteran',        icon:'📅',desc:'Reach Day 10',           reward:60, check:s=>s.day>=10},
-  {id:'survive_30',  name:'Master Keeper',  icon:'🏆',desc:'Reach Day 30',           reward:200,check:s=>s.day>=30},
-  {id:'calm_days',   name:'Inner Peace',    icon:'🧘',desc:'10 peaceful days',       reward:1, check:s=>(s.day||0)>=10},
-  {id:'collector',   name:'Collector',      icon:'📚',desc:'6 different species',    reward:100,check:s=>new Set(s.fish.map(f=>f.id)).size>=6},
-  {id:'decorator',   name:'Designer',       icon:'🏰',desc:'Place 5 decorations',    reward:60, check:s=>(s.decos||[]).length>=5},
-  {id:'rare_catch',  name:'Rare Catch',     icon:'⭐',desc:'Buy a rare fish',         reward:75, check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='rare')},
-  {id:'super_rare',  name:'Legend',         icon:'👑',desc:'Buy a super rare fish',   reward:200,check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='super_rare')},
-  {id:'moments_20',  name:'Storyteller',    icon:'📖',desc:'Collect 20 moments',     reward:1, check:s=>(s.moments||[]).length>=20},
-  {id:'naturalist',  name:'Naturalist',     icon:'🌿',desc:'Discover 10 species',    reward:2, check:s=>(s.discoveredSpecies||[]).length>=10},
+  {id:'first_fish',  name:'First Splash',   icon:'🐟',desc:'Your first companion arrived',   reward:25, check:s=>s.fish.length>=1},
+  {id:'five_fish',   name:'School\'s In',   icon:'🐠',desc:'Five lives share the water',     reward:50, check:s=>s.fish.length>=5},
+  {id:'ten_fish',    name:'Crowd Control',  icon:'🎏',desc:'A full, lively tank',    reward:100,check:s=>s.fish.length>=10},
+  {id:'first_breed', name:'Proud Parent',   icon:'🥚',desc:'New life appeared',      reward:40, check:s=>(s.totalBred||0)>=1},
+  {id:'water_perfect',name:'Crystal Clear', icon:'💧',desc:'The water is very clear',      reward:30, check:s=>avgW()>=90},
+  {id:'survive_10',  name:'Veteran',        icon:'📅',desc:'Ten days have passed',           reward:60, check:s=>s.day>=10},
+  {id:'survive_30',  name:'Master Keeper',  icon:'🏆',desc:'A month of quiet company',           reward:200,check:s=>s.day>=30},
+  {id:'calm_days',   name:'Inner Peace',    icon:'🧘',desc:'Ten calm days in a row',       reward:1, check:s=>(s.day||0)>=10},
+  {id:'collector',   name:'Collector',      icon:'📚',desc:'Many kinds share this space',    reward:100,check:s=>new Set(s.fish.map(f=>f.id)).size>=6},
+  {id:'decorator',   name:'Designer',       icon:'🏰',desc:'The tank has character now',    reward:60, check:s=>(s.decos||[]).length>=5},
+  {id:'rare_catch',  name:'Rare Catch',     icon:'⭐',desc:'Something uncommon arrived',         reward:75, check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='rare')},
+  {id:'super_rare',  name:'Legend',         icon:'👑',desc:'A truly rare visitor stayed',   reward:200,check:s=>s.fish.some(f=>FISH_DEF.find(d=>d.id===f.id)?.rarity==='super_rare')},
+  {id:'moments_20',  name:'Storyteller',    icon:'📖',desc:'Twenty memories recorded',     reward:1, check:s=>(s.moments||[]).length>=20},
+  {id:'naturalist',  name:'Naturalist',     icon:'🌿',desc:'You\'ve seen many kinds',    reward:2, check:s=>(s.discoveredSpecies||[]).length>=10},
   {id:'zen_master', name:'Zen Master', icon:'🌟',desc:'Play for 10 peaceful days',  reward:100,check:s=>(s.daysWithoutDeath||0)>=10},
 ];
 
@@ -573,41 +482,74 @@ const ACHIEVEMENTS=[
 function getSprite(id){
 const D={
 // GUPPY — small torpedo body, fan tail, iridescent scales, male coloring
-guppy:{w:18,h:11,p:[
-  // tail fan (forked, colorful)
-  [13,1,'#E040FB'],[14,0,'#CE93D8'],[15,1,'#BA68C8'],[14,2,'#9C27B0'],[15,3,'#7B1FA2'],[16,1,'#E040FB'],[17,0,'#CE93D8'],
-  [13,2,'#FF6F00'],[14,3,'#FF8F00'],[13,3,'#FFA000'],
-  // body
-  [3,3,'#FF6F00'],[4,3,'#FF8F00'],[5,3,'#FFA000'],[6,3,'#FFB300'],[7,3,'#FFC107'],[8,3,'#FFB300'],[9,3,'#FFA000'],[10,3,'#FF8F00'],[11,3,'#FF6F00'],[12,3,'#FF8F00'],
-  [2,4,'#FF8F00'],[3,4,'#FFB300'],[4,4,'#FFD54F'],[5,4,'#FFE082'],[6,4,'#FFF9C4'],[7,4,'#FFFFFF'],[8,4,'#FFF9C4'],[9,4,'#FFE082'],[10,4,'#FFD54F'],[11,4,'#FFB300'],[12,4,'#FF8F00'],[13,4,'#FF6F00'],
-  [2,5,'#FF8F00'],[3,5,'#FFB300'],[4,5,'#FFD54F'],[5,5,'#FFE082'],[6,5,'#FFFFFF'],[7,5,'#FFFFFF'],[8,5,'#FFE082'],[9,5,'#FFD54F'],[10,5,'#FFB300'],[11,5,'#FF8F00'],[12,5,'#FF6F00'],
-  [3,6,'#FF8F00'],[4,6,'#FFB300'],[5,6,'#FFD54F'],[6,6,'#FFE082'],[7,6,'#FFD54F'],[8,6,'#FFB300'],[9,6,'#FF8F00'],[10,6,'#FF6F00'],
-  [4,7,'#FF6F00'],[5,7,'#FF8F00'],[6,7,'#FF8F00'],[7,7,'#FF6F00'],
-  // dorsal fin
-  [5,2,'#E040FB'],[6,2,'#CE93D8'],[7,2,'#BA68C8'],[8,2,'#CE93D8'],
-  // iridescent spots
-  [7,4,'#00E5FF'],[8,5,'#40C4FF'],[6,5,'#69F0AE'],
-  // eye
-  [3,4,'#111'],[3,5,'#111'],[4,4,'#fff'],
-  // snout/mouth
-  [1,5,'#FF6F00'],[2,5,'#FF8F00'],
+guppy:{w:28,h:16,p:[
+  // ── TAIL FAN: larger, more gradient, purple-magenta-orange blend ──
+  [20,2,'#CE93D8'],[21,1,'#E040FB'],[22,0,'#E080FF'],[23,1,'#CE93D8'],[24,0,'#BA68C8'],[25,1,'#E040FB'],[26,0,'#CE93D8'],[27,1,'#E080FF'],
+  [20,3,'#BA68C8'],[21,2,'#CE93D8'],[22,1,'#E040FB'],[23,2,'#E080FF'],[24,1,'#CE93D8'],[25,2,'#BA68C8'],
+  [20,4,'#9C27B0'],[21,3,'#BA68C8'],[22,3,'#CE93D8'],[23,3,'#BA68C8'],[24,2,'#9C27B0'],
+  [20,5,'#FF8F00'],[21,4,'#FFA000'],[22,4,'#FFB300'],[23,4,'#FFA000'],
+  [20,6,'#FF6F00'],[21,5,'#FF8F00'],[22,5,'#FFA000'],[23,5,'#FF8F00'],
+  [20,7,'#9C27B0'],[21,6,'#BA68C8'],[22,6,'#CE93D8'],[23,6,'#BA68C8'],
+  [20,8,'#BA68C8'],[21,7,'#CE93D8'],[22,7,'#E040FB'],[23,7,'#CE93D8'],[24,7,'#BA68C8'],
+  [20,9,'#CE93D8'],[21,8,'#E040FB'],[22,8,'#E080FF'],[23,8,'#CE93D8'],[24,8,'#E040FB'],[25,8,'#CE93D8'],
+  [21,9,'#E040FB'],[22,9,'#CE93D8'],[23,9,'#BA68C8'],[24,9,'#CE93D8'],[25,9,'#E040FB'],[26,9,'#CE93D8'],
+  // ── BODY: smooth elliptical shape with rich orange-gold gradient ──
+  [6,4,'#E08020'],[7,4,'#F09030'],[8,4,'#FFA040'],[9,4,'#FFB050'],[10,4,'#FFC060'],[11,4,'#FFB050'],[12,4,'#FFA040'],[13,4,'#F09030'],[14,4,'#E08020'],[15,4,'#D07018'],[16,4,'#C06010'],[17,4,'#D07018'],[18,4,'#E08020'],[19,4,'#D07018'],
+  [5,5,'#E08020'],[6,5,'#F0A040'],[7,5,'#FFB858'],[8,5,'#FFC870'],[9,5,'#FFD888'],[10,5,'#FFE8A0'],[11,5,'#FFF0B8'],[12,5,'#FFE8A0'],[13,5,'#FFD888'],[14,5,'#FFC870'],[15,5,'#FFB858'],[16,5,'#F0A040'],[17,5,'#E08020'],[18,5,'#D07018'],[19,5,'#C06010'],
+  [4,6,'#D07018'],[5,6,'#F09030'],[6,6,'#FFB858'],[7,6,'#FFD080'],[8,6,'#FFE0A0'],[9,6,'#FFF0C0'],[10,6,'#FFFDE0'],[11,6,'#FFFFFF'],[12,6,'#FFFDE0'],[13,6,'#FFF0C0'],[14,6,'#FFE0A0'],[15,6,'#FFD080'],[16,6,'#FFB858'],[17,6,'#F09030'],[18,6,'#E08020'],[19,6,'#D07018'],
+  [3,7,'#C06010'],[4,7,'#E08020'],[5,7,'#F0A040'],[6,7,'#FFB858'],[7,7,'#FFD080'],[8,7,'#FFE8A8'],[9,7,'#FFF8D0'],[10,7,'#FFFFFF'],[11,7,'#FFFFFF'],[12,7,'#FFF8D0'],[13,7,'#FFE8A8'],[14,7,'#FFD080'],[15,7,'#FFB858'],[16,7,'#F0A040'],[17,7,'#E08020'],[18,7,'#D07018'],[19,7,'#C06010'],
+  [3,8,'#C06010'],[4,8,'#D07018'],[5,8,'#F09030'],[6,8,'#FFB050'],[7,8,'#FFC870'],[8,8,'#FFE098'],[9,8,'#FFF0C0'],[10,8,'#FFFFFF'],[11,8,'#FFFFFF'],[12,8,'#FFF0C0'],[13,8,'#FFE098'],[14,8,'#FFC870'],[15,8,'#FFB050'],[16,8,'#F09030'],[17,8,'#E08020'],[18,8,'#D07018'],
+  [4,9,'#C06010'],[5,9,'#D07018'],[6,9,'#E08020'],[7,9,'#F0A040'],[8,9,'#FFB858'],[9,9,'#FFD080'],[10,9,'#FFE0A0'],[11,9,'#FFD080'],[12,9,'#FFB858'],[13,9,'#F0A040'],[14,9,'#E08020'],[15,9,'#D07018'],[16,9,'#C06010'],[17,9,'#D07018'],
+  [5,10,'#B05808'],[6,10,'#C06010'],[7,10,'#D07018'],[8,10,'#E08020'],[9,10,'#F09030'],[10,10,'#E08020'],[11,10,'#D07018'],[12,10,'#C06010'],[13,10,'#B05808'],[14,10,'#C06010'],
+  [7,11,'#A04800'],[8,11,'#B05808'],[9,11,'#C06010'],[10,11,'#B05808'],[11,11,'#A04800'],
+  // ── DORSAL FIN: purple-pink, more detailed ──
+  [8,3,'#CE93D8'],[9,3,'#E040FB'],[10,3,'#E080FF'],[11,3,'#CE93D8'],[12,3,'#BA68C8'],[13,3,'#CE93D8'],
+  [9,2,'#BA68C8'],[10,2,'#CE93D8'],[11,2,'#E040FB'],[12,2,'#CE93D8'],
+  [10,1,'#9C27B0'],[11,1,'#BA68C8'],
+  // ── PECTORAL FIN ──
+  [6,10,'#E08820'],[7,11,'#D07818'],[5,11,'#C06810'],
+  // ── VENTRAL FIN ──
+  [10,11,'#E08020'],[11,12,'#D07018'],[12,12,'#C06010'],
+  // ── IRIDESCENT SCALE SPOTS ──
+  [9,6,'#00E5FF'],[10,7,'#40C4FF'],[11,6,'#69F0AE'],[8,8,'#00E5FF'],[12,7,'#80D8FF'],[7,7,'#69F0AE'],
+  // ── EYE: larger, more detailed ──
+  [4,6,'#1A1A1A'],[5,6,'#0A0A0A'],[4,7,'#1A1A1A'],[5,7,'#0A0A0A'],
+  [5,6,'#FFFFFF'],[6,6,'#E8E8E8'],// highlight
+  // ── MOUTH ──
+  [2,7,'#C06010'],[3,7,'#D07818'],[2,8,'#D07818'],
 ]},
 // NEON TETRA — electric blue-silver body, vivid red stripe lower half, tiny fins
-neon:{w:17,h:9,p:[
-  // upper body — silver-blue
-  [2,2,'#90CAF9'],[3,2,'#BBDEFB'],[4,2,'#BBDEFB'],[5,2,'#90CAF9'],[6,2,'#64B5F6'],[7,2,'#42A5F5'],
-  [1,3,'#42A5F5'],[2,3,'#90CAF9'],[3,3,'#E3F2FD'],[4,3,'#FFFFFF'],[5,3,'#E3F2FD'],[6,3,'#90CAF9'],[7,3,'#64B5F6'],[8,3,'#42A5F5'],[9,3,'#1E88E5'],
-  // neon blue stripe
-  [1,3,'#00E5FF'],[2,3,'#00E5FF'],[3,3,'#00E5FF'],[4,3,'#40C4FF'],[5,3,'#00E5FF'],[6,3,'#00E5FF'],[7,3,'#00E5FF'],[8,3,'#29B6F6'],
-  // red lower half
-  [1,4,'#F44336'],[2,4,'#EF5350'],[3,4,'#FFFFFF'],[4,4,'#FFCDD2'],[5,4,'#FFFFFF'],[6,4,'#42A5F5'],[7,4,'#1565C0'],[8,4,'#0D47A1'],[9,4,'#082040'],[10,4,'#082040'],[11,4,'#0D47A1'],[12,4,'#1565C0'],
-  [1,5,'#C62828'],[2,5,'#D32F2F'],[3,5,'#EF9A9A'],[4,5,'#FFCDD2'],[5,5,'#EF9A9A'],[6,5,'#42A5F5'],[7,5,'#1976D2'],[8,5,'#1565C0'],[9,5,'#0D47A1'],
-  [2,6,'#1565C0'],[3,6,'#1976D2'],[4,6,'#42A5F5'],[5,6,'#1976D2'],[6,6,'#1565C0'],[7,6,'#0D47A1'],
-  // tail
-  [9,3,'#1565C0'],[10,3,'#0D47A1'],[11,3,'#0D47A1'],[13,4,'#1565C0'],[14,3,'#0D47A1'],
-  [9,5,'#1565C0'],[10,5,'#0D47A1'],[11,5,'#0D47A1'],
-  // eye (large, distinctive)
-  [1,3,'#111'],[2,3,'#111'],[1,4,'#fff'],
+neon:{w:26,h:14,p:[
+  // ── UPPER BODY: silver-blue gradient, smooth shape ──
+  [5,3,'#B0D8F0'],[6,3,'#C0E0F8'],[7,3,'#D0E8FF'],[8,3,'#D8ECFF'],[9,3,'#D0E8FF'],[10,3,'#C0E0F8'],[11,3,'#B0D8F0'],[12,3,'#A0C8E8'],
+  [4,4,'#90C0E0'],[5,4,'#B0D8F0'],[6,4,'#D0E8FF'],[7,4,'#E0F0FF'],[8,4,'#E8F4FF'],[9,4,'#FFFFFF'],[10,4,'#E8F4FF'],[11,4,'#E0F0FF'],[12,4,'#D0E8FF'],[13,4,'#B0D8F0'],[14,4,'#90C0E0'],
+  [3,5,'#80B0D0'],[4,5,'#A0C8E8'],[5,5,'#C0E0F8'],[6,5,'#D8ECFF'],[7,5,'#E8F4FF'],[8,5,'#FFFFFF'],[9,5,'#FFFFFF'],[10,5,'#E8F4FF'],[11,5,'#D8ECFF'],[12,5,'#C0E0F8'],[13,5,'#A0C8E8'],[14,5,'#80B0D0'],[15,5,'#6898B8'],
+  // ── NEON BLUE STRIPE: the signature, bright and glowing ──
+  [3,6,'#00D0FF'],[4,6,'#00E0FF'],[5,6,'#00E8FF'],[6,6,'#20F0FF'],[7,6,'#40F4FF'],[8,6,'#20F0FF'],[9,6,'#00E8FF'],[10,6,'#00E0FF'],[11,6,'#00D0FF'],[12,6,'#00C0F0'],[13,6,'#00B0E0'],[14,6,'#00A0D0'],[15,6,'#0090C0'],
+  // glow around stripe
+  [3,5,'#40D0F0'],[4,5,'#30C8E8'],[14,5,'#30C8E8'],
+  [3,7,'#40D0F0'],[4,7,'#30C8E8'],[14,7,'#30C8E8'],
+  // ── RED LOWER HALF: warm red belly ──
+  [3,7,'#E04030'],[4,7,'#E85040'],[5,7,'#F06050'],[6,7,'#F87060'],[7,7,'#FF8070'],[8,7,'#FF9080'],[9,7,'#FF8070'],[10,7,'#F87060'],[11,7,'#F06050'],[12,7,'#E85040'],[13,7,'#E04030'],
+  [4,8,'#D03020'],[5,8,'#E04030'],[6,8,'#E85040'],[7,8,'#F06050'],[8,8,'#F87060'],[9,8,'#F06050'],[10,8,'#E85040'],[11,8,'#E04030'],[12,8,'#D03020'],
+  [5,9,'#C02818'],[6,9,'#D03020'],[7,9,'#E04030'],[8,9,'#D03020'],[9,9,'#C02818'],[10,9,'#B02010'],
+  [6,10,'#A01808'],[7,10,'#B02010'],[8,10,'#A01808'],
+  // ── TAIL: forked, translucent red-blue ──
+  [15,4,'#4080B0'],[16,3,'#3070A0'],[17,2,'#2060A0'],[18,1,'#1050A0'],[19,2,'#2060A0'],
+  [15,5,'#3070A0'],[16,4,'#2060A0'],[17,4,'#1050A0'],[18,3,'#2060A0'],
+  [15,6,'#4080B0'],[16,6,'#3070A0'],[17,6,'#2060A0'],
+  [15,8,'#4080B0'],[16,8,'#3070A0'],[17,9,'#2060A0'],[18,10,'#1050A0'],[19,9,'#2060A0'],
+  [15,7,'#3070A0'],[16,7,'#2060A0'],[17,7,'#1050A0'],
+  // ── DORSAL FIN: tiny, translucent ──
+  [8,2,'#80B8D8'],[9,2,'#90C0E0'],[10,2,'#80B8D8'],
+  [9,1,'#70A8C8'],
+  // ── ADIPOSE FIN (tetra feature) ──
+  [13,4,'#90C0E0'],[14,3,'#80B0D0'],
+  // ── EYE: large, characteristic tetra eye ──
+  [4,5,'#0A0A0A'],[5,5,'#1A1A1A'],[4,6,'#0A0A0A'],[5,6,'#1A1A1A'],
+  [5,5,'#FFFFFF'],[6,5,'#E0E0E0'],// highlight
+  // ── MOUTH ──
+  [2,6,'#80B0D0'],[3,6,'#90B8D8'],
 ]},
 // BETTA — flowing fins, jewel tones, proud posture
 betta:{w:20,h:14,p:[
@@ -633,26 +575,41 @@ betta:{w:20,h:14,p:[
   [11,4,'#CE93D8'],[12,4,'#AB47BC'],
 ]},
 // GOLDFISH — round chubby body, fancy double tail, orange-gold
-goldfish:{w:20,h:14,p:[
-  // fancy double tail
-  [14,2,'#FF8F00'],[15,1,'#FFA000'],[16,0,'#FFB300'],[17,1,'#FFA000'],[18,2,'#FF8F00'],
-  [14,5,'#FF8F00'],[15,6,'#FFA000'],[16,7,'#FFB300'],[17,6,'#FFA000'],[18,5,'#FF8F00'],
-  [14,3,'#FF6F00'],[14,4,'#FF6F00'],[15,3,'#FF8F00'],[15,4,'#FF8F00'],
-  // dorsal fin
-  [5,1,'#FFA000'],[6,1,'#FFB300'],[7,1,'#FFA000'],[8,2,'#FF8F00'],
-  // body — round and chubby
-  [3,3,'#E65100'],[4,3,'#FF6F00'],[5,3,'#FF8F00'],[6,3,'#FFA000'],[7,3,'#FFB300'],[8,3,'#FFC107'],[9,3,'#FFB300'],[10,3,'#FFA000'],[11,3,'#FF8F00'],[12,3,'#E65100'],
-  [2,4,'#FF6F00'],[3,4,'#FF8F00'],[4,4,'#FFB300'],[5,4,'#FFD54F'],[6,4,'#FFE082'],[7,4,'#FFF9C4'],[8,4,'#FFFFFF'],[9,4,'#FFF9C4'],[10,4,'#FFE082'],[11,4,'#FFD54F'],[12,4,'#FFB300'],[13,4,'#FF6F00'],
-  [1,5,'#FF8F00'],[2,5,'#FFB300'],[3,5,'#FFD54F'],[4,5,'#FFE082'],[5,5,'#FFF9C4'],[6,5,'#FFFFFF'],[7,5,'#FFFFFF'],[8,5,'#FFFFFF'],[9,5,'#FFF9C4'],[10,5,'#FFE082'],[11,5,'#FFD54F'],[12,5,'#FFB300'],[13,5,'#FF8F00'],
-  [1,6,'#FF6F00'],[2,6,'#FFB300'],[3,6,'#FFD54F'],[4,6,'#FFE082'],[5,6,'#FFF9C4'],[6,6,'#FFFFFF'],[7,6,'#FFFFFF'],[8,6,'#FFF9C4'],[9,6,'#FFE082'],[10,6,'#FFD54F'],[11,6,'#FFB300'],[12,6,'#FF8F00'],[13,6,'#E65100'],
-  [2,7,'#FF6F00'],[3,7,'#FFA000'],[4,7,'#FFD54F'],[5,7,'#FFE082'],[6,7,'#FFE082'],[7,7,'#FFE082'],[8,7,'#FFD54F'],[9,7,'#FFA000'],[10,7,'#FF8F00'],[11,7,'#E65100'],
-  [3,8,'#FF6F00'],[4,8,'#FF8F00'],[5,8,'#FFA000'],[6,8,'#FFB300'],[7,8,'#FFA000'],[8,8,'#FF8F00'],[9,8,'#FF6F00'],
-  // pectoral fin
-  [4,6,'#FFC107'],[4,7,'#FFB300'],
-  // eye (large round)
-  [2,5,'#111'],[3,5,'#111'],[2,6,'#111'],[3,6,'#111'],[2,5,'#fff'],
-  // mouth (down-turned)
-  [1,6,'#BF360C'],
+goldfish:{w:30,h:20,p:[
+  // ── DOUBLE TAIL: flowing, ornate ──
+  [22,3,'#F09020'],[23,2,'#E88018'],[24,1,'#E07010'],[25,0,'#D86808'],[26,1,'#E07010'],[27,2,'#E88018'],
+  [22,4,'#F09020'],[23,3,'#E88018'],[24,2,'#E07010'],[25,1,'#D86808'],[26,2,'#E88018'],
+  [22,5,'#E88018'],[23,4,'#D87010'],[24,3,'#C86008'],[25,3,'#D87010'],
+  [22,14,'#F09020'],[23,15,'#E88018'],[24,16,'#E07010'],[25,17,'#D86808'],[26,16,'#E07010'],[27,15,'#E88018'],
+  [22,13,'#F09020'],[23,14,'#E88018'],[24,15,'#E07010'],[25,16,'#D86808'],[26,15,'#E88018'],
+  [22,12,'#E88018'],[23,13,'#D87010'],[24,14,'#C86008'],[25,14,'#D87010'],
+  // tail center
+  [21,6,'#D07010'],[21,7,'#C86008'],[21,8,'#D07010'],[21,9,'#C86008'],[21,10,'#D07010'],[21,11,'#C86008'],
+  [22,7,'#C86008'],[22,8,'#B85800'],[22,9,'#C86008'],[22,10,'#B85800'],
+  // ── BODY: very round, chubby, rich orange-gold gradient ──
+  [7,4,'#E89030'],[8,4,'#F0A040'],[9,4,'#F8B050'],[10,4,'#FFC060'],[11,4,'#FFD070'],[12,4,'#FFC060'],[13,4,'#F8B050'],[14,4,'#F0A040'],[15,4,'#E89030'],[16,4,'#E08020'],[17,4,'#D87010'],[18,4,'#E08020'],[19,4,'#E89030'],[20,4,'#D87010'],
+  [6,5,'#E08020'],[7,5,'#F0A040'],[8,5,'#FFB858'],[9,5,'#FFC870'],[10,5,'#FFD888'],[11,5,'#FFE8A0'],[12,5,'#FFF0B8'],[13,5,'#FFE8A0'],[14,5,'#FFD888'],[15,5,'#FFC870'],[16,5,'#FFB858'],[17,5,'#F0A040'],[18,5,'#E89030'],[19,5,'#E08020'],[20,5,'#D87010'],
+  [5,6,'#D07010'],[6,6,'#E89030'],[7,6,'#FFB050'],[8,6,'#FFC870'],[9,6,'#FFE098'],[10,6,'#FFF0C0'],[11,6,'#FFFDE0'],[12,6,'#FFFFFF'],[13,6,'#FFFDE0'],[14,6,'#FFF0C0'],[15,6,'#FFE098'],[16,6,'#FFC870'],[17,6,'#FFB050'],[18,6,'#F0A040'],[19,6,'#E89030'],[20,6,'#D87010'],
+  [4,7,'#C86008'],[5,7,'#D87818'],[6,7,'#F09030'],[7,7,'#FFB858'],[8,7,'#FFD080'],[9,7,'#FFE8A8'],[10,7,'#FFF8D0'],[11,7,'#FFFFFF'],[12,7,'#FFFFFF'],[13,7,'#FFF8D0'],[14,7,'#FFE8A8'],[15,7,'#FFD080'],[16,7,'#FFB858'],[17,7,'#F09030'],[18,7,'#E89030'],[19,7,'#E08020'],[20,7,'#D07010'],
+  [3,8,'#B85800'],[4,8,'#D07010'],[5,8,'#E89030'],[6,8,'#F0A040'],[7,8,'#FFB858'],[8,8,'#FFD888'],[9,8,'#FFF0B8'],[10,8,'#FFFFFF'],[11,8,'#FFFFFF'],[12,8,'#FFFFFF'],[13,8,'#FFF0B8'],[14,8,'#FFD888'],[15,8,'#FFB858'],[16,8,'#F0A040'],[17,8,'#E89030'],[18,8,'#E08020'],[19,8,'#D87010'],[20,8,'#C86008'],
+  [3,9,'#B85800'],[4,9,'#C86008'],[5,9,'#E08020'],[6,9,'#F09030'],[7,9,'#FFB050'],[8,9,'#FFD080'],[9,9,'#FFE8A0'],[10,9,'#FFFDE0'],[11,9,'#FFFFFF'],[12,9,'#FFFFFF'],[13,9,'#FFE8A0'],[14,9,'#FFD080'],[15,9,'#FFB050'],[16,9,'#F09030'],[17,9,'#E89030'],[18,9,'#E08020'],[19,9,'#D07010'],[20,9,'#C86008'],
+  [4,10,'#B85800'],[5,10,'#D07010'],[6,10,'#E08020'],[7,10,'#F0A040'],[8,10,'#FFB858'],[9,10,'#FFC870'],[10,10,'#FFE098'],[11,10,'#FFD888'],[12,10,'#FFC870'],[13,10,'#FFB858'],[14,10,'#F0A040'],[15,10,'#E89030'],[16,10,'#E08020'],[17,10,'#D87010'],[18,10,'#D07010'],[19,10,'#C86008'],
+  [5,11,'#B85800'],[6,11,'#C86008'],[7,11,'#D87818'],[8,11,'#E89030'],[9,11,'#F0A040'],[10,11,'#FFB050'],[11,11,'#F0A040'],[12,11,'#E89030'],[13,11,'#D87818'],[14,11,'#D07010'],[15,11,'#C86008'],[16,11,'#B85800'],[17,11,'#C86008'],
+  [6,12,'#A85000'],[7,12,'#B85800'],[8,12,'#C86008'],[9,12,'#D07010'],[10,12,'#D87818'],[11,12,'#D07010'],[12,12,'#C86008'],[13,12,'#B85800'],[14,12,'#A85000'],
+  [8,13,'#985000'],[9,13,'#A85800'],[10,13,'#985000'],
+  // ── DORSAL FIN: tall, ornate ──
+  [8,3,'#E88830'],[9,3,'#F09838'],[10,3,'#F8A840'],[11,3,'#F09838'],[12,3,'#E88830'],[13,3,'#E08020'],
+  [9,2,'#D87820'],[10,2,'#E88830'],[11,2,'#D87820'],
+  [10,1,'#C86818'],
+  // ── PECTORAL FIN ──
+  [6,11,'#E08828'],[5,12,'#D07818'],[7,12,'#E08828'],
+  // ── SCALE SHIMMER: subtle lighter spots ──
+  [9,7,'#FFE8C0'],[11,8,'#FFE8C0'],[8,9,'#FFE0B0'],[12,7,'#FFE0B0'],[10,6,'#FFF0D0'],[13,9,'#FFE0B0'],
+  // ── EYE: large, round, cute ──
+  [5,7,'#1A1008'],[6,7,'#0A0800'],[5,8,'#1A1008'],[6,8,'#0A0800'],
+  [6,7,'#FFFFFF'],[7,7,'#E8E0D8'],// big highlight
+  // ── MOUTH ──
+  [3,9,'#C86008'],[2,9,'#D07818'],[3,8,'#D07818'],
 ]},
 // ANGELFISH — tall diamond body, long trailing ventral fins, vertical stripes
 angel:{w:16,h:22,p:[
@@ -1318,7 +1275,7 @@ let S={
 function sv(){S.lastLoginTime=Date.now();try{localStorage.setItem('aq8',JSON.stringify(S));}catch(e){}}
 function ld(){try{const x=localStorage.getItem('aq8');if(x){Object.assign(S,JSON.parse(x));S.waterTested=true;if(S.owned&&S.owned.backdrop&&!S.activeBackdrop){S.activeBackdrop='ocean';if(!S.ownedBackdrops)S.ownedBackdrops=['ocean'];delete S.owned.backdrop;}}}catch(e){}}
 function coin(n){S.coins+=n;document.getElementById('CD').textContent='🐚 '+S.coins;sv();}
-function shell(n){coin(n);if(n>0)showZenToast('🐚 Shell','Found a shell on the shore');}
+function shell(n){coin(n);}
 function addXP(n){/* zen: no XP/levels */}
 function coinFlyAnim(text){const el=document.createElement('div');el.className='coin-fly';el.textContent=text;const cd=document.getElementById('CD');if(!cd)return;const r=cd.getBoundingClientRect();el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top-5)+'px';document.body.appendChild(el);setTimeout(()=>el.remove(),1000);}
 function showAl(z,m,t){const el=document.getElementById('a-'+(z||'global'));if(!el)return;el.innerHTML='<div class="al '+t+'">'+m+'</div>';setTimeout(()=>{if(el)el.innerHTML='';},3000);}
@@ -1342,8 +1299,8 @@ function getFishMood(f){
   return'content';
 }
 
-function checkAch(){ACHIEVEMENTS.forEach(a=>{if((S.achievements||[]).includes(a.id))return;if(a.check(S)){if(!S.achievements)S.achievements=[];S.achievements.push(a.id);if(a.reward>0)coin(Math.ceil(a.reward/50));showAchPopup(a);sv();}});}
-function showAchPopup(a){const p=document.getElementById('ach-popup');document.getElementById('ach-popup-icon').textContent=a.icon;document.getElementById('ach-popup-text').textContent='Achievement: '+a.name;document.getElementById('ach-popup-sub').textContent=a.desc+(a.reward>0?' (+'+a.reward+' 🐚)':'');p.classList.add('show');setTimeout(()=>p.classList.remove('show'),3500);}
+function checkAch(){ACHIEVEMENTS.forEach(a=>{if((S.achievements||[]).includes(a.id))return;if(a.check(S)){if(!S.achievements)S.achievements=[];S.achievements.push(a.id);showAchPopup(a);sv();}});}
+function showAchPopup(a){const p=document.getElementById('ach-popup');document.getElementById('ach-popup-icon').textContent=a.icon;document.getElementById('ach-popup-text').textContent='Achievement: '+a.name;document.getElementById('ach-popup-sub').textContent=a.desc;p.classList.add('show');setTimeout(()=>p.classList.remove('show'),3500);}
 function updateTankBadge(){const el=document.getElementById('tank-badge');if(el)el.textContent='Tank: '+TANK_SIZES[S.tankSize||0].name;}
 
 function recalcWater(){
@@ -1362,41 +1319,9 @@ function recalcWater(){
   renderWaterBar();
 }
 
-function renderWaterBar(){
-  const el=document.getElementById('wq-bar');if(!el)return;
-  if(!S.waterAdded){el.innerHTML='';return;}
-  const ws=S.waterScore;if(!ws||!Object.keys(ws).length)return;
-  const lbls={ph:'pH',ammonia:'NH₃',oxygen:'O₂',temp:'Temp',clarity:'Clear'};
-  const col=v=>v>=80?'#4ade80':v>=55?'#FFB300':'#ff6b6b';
-  const vals=Object.values(ws);
-  const avg=Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
-  const wq=avg>=80?'Excellent':avg>=60?'Good':avg>=40?'Poor':'Critical';
-  const wc=avg>=80?'#4ade80':avg>=60?'#FFB300':'#ff6b6b';
-  el.innerHTML='<div style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:6px;">'
-    +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">'
-    +'<span style="font-family:var(--pfont);font-size:8px;color:var(--muted);letter-spacing:1px;">WATER QUALITY</span>'
-    +'<span style="font-size:13px;color:'+wc+';font-weight:500;">'+wq+' — '+avg+'%</span></div>'
-    +'<div style="display:flex;gap:6px;">'
-    +Object.keys(ws).map(k=>'<div style="flex:1;text-align:center;">'
-      +'<div style="font-size:10px;color:var(--muted);margin-bottom:3px;">'+lbls[k]+'</div>'
-      +'<div style="height:6px;background:#ffffff15;border-radius:10px;overflow:hidden;"><div style="height:100%;width:'+ws[k]+'%;background:'+col(ws[k])+';border-radius:10px;transition:width .6s;"></div></div>'
-      +'</div>').join('')
-    +'</div></div>';
-}
+function renderWaterBar(){return;}// zen: no water bar
 
-function renderHUD(){
-  const avg=avgW();const wq=avg>=80?'Excellent':avg>=60?'Good':avg>=40?'Poor':'Critical';
-  const wc=avg>=80?'good':avg>=60?'warn':'bad';const cap=getTankCap();
-  document.getElementById('HUD').innerHTML=
-    '<div class="hud-stat '+wc+'"><b>'+wq+'</b>Water</div>'+
-    '<div class="hud-stat"><b>'+getWaterTemp()+'°C</b>Temp</div>'+
-    '<div class="hud-stat"><b>'+(S.waterAdded?100:Math.round(S.waterLevel||0))+'%</b>Level</div>'+
-    '<div class="hud-stat"><b>'+S.fish.length+'/'+cap+'</b>Fish</div>'+
-    '<div class="hud-stat '+(S.poopLevel>50?'bad':S.poopLevel>25?'warn':'')+'"><b>'+Math.round(S.poopLevel)+'%</b>Waste</div>'+
-    '<div class="hud-stat clickable" id="hud-feed-btn" style="background:'+(S.waterAdded&&S.fish.length?'#1D9E7522':'var(--panel)')+';">'+
-    '<b style="font-size:15px;">🍞</b>Feed</div>';
-  const fb=document.getElementById('hud-feed-btn');
-  if(fb)fb.addEventListener('click',()=>{if(!S.waterAdded||!S.fish.length)return;dropFood();});
+function renderHUD(){return;// zen: no HUD
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -1422,7 +1347,7 @@ const panelEl=document.getElementById('slide-panel');
 const panelOverlay=document.getElementById('panel-overlay');
 const panelTitleEl=document.getElementById('panel-title');
 let currentPanel=null;
-const PANEL_NAMES={market:'Add Life',deco:'Decorate',backdrops:'Backdrop',codex:'Codex',journal:'Journal',manage:'My Tank'};
+const PANEL_NAMES={market:'Add Life',deco:'Decorate',codex:'Collection',manage:'Settings'};
 function openPanel(name){
   if(currentPanel===name){closePanel();return;}
   currentPanel=name;
@@ -1431,11 +1356,11 @@ function openPanel(name){
   const target=document.getElementById('s-'+name);
   if(target)target.classList.add('v');
   if(name==='market'){renderMarket();renderCreatures();renderPlants();}
-  if(name==='deco')renderDeco();
-  if(name==='backdrops')renderBackdrops();
-  if(name==='codex')renderCodex();
-  if(name==='journal')renderJournal();
-  if(name==='manage'){renderFishList();renderPlacedItems();renderStats();}
+  if(name==='deco'){renderDeco();renderBackdrops();}
+  if(name==='codex'){renderCodex();renderJournal();}
+  if(name==='manage'){renderFishList();renderPlacedItems();renderStats();
+    const mse=document.getElementById('manage-shells');if(mse)mse.textContent='🐚 '+S.coins+' shells';
+    const mmo=document.getElementById('manage-mood');if(mmo)mmo.textContent=document.getElementById('water-mood')?.textContent||'';}
   if(panelEl)panelEl.classList.add('show');
   if(panelOverlay)panelOverlay.classList.add('show');
   document.querySelectorAll('.fab').forEach(f=>f.classList.remove('active'));
@@ -1475,7 +1400,7 @@ function resetHudFade(){
       if(hud)hud.classList.add('dim');
       if(btns)btns.classList.add('dim');
     }
-  },4000);
+  },3500);
 }
 document.addEventListener('touchstart',resetHudFade);
 document.addEventListener('mousedown',resetHudFade);
@@ -1621,7 +1546,7 @@ function renderMarket(){
       coin(-cat.price);const name=NAMES[Math.floor(Math.random()*NAMES.length)];
       S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid,variant:rollVariant()});
       S.totalFishBought=(S.totalFishBought||0)+1;addXP(5);discoverSpecies(id);discoverVariant(id,S.fish[S.fish.length-1].variant);sv();
-      showZenToast('🐟 Welcome!',name+' the '+cat.name+' joins your tank');renderMarket();renderHUD();checkAch();
+      showZenToast('',name+' the '+cat.name+' settles into the water.');renderMarket();renderHUD();checkAch();
     });
   });
 }
@@ -1853,7 +1778,7 @@ function renderCreatures(){
       const name=NAMES[Math.floor(Math.random()*NAMES.length)];
       S.fish.push({id,name,health:100,hunger:100,age:0,stage:'adult',diseased:false,disease:null,uid:++S.uid,isCreature:true,variant:rollVariant()});
       S.totalFishBought=(S.totalFishBought||0)+1;addXP(5);discoverSpecies(id);discoverVariant(id,S.fish[S.fish.length-1].variant);sv();
-      showZenToast('🦐 Welcome!',name+' the '+cr.name+' joins your tank');renderCreatures();renderHUD();checkAch();
+      showZenToast('',name+' the '+cr.name+' finds a spot.');renderCreatures();renderHUD();checkAch();
     });
   });
 }
@@ -1996,7 +1921,7 @@ function renderPlacedItems(){
         const row=document.createElement('div');row.className='fcard';
         row.innerHTML='<div style="font-size:16px;width:28px;text-align:center;">🪨</div><div class="finfo"><div class="fname">'+(def?.name||d.id)+'</div></div>';
         const rb=document.createElement('button');rb.textContent='Remove';rb.style.cssText='font-size:10px;padding:4px 8px;border:1px solid rgba(255,100,100,0.3);border-radius:6px;background:rgba(255,100,100,0.08);color:#ff6b6b;cursor:pointer;';
-        rb.addEventListener('click',function(e){e.stopPropagation();S.decos.splice(i,1);sv();renderPlacedItems();showZenToast('🪨','Decoration removed');});
+        rb.addEventListener('click',function(e){e.stopPropagation();S.decos.splice(i,1);sv();renderPlacedItems();showZenToast('','Removed quietly.');});
         row.appendChild(rb);dl.appendChild(row);
       });
     }
@@ -2012,7 +1937,7 @@ function renderPlacedItems(){
         const row=document.createElement('div');row.className='fcard';
         row.innerHTML='<div style="font-size:16px;width:28px;text-align:center;">🌿</div><div class="finfo"><div class="fname">'+(def?.name||p.id)+'</div></div>';
         const rb=document.createElement('button');rb.textContent='Remove';rb.style.cssText='font-size:10px;padding:4px 8px;border:1px solid rgba(255,100,100,0.3);border-radius:6px;background:rgba(255,100,100,0.08);color:#ff6b6b;cursor:pointer;';
-        rb.addEventListener('click',function(e){e.stopPropagation();S.plantSeeds.splice(i,1);sv();renderPlacedItems();showZenToast('🌿','Plant removed');});
+        rb.addEventListener('click',function(e){e.stopPropagation();S.plantSeeds.splice(i,1);sv();renderPlacedItems();showZenToast('','Uprooted gently.');});
         row.appendChild(rb);pl.appendChild(row);
       });
     }
@@ -2035,10 +1960,14 @@ function renderFishList(){
     const moodClass=mood==='happy'?'happy':mood==='sleepy'?'idle':'calm';
     const ptag=getIndividualPersonality(f);
     const varLabel=f.variant&&f.variant!=='normal'?' <span style="font-size:8px;color:'+{pale:'#B3E5FC',dark:'#5C6BC0',golden:'#FFD700',glow:'#00E5FF'}[f.variant]+'">'+f.variant+'</span>':'';
+    const bondName=f.bondUid?S.fish.find(x=>x.uid===f.bondUid)?.name:null;
+    const bondInfo=bondName?' · close to '+bondName:'';
+    const spotInfo=f.favoriteSpot?' · prefers '+f.favoriteSpot+' side':'';
     info.innerHTML='<div class="fname">'+f.name+varLabel+' <span style="font-size:8px;color:var(--muted)">'+(def?.name||f.id)+'</span> '+(MOOD_EMOTES[mood]||'')+'</div>'+
       '<div><span class="ftag ftag-'+moodClass+'">'+moodLabel+'</span>'+
       '<span class="ftag" style="background:#ffffff0a;color:var(--muted)">'+ptag+'</span>'+
-      '<span class="ftag ftag-age">day '+f.age+'</span></div>';
+      '<span class="ftag ftag-age">day '+f.age+'</span></div>'+
+      (bondInfo||spotInfo?'<div style="font-size:9px;color:rgba(255,255,255,0.25);font-style:italic;margin-top:2px;">'+bondInfo+spotInfo+'</div>':'');
     div.appendChild(info);
     const btns=document.createElement('div');btns.className='fbtns';
     // Rename button
@@ -2048,8 +1977,8 @@ function renderFishList(){
       const newName=prompt('New name for '+f.name+':',f.name);
       if(newName&&newName.trim()){
         const old=f.name;f.name=newName.trim().slice(0,12);sv();renderFishList();
-        addMoment(old+' is now called '+f.name,'event');
-        showZenToast('✏️ Renamed',old+' → '+f.name);
+        addMoment(old+' is now called '+f.name+'.','observation');
+        showZenToast('',old+' is now '+f.name+'.');
       }
     });
     btns.appendChild(rnBtn);
@@ -2766,7 +2695,7 @@ function drawTank(){
 
     syncAnim();
     fishAnim.forEach(a=>{
-      a.wobble+=0.03;
+      a.wobble+=0.018;// slower, gentler vertical bob
       const fish=S.fish.find(f=>f.uid===a.uid);
       const cfg=getSpeciesCfg(a.id,a.isCreature);
       const ns=isNight?0.35:1;
@@ -2865,52 +2794,89 @@ function drawTank(){
           // ── MOVE STYLES ──
           if(cfg.moveStyle==='cruise'){
             // Large lazy arcs — change direction very rarely
-            if(Math.random()<0.001*ns){a.dx=(Math.random()<0.5?1:-1)*cfg.speedX*1.2;}
-            if(Math.random()<0.0005*ns){a.dy=(Math.random()-0.5)*cfg.speedY*0.5;}
+            if(Math.random()<0.0008*ns){a.dx+=(Math.random()-0.5)*cfg.speedX*0.3;}
+            if(Math.random()<0.0004*ns){a.dy+=(Math.random()-0.5)*cfg.speedY*0.2;}
           } else if(cfg.moveStyle==='idle_burst'){
             a.idleTimer=(a.idleTimer||0)+1;
-            if(a.idleTimer<80){
-              // Idle: slow to stop
-              a.dx*=0.92;a.dy*=0.92;
-            } else if(a.idleTimer<90){
+            if(a.idleTimer<100){
+              // Idle: drift to stop
+              a.dx*=0.96;a.dy*=0.96;
+            } else if(a.idleTimer<108){
               // Burst: sudden move
-              a.dx=(Math.random()<0.5?1:-1)*cfg.speedX*2.5;
-              a.dy=(Math.random()-0.5)*cfg.speedY*1.5;
-            } else if(a.idleTimer>110){
+              a.dx=(Math.random()<0.5?1:-1)*cfg.speedX*2;
+              a.dy=(Math.random()-0.5)*cfg.speedY*1.2;
+            } else if(a.idleTimer>130){
               a.idleTimer=0;
             }
           } else if(cfg.moveStyle==='hover'){
             // Seahorse/jellyfish: mostly vertical drift, tiny horizontal
-            a.dy=Math.sin(t*0.6+a.wobble)*0.04;
-            if(Math.random()<0.003*ns)a.dx=(Math.random()-0.5)*cfg.speedX*0.4;
+            a.dy=Math.sin(t*0.4+a.wobble)*0.025;
+            if(Math.random()<0.002*ns)a.dx=(Math.random()-0.5)*cfg.speedX*0.3;
           } else if(cfg.moveStyle==='jump'){
             // Shrimp/frog: occasional sudden burst then stop
             a.idleTimer=(a.idleTimer||0)+1;
-            if(a.idleTimer>60&&Math.random()<0.03*ns){
-              a.dx=(Math.random()<0.5?1:-1)*cfg.speedX*4;
-              a.dy=-cfg.speedY*3;// jump up slightly
+            if(a.idleTimer>80&&Math.random()<0.02*ns){
+              a.dx=(Math.random()<0.5?1:-1)*cfg.speedX*3;
+              a.dy=-cfg.speedY*2;
               a.idleTimer=0;
             } else {
-              a.dx*=0.88;a.dy*=0.88;
+              a.dx*=0.92;a.dy*=0.92;
             }
           } else {
-            // Normal: random direction changes
-            if(Math.random()<cfg.changeDir*ns){a.dx=(Math.random()-0.5)*cfg.speedX*2;}
-            if(Math.random()<cfg.changeDir*0.5*ns){a.dy=(Math.random()-0.5)*cfg.speedY*2;}
+            // ── NORMAL: smooth, lazy, with idle resting ──
+            // Idle/rest behavior: fish periodically stop and "hover"
+            if(!a.restTimer)a.restTimer=0;
+            if(!a.resting)a.resting=false;
+
+            if(a.resting){
+              // Resting: barely move, gentle drift
+              a.dx*=0.94;a.dy*=0.94;
+              a.dy+=Math.sin(t*0.8+a.wobble)*0.003;// tiny vertical bob
+              a.restTimer--;
+              if(a.restTimer<=0){a.resting=false;}
+              // Drift toward favorite spot if fish has one
+              const favSpot=fish?.favoriteSpot;
+              if(favSpot&&Math.random()<0.005){a.dx+=(favSpot==='left'?-0.01:0.01);}
+            } else {
+              // Swimming: smooth forward motion with GRADUAL turning
+              // Only adjust velocity gently, never snap
+              if(Math.random()<cfg.changeDir*0.3*ns){
+                // Gradual turn: blend toward new direction
+                const targetDx=(Math.random()-0.5)*cfg.speedX*1.5;
+                a.dx+=(targetDx-a.dx)*0.08;// slow blend, not instant
+              }
+              if(Math.random()<cfg.changeDir*0.15*ns){
+                const targetDy=(Math.random()-0.5)*cfg.speedY*1.0;
+                a.dy+=(targetDy-a.dy)*0.06;
+              }
+              // Random chance to start resting
+              if(Math.random()<0.0008*ns){
+                a.resting=true;
+                a.restTimer=80+Math.floor(Math.random()*160);// rest 80-240 frames (~1.5-4 sec)
+              }
+            }
           }
         }
       }
 
       // ── PLECO special: nibble animation at bottom (wobble more) ──
-      const wobbleAdd=(a.id==='pleco'&&a.y>65)?Math.sin(a.wobble*3)*0.05:Math.sin(a.wobble)*0.03;
+      const wobbleAdd=(a.id==='pleco'&&a.y>65)?Math.sin(a.wobble*2)*0.03:Math.sin(a.wobble)*0.015;
 
-      // ── POSITION UPDATE with layer bounds ──
+      // ── POSITION UPDATE with smooth boundary turning ──
       a.x+=a.dx;
       a.y+=a.dy+wobbleAdd;
-      if(a.x<2){a.x=2;a.dx=Math.abs(a.dx);}
-      if(a.x>93){a.x=93;a.dx=-Math.abs(a.dx);}
-      if(a.y<nightYMin){a.y=nightYMin;a.dy=Math.abs(a.dy);}
-      if(a.y>nightYMax){a.y=nightYMax;a.dy=-Math.abs(a.dy);}
+      // Soft boundary: gradually push away from edges instead of instant flip
+      if(a.x<5){a.dx+=(5-a.x)*0.02;if(a.dx<0)a.dx*=0.9;}
+      if(a.x>90){a.dx-=(a.x-90)*0.02;if(a.dx>0)a.dx*=0.9;}
+      // Hard clamp as safety net
+      if(a.x<1){a.x=1;a.dx=Math.abs(a.dx)*0.5;}
+      if(a.x>95){a.x=95;a.dx=-Math.abs(a.dx)*0.5;}
+      if(a.y<nightYMin){a.dy+=(nightYMin-a.y)*0.03;if(a.y<nightYMin-2)a.y=nightYMin-2;}
+      if(a.y>nightYMax){a.dy-=(a.y-nightYMax)*0.03;if(a.y>nightYMax+2)a.y=nightYMax+2;}
+      // Speed damping — fish never go too fast
+      const maxSpd=cfg.speedX*1.8;
+      if(Math.abs(a.dx)>maxSpd)a.dx*=0.95;
+      if(Math.abs(a.dy)>maxSpd*0.6)a.dy*=0.95;
 
       // ── POOP ──
       a.poopCooldown=(a.poopCooldown||0)-1;
@@ -3130,15 +3096,15 @@ function gameLoop(){
   if(S.waterAdded){S.poopLevel=Math.max(0,S.poopLevel-(S.owned.filter2?0.04:S.owned.filter?0.02:0)*gameMins/60);recalcWater();}
   lastTickTime=now;
   const h=Math.floor((S.gameTime%1440)/60);const m=Math.floor(S.gameTime%60);
-  document.getElementById('time-display').textContent='Day '+S.day+' — '+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  document.getElementById('time-display').textContent='day '+S.day;
   renderHUD();if(Math.random()<0.001*gameMins)sv();
   setTimeout(gameLoop,500);
 }
 
 function onNewDay(){
   if(S._waterChangeCooldown>0)S._waterChangeCooldown=Math.max(0,(S._waterChangeCooldown||0)-1);
-  // Zen: occasional shell find
-  if(Math.random()<0.15){coin(1);showZenToast('🐚 Shell','A shell washed ashore');}
+  // Daily observation note
+  generateDailyObservation();
   S._marketRares=null;S._decoRares=null;S._plantRares=null;
   // Zen: no death, no disease, no hunger penalty
   S.fish.forEach(f=>{
@@ -3157,8 +3123,8 @@ function onNewDay(){
       const name=NAMES[Math.floor(Math.random()*NAMES.length)];
       const bv=rollBreedVariant();S.fish.push({id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid,variant:bv});
       S.totalBred=(S.totalBred||0)+1;discoverVariant(id,bv);
-      addMoment(name+' the '+cat.name+' was born','birth');
-      if(bv!=='normal')showZenToast('✨ Mutation!','A '+bv+' '+cat.name+' was born!');else showZenToast('🥚 New Life','A baby '+cat.name+' ('+name+') appeared!');
+      addMoment('A tiny '+cat.name+' appeared among the others. It was named '+name+'.','birth');
+      showZenToast('','A small '+cat.name+' appeared quietly.');
       addXP(10);
       discoverSpecies(id);
     }
@@ -3239,24 +3205,53 @@ function getWaterState(){
 
 function updateWaterMood(){
   const el=document.getElementById('water-mood');if(!el)return;
-  const ws=getWaterState();
+  // Use today's observation if we have one, otherwise generate ambient text
+  if(S.todayObservation){el.textContent=S.todayObservation;return;}
   const fishCount=S.fish.length;
   const hour=Math.floor((S.gameTime%1440)/60);
   const isNight=hour>=21||hour<6;
+  const isDawn=hour>=5&&hour<8;
+  const isDusk=hour>=17&&hour<20;
   let msg='';
-  if(!S.waterAdded){msg='🌊 Set up your tank to begin';
-  }else if(fishCount===0){msg='🌊 The water is calm and waiting';
-  }else if(isNight){msg='🌙 The tank is quiet... fish are resting';
-  }else if(ws==='clear'){
-    const msgs=['🌊 Crystal clear water, fish are happy','✨ Everything feels peaceful','🐟 The tank is thriving'];
-    msg=msgs[Math.floor(S.gameTime/100)%msgs.length];
-  }else if(ws==='natural'){msg='🌊 The water has a natural feel';
-  }else{msg='💤 The tank feels a bit quiet today';}
-  const phaseLbl=getTankPhaseLabel();
-  el.textContent=msg+(phaseLbl?' · '+phaseLbl:'');
+  if(fishCount===0){msg='Still water.';
+  }else if(isNight){msg='The tank is resting.';
+  }else if(isDawn){msg='Morning light touches the water.';
+  }else if(isDusk){msg='The day is ending quietly.';
+  }else{
+    const pool=['quiet water','everything is calm','the fish are drifting','a peaceful afternoon','nothing to do but watch'];
+    msg=pool[Math.floor(S.gameTime/200)%pool.length];
+  }
+  el.textContent=msg;
 }
 
 // ── MOMENTS SYSTEM: record memorable events ──
+function generateDailyObservation(){
+  const hour=Math.floor((S.gameTime%1440)/60);
+  const fc=S.fish.length;
+  const pc=(S.plantSeeds||[]).length;
+  const phase=getTankPhase();
+  const bonded=S.fish.filter(f=>f.bondUid);
+  const babies=S.fish.filter(f=>f.stage==='baby');
+
+  // Build today's observation from what's actually in the tank
+  const pool=[];
+  pool.push('The water is calm today.');
+  pool.push('Everything is quiet this morning.');
+  if(fc>=3)pool.push('The fish seem content together.');
+  if(fc===1)pool.push(S.fish[0].name+' has the whole tank to explore.');
+  if(bonded.length>=2)pool.push(bonded[0].name+' stayed close to its companion.');
+  if(babies.length)pool.push(babies[0].name+' is still small, but growing.');
+  if(pc>=3)pool.push('The plants are filling in nicely.');
+  if(phase>=3)pool.push('The tank feels like a real ecosystem now.');
+  if(phase>=4)pool.push('There is a sense of calm maturity in the water.');
+  if(S.day%7===0)pool.push('Another week has passed. The tank remembers.');
+  if(S.day%10===0)pool.push('The water holds more stories now than when it started.');
+
+  const pick=pool[Math.floor(Math.random()*pool.length)];
+  S.todayObservation=pick;
+  addMoment(pick,'daily');
+}
+
 function addMoment(text,type){
   if(!S.moments)S.moments=[];
   // Don't add duplicate
@@ -3271,7 +3266,7 @@ function discoverSpecies(id){
   if(!S.discoveredSpecies.includes(id)){
     S.discoveredSpecies.push(id);
     const sName=(FISH_DEF.find(f=>f.id===id)||CREATURES_DEF.find(f=>f.id===id)||{}).name||id;
-    addMoment('Discovered '+sName+' for the first time','discovery');
+    addMoment('A '+sName+' was noticed in the tank for the first time.','discovery');
     sv();updateCollectionBadge();
   }
 }
@@ -3280,9 +3275,9 @@ function discoverVariant(speciesId,variant){
   const key=speciesId+'_'+variant;
   if(!S.discoveredVariants.includes(key)){
     S.discoveredVariants.push(key);
-    addMoment('Found a '+variant+' variant of '+speciesId,'variant');
+    addMoment('An unusual '+variant+' coloring was spotted on a '+speciesId+'.','discovery');
     sv();updateCollectionBadge();
-    if(variant!=='normal')showZenToast('📖 New Variant!','Discovered: '+variant+' '+speciesId);
+    if(variant!=='normal')showZenToast('','Something about this '+speciesId+' looks different.');
   }
 }
 
@@ -3320,7 +3315,7 @@ function maybeSpawnVisitor(){
     visitorTimer=visitorFish.timer;
     S.daysWithoutVisitor=0;
     showZenToast('🌟 Rare Visitor!','A mysterious '+pick.name+' is passing through...');
-    addMoment('A rare '+pick.name+' visited the tank','visitor');
+    addMoment('A strange '+pick.name+' drifted in from somewhere. It didn\'t stay long.','visitor');
   }else{
     S.daysWithoutVisitor=(S.daysWithoutVisitor||0)+1;
   }
@@ -3345,73 +3340,101 @@ function getRareChance(){
 let zenVisualEvent=null;
 function triggerZenEvent(){
   if(!S.fish.length)return;
-  S.rarePityCounter=(S.rarePityCounter||0)+1;
-  const rareChance=getRareChance();
   const r=Math.random();
-  if(r<0.45){
-    // Natural event with VISUAL effect
-    const type=Math.floor(Math.random()*5);
+  const hour=Math.floor((S.gameTime%1440)/60);
+  const isNight=hour>=21||hour<6;
+
+  if(r<0.40){
+    // ── NATURAL MOMENT: visual + observation note ──
+    const fish1=S.fish[Math.floor(Math.random()*S.fish.length)];
+    const def1=getDef(fish1);
+    const type=Math.floor(Math.random()*7);
     if(type===0){
       zenVisualEvent={type:'schoolSync',timer:90};
-      showZenToast('🌊 Moment','Fish are swimming in sync...');
+      addMoment('The fish drifted together for a while, moving as one.','observation');
     }else if(type===1){
       zenVisualEvent={type:'lightShift',timer:120};
-      showZenToast('☀️ Light','Sunlight shifts across the water');
+      addMoment('The light shifted slowly across the water.','observation');
     }else if(type===2){
-      zenVisualEvent={type:'bubbleBurst',timer:60};
-      showZenToast('🫧 Bubbles','A burst of bubbles rises up');
-    }else if(type===3){
-      showZenToast('🌊 Peace','A gentle current ripples through');
+      addMoment(fish1.name+' lingered near the '+((S.plantSeeds||[]).length?'plants':'bottom')+' for a long time.','observation');
+    }else if(type===3&&isNight){
+      addMoment('The tank grew very still after dark.','observation');
+    }else if(type===4){
+      addMoment('A gentle current passed through. The plants swayed.','observation');
+    }else if(type===5){
+      // Fish claims a spot
+      if(!fish1.favoriteSpot){
+        fish1.favoriteSpot=Math.random()<0.5?'left':'right';
+        addMoment(fish1.name+' seems to prefer the '+fish1.favoriteSpot+' side of the tank.','observation');
+      }
     }else{
-      zenVisualEvent={type:'fishShowcase',timer:100,uid:fishAnim.length?fishAnim[Math.floor(Math.random()*fishAnim.length)].uid:null};
-      showZenToast('🐟 Spotlight','A fish pauses to say hello');
+      addMoment('Everything was quiet for a while.','observation');
     }
-  }else if(r<0.75){
-    // Eco event with actual effect
-    const eType=Math.floor(Math.random()*4);
-    if(eType===0){
-      S.plantAge+=(Math.random()*3);
-      showZenToast('🌿 Growth','Plants grew a little taller');
-    }else if(eType===1&&S.fish.length>=2){
-      // Bond two fish
+  }else if(r<0.70){
+    // ── RELATIONSHIP EVENT: bonds, habits, proximity ──
+    if(S.fish.length>=2){
       const a=S.fish[Math.floor(Math.random()*S.fish.length)];
       const b=S.fish.find(f=>f.uid!==a.uid);
       if(b){
-        a.bondUid=b.uid;b.bondUid=a.uid;
-        showZenToast('💕 Bond',a.name+' and '+b.name+' became friends');
+        const eType=Math.floor(Math.random()*4);
+        if(eType===0&&!a.bondUid){
+          // Form a new bond
+          a.bondUid=b.uid;b.bondUid=a.uid;
+          addMoment(a.name+' and '+b.name+' have been swimming close together.','relationship');
+          sv();
+        }else if(eType===1&&a.bondUid===b.uid){
+          // Existing bond deepens
+          addMoment(a.name+' and '+b.name+' spent most of the day side by side.','relationship');
+        }else if(eType===2){
+          addMoment(a.name+' followed '+b.name+' around for a while.','relationship');
+        }else{
+          addMoment(b.name+' drifted near '+a.name+', then swam away.','relationship');
+        }
       }
-    }else if(eType===2){
-      showZenToast('🌸 Bloom','A plant is starting to flower');
-      S.plantAge+=2;
     }else{
-      const grower=S.fish.find(f=>f.stage==='baby');
-      if(grower){grower.age=Math.max(grower.age,9);showZenToast('📏 Growing',grower.name+' is getting bigger!');}
-      else showZenToast('🌿 Balance','The ecosystem feels harmonious');
+      const loner=S.fish[0];
+      addMoment(loner.name+' explored the whole tank alone today.','observation');
     }
-  }else if(r<(0.75+(1-0.75-rareChance))){
-    // Reward event
-    const amt=5+Math.floor(Math.random()*20);
-    coin(amt);
-    coin(1);showZenToast('🐚 Drift','A shell drifted in with the current');
+  }else if(r<0.88){
+    // ── GROWTH EVENT: plants, environment, subtle changes ──
+    S.plantAge+=(Math.random()*2);
+    const gType=Math.floor(Math.random()*5);
+    if(gType===0){
+      addMoment('A plant seems a little taller than yesterday.','growth');
+    }else if(gType===1){
+      addMoment('The water looks slightly different today.','growth');
+    }else if(gType===2&&(S.decos||[]).length){
+      const deco=S.decos[Math.floor(Math.random()*S.decos.length)];
+      const dd=DECO_DEF.find(x=>x.id===deco.id);
+      addMoment('Something small settled near the '+(dd?.name||'decoration')+'.','growth');
+    }else if(gType===3){
+      const grower=S.fish.find(f=>f.stage==='baby');
+      if(grower){grower.age=Math.max(grower.age,9);addMoment(grower.name+' looks a little bigger today.','growth');}
+      else addMoment('The tank feels a bit more settled.','growth');
+    }else{
+      addMoment('Tiny bubbles clung to the glass this morning.','growth');
+    }
   }else{
-    // RARE event!
-    S.rarePityCounter=0;
-    const rType=Math.floor(Math.random()*4);
-    if(rType===0&&S.fish.length<getTankCap()){
-      // Spawn a mutant fish
+    // ── RARE / MYSTERIOUS EVENT: no rewards, just wonder ──
+    const rType=Math.floor(Math.random()*5);
+    if(rType===0){
+      maybeSpawnVisitor();
+      if(!visitorFish)addMoment('Something passed through the water, too quick to see clearly.','mystery');
+    }else if(rType===1&&S.fish.length<getTankCap()){
+      // A new fish appears naturally (no "reward" framing)
       const base=FISH_DEF[Math.floor(Math.random()*FISH_DEF.length)];
       const name=NAMES[Math.floor(Math.random()*NAMES.length)];
-      const mv=Math.random()<0.5?'golden':'glow';
+      const mv=rollVariant();
       S.fish.push({id:base.id,name,health:100,hunger:100,age:0,stage:'adult',diseased:false,disease:null,uid:++S.uid,variant:mv});
       discoverSpecies(base.id);discoverVariant(base.id,mv);
-      showZenToast('⭐ Rare Fish!','A '+mv+' '+base.name+' appeared!');
-    }else if(rType===1){
-      maybeSpawnVisitor();
-      if(!visitorFish){coin(1);showZenToast('🐚 Gift','Something shiny was left behind');}
-    }else{
+      addMoment('A new '+base.name+' appeared in the tank this morning. It seems calm.','mystery');
+    }else if(rType===2){
       zenVisualEvent={type:'glow',timer:150};
-      coin(1);
-      showZenToast('💫 Magic Moment','The water shimmers... a shell appears');
+      addMoment('The water shimmered with an unusual light for a moment.','mystery');
+    }else if(rType===3){
+      addMoment('A faint shadow moved through the deep water and vanished.','mystery');
+    }else{
+      addMoment('The tank felt different today, though nothing obvious changed.','mystery');
     }
   }
 }
@@ -3462,8 +3485,7 @@ function processOffline(){
         S.plantAge+=1;
         summary.push('Plants grew a little');
       }else if(r<0.9){
-        if(Math.random()<0.3){coin(1);summary.push('A shell washed in');}
-        else{summary.push('The water stayed calm');}
+        summary.push('The water stayed calm');
       }else{
         // Try breed
         if(S.fish.length>=2&&S.fish.length<getTankCap()){
@@ -3473,7 +3495,7 @@ function processOffline(){
             const name=NAMES[Math.floor(Math.random()*NAMES.length)];
             const obv=rollBreedVariant();S.fish.push({id:parent.id,name,health:100,hunger:100,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid,variant:obv});
             S.totalBred=(S.totalBred||0)+1;discoverVariant(parent.id,obv);
-            summary.push('A baby fish was born: '+name+'!');
+            summary.push('A new baby appeared: '+name);
             discoverSpecies(parent.id);
           }
         }
@@ -3482,7 +3504,7 @@ function processOffline(){
     if(hours>0.5&&summary.length>0){
       const h=Math.floor(hours);const m=Math.floor((hours%1)*60);
       const timeStr=h>0?(h+'h '+m+'m'):(m+' min');
-      showZenToast('🌅 While you were away ('+timeStr+')',summary.join(' · '));
+      showZenToast('','While you were away... '+summary[Math.floor(Math.random()*summary.length)]);
     }
   }
   
@@ -3536,7 +3558,7 @@ function renderBackdrops(){
     btn.addEventListener('click',function(){
       S.activeBackdrop=this.dataset.bd==='none'?'none':this.dataset.bd;
       sv();renderBackdrops();
-      showZenToast('🖼️ Backdrop','Switched to '+(S.activeBackdrop==='none'?'default':BACKDROP_DEF.find(b=>b.id===S.activeBackdrop)?.name));
+      showZenToast('','The light in the water changed.');
     });
   });
   // Event: buy backdrop
@@ -3550,7 +3572,7 @@ function renderBackdrops(){
       S.ownedBackdrops.push(id);
       S.activeBackdrop=id;
       addXP(15);sv();
-      showZenToast('🖼️ New Backdrop!','Unlocked: '+bd.name);
+      showZenToast('','A new view of the water.');
       renderBackdrops();checkAch();
     });
   });
@@ -3603,14 +3625,11 @@ function drawBackdropPreview(ctx,id,w,h){
 function renderJournal(){
   const el=document.getElementById('journal-list');if(!el)return;
   const moments=(S.moments||[]).slice().reverse();
-  if(!moments.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);padding:10px;text-align:center;">Your story has just begun...</div>';return;}
+  if(!moments.length){el.innerHTML='<div style="font-size:12px;color:rgba(255,255,255,0.25);padding:20px;text-align:center;font-style:italic;">Nothing recorded yet.</div>';return;}
   el.innerHTML=moments.map(m=>{
-    const icons={discovery:'🐟',variant:'✨',birth:'🥚',event:'🌊',first:'⭐',visitor:'🌟'};
-    const icon=icons[m.type]||'📝';
-    return '<div style="display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #ffffff08;">'+
-      '<span style="font-size:14px;flex-shrink:0;">'+icon+'</span>'+
-      '<div style="flex:1;"><div style="font-size:12px;color:var(--text);">'+m.text+'</div>'+
-      '<div style="font-size:9px;color:var(--muted);margin-top:2px;">Day '+m.day+'</div></div></div>';
+    return '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.03);">'+
+      '<div style="font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5;font-style:italic;">'+m.text+'</div>'+
+      '<div style="font-size:9px;color:rgba(255,255,255,0.2);margin-top:3px;">day '+m.day+'</div></div>';
   }).join('');
 }
 
@@ -3715,7 +3734,7 @@ if(S.fish.length===0&&S.waterAdded){
   S.fish.push({id:pick,name,health:100,hunger:100,age:3,stage:'adult',diseased:false,disease:null,uid:++S.uid,variant:'normal'});
   discoverSpecies(pick);discoverVariant(pick,'normal');
   S.moments=S.moments||[];
-  S.moments.push({type:'first',text:name+' the '+pick+' was your first fish',day:S.day});
+  S.moments.push({type:'first',text:name+' the '+pick+' arrived in an empty tank. The water felt less lonely.',day:S.day});
   sv();
 }
 
