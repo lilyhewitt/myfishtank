@@ -2327,7 +2327,7 @@ function syncAnim(){
       dy:(Math.random()-0.5)*cfg.speedY,
       wobble:Math.random()*Math.PI*2,
       poopCooldown:Math.random()*200,
-      emoteTimer:0,clickAnim:0,
+      emoteTimer:0,clickAnim:0,eatingTimer:0,idleBubble:null,
       idleTimer:0,
       scaredTimer:0,
       homeDecoX:null,
@@ -2612,6 +2612,8 @@ function drawTank(){
     syncAnim();
     fishAnim.forEach(a=>{
       a.wobble+=0.018;// slower, gentler vertical bob
+      // Eating timer countdown
+      if(a.eatingTimer>0)a.eatingTimer--;
       const fish=S.fish.find(f=>f.uid===a.uid);
       const cfg=getSpeciesCfg(a.id,a.isCreature);
       const ns=isNight?0.35:1;
@@ -2643,6 +2645,7 @@ function drawTank(){
           a.dx=ddx/dist*spd;a.dy=ddy/dist*spd;chasing=true;
           if(nearestD<6){
             nearest.eaten=true;
+            a.eatingTimer=30;// triggers eating animation for ~0.5 seconds
             if(fish){fish.hunger=Math.min(100,fish.hunger+(hunger<30?35:20));sv();}
             for(let i=0;i<8;i++)splashParticles.push({x:a.x/100*W,y:a.y/100*H,vx:(Math.random()-0.5)*3,vy:-Math.random()*2.5,life:22,color:'#FFB300'});
             renderFishList();
@@ -2838,17 +2841,85 @@ function drawTank(){
       // Color variant tinting
       const vari=S.fish.find(ff=>ff.uid===a.uid);
       const vt=vari?.variant||'normal';
+
+      // ── ANIMATED FISH RENDERING ──
+      // Determine animation state
+      const isResting=a.resting||false;
+      const isEating=a.eatingTimer>0;
+      const swimSpeed=Math.abs(a.dx)+Math.abs(a.dy);
+      const tailPhase=a.wobble*2.5;// drives tail sway cycle
+
+      // Tail sway amount depends on state
+      let tailSway=0;
+      if(isResting){
+        // Idle: very gentle, slow sway
+        tailSway=Math.sin(a.wobble*0.8)*0.6;
+      }else if(isEating){
+        // Eating: quick small movements
+        tailSway=Math.sin(a.wobble*4)*0.3;
+      }else{
+        // Swimming: tail sways with speed
+        tailSway=Math.sin(tailPhase)*(0.8+swimSpeed*3);
+      }
+
+      // Body tilt when turning
+      const bodyTilt=isResting?Math.sin(a.wobble*0.5)*0.02:(-a.dy*0.03);
+
+      // Apply body tilt rotation
+      if(Math.abs(bodyTilt)>0.005){
+        ctx.translate(sp.w*sc*0.4,sp.h*sc*0.5);
+        ctx.rotate(bodyTilt);
+        ctx.translate(-sp.w*sc*0.4,-sp.h*sc*0.5);
+      }
+
+      // Draw each pixel with tail animation
+      const tailStartX=sp.w*0.55;// pixels past this X are "tail"
+      const midY=sp.h*0.5;
       sp.p.forEach(([x,y,col])=>{
         let fc=col;
         if(vt==='pale'){fc=lightenColor(col,40);}
         else if(vt==='dark'){fc=darkenColor(col,40);}
         else if(vt==='golden'){fc=tintColor(col,'#FFD700',0.3);}
         else if(vt==='glow'){fc=tintColor(col,'#00E5FF',0.25);}
-        ctx.fillStyle=fc;ctx.fillRect(x*sc,y*sc,sc,sc);
+        ctx.fillStyle=fc;
+
+        // Animate tail pixels
+        if(x>tailStartX){
+          const tailProgress=(x-tailStartX)/(sp.w-tailStartX);// 0 at start of tail, 1 at tip
+          const yOffset=tailSway*tailProgress*tailProgress*2;// quadratic: tip moves most
+          ctx.fillRect(x*sc,Math.round((y+yOffset)*sc),sc,sc);
+        }
+        // Animate mouth area (eating)
+        else if(isEating&&x<sp.w*0.15&&Math.abs(y-midY)<3){
+          const mouthOpen=Math.sin(a.wobble*6)*1.5;
+          const mouthOffset=y<midY?-mouthOpen:mouthOpen;
+          ctx.fillRect(x*sc,Math.round((y+mouthOffset*0.5)*sc),sc,sc);
+        }
+        // Body pixels: no deformation
+        else{
+          ctx.fillRect(x*sc,y*sc,sc,sc);
+        }
       });
+
       // Glow effect for glow variants
       if(vt==='glow'){ctx.globalAlpha=0.15+Math.sin(Date.now()/400)*0.1;ctx.fillStyle='#00E5FF';sp.p.forEach(([x,y])=>{ctx.fillRect(x*sc-1,y*sc-1,sc+2,sc+2);});}
+
+      // ── IDLE BUBBLES: occasionally emit a tiny bubble when resting ──
+      if(isResting&&Math.random()<0.008){
+        a.idleBubble={x:a.x+2,y:a.y-1,life:40};
+      }
       ctx.restore();
+
+      // Draw idle bubble if exists
+      if(a.idleBubble&&a.idleBubble.life>0){
+        a.idleBubble.life--;a.idleBubble.y-=0.08;
+        const bpx=Math.round(a.idleBubble.x/100*W);
+        const bpy=Math.round(a.idleBubble.y/100*H);
+        ctx.save();ctx.globalAlpha=a.idleBubble.life/40*0.4;
+        ctx.strokeStyle='rgba(180,220,240,0.5)';ctx.lineWidth=0.8;
+        ctx.beginPath();ctx.arc(bpx,bpy,2,0,Math.PI*2);ctx.stroke();
+        ctx.restore();
+      }
 
       // ── MOOD EMOTE ──
       a.emoteTimer=(a.emoteTimer||0)+1;
