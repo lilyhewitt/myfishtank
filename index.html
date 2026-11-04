@@ -627,6 +627,8 @@ function saveSnd(){audioEnabled=SND.music||SND.sfx;try{localStorage.setItem('aq8
 const MUSIC_VOL=0.5,SFX_VOL=0.9;
 function getAudio(){
   if(!AC){
+    // mix with whatever is already playing (music, podcasts) and follow the iPhone silent switch — never interrupt it
+    try{if(navigator.audioSession)navigator.audioSession.type='ambient';}catch(e){}
     try{AC=new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}
     const out=AC.createGain();out.gain.value=1.5;
     const hp=AC.createBiquadFilter();hp.type='highpass';hp.frequency.value=120;hp.Q.value=0.5;
@@ -6041,6 +6043,8 @@ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostnam
 </body>
 </html>
 <!-- v1.1 更新内容：1.背景音乐循环时间加倍(32→64拍)，tempo放慢(0.48→0.72)，加入低通滤波、和弦衬底和水泡ping，营造水底悠闲感。2.鱼食面积缩小(radius 4→2)，掉落速度减慢至原来的30%(vy/vx/gravity均×0.3)。3.初始不自动生成植物，植物只能从商店购买。4.全部decoration重新绘制，像素网格扩大约2倍，增加更多细节(阴影、高光、纹理、苔藓、锈迹等)，预览画布扩大至56×56。5.鱼会随机游向附近的装饰物进行互动(靠近调查行为)。-->
+<!-- v3.5.2 更新内容：明确告诉 iPhone 游戏声音是"背景音"——和正在放的音乐、播客一起播放，不会打断它们；静音开关打开时游戏不出声。
+-->
 <!-- v3.5.1 更新内容：
 1. 修好手机上没有声音的问题：以前只在"手指按下"时唤醒声音，但手机浏览器只认"手指抬起"那一下，所以 iPhone 上一直没声。现在按下、抬起、点击都会唤醒，没唤醒成功会在下一次点击再试。
 2. 切到后台再回来（iPhone 会让声音睡着），点一下屏幕就会恢复音乐。
