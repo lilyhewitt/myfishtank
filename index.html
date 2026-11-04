@@ -972,13 +972,19 @@ function openSound(){
   });
 }
 function toggleAudio(){openSound();}
-// First tap anywhere unlocks audio (browsers keep it silent until then), then music starts once.
+// A tap wakes the sound up (browsers keep it silent until then). Phones only count the end of a tap,
+// and iPhone puts the sound to sleep again when the app goes to the background, so this keeps listening
+// and wakes it whenever it isn't running.
+let _waking=false;
 function unlockAudio(){
-  document.removeEventListener('pointerdown',unlockAudio,true);
-  const ac=getAudio();if(!ac)return;
-  ac.resume().then(()=>{if(SND.music)startBGM();}).catch(()=>{});
+  const ac=getAudio();if(!ac||ac.state==='running'||_waking)return;
+  try{const b=ac.createBuffer(1,1,22050),src=ac.createBufferSource();src.buffer=b;src.connect(ac.destination);src.start(0);}catch(e){}// iPhone needs a sound started inside the tap
+  _waking=true;
+  ac.resume().then(()=>{_waking=false;if(SND.music)startBGM();}).catch(()=>{_waking=false;});
+  setTimeout(()=>{_waking=false;},1500);
 }
-document.addEventListener('pointerdown',unlockAudio,true);
+['pointerdown','pointerup','touchend','click','keydown'].forEach(ev=>document.addEventListener(ev,unlockAudio,true));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&AC&&AC.state!=='running')unlockAudio();});
 // a tiny tick for buttons and tabs
 document.addEventListener('click',e=>{if(e.target.closest('button,.tab,.hud-stat.clickable,.bk,.fcard'))sfx('tap');},true);
 
@@ -6035,6 +6041,10 @@ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostnam
 </body>
 </html>
 <!-- v1.1 更新内容：1.背景音乐循环时间加倍(32→64拍)，tempo放慢(0.48→0.72)，加入低通滤波、和弦衬底和水泡ping，营造水底悠闲感。2.鱼食面积缩小(radius 4→2)，掉落速度减慢至原来的30%(vy/vx/gravity均×0.3)。3.初始不自动生成植物，植物只能从商店购买。4.全部decoration重新绘制，像素网格扩大约2倍，增加更多细节(阴影、高光、纹理、苔藓、锈迹等)，预览画布扩大至56×56。5.鱼会随机游向附近的装饰物进行互动(靠近调查行为)。-->
+<!-- v3.5.1 更新内容：
+1. 修好手机上没有声音的问题：以前只在"手指按下"时唤醒声音，但手机浏览器只认"手指抬起"那一下，所以 iPhone 上一直没声。现在按下、抬起、点击都会唤醒，没唤醒成功会在下一次点击再试。
+2. 切到后台再回来（iPhone 会让声音睡着），点一下屏幕就会恢复音乐。
+-->
 <!-- v3.5 更新内容（可以添加到主屏幕当 app 用）：
 1. 加了 manifest.webmanifest、sw.js、icons/、fonts/ 四样东西，和 index.html 放在同一个文件夹。
 2. 用 Safari / Chrome 打开网址 → 添加到主屏幕，会有一个像素金鱼图标；点开是全屏的，像 app 一样。
