@@ -1014,6 +1014,21 @@ const FISH_DEF=[
   {id:'seahorse', name:'Seahorse',      price:120, desc:'Upright slow mover',temp:'22-26°C',hardiness:2,breedable:true, personality:'shy',        poop:0.15,rarity:'rare',       yMin:15,yMax:70,social:'shy',       moveStyle:'hover',       feedLayer:'mid'},
   {id:'manta',    name:'Manta Ray',     price:350, desc:'Gliding giant ray',  temp:'24-28°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.3, rarity:'super_rare', yMin:3, yMax:73,social:'normal',    moveStyle:'cruise',      feedLayer:'mid'},
   {id:'dragon',   name:'Dragon Goby',   price:280, desc:'Fierce eel-like',   temp:'25-29°C',hardiness:2,breedable:false,personality:'territorial', poop:0.35,rarity:'super_rare', yMin:40,yMax:73,social:'solitary',  moveStyle:'cruise',      feedLayer:'bottom'},
+  // v3.7 new fish
+  {id:'molly',     name:'Dalmatian Molly', price:18,  desc:'White with black spots', temp:'24-28°C',hardiness:5,breedable:true, personality:'peaceful',   poop:0.35,rarity:'common',     yMin:8, yMax:50,social:'normal',    moveStyle:'normal',      feedLayer:'surface'},
+  {id:'platy',     name:'Wagtail Platy',  price:14,  desc:'Red with a black tail',  temp:'22-26°C',hardiness:5,breedable:true, personality:'playful',    poop:0.3, rarity:'common',     yMin:10,yMax:55,social:'normal',    moveStyle:'normal',      feedLayer:'mid'},
+  {id:'cherrybarb',name:'Cherry Barb',    price:16,  desc:'Cherry red, dark stripe',temp:'23-27°C',hardiness:4,breedable:true, personality:'peaceful',   poop:0.2, rarity:'common',     yMin:15,yMax:55,social:'schooling', moveStyle:'normal',      feedLayer:'mid'},
+  {id:'cory',      name:'Panda Cory',     price:22,  desc:'Whiskered sand sweeper', temp:'22-26°C',hardiness:4,breedable:true, personality:'curious',    poop:0.2, rarity:'common',     yMin:62,yMax:73,social:'schooling', moveStyle:'idle_burst',  feedLayer:'bottom'},
+  {id:'rasbora',   name:'Harlequin Rasbora',price:13,desc:'Copper with a black wedge',temp:'23-27°C',hardiness:4,breedable:true,personality:'shy',      poop:0.2, rarity:'common',     yMin:6, yMax:42,social:'schooling', moveStyle:'normal',      feedLayer:'mid'},
+  {id:'gourami',   name:'Dwarf Gourami',  price:45,  desc:'Feelers & blue stripes', temp:'24-28°C',hardiness:3,breedable:false,personality:'curious',    poop:0.3, rarity:'uncommon',   yMin:10,yMax:50,social:'normal',    moveStyle:'normal',      feedLayer:'surface'},
+  {id:'ram',       name:'German Blue Ram',price:60,  desc:'Gold head, blue sparkles',temp:'27-30°C',hardiness:2,breedable:true, personality:'sensitive',  poop:0.25,rarity:'uncommon',   yMin:35,yMax:68,social:'normal',    moveStyle:'normal',      feedLayer:'mid'},
+  {id:'puffer',    name:'Pea Puffer',     price:50,  desc:'Tiny and very nosy',     temp:'24-28°C',hardiness:3,breedable:false,personality:'playful',    poop:0.3, rarity:'uncommon',   yMin:15,yMax:60,social:'normal',    moveStyle:'hover',       feedLayer:'mid'},
+  {id:'tang',      name:'Blue Tang',      price:75,  desc:'Royal blue, sunny tail', temp:'24-27°C',hardiness:3,breedable:false,personality:'playful',    poop:0.3, rarity:'uncommon',   yMin:10,yMax:60,social:'normal',    moveStyle:'normal',      feedLayer:'mid'},
+  {id:'mandarin',  name:'Mandarin Dragonet',price:160,desc:'Swirls like a painting',temp:'24-27°C',hardiness:2,breedable:false,personality:'shy',       poop:0.15,rarity:'rare',       yMin:55,yMax:73,social:'shy',       moveStyle:'idle_burst',  feedLayer:'bottom'},
+  {id:'koi',       name:'Kohaku Koi',     price:180, desc:'Snow white and red',     temp:'15-24°C',hardiness:5,breedable:true, personality:'peaceful',   poop:0.5, rarity:'rare',       yMin:10,yMax:65,social:'normal',    moveStyle:'cruise',      feedLayer:'surface'},
+  {id:'lionfish',  name:'Red Lionfish',   price:190, desc:'Fans & feathery spines', temp:'24-28°C',hardiness:3,breedable:false,personality:'proud',      poop:0.35,rarity:'rare',       yMin:20,yMax:65,social:'normal',    moveStyle:'hover',       feedLayer:'mid'},
+  {id:'seadragon', name:'Leafy Sea Dragon',price:320,desc:'Disguised as seaweed',   temp:'18-22°C',hardiness:2,breedable:false,personality:'shy',        poop:0.1, rarity:'super_rare', yMin:20,yMax:60,social:'shy',       moveStyle:'hover',       feedLayer:'mid'},
+  {id:'sunfish',   name:'Ocean Sunfish',  price:380, desc:'A gentle giant disc',    temp:'16-24°C',hardiness:2,breedable:false,personality:'majestic',   poop:0.3, rarity:'super_rare', yMin:5, yMax:60,social:'normal',    moveStyle:'cruise',      feedLayer:'surface'},
 ];
 
 const PLANTS_DEF=[
@@ -1467,6 +1482,7 @@ const band = (u, c, hw, L, edge = 0.6) => { const d = Math.abs(u - c) * L; retur
 const DARK = [30, 24, 34];
 function hash(x, y) { let n = (x * 374761393 + y * 668265263) | 0; n = Math.imul(n ^ (n >>> 13), 1274126177); return (n ^ (n >>> 16)) >>> 0; }
 
+const spotMark = (col, every = 5, a = 235) => (u, y, e) => (!e && hash(Math.round(u * 60), Math.round(y * 5)) % every === 0) ? [...R(col)[1], a] : null;
 const SPECIES = {
   // Neon tetra: slim, big eye, electric-blue stripe eye→adipose fin, red lower rear half, glassy fins, forked tail
   neon: {
@@ -1743,6 +1759,336 @@ const SPECIES = {
     ],
     caudal: { pts: [[0, -.4], [.08, -.65], [.14, 0], [.08, .65], [0, .4]], alpha: .7 },
     details: ({ set }) => { const t = [242, 236, 222], d = [40, 20, 40]; set(.0, .25, d); set(.012, .4, t); set(.03, .48, t); set(.05, .5, d); },
+  },
+  // ── v3.7 new fish ──
+  // Dalmatian molly: chunky white body speckled black, big rounded dorsal, wide rounded tail
+  molly: {
+    L: 15, H: 7.6, gill: 0.2, bend: .18,
+    colors: { body: '#f1efe8', spot: '#2c2832', belly: '#faf8f2', fin: '#ecebe4' },
+    top: [[0, .2], [.06, .55], [.2, .88], [.42, 1], [.7, .86], [.9, .62], [1, .56]],
+    bot: [[0, .18], [.08, .56], [.25, .94], [.5, 1], [.75, .82], [.9, .6], [1, .56]],
+    pattern: (u, vn, { x, y }) => (u > .08 && hash(x, y) % 7 === 0) ? { c: 'spot', s: 2 } : { c: vn > .45 ? 'belly' : 'body' },
+    tamaPattern(u, vn, { L, hh }) {
+      const S = [[.32, -.45], [.48, .2], [.58, -.55], [.74, -.05], [.88, .35], [.9, -.5]];
+      for (const [cu, cv] of S) if (Math.hypot((u - cu) * L, (vn - cv) * hh) < 1.0) return { c: 'spot' };
+      return { c: 'body' };
+    },
+    eye: { u: .13, v: -.2, size: 3, iris: '#d8d4c8' },
+    fins: [
+      { pts: [[.32, -.95], [.38, -1.75], [.62, -1.95], [.82, -1.5], [.8, -.85]], alpha: .95, fade: .08, mark: spotMark('#2c2832') },
+      { pts: [[.6, .88], [.66, 1.5], [.8, 1.38], [.82, .7]], alpha: .9, mark: spotMark('#2c2832') },
+      { pts: [[.38, .95], [.42, 1.5], [.47, 1.42], [.48, .92]], alpha: .85 },
+      { pts: [[.2, .25], [.3, .62], [.32, .4], [.24, .1]], alpha: .5, layer: 'front', rays: false },
+    ],
+    caudal: { pts: [[0, -.56], [.2, -1.35], [.42, -1.45], [.55, -.6], [.57, 0], [.55, .6], [.42, 1.45], [.2, 1.35], [0, .56]], alpha: .93, fade: .1, rayN: 9, swing: .26, mark: spotMark('#2c2832', 6) },
+  },
+
+  // Red wagtail platy: short deep body, tomato red, black fins and tail
+  platy: {
+    L: 12, H: 7.2, gill: 0.22, bend: .2,
+    colors: { body: '#ff5a2c', belly: '#ffa36c', fin: '#2e2832', head: '#ff6a36' },
+    top: [[0, .22], [.06, .58], [.2, .9], [.42, 1], [.7, .86], [.9, .6], [1, .55]],
+    bot: [[0, .2], [.08, .6], [.28, .96], [.5, 1], [.75, .8], [.9, .58], [1, .55]],
+    pattern: (u, vn) => ({ c: vn > .5 ? 'belly' : 'body', s: vn < -.4 ? 3 : 2 }),
+    eye: { u: .14, v: -.2, size: 3, iris: '#f0b080' },
+    fins: [
+      { pts: [[.38, -.95], [.44, -1.6], [.66, -1.55], [.72, -.85]], alpha: .95, fade: .05 },
+      { pts: [[.6, .88], [.66, 1.42], [.78, 1.32], [.8, .7]], alpha: .95, fade: .05 },
+      { pts: [[.4, .95], [.44, 1.45], [.49, 1.38], [.5, .92]], alpha: .9 },
+      { pts: [[.22, .25], [.32, .6], [.34, .38], [.26, .1]], alpha: .55, layer: 'front', rays: false, color: 'body' },
+    ],
+    caudal: { pts: [[0, -.55], [.18, -1.25], [.4, -1.3], [.44, 0], [.4, 1.3], [.18, 1.25], [0, .55]], alpha: .96, fade: .06, rayN: 7, swing: .28 },
+  },
+
+  // Cherry barb: slim, cherry red with a dark line along the side, red fins
+  cherrybarb: {
+    L: 16, H: 6.6, gill: 0.2, bend: .22,
+    colors: { body: '#e2384a', stripe: '#7a1c2c', belly: '#ff9c8c', fin: '#ef5a62', back: '#b8303e' },
+    top: [[0, .15], [.06, .5], [.2, .86], [.42, 1], [.7, .8], [.9, .5], [1, .45]],
+    bot: [[0, .12], [.08, .55], [.25, .92], [.45, 1], [.7, .8], [.9, .48], [1, .45]],
+    pattern(u, vn) {
+      if (u > .16 && Math.abs(vn + .05) < .14) return { c: 'stripe', s: 2, flat: true };
+      return { c: vn < -.55 ? 'back' : vn > .45 ? 'belly' : 'body', s: vn < -.2 ? 3 : 2 };
+    },
+    eye: { u: .12, v: -.15, size: 3, iris: '#e8c060' },
+    fins: [
+      { pts: [[.42, -.92], [.47, -1.65], [.58, -1.55], [.62, -.85]], alpha: .8 },
+      { pts: [[.55, .88], [.6, 1.5], [.78, 1.25], [.8, .6]], alpha: .75 },
+      { pts: [[.38, .95], [.42, 1.45], [.46, 1.38], [.47, .92]], alpha: .7 },
+      { pts: [[.2, .28], [.29, .62], [.31, .42], [.24, .12]], alpha: .4, layer: 'front', rays: false },
+    ],
+    caudal: { pts: [[0, -.46], [.12, -1.0], [.27, -1.8], [.18, -.7], [.12, 0], [.18, .7], [.27, 1.8], [.12, 1.0], [0, .46]], alpha: .75, rayN: 6, swing: .3 },
+  },
+
+  // Panda corydoras: armoured bottom-sitter, cream with a dark patch round the eye, dark dorsal and a dark tail-spot, whiskers
+  cory: {
+    L: 16, H: 9.6, gill: 0.22, bend: .12, tamaL: .95, tamaH: 1.05, tamaKeep: [0],
+    colors: { body: '#efe5d3', mask: '#57505a', belly: '#fbf5ea', fin: '#e8e0d0' },
+    top: [[0, .3], [.06, .66], [.2, .95], [.36, 1], [.6, .82], [.85, .55], [1, .5]],
+    bot: [[0, .42], [.08, .6], [.3, .66], [.6, .62], [.85, .5], [1, .5]],
+    pattern(u, vn, { L, hh }) {
+      if (u > .78 && u < .93 && vn > -.55 && vn < .35) return { c: 'mask' };
+      if (Math.hypot((u - .13) * L, (vn + .4) * hh) < 3.4) return { c: 'mask' };
+      return { c: vn > .45 ? 'belly' : 'body', s: vn < -.3 ? 3 : 2 };
+    },
+    tamaPattern(u, vn, { L, hh }) {
+      if (u > .76 && u < .91 && vn > -.45 && vn < .25) return { c: 'mask' };
+      if (Math.hypot((u - .1365) * L, (vn + .4) * hh) < 3.6) return { c: 'mask' };   // the panda patch round the eye
+      return { c: vn > .5 ? 'belly' : 'body' };
+    },
+    eye: { u: .13, v: -.4, size: 3, iris: '#c8b890' },
+    fins: [
+      { pts: [[.3, -.95], [.34, -1.9], [.46, -1.6], [.52, -.85]], alpha: .97, fade: .05, color: 'mask' },
+      { pts: [[.82, -.5], [.86, -.82], [.9, -.48]], alpha: .85, rays: false },
+      { pts: [[.62, .55], [.66, 1.05], [.76, .98], [.78, .5]], alpha: .8 },
+      { pts: [[.14, .3], [.3, .95], [.34, .7], [.2, .15]], alpha: .85, layer: 'front', fade: .1 },
+    ],
+    caudal: { pts: [[0, -.5], [.12, -1.05], [.26, -1.5], [.18, -.55], [.13, 0], [.18, .55], [.26, 1.5], [.12, 1.05], [0, .5]], alpha: .8, rayN: 6, swing: .22 },
+    details: ({ set }) => { const w = [200, 185, 160]; set(-.02, .6, w); set(-.04, .75, w); set(.02, .8, w); },
+  },
+
+  // Harlequin rasbora: copper-pink diamond-shaped body with a black wedge toward the tail
+  rasbora: {
+    L: 14, H: 7.4, gill: 0.2, bend: .2,
+    colors: { body: '#f2a07a', wedge: '#2b2232', belly: '#ffd0b4', fin: '#f6b496', tail: '#ff8c5c' },
+    top: [[0, .15], [.06, .5], [.22, .88], [.42, 1], [.68, .8], [.88, .5], [1, .42]],
+    bot: [[0, .12], [.08, .55], [.28, .92], [.45, 1], [.68, .76], [.88, .48], [1, .42]],
+    pattern(u, vn) {
+      const t = (u - .44) / .52;
+      if (t >= 0 && t <= 1 && vn > -.55 * (1 - t) - .05 && vn < .5 * (1 - t)) return { c: 'wedge' };
+      return { c: vn > .45 ? 'belly' : 'body', s: vn < -.2 ? 3 : 2 };
+    },
+    tamaPattern(u, vn) {
+      const t = (u - .42) / .5;
+      if (t >= 0 && t <= 1 && vn > -.7 * (1 - t) - .08 && vn < .6 * (1 - t) + .02) return { c: 'wedge' };
+      return { c: vn > .5 ? 'belly' : 'body' };
+    },
+    eye: { u: .12, v: -.15, size: 3, iris: '#e6c080' },
+    fins: [
+      { pts: [[.42, -.92], [.47, -1.7], [.58, -1.55], [.62, -.85]], alpha: .8 },
+      { pts: [[.5, .88], [.56, 1.5], [.72, 1.25], [.74, .6]], alpha: .75 },
+      { pts: [[.2, .28], [.29, .62], [.31, .42], [.24, .12]], alpha: .4, layer: 'front', rays: false },
+    ],
+    caudal: { pts: [[0, -.42], [.12, -1.0], [.28, -1.85], [.18, -.7], [.12, 0], [.18, .7], [.28, 1.85], [.12, 1.0], [0, .42]], alpha: .85, rayN: 6, swing: .3, color: 'tail' },
+  },
+
+  // Dwarf gourami: deep oval body, orange-red with sky-blue slanted stripes, long feeler fins
+  gourami: {
+    L: 14, H: 9.8, gill: 0.22, bend: .14, tamaKeep: [2],
+    colors: { body: '#ff6a3e', stripe: '#46b8ea', belly: '#ffa070', fin: '#ff7a4e', feeler: '#ffd8a0' },
+    top: [[0, .2], [.06, .55], [.2, .9], [.42, 1], [.7, .86], [.9, .55], [1, .45]],
+    bot: [[0, .18], [.08, .56], [.25, .92], [.48, 1], [.72, .84], [.9, .55], [1, .45]],
+    pattern(u, vn, { L, hh }) {
+      if (u > .14 && Math.sin((u * L + vn * hh * 0.7) * 1.15) > .55) return { c: 'stripe', s: 2 };
+      return { c: vn > .5 ? 'belly' : 'body' };
+    },
+    tamaPattern(u, vn, { L, hh }) {
+      if (u > .2 && Math.sin((u * L + vn * hh * 0.7) * .95) > .5) return { c: 'stripe' };
+      return { c: 'body' };
+    },
+    eye: { u: .13, v: -.2, size: 4, iris: '#e05a3a' },
+    fins: [
+      { pts: [[.3, -.9], [.4, -1.5], [.75, -1.55], [.98, -1.05], [.95, -.55]], alpha: .9, fade: .1,
+        mark: (u, y, e) => (!e && Math.floor(u * 22) % 3 === 0) ? [...R('#46b8ea')[2], 220] : null },
+      { pts: [[.36, .9], [.45, 1.6], [.8, 1.7], [1.0, 1.1], [.95, .55]], alpha: .9, fade: .1,
+        mark: (u, y, e) => (!e && Math.floor(u * 22) % 3 === 0) ? [...R('#46b8ea')[2], 220] : null },
+      { pts: [[.26, .88], [.3, 2.4], [.34, 3.0], [.36, 2.4], [.31, .88]], alpha: .95, layer: 'front', rays: false, color: 'feeler' },
+      { pts: [[.2, .25], [.3, .62], [.32, .4], [.24, .1]], alpha: .45, layer: 'front', rays: false },
+    ],
+    caudal: { pts: [[0, -.48], [.15, -1.15], [.32, -1.3], [.36, 0], [.32, 1.3], [.15, 1.15], [0, .48]], alpha: .88, fade: .12, rayN: 7, swing: .22 },
+  },
+
+  // German blue ram: gold head, black bar through the eye, blue-spangled body, red belly, tall dorsal with black front rays
+  ram: {
+    L: 13, H: 9, gill: 0.24, bend: .14,
+    colors: { head: '#f4c450', body: '#8eb6d4', spangle: '#3a72b8', bar: '#2b2630', belly: '#ff8a72', fin: '#f2a66a' },
+    top: [[0, .22], [.06, .58], [.2, .92], [.42, 1], [.7, .84], [.9, .52], [1, .45]],
+    bot: [[0, .18], [.08, .56], [.25, .92], [.48, 1], [.72, .82], [.9, .52], [1, .45]],
+    pattern(u, vn, { x, y }) {
+      if (u > .1 && u < .2 && vn < .3) return { c: 'bar' };
+      if (u < .26) return { c: 'head' };
+      if (vn > .45 && u < .6) return { c: 'belly' };
+      return hash(x, y) % 4 === 0 ? { c: 'spangle' } : { c: 'body' };
+    },
+    eye: { u: .15, v: -.2, size: 4, iris: '#e83a3a' },
+    fins: [
+      { pts: [[.26, -.92], [.3, -1.9], [.42, -1.8], [.6, -1.6], [.8, -1.4], [.88, -.6]], alpha: .92, fade: .08,
+        mark: (u, y, e) => (u < .36) ? [...DARK, 235] : (!e && hash(Math.round(u * 50), Math.round(y * 5)) % 4 === 0) ? [...R('#3a72b8')[2], 230] : null },
+      { pts: [[.55, .88], [.6, 1.5], [.82, 1.35], [.86, .55]], alpha: .9, fade: .08 },
+      { pts: [[.32, .92], [.35, 1.7], [.4, 1.55], [.41, .9]], alpha: .92, color: 'belly' },
+      { pts: [[.22, .2], [.32, .6], [.35, .38], [.26, .06]], alpha: .45, layer: 'front', rays: false },
+    ],
+    caudal: { pts: [[0, -.45], [.15, -1.1], [.32, -1.2], [.36, 0], [.32, 1.2], [.15, 1.1], [0, .45]], alpha: .9, fade: .1, rayN: 7, swing: .24,
+      mark: (u, y, e) => (!e && hash(Math.round(u * 50), Math.round(y * 5)) % 4 === 0) ? [...R('#3a72b8')[2], 230] : null },
+  },
+
+  // Pea puffer: tiny round body, yellow-green with dark blotches, white belly, big eyes, little fins
+  puffer: {
+    L: 10, H: 8.4, gill: 0, bend: .1, tamaL: 1, tamaH: 1, tamaSmile: true,
+    colors: { body: '#cfc44c', spot: '#55602c', belly: '#f7f3de', fin: '#e2dc8a' },
+    top: [[0, .38], [.06, .7], [.2, .95], [.42, 1], [.7, .86], [.9, .58], [1, .45]],
+    bot: [[0, .3], [.08, .68], [.25, .96], [.5, 1], [.75, .82], [.9, .55], [1, .45]],
+    pattern: (u, vn, { x, y }) => vn > .3 ? { c: 'belly' } : (u > .2 && hash(x >> 1, y >> 1) % 3 === 0 ? { c: 'spot' } : { c: 'body', s: vn < -.4 ? 3 : 2 }),
+    tamaPattern: (u, vn, { x, y }) => vn > .3 ? { c: 'belly' } : (u > .3 && hash(x >> 1, y >> 1) % 3 === 0 ? { c: 'spot' } : { c: 'body' }),
+    eye: { u: .2, v: -.3, size: 4, iris: '#58c0e8' },
+    fins: [
+      { pts: [[.66, -.88], [.72, -1.3], [.82, -1.2], [.84, -.7]], alpha: .7, rays: false },
+      { pts: [[.66, .85], [.72, 1.28], [.82, 1.18], [.84, .68]], alpha: .7, rays: false },
+      { pts: [[.34, .05], [.44, .4], [.46, .12], [.38, -.12]], alpha: .55, layer: 'front', rays: false },
+    ],
+    caudal: { pts: [[0, -.45], [.15, -.95], [.3, -.85], [.33, 0], [.3, .85], [.15, .95], [0, .45]], alpha: .75, rays: false, swing: .3 },
+  },
+
+  // Blue tang: royal-blue oval, black "palette" stripe looping along the side, bright yellow tail
+  tang: {
+    L: 18, H: 10.4, gill: 0.2, bend: .12, tamaL: 1.02, tamaH: .96,
+    colors: { body: '#2f6be0', black: '#1e1a38', fin: '#2a5ad6', yellow: '#ffd028', belly: '#4a86ea' },
+    top: [[0, .25], [.06, .6], [.2, .9], [.42, 1], [.7, .85], [.9, .5], [1, .35]],
+    bot: [[0, .2], [.08, .58], [.25, .92], [.48, 1], [.72, .84], [.9, .5], [1, .35]],
+    pattern(u, vn) {
+      const top = u > .18 && u < .9 && vn > -.62 + (u - .18) * .35 && vn < -.3 + (u - .18) * .5;
+      const loop = Math.hypot((u - .58) * 2.2, (vn + .02) * 1.6) < .42 && Math.hypot((u - .6) * 2.2, (vn + .05) * 1.6) > .2;
+      if (top || loop) return { c: 'black' };
+      return { c: vn > .55 ? 'belly' : 'body', s: vn < -.4 ? 3 : 2 };
+    },
+    tamaPattern(u, vn) {
+      const top = u > .24 && u < .96 && vn > -.62 + (u - .24) * .45 && vn < -.18 + (u - .24) * .5;
+      const ring = Math.hypot((u - .6) * 2.4, (vn - .12) * 1.5);
+      if (top || (ring < .46 && ring > .26 && vn > -.1)) return { c: 'black' };
+      return { c: 'body' };
+    },
+    eye: { u: .14, v: -.25, size: 4, iris: '#2a3a8a' },
+    fins: [
+      { pts: [[.16, -.85], [.3, -1.25], [.65, -1.3], [.92, -1.0], [.98, -.4]], alpha: .95, fade: .06,
+        mark: (u, y, e) => e ? [...DARK, 230] : null },
+      { pts: [[.3, .88], [.42, 1.25], [.75, 1.25], [.95, .95], [.98, .35]], alpha: .95, fade: .06,
+        mark: (u, y, e) => e ? [...DARK, 230] : null },
+      { pts: [[.2, .1], [.32, .5], [.35, .25], [.25, -.05]], alpha: .7, layer: 'front', rays: false, color: 'yellow' },
+    ],
+    caudal: { pts: [[0, -.35], [.14, -.9], [.3, -1.25], [.24, 0], [.3, 1.25], [.14, .9], [0, .35]], alpha: .98, fade: .05, rayN: 6, swing: .24, color: 'yellow',
+      mark: (u, y, e) => e ? [...DARK, 230] : null },
+  },
+
+  // Mandarin dragonet (rare): rounded head, swirling orange-on-blue pattern, bright fins
+  mandarin: {
+    L: 15, H: 7.4, gill: 0, bend: .14, tamaKeep: [0],
+    colors: { body: '#2a86de', orange: '#ff8a2c', green: '#38d0a0', fin: '#ff9a3c', head: '#2a7ad0' },
+    top: [[0, .3], [.06, .66], [.2, .95], [.4, 1], [.7, .82], [.9, .52], [1, .45]],
+    bot: [[0, .3], [.08, .62], [.25, .9], [.45, .95], [.72, .78], [.9, .5], [1, .45]],
+    pattern(u, vn) {
+      const w = Math.sin(u * 30 + Math.sin(vn * 5) * 2.4);
+      if (w > .55) return { c: 'orange' };
+      if (w > .35) return { c: 'green' };
+      return { c: 'body', s: vn < -.3 ? 3 : 2 };
+    },
+    tamaPattern(u, vn) {
+      const w = Math.sin(u * 22 + Math.sin(vn * 4) * 2);
+      return w > .45 ? { c: 'orange' } : { c: 'body' };
+    },
+    eye: { u: .14, v: -.35, size: 4, iris: '#ff9a3c' },
+    fins: [
+      { pts: [[.3, -.92], [.34, -1.9], [.46, -2.1], [.56, -1.4], [.58, -.85]], alpha: .95, fade: .08, grad: [[0, 'orange'], [.5, 'body']] },
+      { pts: [[.62, -.8], [.68, -1.5], [.9, -1.3], [.94, -.55]], alpha: .9, fade: .1,
+        mark: (u, y, e) => (!e && Math.floor(u * 26) % 2 === 0) ? [...R('#ff8a2c')[2], 230] : null },
+      { pts: [[.55, .8], [.6, 1.35], [.9, 1.2], [.94, .5]], alpha: .9, fade: .1,
+        mark: (u, y, e) => (!e && Math.floor(u * 26) % 2 === 0) ? [...R('#ff8a2c')[2], 230] : null },
+      { pts: [[.18, .1], [.34, .7], [.38, .3], [.24, -.08]], alpha: .85, layer: 'front', fade: .1, color: 'green' },
+    ],
+    caudal: { pts: [[0, -.45], [.18, -1.15], [.36, -1.2], [.4, 0], [.36, 1.2], [.18, 1.15], [0, .45]], alpha: .92, fade: .1, rayN: 8, swing: .22,
+      mark: (u, y, e) => (!e && Math.floor(Math.abs(y) * 4) % 2 === 0) ? [...R('#ff8a2c')[2], 230] : null },
+  },
+
+  // Kohaku koi (rare): long torpedo body, snow white with red patches, barbels, broad tail
+  koi: {
+    L: 24, H: 7.8, gill: 0.18, bend: .2, tamaL: .82, tamaH: 1.18,
+    colors: { body: '#f8f4ee', red: '#e8402c', fin: '#f2eee8', belly: '#fffdf8' },
+    top: [[0, .2], [.05, .52], [.16, .86], [.36, 1], [.62, .9], [.86, .6], [1, .45]],
+    bot: [[0, .3], [.06, .6], [.2, .88], [.42, 1], [.65, .86], [.86, .55], [1, .45]],
+    pattern(u, vn) {
+      const n = Math.sin(u * 11 + 1.3) + Math.cos(vn * 2.6 + u * 6.5);
+      if (vn < .35 && n > .55) return { c: 'red', s: vn < -.4 ? 3 : 2 };
+      return { c: vn > .5 ? 'belly' : 'body' };
+    },
+    tamaPattern(u, vn) {
+      if (u < .2 && vn < .1) return { c: 'red' };
+      const n = Math.sin(u * 9 + 1.6) + Math.cos(vn * 2.4 + u * 5);
+      return (vn < .3 && n > .7) ? { c: 'red' } : { c: 'body' };
+    },
+    eye: { u: .1, v: -.25, size: 3, iris: '#e0b070' },
+    fins: [
+      { pts: [[.36, -.95], [.42, -1.5], [.7, -1.35], [.76, -.85]], alpha: .85, fade: .15 },
+      { pts: [[.66, .82], [.7, 1.3], [.8, 1.22], [.82, .65]], alpha: .8 },
+      { pts: [[.36, .95], [.4, 1.5], [.46, 1.42], [.46, .92]], alpha: .8 },
+      { pts: [[.16, .35], [.3, .95], [.34, .7], [.2, .18]], alpha: .7, layer: 'front', rays: false },
+    ],
+    caudal: { pts: [[0, -.48], [.14, -1.1], [.3, -1.55], [.26, -.5], [.22, 0], [.26, .5], [.3, 1.55], [.14, 1.1], [0, .48]], alpha: .85, fade: .15, rayN: 8, swing: .3 },
+    details: ({ set }) => { const b = [220, 200, 180]; set(-.02, .55, b); set(-.035, .7, b); set(.0, .3, [150, 120, 110]); },
+  },
+
+  // Red lionfish (rare): banded red and cream, spiky dorsal spines, huge feathery striped pectoral fans
+  lionfish: {
+    L: 17, H: 8.4, gill: 0.22, bend: .1, tamaKeep: [0, 1, 2, 3, 4],
+    colors: { body: '#f4e2d0', stripe: '#b4302e', fin: '#f0cdb8', spine: '#c03c36' },
+    top: [[0, .25], [.06, .62], [.2, .92], [.4, 1], [.68, .84], [.9, .52], [1, .42]],
+    bot: [[0, .22], [.08, .58], [.25, .9], [.45, 1], [.7, .8], [.9, .5], [1, .42]],
+    pattern(u, vn, { L }) {
+      if (Math.floor(u * L / 1.8) % 2 === 0 && u > .08) return { c: 'stripe', s: vn < -.3 ? 3 : 2 };
+      return { c: 'body' };
+    },
+    tamaPattern(u, vn, { L }) { return (Math.floor(u * L / 2.2) % 2 === 0 && u > .16) ? { c: 'stripe' } : { c: 'body' }; },
+    eye: { u: .14, v: -.3, size: 4, iris: '#c84a2a' },
+    fins: [
+      { pts: [[.22, -.9], [.25, -3.0], [.29, -.9]], alpha: .97, rays: false, color: 'spine' },
+      { pts: [[.33, -.95], [.37, -3.3], [.41, -.95]], alpha: .97, rays: false, color: 'spine' },
+      { pts: [[.45, -.98], [.49, -3.1], [.53, -.95]], alpha: .97, rays: false, color: 'spine' },
+      { pts: [[.57, -.92], [.61, -2.6], [.65, -.88]], alpha: .97, rays: false, color: 'spine' },
+      { pts: [[.2, .1], [.28, 1.5], [.5, 2.5], [.72, 2.3], [.6, 1.2], [.32, .2]], alpha: .85, layer: 'front', fade: .2,
+        mark: (u, y, e) => (!e && Math.floor(y * 3.2) % 2 === 0) ? [...R('#b4302e')[2], 225] : null },
+      { pts: [[.7, -.85], [.76, -1.4], [.92, -1.2], [.96, -.6]], alpha: .7, rays: false },
+      { pts: [[.62, .82], [.68, 1.3], [.86, 1.2], [.9, .55]], alpha: .7 },
+    ],
+    caudal: { pts: [[0, -.42], [.16, -1.05], [.32, -1.15], [.36, 0], [.32, 1.15], [.16, 1.05], [0, .42]], alpha: .7, fade: .2, rayN: 7, swing: .2,
+      mark: (u, y, e) => (!e && hash(Math.round(u * 40), Math.round(y * 6)) % 4 === 0) ? [...R('#b4302e')[2], 220] : null },
+  },
+
+  // Leafy sea dragon (super rare): long olive body with pale bands, tube snout, ragged seaweed-like leaves along back and belly
+  seadragon: {
+    L: 30, H: 4.4, gill: 0, wave: .07, tamaL: .8, tamaH: 1.3, tamaKeep: [0, 1, 2, 3, 4, 5, 6, 7],
+    colors: { body: '#8f8a4a', stripe: '#d6cf96', leaf: '#6fa45a', leaf2: '#a8cc78', fin: '#c8d8a0' },
+    top: [[0, .2], [.12, .24], [.2, .6], [.26, 1], [.45, .95], [.7, .7], [1, .3]],
+    bot: [[0, .2], [.12, .24], [.2, .6], [.28, 1], [.48, .95], [.7, .62], [1, .3]],
+    pattern: (u, vn) => (Math.abs(Math.sin(u * 36)) > .86 && u > .22) ? { c: 'stripe' } : { c: 'body', s: vn < -.2 ? 3 : 2 },
+    tamaPattern: (u, vn) => (Math.abs(Math.sin(u * 30)) > .82 && u > .25) ? { c: 'stripe' } : { c: 'body' },
+    eye: { u: .24, v: -.25, size: 3, iris: '#c8a040' },
+    fins: [
+      { pts: [[.27, -.8], [.22, -1.8], [.17, -2.4], [.24, -2.1], [.26, -2.9], [.31, -2.0], [.36, -2.5], [.35, -1.4], [.33, -.8]], alpha: .97, color: 'leaf', fade: .1, raySpace: 1, grad: [[0, 'leaf'], [.6, 'leaf2']] },
+      { pts: [[.43, -.85], [.37, -2.0], [.33, -2.8], [.41, -2.4], [.45, -3.4], [.5, -2.3], [.57, -2.8], [.55, -1.5], [.51, -.8]], alpha: .97, color: 'leaf', fade: .1, raySpace: 1, grad: [[0, 'leaf'], [.6, 'leaf2']] },
+      { pts: [[.63, -.65], [.59, -1.6], [.56, -2.3], [.63, -2.0], [.67, -2.8], [.71, -1.9], [.77, -2.2], [.75, -1.1], [.71, -.6]], alpha: .97, color: 'leaf', fade: .1, raySpace: 1, grad: [[0, 'leaf'], [.6, 'leaf2']] },
+      { pts: [[.33, .85], [.28, 1.9], [.25, 2.6], [.32, 2.2], [.36, 3.0], [.4, 2.1], [.46, 2.5], [.44, 1.4], [.41, .85]], alpha: .97, color: 'leaf', fade: .1, raySpace: 1, grad: [[0, 'leaf'], [.6, 'leaf2']] },
+      { pts: [[.55, .75], [.51, 1.7], [.49, 2.4], [.56, 2.1], [.6, 2.8], [.64, 1.9], [.7, 2.2], [.68, 1.1], [.63, .7]], alpha: .97, color: 'leaf', fade: .1, raySpace: 1, grad: [[0, 'leaf'], [.6, 'leaf2']] },
+      { pts: [[.8, .5], [.78, 1.3], [.77, 1.9], [.83, 1.6], [.87, 2.1], [.9, 1.4], [.94, 1.5], [.91, .8], [.87, .45]], alpha: .97, color: 'leaf', fade: .1, raySpace: 1, grad: [[0, 'leaf'], [.6, 'leaf2']] },
+      { pts: [[.2, .55], [.17, 1.3], [.15, 1.8], [.21, 1.5], [.24, 1.9], [.26, 1.1], [.25, .6]], alpha: .97, color: 'leaf', fade: .1, raySpace: 1, grad: [[0, 'leaf'], [.6, 'leaf2']] },
+      { pts: [[.86, -.4], [.86, -1.1], [.9, -1.5], [.93, -1.0], [.97, -1.2], [.95, -.6], [.92, -.35]], alpha: .97, color: 'leaf', fade: .1, raySpace: 1, grad: [[0, 'leaf'], [.6, 'leaf2']] },
+    ],
+    caudal: { pts: [[0, -.3], [.12, -.2], [.2, .4], [.16, 1.0], [.08, .7], [.04, .3], [0, .3]], alpha: .95, rays: false, swing: .12, color: 'body' },
+  },
+
+  // Ocean sunfish (super rare): huge tall disc, tall dorsal and anal fins at the back, a frilly rounded rear instead of a tail
+  sunfish: {
+    L: 15, H: 14, gill: 0, bend: .05, tamaL: 1, tamaH: 1, tamaKeep: [0, 1],
+    colors: { body: '#aebccc', belly: '#e2eaf0', fin: '#9aaab8', spot: '#c8d4de' },
+    top: [[0, .4], [.06, .7], [.2, .92], [.42, 1], [.7, .95], [.9, .8], [1, .7]],
+    bot: [[0, .35], [.08, .66], [.25, .92], [.48, 1], [.72, .95], [.9, .8], [1, .7]],
+    pattern: (u, vn, { x, y }) => vn > .4 ? { c: 'belly' } : (hash(x >> 1, y >> 1) % 7 === 0 ? { c: 'spot' } : { c: 'body', s: vn < -.4 ? 3 : 2 }),
+    tamaPattern: (u, vn) => vn > .45 ? { c: 'belly' } : { c: 'body' },
+    eye: { u: .2, v: -.15, size: 3, iris: '#506070' },
+    fins: [
+      { pts: [[.68, -.9], [.72, -2.2], [.86, -2.4], [.92, -.85]], alpha: .97, fade: .08 },
+      { pts: [[.68, .9], [.72, 2.2], [.86, 2.4], [.92, .85]], alpha: .97, fade: .08 },
+      { pts: [[.3, -.1], [.4, .25], [.43, 0], [.34, -.28]], alpha: .7, layer: 'front', rays: false },
+    ],
+    caudal: { pts: [[0, -.75], [.1, -.7], [.16, -.35], [.17, 0], [.16, .35], [.1, .7], [0, .75]], alpha: .95, fade: .1, rayN: 9, swing: .06 },
+    details: ({ set }) => set(.0, .1, [90, 100, 115]),
   },
 };
 const { R } = FG;
@@ -2628,6 +2974,7 @@ let S={
   _marketRares:null,_marketRareDay:-1,
   _decoRares:null,_decoRareDay:-1,
   _plantRares:null,_plantRareDay:-1,
+  _critterRares:null,_critterRareDay:-1,
 };
 
 var _noSaveOnUnload=false;
@@ -2919,16 +3266,19 @@ function renderShop(){
   });
 }
 
+// v3.7 — one rule for every shop: rares refresh every 2 days; each ★ rare shows 20% of the time, each ★★ super rare 6%,
+// and there is always at least one rare (a random one) to look at
+function rollRares(defs){
+  const pool=defs.filter(d=>d.rarity==='rare'||d.rarity==='super_rare');const out=[];
+  pool.forEach(r=>{if(Math.random()<(r.rarity==='super_rare'?0.06:0.2))out.push(r.id);});
+  const plain=pool.filter(r=>r.rarity==='rare');
+  if(!out.length&&plain.length)out.push(plain[Math.floor(Math.random()*plain.length)].id);
+  return out;
+}
+function rareDay(){return Math.floor(S.day/2)*2;}
 function getMarketRares(){
-  const refreshDay=Math.floor(S.day/2)*2;
-  if(S._marketRareDay!==refreshDay||!S._marketRares){
-    S._marketRareDay=refreshDay;
-    const rares=FISH_DEF.filter(f=>f.rarity==='rare'||f.rarity==='super_rare');
-    S._marketRares=[];
-    rares.forEach(r=>{if(Math.random()<(r.rarity==='super_rare'?0.25:0.5))S._marketRares.push(r.id);});
-    if(!S._marketRares.length)S._marketRares=[rares[0].id];
-    sv();
-  }
+  const refreshDay=rareDay();
+  if(S._marketRareDay!==refreshDay||!S._marketRares){S._marketRareDay=refreshDay;S._marketRares=rollRares(FISH_DEF);sv();}
   return S._marketRares;
 }
 
@@ -2964,17 +3314,11 @@ function renderMarket(){
 }
 
 /* ═══════════════════════════════════════════════════════════
-   PLANTS — refresh every 5 days
+   PLANTS — rare ones refresh every 2 days
 ═══════════════════════════════════════════════════════════ */
 function getPlantRares(){
-  const refreshDay=Math.floor(S.day/2)*2;
-  if(S._plantRareDay!==refreshDay||!S._plantRares){
-    S._plantRareDay=refreshDay;
-    const rares=PLANTS_DEF.filter(p=>p.rarity==='rare'||p.rarity==='super_rare');
-    S._plantRares=[];
-    rares.forEach(r=>{if(Math.random()<(r.rarity==='super_rare'?0.3:0.6))S._plantRares.push(r.id);});
-    sv();
-  }
+  const refreshDay=rareDay();
+  if(S._plantRareDay!==refreshDay||!S._plantRares){S._plantRareDay=refreshDay;S._plantRares=rollRares(PLANTS_DEF);sv();}
   return S._plantRares||[];
 }
 
@@ -3002,9 +3346,10 @@ function renderCreatures(){
     document.getElementById('creature-note').textContent='';return;
   }
   const cap=getTankCap();const full=(S.fish||[]).length>=cap;
-  document.getElementById('creature-note').textContent=full?'Tank full!':'Aquatic creatures share the tank with your fish.';
+  const rareIds=getCritterRares();
+  document.getElementById('creature-note').textContent=full?'Tank full!':'Rare critters refresh on Day '+(rareDay()+2)+'.';
   const grid=document.getElementById('creature-g');grid.innerHTML='';
-  CREATURES_DEF.forEach(cr=>{
+  CREATURES_DEF.filter(cr=>(cr.rarity!=='rare'&&cr.rarity!=='super_rare')||rareIds.includes(cr.id)).forEach(cr=>{
     const div=shopCard(fitPreview('c',cr.id,120,80,2),rarityTag(cr.rarity),
       '<div class="iname">'+cr.name+'</div><div class="idesc">'+cr.desc+'</div>'+
       '<div class="itemp">'+cr.temp+'</div>'+
@@ -3076,23 +3421,22 @@ function renderPlants(){
 }
 
 /* ═══════════════════════════════════════════════════════════
-   DECORATIONS — rare refresh every 10 days
+   DECORATIONS — rare ones refresh every 2 days
 ═══════════════════════════════════════════════════════════ */
 function getDecoRares(){
-  const refreshDay=Math.floor(S.day/3)*3;
-  if(S._decoRareDay!==refreshDay||!S._decoRares){
-    S._decoRareDay=refreshDay;
-    const rares=DECO_DEF.filter(d=>d.rarity==='rare'||d.rarity==='super_rare');
-    S._decoRares=[];
-    rares.forEach(r=>{if(Math.random()<(r.rarity==='super_rare'?0.3:0.6))S._decoRares.push(r.id);});
-    sv();
-  }
+  const refreshDay=rareDay();
+  if(S._decoRareDay!==refreshDay||!S._decoRares){S._decoRareDay=refreshDay;S._decoRares=rollRares(DECO_DEF);sv();}
   return S._decoRares||[];
+}
+function getCritterRares(){
+  const refreshDay=rareDay();
+  if(S._critterRareDay!==refreshDay||!S._critterRares){S._critterRareDay=refreshDay;S._critterRares=rollRares(CREATURES_DEF);sv();}
+  return S._critterRares||[];
 }
 
 function renderDeco(){
   const rareIds=getDecoRares();
-  const nextRefresh=Math.floor(S.day/3)*3+3;
+  const nextRefresh=rareDay()+2;
   const cap=getDecoCap();
   const cur=(S.decos||[]).length;
   const full=cur>=cap;
@@ -3993,7 +4337,7 @@ function drawTank(){
       }
 
       // ── PLECO special: nibble animation at bottom (wobble more) ──
-      const wobbleAdd=(a.id==='pleco'&&a.y>65)?Math.sin(a.wobble*3)*0.05:Math.sin(a.wobble)*0.03;
+      const wobbleAdd=((a.id==='pleco'||a.id==='cory')&&a.y>65)?Math.sin(a.wobble*3)*0.05:Math.sin(a.wobble)*0.03;
 
       // ── POSITION UPDATE with layer bounds ──
       a.x+=a.dx;
@@ -4210,6 +4554,7 @@ function renderDaily(){
 
 /* ── Collection book ── */
 const BOOK_FACTS={
+  molly:'Mollies can live in fresh, brackish or even salty water.',platy:'Platies come in dozens of colours, all bred from the same wild fish.',cherrybarb:'Male cherry barbs turn a deeper red when they show off.',cory:'Corydoras dart up for a gulp of air, then sink back down.',rasbora:'Harlequin rasboras lay their eggs on the underside of leaves.',gourami:'Gouramis breathe air from the surface with a special organ.',ram:'Rams dig little pits in the sand for their babies.',puffer:'Pea puffers are the smallest pufferfish — about the size of a pea.',tang:'Blue tangs turn a paler blue while they sleep.',mandarin:'Mandarin dragonets are one of very few animals with true blue colour.',koi:'Koi can live for decades — some for more than a hundred years.',lionfish:'Lionfish use their fan fins to gently herd food into a corner.',seadragon:'Leafy sea dragon dads carry the eggs under their tails.',sunfish:'Ocean sunfish are the heaviest bony fish in the world.',
   guppy:'Guppies give birth to live babies — no eggs needed.',betta:'Male bettas blow bubble nests at the surface.',neon:'The glowing stripe helps the school stay together in dark water.',goldfish:'Goldfish remember things for months, not seconds.',angel:'Angelfish pairs often stay together for life.',pleco:'Plecos scrape algae off glass with a sucker mouth.',discus:'Discus parents feed their babies a special slime from their skin.',zebra:'Zebra danios are tough, quick and love to chase each other.',clown:'Clownfish are all born male; the biggest one becomes female.',arowana:'Arowanas can leap out of the water to snatch insects.',axolotl:'Axolotls can regrow lost legs — even parts of their heart.',seahorse:'Seahorse dads carry the eggs in a pouch.',manta:'Mantas have one of the biggest brains of any fish.',dragon:'Dragon gobies dig burrows in soft mud.',
   shrimp:'Cherry shrimp pick at algae and biofilm all day long.',snail:'Nerite snail eggs only hatch in slightly salty water.',crab:'Male fiddler crabs wave one giant claw to show off.',crayfish:'Crayfish shed their whole shell as they grow.',turtle:'Turtles can feel touch through their shells.',frog:'African dwarf frogs never leave the water.',eel:'Fire eels bury themselves in sand with just their heads out.',starfish:'A starfish can regrow a lost arm.',jellyfish:'Moon jellies have no brain, heart or bones.',octopus:'An octopus has three hearts and blue blood.',
   vallis:'Vallisneria spreads by runners into a meadow of ribbons.',moss:'Java moss clings to wood and stone with tiny threads.',amazon:'Amazon swords can grow leaves longer than a ruler.',cabomba:'Baby fish love hiding in Cabomba’s feathery leaves.',crypt:'Crypts sometimes “melt” after moving, then grow back.',hornwort:'Hornwort has no true roots and can float freely.',anubias:'Anubias grows so slowly that fish rarely bother it.',lotus:'Red lotus can send leaves all the way to the surface.',tiger:'Tiger lotus grows from an underground bulb.',buce:'Bucephalandra grows wild on rocks in Borneo’s streams.',pogostemon:'Pogostemon turns pinker under bright light.',utricularia:'Utricularia catches tiny critters in little bladders.',marimo:'Marimo balls roll along lake beds and can live for decades.',
@@ -6046,6 +6391,15 @@ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostnam
 </body>
 </html>
 <!-- v1.1 更新内容：1.背景音乐循环时间加倍(32→64拍)，tempo放慢(0.48→0.72)，加入低通滤波、和弦衬底和水泡ping，营造水底悠闲感。2.鱼食面积缩小(radius 4→2)，掉落速度减慢至原来的30%(vy/vx/gravity均×0.3)。3.初始不自动生成植物，植物只能从商店购买。4.全部decoration重新绘制，像素网格扩大约2倍，增加更多细节(阴影、高光、纹理、苔藓、锈迹等)，预览画布扩大至56×56。5.鱼会随机游向附近的装饰物进行互动(靠近调查行为)。-->
+<!-- v3.7 更新内容（内容翻倍·第一批：鱼）：
+1. 新增 14 种鱼，鱼从 14 种变成 28 种：
+   普通：茉莉鱼、月光鱼、樱桃灯、熊猫鼠鱼、三角灯；少见：蜜丝丽丽、荷兰凤凰、豆豆河豚、蓝倒吊；
+   ★ 稀有：青蛙鳚、锦鲤、狮子鱼；★★ 超稀有：叶海龙、翻车鱼。每种都有宝宝的样子、摆尾和表情、习性和图鉴小知识。
+2. 稀有几率统一：四个商店的稀有品都是每 2 天刷新一次；每样 ★ 稀有 20%，每样 ★★ 超稀有 6%；每次至少有一个稀有（随机挑）。
+   鱼市现在每次刷新出现超稀有的几率约 22%，平均一周左右遇到一次。
+3. 小生物商店也加入稀有轮换：火焰鳗、海星、月亮水母、小章鱼不再一直都能买。
+4. 装饰的稀有刷新从 3 天改成 2 天，和其他商店一致。
+-->
 <!-- v3.6.3 更新内容：去掉打开时的白屏——主屏幕 app 先直接打开存在手机里的那份游戏，不再等网络；新版本在后台下载，下次打开生效。页面底色一开始就是海玻璃浅色。
 -->
 <!-- v3.6.2 更新内容：去掉打开游戏时的全屏 Twodee logo，打开就直接是鱼缸。App 图标和设置页底部的 "made by Twodee" 保留。
