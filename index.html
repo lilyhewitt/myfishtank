@@ -377,7 +377,6 @@ body.arranging #tank-btns{display:none;}
 .tab .ti .pxi,#q-seg .pxi,.al-seg .pxi,#tank-btns .pxi,.ach-icon .pxi{width:18px;height:18px;vertical-align:middle;}
 #strip-feed .pxi,#ach-popup-icon .pxi,.sp-ic .pxi{width:24px;height:24px;vertical-align:middle;}
 .item .pv .ico .pxi{width:36px;height:36px;vertical-align:middle;}
-@keyframes twOut{to{opacity:0;visibility:hidden}}
 .made-by{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0 0;font-size:15px;color:var(--muted);}
 .made-by img{width:54px;height:20px;image-rendering:pixelated;}
 </style>
@@ -481,7 +480,6 @@ apply();
 </script>
 </head>
 <body>
-<div id="tw-splash" data-nopal aria-hidden="true" style="position:fixed;inset:0;z-index:9999;background:#e6f7f0;display:flex;align-items:center;justify-content:center;animation:twOut .5s ease 1.2s forwards;"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAdCAYAAADoxT9SAAACcUlEQVR4Xu2XIU9DQQzHHwSBI8HhEYhhUIR9gSnscPMkyCFIUEsQIPgMOAgoDPgFgsIMgUCDI6DAQf6P9dKVXtu3t7n9kkuW67v2etdru6IYg+WNzR+MMZaaTEuvCoydDvrlmKQzdfUu1DnVw7OTotfpppt5f3yYq6KPHwR01aGy4ae726y9RrNVyjyHyAFr871O19XDcW8ERuXGVhaXko6378/0m5xsNFv/1hDQpznQXl1P31y8DEY2qe1BMm9dJxmVbwGbp6EBh7T3k3MCYPM0OFiT08cxHSFwgtrGJAgtCi9pnDuBsMHwICcihBwB0cdovSEi8g2Ifgfcx85PksdxBNwOvS8rrHKQPa4nh/nYpXEo9E4Jce45fHnTL672ds2zgK32MEPCppVAQDi0IjENPCcg95wg6L1FCDlSNacDGQ4IMeiRqdUCa6o4Y8KzFX6/fn24w8pwvBXJ6ZLtTyRjugXRq9KcSGUf3sxfWxNsSyJ7cLOWxDqdiEHOJHXNmDElRt5ILmYR+yST70DOSx28sksfLBngdnNrieSI1aDxii7bDta6lzpl5edNpMSSUS3KdRKyToUKopa5tNvTjFotjSWLsHV8lG451ZFhFS0F8pQlnnzcW7CquJSt7WyPbGukIGoxiQXP59eRA6oNvyG5cU12v3+QnoZa2bV+iM9FfoPcd56ME+3N3BZFwv9gRf9sRbE6bK/7ruwIIKU5RywHq8j45uU66VjlrAUFeDcYUpl2atocYcki8KylNo2UWikz4FFpczAm52ViIB1awrBkwEo0fG/4VnUEkLc8M2hz2rf8pADpkPOejOTaOr4W/AJNSewkzs1zawAAAABJRU5ErkJggg==" style="width:300px;height:174px;image-rendering:pixelated;"></div>
 <div id="app">
   <div class="game-title">~ MY AQUARIUM ~</div>
   <div class="top-bar">
@@ -6044,13 +6042,12 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)sv();});
 function syncThemeColor(){try{const m=document.querySelector('meta[name="theme-color"]');if(m&&window.UIPAL)m.content=UIPAL.swatch(UIPAL.current())[0];}catch(e){}}
 syncThemeColor();
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
-
-/* v3.6 — the Twodee splash: a tap skips it; it is gone after two seconds either way */
-(function(){const sp=document.getElementById('tw-splash');if(!sp)return;const bye=()=>{if(!sp.isConnected)return;sp.style.transition='opacity .35s';sp.style.opacity='0';setTimeout(()=>sp.remove(),400);};sp.addEventListener('pointerdown',bye);setTimeout(()=>sp.remove(),2000);})();
 </script>
 </body>
 </html>
 <!-- v1.1 更新内容：1.背景音乐循环时间加倍(32→64拍)，tempo放慢(0.48→0.72)，加入低通滤波、和弦衬底和水泡ping，营造水底悠闲感。2.鱼食面积缩小(radius 4→2)，掉落速度减慢至原来的30%(vy/vx/gravity均×0.3)。3.初始不自动生成植物，植物只能从商店购买。4.全部decoration重新绘制，像素网格扩大约2倍，增加更多细节(阴影、高光、纹理、苔藓、锈迹等)，预览画布扩大至56×56。5.鱼会随机游向附近的装饰物进行互动(靠近调查行为)。-->
+<!-- v3.6.2 更新内容：去掉打开游戏时的全屏 Twodee logo，打开就直接是鱼缸。App 图标和设置页底部的 "made by Twodee" 保留。
+-->
 <!-- v3.6.1 更新内容：Twodee logo 改成海玻璃配色——只用四种海玻璃绿，像老掌机的屏幕，但整体更浅：
 1. App 图标：浅色的水和沙，两条小鱼用最深的绿描边。
 2. 启动画面：浅海玻璃底，TWODEE 两截色（上浅下中绿）加描边和投影。
