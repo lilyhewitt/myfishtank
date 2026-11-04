@@ -1,6 +1,6 @@
 // My Aquarium — keeps a copy of the game on the phone so it opens offline.
 // Change VERSION whenever fonts or icons change; index.html is always fetched fresh when online.
-const VERSION = 'aq-3.6-1';
+const VERSION = 'aq-3.6.1-1';
 const FILES = [
   './', './index.html', './manifest.webmanifest',
   './fonts/vt323-latin.woff2', './fonts/press-start-2p-latin.woff2',
