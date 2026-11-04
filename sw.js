@@ -1,6 +1,6 @@
 // My Aquarium — keeps a copy of the game on the phone so it opens offline.
-// Change VERSION whenever fonts or icons change; index.html is always fetched fresh when online.
-const VERSION = 'aq-3.6.1-1';
+// Change VERSION whenever fonts or icons change. A new index.html shows up the next time the game is opened.
+const VERSION = 'aq-3.6.3-1';
 const FILES = [
   './', './index.html', './manifest.webmanifest',
   './fonts/vt323-latin.woff2', './fonts/press-start-2p-latin.woff2',
@@ -28,14 +28,12 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
 
-  // The game page: the newest version when online (gives up after 4 s), the saved copy when offline.
+  // The game page: open the saved copy straight away (no waiting on the network, so no white screen),
+  // and fetch the newest version in the background for next time. The very first visit uses the network.
   if (req.mode === 'navigate' || url.pathname.endsWith('/') || url.pathname.endsWith('.html')) {
     const fromNet = fetch(url.href, { cache: 'no-cache', credentials: 'same-origin' }).then(res => save('./index.html', res));
-    const fromCache = () => caches.match('./index.html');
-    e.respondWith(
-      Promise.race([fromNet, new Promise((_, no) => setTimeout(no, 4000))])
-        .catch(() => fromCache().then(m => m || fromNet))
-    );
+    e.waitUntil(fromNet.catch(() => {}));
+    e.respondWith(caches.match('./index.html').then(m => m || fromNet));
     return;
   }
 
