@@ -377,6 +377,9 @@ body.arranging #tank-btns{display:none;}
 .tab .ti .pxi,#q-seg .pxi,.al-seg .pxi,#tank-btns .pxi,.ach-icon .pxi{width:18px;height:18px;vertical-align:middle;}
 #strip-feed .pxi,#ach-popup-icon .pxi,.sp-ic .pxi{width:24px;height:24px;vertical-align:middle;}
 .item .pv .ico .pxi{width:36px;height:36px;vertical-align:middle;}
+@keyframes twOut{to{opacity:0;visibility:hidden}}
+.made-by{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0 0;font-size:15px;color:var(--muted);}
+.made-by img{width:54px;height:20px;image-rendering:pixelated;}
 </style>
 <script>
 /* ═══════════════════════════════════════════════════════════
@@ -478,6 +481,7 @@ apply();
 </script>
 </head>
 <body>
+<div id="tw-splash" data-nopal aria-hidden="true" style="position:fixed;inset:0;z-index:9999;background:#1d1a33;display:flex;align-items:center;justify-content:center;animation:twOut .5s ease 1.2s forwards;"><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAdCAYAAADoxT9SAAAC2klEQVR4Xu2Yv2sUURDHR/EPOEGwucrSQiSldhYquoVFmkAIVvE/EAJWIp4/wMJKU8kRsEkhuEpiYaW2iqJ2Vjax8f6Dk+/czu7s7Lwfu166fGBh82Zn3nxn35u3F6IBXL+wMcc1wDXKYcV1wWTz11f4WqYYjvvkA19D4p74n6qWWwdUTJo38+bT9FifeDrhcnWzj2uH3hOXN94HJyxeXWJbSpAIKM9cC8f69TYZR5N8I5i0k9itnSbG8/X6XkQW5PhUIJ4r4N7lJuadd60k3RwMUSE8abV8WmJU8h4Q5IkJigAm+Zbw1U0qiLoFVRx3MzFATM4GHD8+xReAGO2jRYz3H/CVgn0y906WEE5s6yA1L/P7z+fkcznP8JyZIkBys8vyYn5+TyapweaXJRldViFWxmwpdreTGz9rjwhIrHy2CB7k0Yjo3NP4M9++Ej3ciD5T3L1P5cqiJS9tj3BVJqfjyQm3Z0RXI0mun0+KqAu3u503J1HeHoGI1NnQYm/aWlYA/jgbaOdLdnLskykmurQ40MScCXvTcMVhw9tTe0PD8YjmpRxDeDseSqz4pAqZPBDdAFXClpyTXRLjta/O1RgpESDZtSyx8yRnQs0yYx1xxCHR2iOhNYu1Lza7D+y4jaFPdqshZpOWHctJx6v/4E+Il3/dehVrJ0lsuG99dlQ+GOdOZGKExrlNB3wEPW+nQ6o8QPZHo+02XqW8QoSK44nuy8Wzza/T+hzh/r62MNgqW1L2oW9B/DysbTZrP9U6EPVeEOAwGvWt1TD027OJe7aPP5r/Efgn+778plj8Bmf0WM59zCdo01Rz13M5NkXyE6WzrG42/3zQ98ugeKEKZ4jZQG8hQIKGhMQE9rHp5K2fFda7ayEA9g0uG8yrmjcmxGw56K7lfjRKa5XOgE3ljWEyO24bg8TwGkbMBmKNRueGZ10hQNTqzuCNec/qSgGJYcdTNrF7ftoX/APQ5rGwOymzXwAAAABJRU5ErkJggg==" style="width:300px;height:174px;image-rendering:pixelated;"></div>
 <div id="app">
   <div class="game-title">~ MY AQUARIUM ~</div>
   <div class="top-bar">
@@ -963,7 +967,8 @@ function openSound(){
     +'<div class="snd-row"><span>Sound effects</span><button class="snd-tg" data-t="sfx"></button></div>'
     +'<div class="snd-lbl">Theme — tap to try</div>'
     +'<div class="snd-packs" data-nopal>'+UIPAL.list.map(p=>'<button class="snd-pack pal-pick" data-pal="'+p.id+'"><span class="th-top"><b>'+p.name+'</b><small>♪ '+(THEME_MUSIC[p.id]||'')+'</small></span><span class="pal-sw">'+UIPAL.swatch(p).map(c=>'<i style="background:'+c+'"></i>').join('')+'</span></button>').join('')+'</div>'
-    +'<button class="btn" id="snd-close">Done</button>');
+    +'<button class="btn" id="snd-close">Done</button>'
+    +'<div class="made-by" data-nopal><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAKCAYAAABFXiVrAAABHklEQVR4XmNgwAG8reL+45LDB/DpY8GmEaRhS+VLBp92hIVbjy1iJMZhW0LSGHwYGP5jUw82AGQ4TBJsUcA+DHN9NjhhtRCsXskLU/29bXD1MPOZYL7A8H76EhQDQA5AV4PVohY3FH1gNSFpYJoJJgMKNhTDZsbANcl0i4DZyBYiWySzswNhQc0uOBtmEQzAgxFkGRhcv4o3AcCCE1fwoQAjGTDXZ80scJCywIIRLNguzsDAIM6wZQZEEQroEmBg0JuEKX75EgNDZxxmnDW1MTDcYwAnGFiigQcjyCJ8KQ5kEXIiAakFJQIGXT2cIQFWs2YWXJ4FLNCOSI1gsGMRpkuxpEawXgaG/1tQ0xIKgKkB0VjzDraMSWw+gwFs6gHgjpvIt8aPagAAAABJRU5ErkJggg=="><span>made by Twodee</span></div>');
   const refresh=()=>{bg.querySelectorAll('.snd-tg').forEach(b=>{const on=SND[b.dataset.t];b.textContent=on?'ON':'OFF';b.classList.toggle('on',on);});bg.querySelectorAll('.pal-pick').forEach(b=>b.classList.toggle('on',b.dataset.pal===UIPAL.current().id));};
   refresh();
   bg.addEventListener('click',e=>{
@@ -6039,10 +6044,19 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden)sv();});
 function syncThemeColor(){try{const m=document.querySelector('meta[name="theme-color"]');if(m&&window.UIPAL)m.content=UIPAL.swatch(UIPAL.current())[0];}catch(e){}}
 syncThemeColor();
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+
+/* v3.6 — the Twodee splash: a tap skips it; it is gone after two seconds either way */
+(function(){const sp=document.getElementById('tw-splash');if(!sp)return;const bye=()=>{if(!sp.isConnected)return;sp.style.transition='opacity .35s';sp.style.opacity='0';setTimeout(()=>sp.remove(),400);};sp.addEventListener('pointerdown',bye);setTimeout(()=>sp.remove(),2000);})();
 </script>
 </body>
 </html>
 <!-- v1.1 更新内容：1.背景音乐循环时间加倍(32→64拍)，tempo放慢(0.48→0.72)，加入低通滤波、和弦衬底和水泡ping，营造水底悠闲感。2.鱼食面积缩小(radius 4→2)，掉落速度减慢至原来的30%(vy/vx/gravity均×0.3)。3.初始不自动生成植物，植物只能从商店购买。4.全部decoration重新绘制，像素网格扩大约2倍，增加更多细节(阴影、高光、纹理、苔藓、锈迹等)，预览画布扩大至56×56。5.鱼会随机游向附近的装饰物进行互动(靠近调查行为)。-->
+<!-- v3.6 更新内容（Twodee 工作室 logo）：
+1. App 图标换成 8-bit 复古风：两条 D 字形的小鱼（橙色和粉色）面对面，深色描边，网点渐变的水和沙子。
+2. 打开游戏时先出现约 1 秒的 Twodee logo（深蓝底、街机风黄橙字），然后淡入鱼缸；点一下可以跳过。
+3. 设置页最下面加了一行小字 "made by Twodee"，配两条小鱼。
+4. 游戏内容和 v3.5.2 一样。
+-->
 <!-- v3.5.2 更新内容：明确告诉 iPhone 游戏声音是"背景音"——和正在放的音乐、播客一起播放，不会打断它们；静音开关打开时游戏不出声。
 -->
 <!-- v3.5.1 更新内容：
