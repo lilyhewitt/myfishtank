@@ -1045,6 +1045,20 @@ const PLANTS_DEF=[
   {id:'pogostemon',name:'Pogostemon',    price:60, desc:'Pink stem plant',    rarity:'rare'},
   {id:'utricularia',name:'Utricularia',  price:80, desc:'Carnivorous grass!', rarity:'super_rare'},
   {id:'marimo',   name:'Marimo Ball',    price:90, desc:'Rare moss sphere',   rarity:'super_rare'},
+  // v3.8
+  {id:'javafern',   name:'Java Fern',       price:22, desc:'Tough lance leaves',   rarity:'common'},
+  {id:'hairgrass',  name:'Dwarf Hairgrass', price:18, desc:'A soft green lawn',    rarity:'common'},
+  {id:'wisteria',   name:'Water Wisteria',  price:20, desc:'Lacy bright leaves',   rarity:'common'},
+  {id:'rotala',     name:'Rotala',          price:24, desc:'Pink-tipped stems',    rarity:'common'},
+  {id:'ludwigia',   name:'Red Ludwigia',    price:26, desc:'Copper-red leaves',    rarity:'common'},
+  {id:'montecarlo', name:'Monte Carlo',     price:20, desc:'Tiny round carpet',    rarity:'common'},
+  {id:'watersprite',name:'Water Sprite',    price:18, desc:'Soft frilly leaves',   rarity:'common'},
+  {id:'bacopa',     name:'Bacopa',          price:30, desc:'Round-leaf stems',     rarity:'uncommon'},
+  {id:'sagittaria', name:'Dwarf Sagittaria',price:32, desc:'Little grassy tufts',  rarity:'uncommon'},
+  {id:'madagascar', name:'Madagascar Lace', price:65, desc:'Leaves like lace',     rarity:'rare'},
+  {id:'pinnatifida',name:'Pinnatifida',     price:60, desc:'Copper jagged leaves', rarity:'rare'},
+  {id:'eriocaulon', name:'Eriocaulon',      price:85, desc:'A spiky green star',   rarity:'super_rare'},
+  {id:'ghostlotus', name:'Ghost Lotus',     price:95, desc:'Pale lily in bloom',   rarity:'super_rare'},
 ];
 
 const DECO_DEF=[
@@ -1062,6 +1076,21 @@ const DECO_DEF=[
   {id:'sunken',       name:'Sunken Ship',    price:200,desc:'Tilted shipwreck',        rarity:'super_rare'},
   {id:'mermaid',      name:'Mermaid',        price:180,desc:'Mystical mermaid statue', rarity:'rare'},
   {id:'crystal',      name:'Crystal Cluster',price:250,desc:'Glowing crystal spires',  rarity:'super_rare'},
+  // v3.8
+  {id:'driftarch',    name:'Driftwood Arch', price:45, desc:'A little wooden gate',    rarity:'common'},
+  {id:'bubbleclam',   name:'Bubble Clam',    price:40, desc:'Breathes up bubbles',     rarity:'common'},
+  {id:'diverhelmet',  name:'Diver Helmet',   price:50, desc:'Brass, with round windows',rarity:'common'},
+  {id:'mossylog',     name:'Mossy Log',      price:35, desc:'A hollow nap spot',       rarity:'common'},
+  {id:'staghorn',     name:'Staghorn Coral', price:45, desc:'Lilac antler branches',   rarity:'common'},
+  {id:'seaglass',     name:'Sea Glass',      price:25, desc:'Frosted beach pebbles',   rarity:'common'},
+  {id:'teapot',       name:'Teapot Cottage', price:60, desc:'A home with a spout',     rarity:'common'},
+  {id:'cairn',        name:'Pebble Cairn',   price:25, desc:'Stacked river stones',    rarity:'common'},
+  {id:'anchor',       name:'Old Anchor',     price:40, desc:'Rope still attached',     rarity:'common'},
+  {id:'lighthouse',   name:'Tiny Lighthouse',price:65, desc:'Its lamp glows warm',     rarity:'common'},
+  {id:'ruinarch',     name:'Ancient Arch',   price:160,desc:'Columns from a lost city',rarity:'rare'},
+  {id:'giantclam',    name:'Giant Clam',     price:170,desc:'Wavy lips and a pearl',   rarity:'rare'},
+  {id:'piano',        name:'Sunken Piano',   price:260,desc:'Still knows one song',    rarity:'super_rare'},
+  {id:'grotto',       name:'Mushroom Grotto',price:240,desc:'Glows softly at night',   rarity:'super_rare'},
 ];
 
 const EQ=[
@@ -1089,6 +1118,17 @@ const CREATURES_DEF=[
   {id:'starfish',  name:'Starfish',       price:90,  desc:'Slow star creeper',   temp:'22-26°C',rarity:'rare',      personality:'peaceful',    poop:0.05, yMin:73,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
   {id:'jellyfish', name:'Moon Jellyfish', price:200, desc:'Ethereal drifter',    temp:'20-26°C',rarity:'super_rare',personality:'majestic',    poop:0.05, yMin:5, yMax:55,social:'normal',    moveStyle:'hover',      feedLayer:'none'},
   {id:'octopus',   name:'Baby Octopus',   price:250, desc:'Genius shapeshifter', temp:'20-24°C',rarity:'super_rare',personality:'curious',     poop:0.15, yMin:40,yMax:74,social:'shy',       moveStyle:'idle_burst', feedLayer:'mid'},
+  // v3.8
+  {id:'amano',       name:'Amano Shrimp',  price:20,  desc:'Tireless algae eater',  temp:'20-28°C',rarity:'common',    personality:'peaceful', poop:0.1,  yMin:60,yMax:75,social:'schooling', moveStyle:'jump',       feedLayer:'bottom', benthic:true},
+  {id:'mysterysnail',name:'Mystery Snail', price:18,  desc:'Golden shell, long feelers',temp:'20-28°C',rarity:'common',personality:'peaceful', poop:0.15, yMin:72,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
+  {id:'hermit',      name:'Hermit Crab',   price:28,  desc:'Lives in a borrowed shell',temp:'22-28°C',rarity:'common', personality:'curious',  poop:0.15, yMin:68,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'bottom', benthic:true},
+  {id:'urchin',      name:'Sea Urchin',    price:32,  desc:'A spiny purple ball',   temp:'22-26°C',rarity:'common',    personality:'peaceful', poop:0.05, yMin:73,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
+  {id:'anemone',     name:'Sea Anemone',   price:55,  desc:'Waving soft tentacles', temp:'24-28°C',rarity:'uncommon',  personality:'peaceful', poop:0.05, yMin:73,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
+  {id:'pistol',      name:'Pistol Shrimp', price:45,  desc:'Snaps its big claw',    temp:'24-28°C',rarity:'uncommon',  personality:'curious',  poop:0.1,  yMin:66,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'bottom', benthic:true},
+  {id:'nudibranch',  name:'Nudibranch',    price:110, desc:'A frilly sea slug',     temp:'22-26°C',rarity:'rare',      personality:'peaceful', poop:0.05, yMin:72,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'none',   benthic:true},
+  {id:'mantis',      name:'Mantis Shrimp', price:140, desc:'Rainbow armour, super eyes',temp:'24-28°C',rarity:'rare',  personality:'curious',  poop:0.15, yMin:66,yMax:75,social:'normal',    moveStyle:'idle_burst', feedLayer:'bottom', benthic:true},
+  {id:'dumbo',       name:'Dumbo Octopus', price:260, desc:'Flaps its little ears', temp:'16-22°C',rarity:'super_rare',personality:'curious',  poop:0.1,  yMin:30,yMax:65,social:'normal',    moveStyle:'hover',      feedLayer:'mid'},
+  {id:'combjelly',   name:'Comb Jelly',    price:230, desc:'Flashes rainbow rows',  temp:'18-24°C',rarity:'super_rare',personality:'majestic', poop:0.02, yMin:5, yMax:55,social:'normal',    moveStyle:'hover',      feedLayer:'none'},
 ];
 
 const STEPS=[
@@ -2603,6 +2643,179 @@ const CRITTERS = {
     S.mouth(smile(11, 13, 12), e, C);
     return S.out();
   },
+  // ── v3.8 new critters ──
+  amano(o) {
+    // Amano shrimp: see-through grey-green body with a row of little brown dashes along the side
+    const ph = o.phase || 0, e = o.expr || 'normal', C = '#a8c8ba', D = '#8a6a52';
+    const S = Spr(27, 15);
+    S.paint(poly([[19.4, 8], [24.6, 5.1], [25.8, 8.4], [24.4, 11.8], [19.4, 10.2]]), C, 2, 1);
+    S.paint(or(ell(18.6, 8.6, 2.3, 2.4), ell(16.3, 7.4, 2.5, 2.8), ell(13.7, 6.6, 2.7, 3.0), ell(11.1, 6.3, 2.8, 3.2), ell(7.3, 6.9, 4.9, 3.7), poly([[3.2, 5.6], [0.6, 4.6], [3.4, 7.2]])), C, 1, 0);
+    S.tint((x, y) => y > 7.8 + (x > 11 ? 0.6 : 0), C, 2, [0]);
+    S.tint((x, y, X, Y) => Y === 8 && X > 5 && X < 21 && X % 2 === 0, D, 1, [0]);
+    S.tint((x, y, X, Y) => Y === 5 && X > 9 && X < 19 && X % 3 === 1, D, 1, [0]);
+    S.finish(C, [1]);
+    const lc = lineCol(K(C)[1], 'self');
+    S.line([[3.4, 4.6], [6, 1.6], [10, 0.6], [15, 0.9], [19, 2.4]], lc);
+    S.line([[4, 5.0], [7.5, 3.2], [11, 3.0]], lc);
+    for (let k = 0; k < 3; k++) S.line([[6.6 + 1.8 * k, 10.4], [5.8 + 1.8 * k + 0.6 * Math.sin(ph + k), 13.4]], K(C)[0]);
+    for (let k = 0; k < 3; k++) S.line([[12.6 + 2.2 * k, 9.8], [12 + 2.2 * k + 0.5 * Math.sin(ph * 2 + k), 11.6]], K(C)[0]);
+    const E = S.eye(5.6, 6.0, 2, e); S.blush(E.ex + E.ew, E.ey + E.eh, 1, e);
+    S.set(8.6, 4.2, [255, 255, 255]);
+    return S.out();
+  },
+  mysterysnail(o) {
+    // Golden mystery snail: big round gold shell with brown bands, dusky body, long feelers
+    const ph = o.phase || 0, e = o.expr || 'normal', B = '#8a8494', SH = '#f6c64a', BD = '#b0782e';
+    const S = Spr(25, 17); const bob = Math.sin(ph) * 0.35;
+    S.paint(cap(3.2 + 0.3 * Math.sin(ph), 10.4, 0.8 + 0.6 * Math.sin(ph), 5.6, 0.6), B, 0, 2);
+    S.paint(cap(5.4 + 0.3 * Math.sin(ph + 1), 10.2, 5.8 + 0.6 * Math.sin(ph + 1), 5.0, 0.6), B, 0, 2);
+    S.paint(or(cap(3.4, 14.4, 21.4, 14.8, 2.0), ell(4.4, 12.4, 3.6, 3.0)), B, 1, 0);
+    const cx = 14.2, cy = 8.4 + bob;
+    S.paint(ell(cx, cy, 7.4, 6.9), SH, 1, 1);
+    S.tint((x, y) => { const a = Math.atan2(y - cy, x - cx), r = Math.hypot((x - cx) / 7.4, (y - cy) / 6.9); const s = a / (Math.PI * 2) + r * 1.1; return ((s * 2) % 1 + 1) % 1 < 0.16 && r > 0.18; }, BD, 1, [1]);
+    S.tint(ell(11.4, 4.8 + bob, 2.2, 1.4), SH, 2, [1]);
+    S.finish(SH, [1]);
+    const E = S.eye(4.2, 12.0, 2, e); S.blush(E.ex + E.ew, E.ey + E.eh, 1, e);
+    S.mouth([[2, 15]], e, B);
+    return S.out();
+  },
+  hermit(o) {
+    // Hermit crab: a borrowed spiral shell, red legs and a big claw peeking out the front
+    const ph = o.phase || 0, e = o.expr || 'normal', C = '#ef6a4c', SH = '#f2d0b0', SP = '#d49a86';
+    const S = Spr(27, 19);
+    for (let k = 0; k < 3; k++) { const s = Math.sin(ph + k * 2) * 0.6; S.paint(cap(8.6 + 1.6 * k, 13.4, 6.4 + 1.8 * k, 17.6 + s, 0.75, 0.55), C, 0, 2); }
+    const cx = 17.4, cy = 9.6;
+    S.paint(or(ell(cx, cy, 8.4, 7.6), ell(24.4, 5.4, 2.6, 2.4)), SH, 1, 0);
+    S.tint((x, y) => { const a = Math.atan2(y - cy, x - cx), r = Math.hypot((x - cx) / 8.4, (y - cy) / 7.6); const s = a / (Math.PI * 2) + r * 1.2; return ((s * 2) % 1 + 1) % 1 < 0.18 && r > 0.2; }, SP, 1, [0]);
+    S.tint(ell(15, 4.6, 3, 1.4), SH, 2, [0]);
+    S.paint(ell(8.4, 11.4, 3.6, 3.0), C, 1, 1);
+    const w = Math.sin(ph) * 0.5;
+    S.paint(cap(6, 12.6, 3.6, 13.6 + w, 1.0), C, 1, 3); S.paint(ell(2.6, 13.2 + w, 2.4, 2.0), C, 1, 3);
+    S.paint(cap(7.6, 8.8, 6.6, 5.4, 0.55), C, 0, 4); S.paint(cap(9.6, 8.8, 10.0, 5.2, 0.55), C, 0, 4);
+    S.paint(ell(6.4, 4.6, 1.2, 1.2), C, 1, 4); S.paint(ell(10.1, 4.4, 1.2, 1.2), C, 1, 4);
+    S.finish(SH, [1, 3, 4]);
+    S.set(6.4, 4.6, OUT); S.set(10.1, 4.4, OUT);
+    S.blush(5, 12, 1, e); S.blush(10, 12, 1, e);
+    S.mouth(smile(7, 9, 12), e, C);
+    return S.out();
+  },
+  urchin(o) {
+    // Sea urchin: a round purple pincushion of spines that sway a little
+    const ph = o.phase || 0, e = o.expr || 'normal', C = '#9a6cd0', SP = '#6a46a8';
+    const S = Spr(23, 19); const cx = 11.5, cy = 12.4;
+    S.paint(and(ell(cx, cy, 7.2, 6.4), (x, y) => y < 18.6), C, 1, 0);
+    S.tint(ell(9, 9, 2.6, 1.6), C, 2, [0]);
+    S.finish(C);
+    for (let k = 0; k < 13; k++) {
+      const a = Math.PI * (1.05 + k * 0.075) + 0.04 * Math.sin(ph + k), r0 = 6.6, r1 = 9.8 + (k % 2) * 1.2;
+      S.line([[cx + Math.cos(a) * r0, cy + Math.sin(a) * r0 * .9], [cx + Math.cos(a) * r1, cy + Math.sin(a) * r1 * .9]], K(SP)[0]);
+    }
+    S.line([[cx - 7.4, cy + 2.6], [cx - 10.6, cy + 3.6]], K(SP)[0]); S.line([[cx + 7.4, cy + 2.6], [cx + 10.6, cy + 3.6]], K(SP)[0]);
+    const E1 = S.eye(9.2, 12.6, 2, e), E2 = S.eye(13.8, 12.6, 2, e);
+    S.blush(7, 14, 1, e); S.blush(16, 14, 1, e);
+    S.mouth(smile(11, 12, 14), e, C);
+    return S.out();
+  },
+  anemone(o) {
+    // Sea anemone: a short soft column with a crown of separate, waving tentacles with green tips
+    const ph = o.phase || 0, e = o.expr || 'normal', C = '#ff9ab4', T = '#ffb4c8', TIP = '#9be27a';
+    const S = Spr(29, 27);
+    for (let k = 0; k < 7; k++) {
+      const x0 = 6.6 + k * 2.6, pts = [], lean = (k - 3) * 1.1;
+      for (let t = 0; t <= 1.001; t += 0.2) pts.push([x0 + lean * t * 2.4 + Math.sin(ph + k * 1.1 + t * 3.4) * 1.4 * t, 14.6 - t * (10.6 + (k % 2) * 1.6)]);
+      S.paint(chain(pts, 0.95, 0.65), T, 1, 1 + (k % 2));
+      const [tx, ty] = pts[pts.length - 1]; S.paint(ell(tx, ty, 1.1, 1.1), TIP, 1, 3);
+    }
+    S.paint(or(ell(14.5, 16, 8.2, 2.4), rect(7.2, 16, 21.8, 24.8), ell(14.5, 24.8, 8.6, 1.6)), C, 1, 0);
+    S.tint((x, y, X) => X % 3 === 0 && y > 18, C, 0, [0]);
+    S.tint(ell(11, 17.4, 2, 1), C, 2, [0]);
+    S.finish(C, [0, 2, 3]);
+    const E1 = S.eye(12.2, 20.2, 2, e), E2 = S.eye(16.8, 20.2, 2, e);
+    S.blush(10, 22, 1, e); S.blush(19, 22, 1, e);
+    S.mouth(smile(14, 15, 22), e, C);
+    return S.out();
+  },
+  pistol(o) {
+    // Pistol shrimp: orange-and-white bands and one oversized snapping claw
+    const ph = o.phase || 0, e = o.expr || 'normal', C = '#ff8a3c', W = '#fff1e2', CL = '#ff6a3a';
+    const S = Spr(31, 17);
+    S.paint(poly([[23.4, 9], [28.6, 6.1], [29.8, 9.4], [28.4, 12.8], [23.4, 11.2]]), C, 2, 1);
+    S.paint(or(ell(22.6, 9.6, 2.3, 2.4), ell(20.3, 8.4, 2.5, 2.8), ell(17.7, 7.6, 2.7, 3.0), ell(15.1, 7.3, 2.8, 3.2), ell(11.3, 7.9, 4.9, 3.7)), C, 1, 0);
+    S.tint((x, y, X) => Math.floor((X - 9) / 2.4) % 2 === 0 && X > 9, W, 1, [0]);
+    const w = Math.sin(ph) * 0.5;
+    S.paint(cap(8.2, 9.6, 5.4, 10.2 + w, 1.1), CL, 1, 2);
+    S.paint(ell(3.6, 9.4 + w, 3.4, 2.8), CL, 1, 2);
+    S.paint(poly([[0.4, 7.8 + w], [3.6, 6.8 + w], [5.6, 8.6 + w], [2.2, 9.4 + w]]), CL, 2, 2);
+    S.finish(C, [1, 2]);
+    const lc = lineCol(K(C)[1], 'self');
+    S.line([[8.4, 5.6], [11, 2.6], [15, 1.6], [20, 2.0]], lc);
+    for (let k = 0; k < 3; k++) S.line([[12.6 + 2 * k, 11.4], [12 + 2 * k + 0.6 * Math.sin(ph + k), 14.4]], K(C)[0]);
+    const E = S.eye(9.8, 6.8, 2, e); S.blush(E.ex + E.ew, E.ey + E.eh, 1, e);
+    return S.out();
+  },
+  nudibranch(o) {
+    // Nudibranch (sea slug): soft violet body with a frill of orange-tipped plumes and two little horns
+    const ph = o.phase || 0, e = o.expr || 'normal', C = '#8a7cf0', F = '#ff9a4a', FT = '#fff0b0';
+    const S = Spr(29, 15); const wv = x => 0.35 * Math.sin(ph - x * 0.4);
+    for (let k = 0; k < 7; k++) {
+      const x = 8 + k * 2.6, h = 4.4 + (k % 2) * 1.2 - Math.abs(k - 3) * 0.3;
+      S.paint(cap(x, 9.4 + wv(x), x + 0.6 * Math.sin(ph + k), 9.4 - h, 1.1, 0.8), F, 1, 1);
+      S.paint(ell(x + 0.6 * Math.sin(ph + k), 9.4 - h, 0.9, 0.9), FT, 1, 2);
+    }
+    S.paint((x, y) => x > 1 && x < 28 && Math.abs(y - (11.4 + wv(x))) < (x < 8 ? 2.6 : 2.6 - (x - 8) / 20 * 1.6), C, 1, 0);
+    S.tint((x, y) => y > 12.2 + wv(x), C, 2, [0]);
+    S.paint(cap(3.4, 9.2, 2.6, 5.4, 0.6), C, 0, 3); S.paint(cap(5.6, 9.2, 5.8, 5.2, 0.6), C, 0, 3);
+    S.finish(C, [1, 2, 3]);
+    const E = S.eye(4.2, 11.2, 2, e); S.blush(E.ex + E.ew, E.ey + E.eh, 1, e);
+    return S.out();
+  },
+  mantis(o) {
+    // Peacock mantis shrimp: green armour, red legs, blue tail fan and big stalked eyes
+    const ph = o.phase || 0, e = o.expr || 'normal', C = '#5cc46a', R2 = '#ff5a5a', BL = '#4a9ae8';
+    const S = Spr(33, 17);
+    S.paint(poly([[24.4, 9], [30.4, 6.2], [31.8, 9.6], [30.4, 13.2], [24.4, 11]]), BL, 1, 3);
+    S.paint(or(ell(23.4, 9.8, 2.4, 2.4), ell(20.6, 9.2, 2.6, 2.8), ell(17.6, 8.8, 2.8, 3.0), ell(14.4, 8.6, 2.9, 3.2), ell(9.6, 9.0, 4.8, 3.6)), C, 1, 0);
+    S.tint((x, y, X) => X % 3 === 0 && X > 11 && X < 25, C, 0, [0]);
+    S.tint((x, y) => y > 10.4, C, 2, [0]);
+    for (let k = 0; k < 4; k++) S.paint(cap(11 + 2.4 * k, 11.8, 10.4 + 2.4 * k + 0.6 * Math.sin(ph + k), 15.2, 0.6), R2, 1, 4);
+    const w = Math.sin(ph) * 0.4;
+    S.paint(cap(7.6, 10.8, 4.4, 12.4 + w, 1.0), R2, 1, 1); S.paint(cap(4.4, 12.4 + w, 6.6, 14.6 + w, 0.8), R2, 1, 1);
+    S.paint(cap(6.4, 7.0, 5.2, 2.8, 0.7), C, 0, 2); S.paint(cap(8.6, 7.0, 9.4, 2.6, 0.7), C, 0, 2);
+    S.paint(ell(4.8, 2.4, 1.8, 1.6), '#ffd84a', 1, 5); S.paint(ell(9.8, 2.2, 1.8, 1.6), '#ffd84a', 1, 5);
+    S.finish(C, [1, 2, 3, 4, 5]);
+    S.set(4.8, 2.4, OUT); S.set(9.8, 2.2, OUT); S.set(4.3, 1.9, [255, 255, 255]); S.set(9.3, 1.7, [255, 255, 255]);
+    S.blush(6, 9, 1, e); S.mouth([[4, 9], [5, 10]], e, C);
+    return S.out();
+  },
+  dumbo(o) {
+    // Dumbo octopus: a tall peachy bell, two ear-fins flapping on top, a scalloped webbed skirt below
+    const ph = o.phase || 0, e = o.expr || 'normal', C = '#ffa47a', W = '#ffc8a4';
+    const S = Spr(27, 25); const f = Math.sin(ph);
+    S.paint(poly([[7.4, 6.4], [1.6, 2.6 - f * 1.6], [2.6, 6.2 - f * 0.8], [6.8, 9.6]]), C, 0, 1);
+    S.paint(poly([[19.6, 6.4], [25.4, 2.6 - f * 1.6], [24.4, 6.2 - f * 0.8], [20.2, 9.6]]), C, 0, 1);
+    S.paint(and(or(ell(13.5, 17.6, 9.6, 4.6), ...[5.2, 9.4, 13.5, 17.6, 21.8].map(x => ell(x, 21.6 + 0.4 * Math.sin(ph + x), 2.0, 1.6))), (x, y) => y > 15), W, 1, 2);
+    S.paint(ell(13.5, 10.6, 7.0, 8.4), C, 1, 0);
+    S.tint(ell(11.2, 5.4, 2.4, 1.8), C, 2, [0]);
+    S.finish(C, [1, 2]);
+    const E1 = S.eye(10.8, 11.6, 3, e), E2 = S.eye(16.2, 11.6, 3, e);
+    S.blush(8, 14, 2, e); S.blush(18, 14, 2, e);
+    S.mouth(smile(13, 14, 15), e, C);
+    return S.out();
+  },
+  combjelly(o) {
+    // Comb jelly: a clear oval drifting by, its eight comb rows flashing rainbow colours
+    const ph = o.phase || 0, e = o.expr || 'normal', B = '#e3f2fa';
+    const S = Spr(19, 25); const cx = 9.5, cy = 12.2;
+    S.paint(ell(cx, cy, 7.4, 10.6), B, 1, 0);
+    S.tint(ell(6.6, 6, 1.6, 2.6), B, 2, [0]);
+    S.finish(B);
+    const RB = ['#ff7fa8', '#ffc84a', '#6fd86a', '#5ab8f8', '#b48cff'];
+    for (const dx of [-5.4, -2.6, 2.6, 5.4]) for (let y = 2; y < 23; y++) { const sq = Math.sqrt(Math.max(0, 1 - ((y + 0.5 - cy) / 10.6) ** 2)); if (sq < 0.25) continue; const k = Math.floor(((y * 0.7 + ph * 2.5 + dx) % 5 + 5) % 5); S.set(cx + dx * sq - 0.5, y, K(RB[k])[1]); }
+    const E1 = S.eye(7.6, 13.6, 2, e), E2 = S.eye(11.6, 13.6, 2, e);
+    S.blush(5, 15, 1, e); S.blush(13, 15, 1, e);
+    S.mouth(smile(9, 10, 16), e, B);
+    return S.out();
+  },
 };
 
 /* ════════════════ DECORATIONS (static; sit on the sand, bottom row = ground) ════════════════ */
@@ -2783,6 +2996,180 @@ const DECOS = {
     S.set(12.4, 8, [255, 255, 255]); S.set(12.4, 9, [255, 255, 255]); S.set(7.6, 16, [255, 255, 255]);
     return S.out();
   },
+  // ── v3.8 new decorations ──
+  driftarch() {
+    // Driftwood arch: one curved branch making a little gate, moss on top
+    const W = '#b88456', M = '#86d16a'; const S = Spr(41, 27);
+    const arc = []; for (let k = 0; k <= 10; k++) { const a = Math.PI * (1 - k / 10); arc.push([20.5 + Math.cos(a) * 15.6, 25 - Math.sin(a) * 18]); }
+    S.paint(or(chain(arc, 3.0, 2.0), ell(5.2, 25.4, 5, 2), ell(36, 25.6, 4.4, 1.8), cap(30, 9, 35, 3.6, 1.1, 0.6), cap(10, 12, 6, 7, 1.0, 0.6)), W, 1, 0);
+    S.rim([0]);
+    S.tint((x, y, X, Y) => (X + (Y >> 1)) % 5 === 0, W, 0, [0]);
+    S.tint((x, y, X, Y) => S.part[(Y - 1) * S.W + X] === -1 && hash(X >> 1, Y) % 3 === 0, M, 1, [0]);
+    S.finish(W);
+    return S.out();
+  },
+  bubbleclam() {
+    // Bubble clam: a pearly clam, shell open a crack, a pearl inside (bubbles rise from it in the tank)
+    const C = '#c9a6e8', P = '#fff4fa', In = '#ffc6d8'; const S = Spr(25, 19);
+    S.paint(and(ell(12.5, 14, 11.6, 5.4), (x, y) => y > 12), C, 1, 0);
+    S.paint(and(ell(12.5, 11.4, 11.0, 8.6), (x, y) => y < 9.6), C, 1, 1);
+    S.paint(and(ell(12.5, 11.6, 10.0, 2.6), (x, y) => y >= 9.6 && y < 13), In, 1, 2);
+    S.paint(ell(12.5, 10.8, 2.4, 2.2), P, 1, 3);
+    for (const P1 of [0, 1]) S.tint((x, y) => Math.sin(Math.atan2(y - 15, x - 12.5) * 9) > 0.55, C, 0, [P1]);
+    S.rim([1], true, false);
+    S.finish(C, [1, 2, 3]);
+    S.set(11.8, 10, [255, 255, 255]);
+    return S.out();
+  },
+  diverhelmet() {
+    // Diver's helmet: brass dome with round windows, half sunk in the sand
+    const B = '#e2b04a', G = '#a6dcef', Dk = '#8a6a3a'; const S = Spr(23, 23);
+    S.paint(or(ell(11.5, 11.6, 9.4, 9.2), rect(3, 15, 20, 22.6)), B, 1, 0);
+    S.rim([0], true, false);
+    S.paint(ell(11.5, 11.4, 4.4, 4.2), G, 1, 1); S.paint(ell(3.4, 12.4, 1.8, 2.2), G, 1, 2); S.paint(ell(19.6, 12.4, 1.8, 2.2), G, 1, 2);
+    S.tint(ell(10, 9.6, 1.6, 1.2), G, 2, [1]);
+    S.paint(rect(2, 19.4, 21, 21.2), Dk, 1, 3);
+    S.tint((x, y, X) => X % 3 === 0, Dk, 2, [3]);
+    S.finish(B, [1, 2, 3]);
+    return S.out();
+  },
+  mossylog() {
+    // Mossy log: a hollow log on its side, moss blanket on top — a fish could sleep in there
+    const W = '#a87850', In = '#5a3e2c', M = '#7fcf62'; const S = Spr(37, 19);
+    S.paint(or(rect(6, 6, 33, 17.6), ell(33, 11.8, 3.6, 5.8)), W, 1, 0);
+    S.tint((x, y, X, Y) => Y % 3 === 0 && X > 7, W, 0, [0]);
+    S.paint(ell(6, 11.8, 4.4, 5.9), W, 2, 1);
+    S.paint(ell(6, 11.8, 3.0, 4.4), In, 1, 2);
+    S.paint(and(or(rect(7, 3.6, 32, 7.8), ell(31.6, 5.6, 3.2, 2)), (x, y, X) => true), M, 1, 3);
+    S.tint((x, y, X, Y) => Y === 3 && hash(X, Y) % 2 === 0, M, 2, [3]);
+    S.finish(W, [1, 2, 3]);
+    return S.out();
+  },
+  staghorn() {
+    // Staghorn coral: soft lilac antler branches with pale tips
+    const C = '#c39ae6'; const S = Spr(31, 27);
+    const br = [[15.5, 26, 15.5, 14, 2.2, 1.6], [15.5, 16, 8, 8, 1.6, 1.0], [8, 8, 5, 2, 1.0, 0.7], [8, 8, 11, 2.6, 0.9, 0.7], [15.5, 15, 23, 7, 1.6, 1.0], [23, 7, 26.6, 2.4, 1.0, 0.7], [23, 7, 20, 2, 0.9, 0.6], [15.5, 14, 15.5, 4, 1.4, 0.9], [15.5, 22, 5, 17, 1.6, 0.9], [15.5, 22, 26.6, 16, 1.6, 0.9]];
+    S.paint(or(ell(15.5, 25.6, 6, 1.8), ...br.map(b => cap(...b))), C, 1, 0);
+    S.tint((x, y, X, Y) => S.part[(Y - 1) * S.W + X] === -1 && y < 18, C, 2, [0]);
+    S.tint((x, y, X, Y) => hash(X, Y) % 9 === 0, C, 0, [0]);
+    S.finish(C);
+    return S.out();
+  },
+  seaglass() {
+    // A little pile of sea glass: frosted pebbles in teal, mint, amber and white
+    const Sd = '#e8d6a8'; const S = Spr(25, 13);
+    S.paint(or(ell(12.5, 11.4, 11.6, 2.0)), Sd, 1, 0);
+    const bits = [[5, 9.4, 3, 2, '#7fd6c6'], [10.6, 8.6, 3.2, 2.4, '#b8ecd8'], [16.6, 9.2, 3, 2.1, '#f2c27a'], [21, 9.8, 2.4, 1.7, '#f4f6f2'], [8, 6.2, 2.4, 1.8, '#9ad8f0'], [14, 5.6, 2.6, 2, '#7fd6c6'], [18.4, 6.6, 2.0, 1.6, '#c8b0f0']];
+    bits.forEach(([x, y, rx, ry, c], i) => { S.paint(ell(x, y, rx, ry), c, 1, i + 1); S.tint(ell(x - rx * .35, y - ry * .35, rx * .4, ry * .35), c, 2, [i + 1]); });
+    S.finish('#7fd6c6', [1, 2, 3, 4, 5, 6, 7]);
+    return S.out();
+  },
+  teapot() {
+    // Teapot cottage: a round ceramic teapot with a little door and window
+    const C = '#9ad8e4', Lid = '#ff9ab8', Dr = '#c48a5a', Wn = '#fff2b0'; const S = Spr(31, 27);
+    S.paint(cap(26, 14, 30, 7.4, 1.3, 0.9), C, 1, 1);
+    S.paint(and(ell(5.2, 14, 4.4, 5), not(ell(5.2, 14, 2.4, 3))), C, 1, 2);
+    S.paint(or(ell(16, 17, 11, 9.4), rect(5.4, 17, 26.6, 26.6)), C, 1, 0);
+    S.tint((x, y, X, Y) => Y === 15 || Y === 21, C, 0, [0]);
+    S.paint(and(ell(16, 8.4, 6.4, 3), (x, y) => y < 9), Lid, 1, 3); S.paint(ell(16, 4.8, 1.6, 1.4), Lid, 1, 3);
+    S.paint(or(and(rect(13.4, 19, 18.6, 26.6), or((x, y) => y > 21.4, ell(16, 21.4, 2.6, 2.6)))), Dr, 1, 4);
+    S.paint(ell(22.2, 16.4, 1.8, 1.8), Wn, 1, 5); S.paint(ell(9.8, 16.4, 1.8, 1.8), Wn, 1, 5);
+    S.rim([0], true, false);
+    S.finish(C, [1, 2, 3, 4, 5]);
+    S.set(17.4, 23, OUT);
+    return S.out();
+  },
+  cairn() {
+    // Pebble cairn: flat river stones stacked from big to small
+    const S = Spr(19, 23); const st = [[9.5, 20.4, 8.4, 2.6, '#b9b2c8'], [9.2, 15.8, 6.6, 2.3, '#d0c2b0'], [9.8, 11.6, 5.2, 2.1, '#a9bcc8'], [9.4, 7.8, 3.8, 1.8, '#c8b8d8'], [9.6, 4.6, 2.4, 1.5, '#d6cab8']];
+    st.forEach(([x, y, rx, ry, c], i) => { S.paint(ell(x, y, rx, ry), c, 1, i); S.tint(and(ell(x, y, rx, ry), (X, Y) => Y < y - ry * .3), c, 2, [i]); });
+    S.finish('#b9b2c8', [0, 1, 2, 3, 4]);
+    return S.out();
+  },
+  anchor() {
+    // An old anchor leaning in the sand, rope looped through the ring
+    const A = '#8f8aa8', Rp = '#e2c07a'; const S = Spr(25, 29); const a = 0.22, ox = 12.5, oy = 15;
+    const P = pts => poly(rot(pts, ox, oy, a));
+    S.paint(or(P([[11.4, 4], [13.6, 4], [13.6, 25], [11.4, 25]]), P([[7, 8], [18, 8], [18, 10], [7, 10]]),
+      (x, y) => { const [cx, cy] = rot([[12.5, 21]], ox, oy, a)[0]; const r = Math.hypot(x - cx, y - cy); return r > 5.2 && r < 7.4 && y > cy; },
+      P([[3.6, 20], [6.6, 18.6], [5.4, 23]]), P([[21.4, 20], [18.4, 18.6], [19.6, 23]])), A, 1, 0);
+    const [rx, ry] = rot([[12.5, 2.6]], ox, oy, a)[0];
+    S.paint(and(ell(rx, ry, 2.6, 2.4), not(ell(rx, ry, 1.2, 1.1))), A, 1, 1);
+    S.paint(cap(rx + 1.6, ry + 1, rx + 5, ry + 7, 0.7), Rp, 1, 2); S.paint(cap(rx + 5, ry + 7, rx + 3, ry + 12, 0.7), Rp, 1, 2);
+    S.tint((x, y, X, Y) => hash(X, Y) % 7 === 0, '#c98a5a', 1, [0]);
+    S.rim([0], true, false);
+    S.finish(A, [1, 2]);
+    return S.out();
+  },
+  lighthouse() {
+    // Tiny lighthouse on a rock: red and white rings, a warm lamp at the top
+    const Rk = '#a9b6cf', Wt = '#f8f2ea', Rd = '#ff7a7a', L = '#ffe07a'; const S = Spr(21, 39);
+    S.paint(or(ell(10.5, 35.6, 9.6, 3.4), rect(1, 35.6, 20, 38.6)), Rk, 1, 0);
+    S.rim([0], true, false);
+    S.paint(poly([[5.4, 35], [7.4, 11], [13.6, 11], [15.6, 35]]), Wt, 1, 1);
+    S.tint((x, y) => Math.floor((y - 11) / 5) % 2 === 0, Rd, 1, [1]);
+    S.paint(rect(6.4, 7, 14.6, 11), L, 1, 2); S.tint(rect(9.4, 7, 11.6, 11), L, 2, [2]);
+    S.paint(poly([[5.4, 7.2], [10.5, 2.2], [15.6, 7.2]]), Rd, 1, 3);
+    S.paint(rect(5, 10.6, 16, 11.8), '#8d76c6', 1, 4);
+    S.paint(and(rect(9.2, 29, 11.8, 35), or((x, y) => y > 30.4, ell(10.5, 30.4, 1.3, 1.3))), '#8d76c6', 1, 4);
+    S.finish(Rd, [1, 2, 3, 4]);
+    return S.out();
+  },
+  ruinarch() {
+    // Ancient arch (rare): two weathered columns and a lintel, vines trailing down
+    const St = 'stone', V = '#7fcf62'; const S = Spr(37, 33);
+    S.paint(or(rect(4, 9, 10, 32.6), rect(27, 9, 33, 32.6)), St, 1, 0);
+    S.paint(or(rect(2.4, 30, 11.6, 32.6), rect(25.4, 30, 34.6, 32.6), rect(2.4, 7, 11.6, 9.4), rect(25.4, 7, 34.6, 9.4)), St, 1, 1);
+    S.paint(and(or(rect(1, 2, 36, 7.2), poly([[1, 2], [18.5, -0.6], [36, 2]])), (x, y) => y > 0), St, 1, 2);
+    S.erase(ell(30, 3, 3, 1.4));
+    S.tint((x, y, X) => X % 2 === 0, St, 0, [0]);
+    S.tint((x, y, X, Y) => hash(X, Y) % 9 === 0, St, 0, [1, 2]);
+    S.paint(or(chain([[7, 7], [6, 12], [8, 17], [7, 21]], 0.7), chain([[30, 7], [31.4, 11], [30, 15]], 0.7), chain([[20, 7], [21, 10]], 0.6)), V, 1, 3);
+    S.tint((x, y, X, Y) => (X + Y) % 3 === 0, V, 2, [3]);
+    S.rim([2], true, false);
+    S.finish(St, [1, 2, 3]);
+    return S.out();
+  },
+  giantclam() {
+    // Giant clam (rare): wavy blue-violet lips, open to show a big pearl
+    const Sh = '#e8dccc', L = '#5a8ae8', L2 = '#9a6ae0', P = '#fff6fb'; const S = Spr(35, 21);
+    S.paint(and(ell(17.5, 15, 17, 6.4), (x, y) => y > 12.6), Sh, 1, 0);
+    S.tint((x, y) => Math.sin(x * 0.9) > 0.3, Sh, 0, [0]);
+    S.paint((x, y) => x > 1.6 && x < 33.4 && y > 8 + Math.sin(x * 0.95) * 1.6 && y < 13.4 + Math.sin(x * 0.95) * 0.8, L, 1, 1);
+    S.tint((x, y, X, Y) => hash(X >> 1, Y) % 3 === 0, L2, 1, [1]);
+    S.tint((x, y, X, Y) => hash(X, Y) % 7 === 0, '#a8f0f0', 1, [1]);
+    S.paint(ell(17.5, 9.4, 3.2, 3.0), P, 1, 2);
+    S.finish(L, [1, 2]);
+    S.set(16.4, 8, [255, 255, 255]); S.set(17, 8, [255, 255, 255]);
+    return S.out();
+  },
+  piano() {
+    // Sunken piano (super rare): a little grand piano tilted in the sand, lid propped, seaweed on the legs
+    const Wd = '#4a3a5e', K1 = '#f8f2e8', M = '#7fcf62'; const S = Spr(41, 29); const a = -0.1, ox = 20, oy = 16;
+    S.paint(poly(rot([[3, 13], [26, 12.4], [37, 16.2], [37.6, 20], [3, 20.2]], ox, oy, a)), Wd, 1, 0);
+    S.paint(poly(rot([[8, 12.6], [33, 3.6], [34.6, 5.4], [26, 12.4]], ox, oy, a)), Wd, 2, 1);
+    S.paint(cap(...rot([[26, 12.4]], ox, oy, a)[0], ...rot([[30.4, 6]], ox, oy, a)[0], 0.5), '#e2b04a', 1, 2);
+    S.paint(poly(rot([[3, 17.8], [16, 17.6], [16, 20.2], [3, 20.2]], ox, oy, a)), K1, 1, 3);
+    S.tint((x, y, X, Y) => X % 2 === 0 && y < 18 + (X - 3) * -0.1 + 1.2, '#2a2432', 1, [3]);
+    S.paint(or(cap(...rot([[6, 20]], ox, oy, a)[0], 5.6, 28, 0.9), cap(...rot([[33, 20]], ox, oy, a)[0], 33.4, 27.4, 0.9)), Wd, 0, 4);
+    S.paint(or(chain([[6.6, 28], [5.4, 25], [7, 22]], 0.6), chain([[33.8, 27.6], [35, 24.6], [33.6, 22]], 0.6)), M, 1, 5);
+    S.rim([0], true, false);
+    S.finish(Wd, [1, 2, 3, 4, 5]);
+    return S.out();
+  },
+  grotto() {
+    // Glowing mushroom grotto (super rare): a mossy rock cave with softly glowing mushrooms
+    const Rk = '#8a86a8', In = '#3a3450', M = '#7fcf62', G1 = '#7ff0e8', G2 = '#ff9fd6'; const S = Spr(37, 29);
+    S.paint(or(ell(18.5, 18, 17.4, 11), rect(1, 18, 36, 28.6)), Rk, 1, 0);
+    S.paint(and(ell(18.5, 24, 7.6, 7.4), (x, y) => y < 28.6), In, 1, 1);
+    S.tint((x, y, X, Y) => S.part[(Y - 1) * S.W + X] === -1 && hash(X >> 1, Y) % 2 === 0, M, 1, [0]);
+    S.tint((x, y, X, Y) => hash(X, Y) % 8 === 0, Rk, 0, [0]);
+    const mush = (x, y, r, c) => { S.paint(cap(x, y, x, y - r * 1.4, 0.6), '#f4ecd8', 1, 2); S.paint(and(ell(x, y - r * 1.4, r, r * 0.8), (X, Y) => Y < y - r * 1.2), c, 2, 3); };
+    mush(14.6, 28, 2.2, G1); mush(19.6, 28, 3.0, G2); mush(23, 28, 1.8, G1); mush(5, 19, 1.8, G2); mush(31.4, 20, 2.0, G1);
+    S.rim([0], true, false);
+    S.finish(Rk, [1, 2, 3]);
+    return S.out();
+  },
 };
 
 
@@ -2880,6 +3267,20 @@ const PLANT_COLORS={
   pogostemon:{stem:'#c2416f',leaf:['#e86a9c','#ff95bd','#ffc6dc'],shape:'tall'},
   utricularia:{stem:'#4e9a3c',leaf:['#7cc94a','#a8e05a','#e2f58a'],shape:'bush'},
   marimo:   {stem:'#3a8f43',leaf:['#4fb35a','#6fcf6a','#9be58a'],shape:'ball'},
+  // v3.8
+  javafern:   {stem:'#2f6a3a',leaf:['#3a8a46','#58a85a','#8cc87a']},
+  hairgrass:  {stem:'#4e9a3c',leaf:['#5cb84a','#82d260','#b8ec8a']},
+  wisteria:   {stem:'#3f9a4a',leaf:['#62c45a','#8ad870','#c2f09a']},
+  rotala:     {stem:'#7aa84a',leaf:['#7cc45a','#a2d870','#d6f0a0'],tip:'#ff8fb0'},
+  ludwigia:   {stem:'#a8583a',leaf:['#c86a4a','#e88a5a','#ffb88a'],tip:'#ff6a5a'},
+  montecarlo: {stem:'#4e9a3c',leaf:['#6ccc4a','#94e060','#ccf590']},
+  watersprite:{stem:'#4a9a52',leaf:['#6ccf7a','#94e09a','#c8f4c8']},
+  bacopa:     {stem:'#3f8a46',leaf:['#58b058','#7cc86a','#b0e490']},
+  sagittaria: {stem:'#4e9a3c',leaf:['#6ccc5a','#94e070','#c8f49a']},
+  madagascar: {stem:'#4a6a3a',leaf:['#5a8a4a','#7aaa5a','#a8cc7a']},
+  pinnatifida:{stem:'#7a4a3a',leaf:['#8a5a3a','#b07a4a','#d8a870']},
+  eriocaulon: {stem:'#5a9a4a',leaf:['#9ad870','#bce890','#e6f8c0']},
+  ghostlotus: {stem:'#5a8a6a',leaf:['#9ac8a8','#c0e0c8','#eef8f0'],flower:['#ffffff','#ffd6ea']},
 };
 
 // Pre-rendered sprite images: pixels are painted once, then blitted with drawImage every frame
@@ -3337,6 +3738,16 @@ const CREATURE_CONFIG={
   starfish:  {sc:2, speedX:0.01, speedY:0,    yMin:73, yMax:75, wobble:false, static:true },
   jellyfish: {sc:2, speedX:0.03, speedY:0.05, yMin:10, yMax:65, wobble:true,  static:false},
   octopus:   {sc:2, speedX:0.08, speedY:0.05, yMin:50, yMax:74, wobble:true,  static:false},
+  amano:     {sc:2, speedX:0.10, speedY:0.06, yMin:65, yMax:75, wobble:true,  static:false},
+  mysterysnail:{sc:2,speedX:0.02, speedY:0,    yMin:73, yMax:75, wobble:false, static:true },
+  hermit:    {sc:2, speedX:0.05, speedY:0,    yMin:71, yMax:75, wobble:false, static:false},
+  urchin:    {sc:2, speedX:0.008,speedY:0,    yMin:73, yMax:75, wobble:false, static:true },
+  anemone:   {sc:2, speedX:0.002,speedY:0,    yMin:73, yMax:75, wobble:false, static:true },
+  pistol:    {sc:2, speedX:0.07, speedY:0,    yMin:71, yMax:75, wobble:false, static:false},
+  nudibranch:{sc:2, speedX:0.015,speedY:0,    yMin:73, yMax:75, wobble:false, static:true },
+  mantis:    {sc:2, speedX:0.07, speedY:0,    yMin:71, yMax:75, wobble:false, static:false},
+  dumbo:     {sc:2, speedX:0.04, speedY:0.04, yMin:35, yMax:68, wobble:true,  static:false},
+  combjelly: {sc:2, speedX:0.025,speedY:0.04, yMin:10, yMax:60, wobble:true,  static:false},
 };
 function getCreatureScale(id){return ART_SC;}
 
@@ -3696,6 +4107,20 @@ const PLANT_FORM={
   cabomba:    {type:'feather',hMul:0.9},
   hornwort:   {type:'feather',hMul:0.85},
   marimo:     {type:'ball'},
+  // v3.8
+  javafern:   {type:'leaves',n:[4,6],hMul:0.7,pet:0.06,wid:0.10,spread:0.7},
+  hairgrass:  {type:'blades',n:[8,11],hMul:0.32},
+  wisteria:   {type:'feather',hMul:0.8},
+  rotala:     {type:'stems',n:[3,5],hMul:0.85,leafLen:2,tipFrom:0.65},
+  ludwigia:   {type:'stems',n:[3,4],hMul:0.75,leafLen:3,tipFrom:0.5},
+  montecarlo: {type:'mound',hMul:0.14,wMul:2.4},
+  watersprite:{type:'leaves',n:[5,7],hMul:0.6,pet:0.2,wid:0.16,spread:1.0},
+  bacopa:     {type:'stems',n:[3,4],hMul:0.8,leafLen:2,tipFrom:0.95},
+  sagittaria: {type:'blades',n:[5,7],hMul:0.42},
+  madagascar: {type:'leaves',n:[5,7],hMul:0.6,pet:0.2,wid:0.2,spread:1.1,lace:true},
+  pinnatifida:{type:'leaves',n:[5,7],hMul:0.4,pet:0.12,wid:0.16,spread:1.3,spots:true},
+  eriocaulon: {type:'leaves',n:[11,14],hMul:0.3,pet:0.02,wid:0.06,spread:1.5},
+  ghostlotus: {type:'leaves',n:[4,5],hMul:0.32,pet:0.4,wid:0.22,spread:1.2,bloom:true},
 };
 function plantRng(seed){let s=(Math.floor(seed*99991)|0)^0x5bd1e995;return()=>{s=(s+0x6D2B79F5)|0;let t=Math.imul(s^(s>>>15),1|s);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
 
@@ -3724,6 +4149,23 @@ function drawPlantShape(ctx,p,t,baseY,sc,h,cx){
         const c=f<0.12?pc.stem:f>0.86?pc.leaf[2]:pc.leaf[shade?0:1];
         cell(x,baseY-y-sc,c);
         if(form.tips&&f>0.6&&((y/sc)|0)%3===0){cell(x-sc,baseY-y-sc,pc.leaf[2]);cell(x+sc,baseY-y-sc,pc.leaf[1]);}
+      }
+    }
+    return;
+  }
+
+  if(form.type==='stems'){
+    const n=form.n[0]+Math.floor(R()*(form.n[1]-form.n[0]+1));
+    for(let i=0;i<n;i++){
+      const sh=ph*(0.6+0.4*R());const off=(i-(n-1)/2)*U*1.7;const lean=(R()-0.5)*0.25;
+      for(let y=0;y<sh;y+=sc){
+        const f=y/sh;const x=cx+off+lean*y+sway(f,i*0.8);const top=f>(form.tipFrom||0.7);
+        cell(x,baseY-y-sc,f<0.1||!top?pc.stem:(pc.tip||pc.leaf[2]));
+        if(((y/sc)|0)%2===1&&f>0.08){
+          const L=(form.leafLen||2)*sc*(f>0.85?0.6:1);
+          const c=top?(pc.tip||pc.leaf[2]):pc.leaf[((y/sc)|0)%4===1?1:0];
+          for(let k=sc;k<=L;k+=sc){cell(x-k,baseY-y-sc,c);cell(x+k,baseY-y-sc,c);}
+        }
       }
     }
     return;
@@ -3769,20 +4211,28 @@ function drawPlantShape(ctx,p,t,baseY,sc,h,cx){
         if(vertical){
           const hw=w/Math.max(0.55,Math.cos(a));
           const x0=g(px-hw),x1=g(px+hw),xm=g(px);
-          ctx.fillStyle=lite;ctx.fillRect(x0,g(py-sc),Math.max(sc,xm-x0),sc);
-          ctx.fillStyle=dark;ctx.fillRect(xm,g(py-sc),Math.max(sc,x1-xm),sc);
+          if(form.lace&&((s/(sc*0.8))|0)%2===0){cell(x0,py-sc,lite);cell(x1-sc,py-sc,dark);}
+          else{ctx.fillStyle=lite;ctx.fillRect(x0,g(py-sc),Math.max(sc,xm-x0),sc);
+          ctx.fillStyle=dark;ctx.fillRect(xm,g(py-sc),Math.max(sc,x1-xm),sc);}
           if(u>0.15&&u<0.9)cell(px,py-sc,pc.stem);
         } else {
           const hh=w/Math.max(0.55,Math.abs(Math.sin(a)));
           const y0=g(py-hh),y1=g(py+hh),ym=g(py);
-          ctx.fillStyle=lite;ctx.fillRect(g(px),y0-sc,sc,Math.max(sc,ym-y0));
-          ctx.fillStyle=dark;ctx.fillRect(g(px),ym-sc,sc,Math.max(sc,y1-ym));
+          if(form.lace&&((s/(sc*0.8))|0)%2===0){cell(px,y0-sc,lite);cell(px,y1-sc*2,dark);}
+          else{ctx.fillStyle=lite;ctx.fillRect(g(px),y0-sc,sc,Math.max(sc,ym-y0));
+          ctx.fillStyle=dark;ctx.fillRect(g(px),ym-sc,sc,Math.max(sc,y1-ym));}
           if(u>0.15&&u<0.9)cell(px,py-sc,pc.stem);
         }
         if(u>0.92)cell(px,py-sc,pc.leaf[2]);
         if(form.spots&&u>0.2&&u<0.85&&R()<0.12)cell(px+(R()-0.5)*w,py-sc,pc.stem);
       }
     });
+    if(form.bloom){
+      const fh=ph*1.15;for(let y=0;y<fh;y+=sc)cell(cx+sway(y/fh,9)*0.5,baseY-y-sc,pc.stem);
+      const fx=cx+sway(1,9)*0.5,fy=baseY-fh-sc,P=pc.flower||['#ffffff','#ffd6ea'];
+      [[-2,0],[2,0],[0,-2],[-1,-1],[1,-1],[-1,0],[1,0],[0,-1],[-2,-1],[2,-1],[-1,-2],[1,-2]].forEach(([dx,dy])=>cell(fx+dx*sc,fy+dy*sc,(Math.abs(dx)===2||dy===-2)?P[0]:P[1]));
+      cell(fx,fy-sc,'#ffd84a');
+    }
     return;
   }
 
@@ -4160,6 +4610,17 @@ function drawTank(){
         for(let i=0;i<4;i++){const s2=i%2?2:4;ctx.fillStyle=i%2?'rgba(255,212,90,0.85)':'rgba(255,122,82,0.75)';ctx.fillRect(Math.round((vx+Math.sin(t*2+i*1.5)*6)/2)*2,Math.round((vy-spriteH-((t*22+i*14)%(spriteH*0.5)))/2)*2,s2,s2);}
       });
     }
+    // v3.8: bubbles rising from the bubble clam, a soft glow on the grotto's mushrooms and the lighthouse lamp
+    (S.decos||[]).forEach(dd=>{
+      if(dd.id!=='bubbleclam'&&dd.id!=='grotto'&&dd.id!=='lighthouse')return;
+      const sc=ART_SC,img=decoImg(dd.id),bx=Math.round(dd.x*W/2)*2,by=flY+Math.round((dd.d||0.5)*(H-flY)*0.55);
+      const x0=bx-img.width/2,y0=by-img.height+sc*2;
+      ctx.save();
+      if(dd.id==='bubbleclam'){for(let i=0;i<3;i++){const k=(t*0.35+i/3+(dd.x*7))%1;const x=Math.round((x0+12.5*sc+Math.sin(t*1.6+i*2)*sc*1.5)/sc)*sc,y=Math.round((y0+9*sc-k*sc*26)/sc)*sc;ctx.globalAlpha=0.8*(1-k);ctx.fillStyle='#ffffff';ctx.fillRect(x,y-sc,sc,sc);ctx.fillRect(x-sc,y,sc,sc);ctx.fillRect(x+sc,y,sc,sc);ctx.fillRect(x,y+sc,sc,sc);}}
+      else if(dd.id==='grotto'){ctx.globalAlpha=0.25+0.2*Math.sin(t*1.4);[[14.6,24,'#7ff0e8'],[19.6,22,'#ff9fd6'],[23,25,'#7ff0e8'],[5,16,'#ff9fd6'],[31.4,17,'#7ff0e8']].forEach(([mx,my,c])=>{ctx.fillStyle=c;ctx.fillRect(Math.round(x0+mx*sc-sc*2),Math.round(y0+my*sc-sc*2),sc*4,sc*3);});}
+      else{ctx.globalAlpha=0.28+0.18*Math.sin(t*1.1);ctx.fillStyle='#ffe07a';ctx.fillRect(Math.round(x0+3*sc),Math.round(y0+6*sc),sc*15,sc*6);}
+      ctx.restore();
+    });
     // Crystal shimmer
     if(S.decos&&S.decos.some(d=>d.id==='crystal')){
       S.decos.filter(d=>d.id==='crystal').forEach(cd=>{
@@ -4286,7 +4747,7 @@ function drawTank(){
 
           // ── SOCIAL: ANEMONE — clownfish orbits nearest coral deco ──
           if(cfg.social==='anemone'&&S.decos&&S.decos.length){
-            const coral=S.decos.find(d=>d.id==='brain_coral'||d.id==='fan_coral');
+            const coral=S.decos.find(d=>d.id==='brain_coral'||d.id==='fan_coral'||d.id==='staghorn');
             if(coral){
               if(a.homeDecoX===null)a.homeDecoX=coral.x*100;
               const orbitR=8;const angle=t*0.8+a.wobble;
@@ -4554,6 +5015,9 @@ function renderDaily(){
 
 /* ── Collection book ── */
 const BOOK_FACTS={
+  amano:'Amano shrimp were made famous by a Japanese aquarium gardener, Takashi Amano.',mysterysnail:'Mystery snails breathe through a little snorkel tube.',hermit:'Hermit crabs move house when they outgrow their shell.',urchin:'Sea urchins walk on hundreds of tiny tube feet.',anemone:'Clownfish hide in anemones without getting stung.',pistol:'A pistol shrimp’s snap is one of the loudest sounds in the sea.',nudibranch:'Some nudibranchs borrow colours from the food they eat.',mantis:'Mantis shrimp can see colours we can’t even imagine.',dumbo:'Dumbo octopuses live deeper than almost any other octopus.',combjelly:'Comb jellies don’t glow — their combs bend light into rainbows.',
+  javafern:'Java fern grows on wood and rocks, not in the sand.',hairgrass:'Dwarf hairgrass slowly spreads into a soft lawn.',wisteria:'Water wisteria grows different leaf shapes above and below water.',rotala:'Rotala turns pinker when it gets lots of light.',ludwigia:'Red ludwigia’s leaves blush deeper red under bright light.',montecarlo:'Monte Carlo was first found in Argentina.',watersprite:'Water sprite can float on the surface or grow in sand.',bacopa:'Bacopa leaves smell a little like lemon when crushed.',sagittaria:'Dwarf sagittaria sends out runners to make new tufts.',madagascar:'Madagascar lace leaves are see-through, like a net.',pinnatifida:'Pinnatifida can grow on rocks as well as in sand.',eriocaulon:'Eriocaulon is also called pipewort.',ghostlotus:'Water lilies close their flowers at night.',
+  driftarch:'Driftwood can travel the oceans for years.',bubbleclam:'Clams filter the water as they breathe.',diverhelmet:'Old diving helmets were made of copper and brass.',mossylog:'Fallen logs become homes for all kinds of water life.',staghorn:'Staghorn coral is one of the fastest-growing corals.',seaglass:'Sea glass is tumbled smooth by waves over many years.',teapot:'Every fish loves a cosy little house.',cairn:'People stack cairns to mark a path.',anchor:'Anchors are often painted to keep off the rust.',lighthouse:'Lighthouses used to have keepers living inside.',ruinarch:'Some ancient harbours now lie underwater.',giantclam:'Giant clams can live for over a hundred years.',piano:'Sound travels four times faster in water than in air.',grotto:'Some mushrooms really do glow in the dark.',
   molly:'Mollies can live in fresh, brackish or even salty water.',platy:'Platies come in dozens of colours, all bred from the same wild fish.',cherrybarb:'Male cherry barbs turn a deeper red when they show off.',cory:'Corydoras dart up for a gulp of air, then sink back down.',rasbora:'Harlequin rasboras lay their eggs on the underside of leaves.',gourami:'Gouramis breathe air from the surface with a special organ.',ram:'Rams dig little pits in the sand for their babies.',puffer:'Pea puffers are the smallest pufferfish — about the size of a pea.',tang:'Blue tangs turn a paler blue while they sleep.',mandarin:'Mandarin dragonets are one of very few animals with true blue colour.',koi:'Koi can live for decades — some for more than a hundred years.',lionfish:'Lionfish use their fan fins to gently herd food into a corner.',seadragon:'Leafy sea dragon dads carry the eggs under their tails.',sunfish:'Ocean sunfish are the heaviest bony fish in the world.',
   guppy:'Guppies give birth to live babies — no eggs needed.',betta:'Male bettas blow bubble nests at the surface.',neon:'The glowing stripe helps the school stay together in dark water.',goldfish:'Goldfish remember things for months, not seconds.',angel:'Angelfish pairs often stay together for life.',pleco:'Plecos scrape algae off glass with a sucker mouth.',discus:'Discus parents feed their babies a special slime from their skin.',zebra:'Zebra danios are tough, quick and love to chase each other.',clown:'Clownfish are all born male; the biggest one becomes female.',arowana:'Arowanas can leap out of the water to snatch insects.',axolotl:'Axolotls can regrow lost legs — even parts of their heart.',seahorse:'Seahorse dads carry the eggs in a pouch.',manta:'Mantas have one of the biggest brains of any fish.',dragon:'Dragon gobies dig burrows in soft mud.',
   shrimp:'Cherry shrimp pick at algae and biofilm all day long.',snail:'Nerite snail eggs only hatch in slightly salty water.',crab:'Male fiddler crabs wave one giant claw to show off.',crayfish:'Crayfish shed their whole shell as they grow.',turtle:'Turtles can feel touch through their shells.',frog:'African dwarf frogs never leave the water.',eel:'Fire eels bury themselves in sand with just their heads out.',starfish:'A starfish can regrow a lost arm.',jellyfish:'Moon jellies have no brain, heart or bones.',octopus:'An octopus has three hearts and blue blood.',
@@ -4786,7 +5250,8 @@ const PERS_TXT={
 };
 const SNACK_COST=5,PLAY_REST=20*60000;
 // favourite decoration and plant: fixed per fish, found out by spending time with it
-function likesOf(f){let h=Math.imul((f.uid|0)+97,2654435761)^Math.imul((f.id||'').length+7,40503);h=Math.imul(h^(h>>>15),2246822519)>>>0;return{deco:DECO_DEF[h%DECO_DEF.length].id,plant:PLANTS_DEF[(h>>>9)%PLANTS_DEF.length].id};}
+const LIKES_V38=Date.UTC(2026,10,5);// fish from before v3.8 keep their old favourites (14 decorations, 13 plants back then)
+function likesOf(f){let h=Math.imul((f.uid|0)+97,2654435761)^Math.imul((f.id||'').length+7,40503);h=Math.imul(h^(h>>>15),2246822519)>>>0;const old=(f.born||0)<LIKES_V38,nd=old?14:DECO_DEF.length,np=old?13:PLANTS_DEF.length;return{deco:DECO_DEF[h%nd].id,plant:PLANTS_DEF[(h>>>9)%np].id};}
 function likesInTank(f){const L=likesOf(f);return(S.decos||[]).some(d=>d.id===L.deco)||(S.plantSeeds||[]).some(p=>p.id===L.plant);}
 
 // ── pixel hearts ──
@@ -5860,8 +6325,8 @@ EVENTS[1].push(
 );
 
 // fish and decorations
-const HIDE_IN=['castle','sunken','pagoda','lava_rock','dragon_stone','spider_wood','mermaid'];
-const REST_BY=['conch','brain_coral','fan_coral','seiryu','crystal','treasure'];
+const HIDE_IN=['castle','sunken','pagoda','lava_rock','dragon_stone','spider_wood','mermaid','driftarch','mossylog','teapot','ruinarch','grotto'];
+const REST_BY=['conch','brain_coral','fan_coral','seiryu','crystal','treasure','bubbleclam','diverhelmet','staghorn','seaglass','cairn','anchor','lighthouse','giantclam','piano'];
 // a spot inside / beside a decoration; 'deep' lets a fish swim lower than it usually would to get there
 function decoSpot(d,cfg,frac){
   const g=tankGeo();const img=decoImg(d.id,ART_SC);
@@ -6391,6 +6856,14 @@ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostnam
 </body>
 </html>
 <!-- v1.1 更新内容：1.背景音乐循环时间加倍(32→64拍)，tempo放慢(0.48→0.72)，加入低通滤波、和弦衬底和水泡ping，营造水底悠闲感。2.鱼食面积缩小(radius 4→2)，掉落速度减慢至原来的30%(vy/vx/gravity均×0.3)。3.初始不自动生成植物，植物只能从商店购买。4.全部decoration重新绘制，像素网格扩大约2倍，增加更多细节(阴影、高光、纹理、苔藓、锈迹等)，预览画布扩大至56×56。5.鱼会随机游向附近的装饰物进行互动(靠近调查行为)。-->
+<!-- v3.8 更新内容（内容翻倍·第二批：小生物、水草、装饰）：
+1. 新增 10 种小生物（共 20）：大和藻虾、神秘螺、寄居蟹、海胆、海葵、枪虾；★ 海蛞蝓、螳螂虾；★★ 小飞象章鱼、栉水母。
+2. 新增 13 种水草（共 26）：铁皇冠、牛毛毡、水罗兰、红宫廷、红丁香、天胡荽、水芹、过长沙、矮慈姑；★ 网草、羽裂水蓑衣；★★ 谷精草、白睡莲（会开花）。
+3. 新增 14 种装饰（共 28）：沉木拱门、冒泡的蚌、潜水头盔、长苔的倒木、鹿角珊瑚、海玻璃、茶壶小屋、鹅卵石堆、船锚、小灯塔；★ 古代石拱、大砗磲；★★ 水底钢琴、发光蘑菇洞。
+4. 冒泡的蚌会冒泡，蘑菇洞和小灯塔会微微发光；鱼会躲进新的拱门、倒木、茶壶屋、石拱和蘑菇洞，也会在其他新装饰旁边休息；小丑鱼也会绕着鹿角珊瑚游。
+5. 图鉴从 65 种变成 102 种，每样都有一句小知识。
+6. 已经养着的鱼"喜欢的东西"保持不变；新买的鱼会喜欢新的装饰和水草。
+-->
 <!-- v3.7 更新内容（内容翻倍·第一批：鱼）：
 1. 新增 14 种鱼，鱼从 14 种变成 28 种：
    普通：茉莉鱼、月光鱼、樱桃灯、熊猫鼠鱼、三角灯；少见：蜜丝丽丽、荷兰凤凰、豆豆河豚、蓝倒吊；
