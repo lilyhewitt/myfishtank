@@ -4,8 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>My Aquarium</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#eff8fa">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="My Aquarium">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap');
+@font-face{font-family:'VT323';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/vt323-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
+@font-face{font-family:'Press Start 2P';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/press-start-2p-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;}
 *{box-sizing:border-box;margin:0;padding:0;image-rendering:pixelated;}
 /* v2.5 — light "Tamagotchi colour" theme: cream page, white toy-like cards, candy accents */
 :root{
@@ -5994,7 +6003,7 @@ function starterTank(){
 }
 
 // change the colour scheme while playing
-function applyUIPal(id){const was=curTheme();UIPAL.set(id);_bgCache.key='';_petBg=null;_stripSig='';renderStrip();drawTank();if(petUid!=null)renderPet(true);if(SND.music&&curTheme()!==was)startBGM();}
+function applyUIPal(id){const was=curTheme();UIPAL.set(id);_bgCache.key='';_petBg=null;_stripSig='';renderStrip();drawTank();if(petUid!=null)renderPet(true);if(SND.music&&curTheme()!==was)startBGM();syncThemeColor();}
 
 /* ═══════════════════════════════════════════════════════════
    INIT
@@ -6017,10 +6026,23 @@ setTimeout(gameLoop,500);
 let _rsT=null;window.addEventListener('resize',()=>{clearTimeout(_rsT);_rsT=setTimeout(drawTank,200);});
 // save when the app goes to the background so "time away" is accurate
 document.addEventListener('visibilitychange',()=>{if(document.hidden)sv();});
+
+/* v3.5 — home-screen app: the page colour for the phone's top bar, and the offline copy */
+function syncThemeColor(){try{const m=document.querySelector('meta[name="theme-color"]');if(m&&window.UIPAL)m.content=UIPAL.swatch(UIPAL.current())[0];}catch(e){}}
+syncThemeColor();
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost'))window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>
 </html>
 <!-- v1.1 更新内容：1.背景音乐循环时间加倍(32→64拍)，tempo放慢(0.48→0.72)，加入低通滤波、和弦衬底和水泡ping，营造水底悠闲感。2.鱼食面积缩小(radius 4→2)，掉落速度减慢至原来的30%(vy/vx/gravity均×0.3)。3.初始不自动生成植物，植物只能从商店购买。4.全部decoration重新绘制，像素网格扩大约2倍，增加更多细节(阴影、高光、纹理、苔藓、锈迹等)，预览画布扩大至56×56。5.鱼会随机游向附近的装饰物进行互动(靠近调查行为)。-->
+<!-- v3.5 更新内容（可以添加到主屏幕当 app 用）：
+1. 加了 manifest.webmanifest、sw.js、icons/、fonts/ 四样东西，和 index.html 放在同一个文件夹。
+2. 用 Safari / Chrome 打开网址 → 添加到主屏幕，会有一个像素金鱼图标；点开是全屏的，像 app 一样。
+3. 第一次打开后，游戏、字体和图标都存在手机里，断网也能玩；有网时自动拿最新版。
+4. 两个像素字体（VT323、Press Start 2P，开源 OFL 字体）放进了 fonts/，不再从 Google 联网加载。
+5. 手机顶部状态栏的颜色跟着当前主题走。
+6. 游戏内容和 v3.4 一样。
+-->
 <!-- v3.4 更新内容（像素图标）：
 1. 游戏里所有系统表情（🐟🍞📷🏆…）都换成了自己画的像素图标，一共 76 个，画法和鱼一样：12×12 像素，描边只比本身颜色深一档，左上浅、右下深，再点一两颗高光。
 2. 大小：按钮和标签里放大 1.5 倍；Feed 按钮 2 倍；商店设备图 3 倍；夹在文字里的跟文字差不多大。
