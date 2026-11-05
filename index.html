@@ -379,6 +379,20 @@ body.arranging #tank-btns{display:none;}
 .item .pv .ico .pxi{width:36px;height:36px;vertical-align:middle;}
 .made-by{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0 0;font-size:15px;color:var(--muted);}
 .made-by img{width:54px;height:20px;image-rendering:pixelated;}
+.game-title{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;cursor:default;}
+.game-title.egg-hop{animation:egghop .24s steps(2);}
+@keyframes egghop{50%{transform:translateY(-2px);}}
+.ftag-shiny{background:#fff6d6;color:#b07c10;}
+.bk{position:relative;}.bk .shn{position:absolute;top:2px;right:3px;font-size:12px;line-height:1;}
+.bd-shiny{display:flex;align-items:center;gap:6px;margin-top:6px;font-size:13px;color:var(--muted);}
+.sh-it.egg{background:#effaf6;border-color:#9fdcc9;border-style:dashed;}.sh-it.egg img{width:48px;}
+.tr-ic.stk{width:84px;}
+.ann-card{border-color:#9fdcc9;background:#fffdf6;}
+.ann-pv{display:flex;justify-content:center;margin:2px 0 0;}
+.ann-y{font-family:var(--pfont);font-size:10px;letter-spacing:2px;color:var(--pink);margin:4px 0 2px;}
+.ann-t{font-size:19px;text-align:left;line-height:1.22;}
+.note-row.ann{border-color:#9fdcc9;background:#f3fbf8;}
+html[data-pal="handheld"] img,html[data-pal="handheld"] canvas:not(#TC):not(.ps-cv){filter:grayscale(1) sepia(1) hue-rotate(118deg) saturate(.55);}
 </style>
 <script>
 /* ═══════════════════════════════════════════════════════════
@@ -406,6 +420,10 @@ const PALS=[
   {id:'milk',name:'Milk Glass',desc:'Frosted white and pale sage. Very quiet.',
     v1:true,fam:{paper:{h:110,s:.07},ink:{h:170,s:.10},accent:{h:168,s:.17,ld:2.0},primary:{h:165,s:.22},secondary:{h:190,s:.16},warm:{h:40,s:.32},alert:{h:8,s:.32},water:{h:176,s:.16,dl:.02}},sand:{top:'#efefeb',bot:'#e3e3de',dk:'#d5d5cf',lt:'#f9f9f6'}},
   {id:'candy',name:'Candy',desc:'The original sweet pastel colours.',fam:null},
+  // secret (tap the title 7 times): every colour is pressed down to four sea-glass greens
+  {id:'handheld',name:'Handheld',desc:'Four sea-glass greens, like an old pocket game.',hidden:true,gb:['#e6f7f0','#8fd3c3','#3a8a86','#123238'],
+    fam:{paper:{h:160,s:.4},ink:{h:190,s:.5},accent:{h:176,s:.4},primary:{h:176,s:.4},secondary:{h:176,s:.4},warm:{h:176,s:.4},alert:{h:176,s:.4},water:{h:166,s:.4}},
+    sand:{top:'#e6f7f0',bot:'#8fd3c3',dk:'#8fd3c3',lt:'#e6f7f0'}},
 ];
 const DEFAULT_PAL='lagoon';
 const ORIG_WATER=[[0,'#d6f6f3'],[0.3,'#c4f0f0'],[0.75,'#ade6ec'],[1,'#a2e0ea']];
@@ -426,8 +444,16 @@ function _role(h,s,l){
   if(h<170)return'primary';
   return'secondary';
 }
+function gbRGB(r,g,b,P,forceRole){
+  const G=P._g||(P._g=P.gb.map(_h2r));
+  for(const c of G)if(c[0]===r&&c[1]===g&&c[2]===b)return[r,g,b];
+  const[h,s,l]=_rgb2hsl(r,g,b);const role=forceRole||_role(h,s,l);
+  const k=role==='paper'?0:role==='ink'?3:role==='water'?(l>0.8?0:1):role==='gray'?(l>=0.9?0:l>=0.72?1:l>=0.4?2:3):(l>=0.9?0:l>=0.7?1:l>=0.36?2:3);
+  return G[k].slice();
+}
 function palRGB(r,g,b,P,forceRole){
   if(!P||!P.fam)return[r,g,b];
+  if(P.gb)return gbRGB(r,g,b,P,forceRole);
   const[h,s,l]=_rgb2hsl(r,g,b);const role=forceRole||_role(h,s,l);const T=P.fam[role];
   if(!T)return[r,g,b];
   let s2,l2=l;
@@ -964,7 +990,7 @@ function openSound(){
     +'<div class="snd-row"><span>Music</span><button class="snd-tg" data-t="music"></button></div>'
     +'<div class="snd-row"><span>Sound effects</span><button class="snd-tg" data-t="sfx"></button></div>'
     +'<div class="snd-lbl">Theme — tap to try</div>'
-    +'<div class="snd-packs" data-nopal>'+UIPAL.list.map(p=>'<button class="snd-pack pal-pick" data-pal="'+p.id+'"><span class="th-top"><b>'+p.name+'</b><small>♪ '+(THEME_MUSIC[p.id]||'')+'</small></span><span class="pal-sw">'+UIPAL.swatch(p).map(c=>'<i style="background:'+c+'"></i>').join('')+'</span></button>').join('')+'</div>'
+    +'<div class="snd-packs" data-nopal>'+UIPAL.list.filter(p=>!p.hidden||(S.eggs||{}).gb||UIPAL.current().id===p.id).map(p=>'<button class="snd-pack pal-pick" data-pal="'+p.id+'"><span class="th-top"><b>'+p.name+'</b><small>♪ '+(THEME_MUSIC[p.id]||'')+'</small></span><span class="pal-sw">'+UIPAL.swatch(p).map(c=>'<i style="background:'+c+'"></i>').join('')+'</span></button>').join('')+'</div>'
     +'<button class="btn" id="snd-close">Done</button>'
     +'<div class="made-by" data-nopal><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAKCAYAAABFXiVrAAAA+UlEQVR4XmNgwAGEjCz+45LDB0jWB9LQf/nwfxANw4QsgKmD6cOmnhEkCFL47twJOPvK0R0YanWsPRhgapABSG/twm4M9c3xpXD1MPOZYIrRvS/JwY9iAMgB6GqwWRSuoovhGJheJpgMyHXIhj3/8RGuCeQrEEC2ENkikC9gYOWdy3A2SA1yKMGDDhYU6C5DB7DgxOYrdAAzC6aHBd2FzVAfoAOQi7E5ZPX2wwxrcrOwOgpmFsh3OtYeiGBEjlBsAGQRciIBJRaQnlBPW5wJFaQGFgUgwALVBE+NuAC21AjTy4AlNcIA1EKw+eA4QwfYMia2ZA8DxKoHAHZbpFNOFnSbAAAAAElFTkSuQmCC"><span>made by Twodee</span></div>');
   const refresh=()=>{bg.querySelectorAll('.snd-tg').forEach(b=>{const on=SND[b.dataset.t];b.textContent=on?'ON':'OFF';b.classList.toggle('on',on);});bg.querySelectorAll('.pal-pick').forEach(b=>b.classList.toggle('on',b.dataset.pal===UIPAL.current().id));};
@@ -1291,9 +1317,9 @@ function K(hex) { if (KC[hex]) return KC[hex]; const b = kawaii(hex); const [h, 
   return (KC[hex] = [hsl2rgb([hueToward(h, 260, 9), Math.min(1, s * 1.02), l * 0.86]), b, hsl2rgb([hueToward(h, 55, 6), s * 0.85, l + (1 - l) * 0.42])]); }
 // bean eyes (Tamagotchi-style): k = outline-black, h = highlight; '.' keeps body
 const BEAN = {
-  3: { normal: ['.k.', 'khk', 'kkk', '.k.'], blink: ['...', '...', 'kkk', '...'], happy: ['...', '.k.', 'k.k', '...'], sleepy: ['...', 'k.k', '.k.', '...'], scared: ['kkk', 'khk', 'kkk', 'kkk'], hungry: ['.k.', 'khk', 'kkk', '.k.'] },
-  4: { normal: ['.kk.', 'khkk', 'kkkk', 'kkkk', '.kk.'], blink: ['....', '....', 'kkkk', '....', '....'], happy: ['....', '.kk.', 'k..k', '....', '....'], sleepy: ['....', 'k..k', '.kk.', '....', '....'], scared: ['kkkk', 'khkk', 'kkkk', 'kkkk', 'kkkk'], hungry: ['.kk.', 'khkk', 'kkkk', 'kkkk', '.kk.'] },
-  2: { normal: ['hk', 'kk', 'kk'], blink: ['..', 'kk', '..'], happy: ['..', 'kk', 'k.'], sleepy: ['..', 'kk', '..'], scared: ['hk', 'kk', 'kk'], hungry: ['hk', 'kk', 'kk'] },
+  3: { normal: ['.k.', 'khk', 'kkk', '.k.'], blink: ['...', '...', 'kkk', '...'], happy: ['...', '.k.', 'k.k', '...'], sleepy: ['...', 'k.k', '.k.', '...'], scared: ['kkk', 'khk', 'kkk', 'kkk'], hungry: ['.k.', 'khk', 'kkk', '.k.'], dizzy: ['k.k', '.k.', 'k.k', '...'] },
+  4: { normal: ['.kk.', 'khkk', 'kkkk', 'kkkk', '.kk.'], blink: ['....', '....', 'kkkk', '....', '....'], happy: ['....', '.kk.', 'k..k', '....', '....'], sleepy: ['....', 'k..k', '.kk.', '....', '....'], scared: ['kkkk', 'khkk', 'kkkk', 'kkkk', 'kkkk'], hungry: ['.kk.', 'khkk', 'kkkk', 'kkkk', '.kk.'], dizzy: ['.kk.', 'k..k', 'k.kk', 'k...', '.kkk'] },
+  2: { normal: ['hk', 'kk', 'kk'], blink: ['..', 'kk', '..'], happy: ['..', 'kk', 'k.'], sleepy: ['..', 'kk', '..'], scared: ['hk', 'kk', 'kk'], hungry: ['hk', 'kk', 'kk'], dizzy: ['k.', '.k', 'k.'] },
 };
 
 function gen(spec, opt = {}) {
@@ -3342,6 +3368,7 @@ function fitPreview(kind,id,W,H,sc,o){
   while(kind!=='p'&&ps>1&&(t.width>W||t.height>H)){ps--;t=previewSrc(kind,id,ps,Object.assign({W,H},o));}
   const c=document.createElement('canvas');c.width=W;c.height=H;
   c.style.width=W+'px';c.style.height=H+'px';c.style.imageRendering='pixelated';c.style.display='block';
+  if(o.shiny)t=shinyOf(t,id);
   const x=c.getContext('2d');x.imageSmoothingEnabled=false;
   const bottom=o.bottom!=null?o.bottom:(kind==='d'||kind==='p'||(kind==='c'&&!!CREATURES_DEF.find(d=>d.id===id)?.benthic));
   let w=t.width,h=t.height;
@@ -3393,6 +3420,8 @@ function ld(){
   const _now=Date.now();
   const _base=S.lastSeen||_now;(S.fish||[]).forEach(f=>{if(!f.born)f.born=_base-(f.age||0)*3600000;if(f.joy==null)f.joy=70;});
   if(!S.lastDate)S.lastDate=todayStr();
+  // v3.9: the day this tank was started (older saves: counted back from the day number and the oldest fish)
+  if(!S.startTs&&!window._freshGame){const b=(S.fish||[]).map(f=>f.born||_now);S.startTs=Math.min(_now-((S.day||1)-1)*86400000,...b);}
   if(S._waterChangeCooldown>0&&!S.waterReadyAt)S.waterReadyAt=_now+Math.min(12,S._waterChangeCooldown*4)*3600000;
   delete S._waterChangeCooldown;
 }
@@ -3707,7 +3736,7 @@ function renderMarket(){
       const id=this.dataset.fish;const cat=FISH_DEF.find(f=>f.id===id);
       if(!cat||S.coins<cat.price||S.fish.length>=cap)return;
       coin(-cat.price);const name=NAMES[Math.floor(Math.random()*NAMES.length)];
-      S.fish.push({id,name,health:100,hunger:100,joy:75,born:Date.now(),age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});
+      S.fish.push({id,name,health:100,hunger:100,joy:75,born:Date.now(),age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});newFishEgg(S.fish[S.fish.length-1]);
       S.totalFishBought=(S.totalFishBought||0)+1;addXP(5);sv();
       showAl('market',name+' the '+cat.name+' added!','ok');renderMarket();renderHUD();checkAch();gameEvent('fish',{id});
     });
@@ -3907,7 +3936,7 @@ function renderFishList(){
     const div=document.createElement('div');div.className='fcard';
     div.addEventListener('click',()=>openPet(f.uid));
     const th=document.createElement('div');th.className='fthumb';
-    th.appendChild(fitPreview(isC?'c':'f',f.id,60,40,1,{stage:f.stage,bottom:false}));
+    th.appendChild(fitPreview(isC?'c':'f',f.id,60,40,1,{stage:f.stage,bottom:false,shiny:f.shiny}));
     div.appendChild(th);
     const info=document.createElement('div');info.className='finfo';
     const dis=f.disease?DISEASES.find(d=>d.id===f.disease):null;
@@ -4497,7 +4526,7 @@ function drawTank(){
       ctx.fillText('[ EMPTY TANK ]',W/2,H/2-12);
       ctx.fillStyle='#b9abd2';ctx.font='11px monospace';
       ctx.fillText('buy equipment & add water',W/2,H/2+12);
-      raf=requestAnimationFrame(frame);return;
+      gbPost(ctx,W,H);raf=requestAnimationFrame(frame);return;
     }
 
     if(S.waterAnim){
@@ -4511,7 +4540,7 @@ function drawTank(){
       ctx.fillStyle='#6f8fb0';ctx.font='bold 12px monospace';ctx.textAlign='center';
       ctx.fillText('filling... '+Math.round(S.waterLevel)+'%',W/2,Math.max(20,wy-10));
       if(Math.random()<0.05)sfx('bubble');
-      raf=requestAnimationFrame(frame);return;
+      gbPost(ctx,W,H);raf=requestAnimationFrame(frame);return;
     }
 
     const hourF=hourAt(Date.now());
@@ -4801,8 +4830,8 @@ function drawTank(){
       const wobbleAdd=((a.id==='pleco'||a.id==='cory')&&a.y>65)?Math.sin(a.wobble*3)*0.05:Math.sin(a.wobble)*0.03;
 
       // ── POSITION UPDATE with layer bounds ──
-      a.x+=a.dx;
-      a.y+=a.dy+wobbleAdd;
+      if(_dizzy.size&&isDizzy(a.uid)){a.y+=Math.sin(Date.now()/150)*0.06;}// dizzy: stays put and wobbles
+      else{a.x+=a.dx;a.y+=a.dy+wobbleAdd;}
       if(a.x<2){a.x=2;a.dx=Math.abs(a.dx);}
       if(a.x>93){a.x=93;a.dx=-Math.abs(a.dx);}
       if(a.y<nightYMin){a.y=nightYMin;a.dy=Math.abs(a.dy);}
@@ -4833,7 +4862,9 @@ function drawTank(){
       const moodNow=fish?getFishMood(fish):'content';
       const emoteOn=((a.emoteTimer||0)%200)<60;
       let expr='normal';
-      if(a.clickAnim>0)expr='happy';
+      const dz=_dizzy.size&&isDizzy(a.uid);
+      if(dz)expr='dizzy';
+      else if(a.clickAnim>0)expr='happy';
       else if(!isAwake(fish))expr='sleepy';
       else if(a.scaredTimer>0)expr='scared';
       else if(a.goal&&a.goal.happy&&Math.hypot(a.goal.x-a.x,a.goal.y-a.y)<6)expr='happy';
@@ -4842,7 +4873,7 @@ function drawTank(){
       else if(emoteOn&&(moodNow==='weak'||moodNow==='sleepy'))expr='sleepy';
       else if(emoteOn&&(moodNow==='happy'||moodNow==='home'||moodNow==='playful'))expr='happy';
       else if((t+(a.uid%7)*0.73)%4.2<0.14)expr='blink';
-      const img=artImg(kind,a.id,expr==='normal'?Math.floor(a.anim)%nf:0,expr);
+      let img=artImg(kind,a.id,expr==='normal'?Math.floor(a.anim)%nf:0,expr);if(fish&&fish.shiny)img=shinyOf(img,a.id);
       let px,py;
       if(a.isBenthic){
         // benthic: fixed to sand surface, depth controls y position in sand area
@@ -4856,13 +4887,16 @@ function drawTank(){
         px=Math.round(a.x/100*W/2)*2;py=Math.round(a.y/100*H/2)*2;
       }
       const sp={h:img.height/ART_SC};const sc=ART_SC;
+      const dx0=a.dx;if(dz&&dizzyLeft(a.uid)>3500)a.dx=Math.abs(a.dx||0.1)*(Math.floor(Date.now()/110)%2?1:-1);// spins round for a moment
       ctx.save();ctx.translate(px,py);
       // every sprite is drawn facing left; mirror it while it swims right
       if(a.dx>0){ctx.scale(-1,1);ctx.translate(-img.width,0);}
       if(a._hideUntil>Date.now())ctx.globalAlpha=0.3;// tucked inside a decoration
       ctx.drawImage(img,0,0);
       ctx.restore();
-      drawFishExtra(ctx,a,fish,px,py,img,t);
+      drawFishExtra(ctx,a,fish,px,py,img,t);a.dx=dx0;
+      if(dz)dizzyStars(ctx,px+img.width/2,py-2,Math.max(10,img.width*0.38),t);
+      if(fish&&fish.shiny)shinySpark(ctx,px,py,img,t,a.uid);
       // the fish you're looking at in the close-up wears a little bobbing heart
       if(a.uid===petUid){const bob=Math.round(Math.sin(t*4))*2;ctx.drawImage(heartCanvas('full'),px+Math.round(img.width/4)*2-9,py-20+bob,18,16);}
       // remember the sprite centre for tap detection (a.x/a.y is the top-left corner)
@@ -4926,7 +4960,7 @@ function drawTank(){
     drawCalm(ctx,W,H,t);
     if(S.owned.airpump&&Math.random()<0.004)playBubble();
 
-    raf=requestAnimationFrame(frame);
+    gbPost(ctx,W,H);raf=requestAnimationFrame(frame);
   }
   frame();
 }
@@ -5063,6 +5097,7 @@ function renderBook(){
       const cell=document.createElement('div');cell.className='bk'+(seen?'':' unseen')+(bookSel===K.k+def.id?' sel':'');
       const c=bookCanvas(K.k,def.id);if(!seen)silhouette(c);
       cell.appendChild(c);
+      if(K.k==='f'&&(S.shinySeen||{})[def.id]){const b=document.createElement('span');b.className='shn';b.textContent='✨';cell.appendChild(b);}
       const nm=document.createElement('div');nm.className='bn';nm.textContent=seen?def.name:'???';cell.appendChild(nm);
       cell.addEventListener('click',()=>{bookSel=K.k+def.id;el.querySelectorAll('.bk.sel').forEach(x=>x.classList.remove('sel'));cell.classList.add('sel');showBookDetail(K.k,def,seen);});
       grid.appendChild(cell);
@@ -5080,6 +5115,8 @@ function showBookDetail(k,def,seen){
     ?'<div class="bd-t">'+def.name+' <span style="font-size:12px;color:var(--muted);">'+rar+'</span></div><div class="bd-f">'+(BOOK_FACTS[def.id]||def.desc)+'</div>'
     :'<div class="bd-t">???</div><div class="bd-f">Not discovered yet. '+rar+(def.rarity==='rare'||def.rarity==='super_rare'?' — watch for it when the shop restocks.':' — find it in the shop.')+'</div>';
   d.appendChild(info);
+  const sh=k==='f'&&(S.shinySeen||{})[def.id];
+  if(sh){const row=document.createElement('div');row.className='bd-shiny';row.appendChild(fitPreview('f',def.id,64,44,1,{shiny:true}));const tx=document.createElement('span');tx.textContent='✨ Shiny found '+sh;row.appendChild(tx);info.appendChild(row);}
 }
 
 /* ── Quests tab sub-navigation + badge ── */
@@ -5279,7 +5316,7 @@ function petFish(f,a){
   const fresh=now-(f.lastPet||0)>8000;
   f.joy=Math.min(100,(f.joy==null?70:f.joy)+(fresh?6:1));
   if(fresh&&(f.petsToday||0)<15){f.bond=(f.bond||0)+1;f.petsToday=(f.petsToday||0)+1;}
-  f.lastPet=now;
+  f.lastPet=now;eggTap(f);
   if(isNightNow())f._wake=now+30000;// a sleepy fish wakes up for a moment
   if(a){a.clickAnim=20;}
   if(petUid===f.uid){_petFx.happyUntil=now+1600;for(let i=0;i<3;i++)_petFx.hearts.push({x:0.5+(Math.random()-0.5)*0.3,y:0.55,v:0.25+Math.random()*0.2,t:now+i*120});}
@@ -5354,7 +5391,7 @@ function renderPet(force){
   el.querySelector('.ps-info').innerHTML=
     '<div class="ps-top"><div class="ps-name"><span class="ps-rn" title="Tap to rename">'+f.name+'</span><span class="ps-sp">'+(def.name||f.id)+'</span></div>'
     +'<div class="ps-tags"><span class="ftag ftag-'+(f.stage==='baby'?'baby':'adult')+'">'+stage+'</span><span class="ftag ftag-age">⏳ '+ageText(f)+'</span>'
-    +(sleeping?'<span class="ftag ftag-mood">💤 asleep</span>':'')+(f.weak?'<span class="ftag ftag-sick">✚ weak</span>':'')+(dis?'<span class="ftag ftag-sick">'+dis.name+'</span>':'')+'</div></div>'
+    +(f.shiny?'<span class="ftag ftag-shiny">✨ shiny</span>':'')+(sleeping?'<span class="ftag ftag-mood">💤 asleep</span>':'')+(f.weak?'<span class="ftag ftag-sick">✚ weak</span>':'')+(dis?'<span class="ftag ftag-sick">'+dis.name+'</span>':'')+'</div></div>'
     +'<div class="ps-stats">'
     +'<div class="ps-row"><span>Full</span><span>'+heartsHTML(f.hunger)+'</span></div>'
     +'<div class="ps-row"><span>Happy</span><span>'+heartsHTML(f.joy==null?70:f.joy)+'</span></div>'
@@ -5409,8 +5446,9 @@ function petFrame(){
   const ox=fx.px;fx.px+=(tx-fx.px)*0.06;fx.py+=(ty-fx.py)*0.06;
   const moving=fx.px-ox;if(Math.abs(moving)>0.15)fx.dir=moving>0?1:-1;
   // face
-  const mood=getFishMood(f);let expr='normal';
-  if(now<fx.happyUntil||fx.snack)expr='happy';
+  const mood=getFishMood(f);let expr='normal';const dz=isDizzy(f.uid);
+  if(dz){expr='dizzy';if(dizzyLeft(f.uid)>3500)fx.dir=Math.floor(now/110)%2?1:-1;}
+  else if(now<fx.happyUntil||fx.snack)expr='happy';
   else if(sleeping)expr='sleepy';
   else if(f.weak)expr='sleepy';
   else if(f.diseased||mood==='scared')expr='scared';
@@ -5419,10 +5457,12 @@ function petFrame(){
   const nf=kind==='c'?FRAMES_CRIT:FRAMES_FISH;
   const frame=expr==='normal'?Math.floor(t*(kind==='c'?5:(sleeping?2:8)))%nf:0;
   let d=artData(kind,f.id,frame,expr,true);
-  const img=artCanvas(d,kind+':'+f.id+':'+frame+':'+expr,sc);
+  let img=artCanvas(d,kind+':'+f.id+':'+frame+':'+expr,sc);if(f.shiny)img=shinyOf(img,f.id);
   const dx=Math.round((fx.px-img.width/2)/2)*2,dy=Math.round((fx.py-img.height/2)/2)*2;
   ctx.save();ctx.translate(dx,dy);if(fx.dir>0){ctx.scale(-1,1);ctx.translate(-img.width,0);}ctx.drawImage(img,0,0);ctx.restore();
   drawFishExtraAt(ctx,f,dx,dy,img,t,fx.dir>0,sc);
+  if(dz)dizzyStars(ctx,dx+img.width/2,dy-4,Math.max(16,img.width*0.4),t,3);
+  if(f.shiny)shinySpark(ctx,dx,dy,img,t,f.uid);
   // zzz while asleep
   if(sleeping){ctx.save();ctx.font='16px VT323, monospace';ctx.lineWidth=3;ctx.strokeStyle='#fff';ctx.fillStyle='#7c86c8';const k=(t%3)/3;ctx.globalAlpha=1-k;const zx=dx+img.width-6,zy=dy-4-k*14;ctx.strokeText('z',zx,zy);ctx.fillText('z',zx,zy);ctx.strokeText('Z',zx+8,zy-8);ctx.fillText('Z',zx+8,zy-8);ctx.restore();}
   // snack: a little red worm
@@ -5434,6 +5474,7 @@ function petFrame(){
   fx.hearts=fx.hearts.filter(h=>{const age=(now-h.t)/1000;if(age<0)return true;if(age>1.4)return false;ctx.save();ctx.globalAlpha=Math.min(1,1.6-age);const hx=Math.round((fx.px+(h.x-0.5)*img.width)/2)*2,hy=Math.round((fx.py-img.height*0.4-age*30)/2)*2;ctx.drawImage(hc,hx,hy,18,16);ctx.restore();return true;});
   // night tint
   if(isNightNow()){ctx.save();ctx.globalAlpha=0.28;ctx.fillStyle='#3b3a8c';ctx.fillRect(0,0,W,H);ctx.restore();}
+  gbPost(ctx,W,H);
   _petRaf=requestAnimationFrame(petFrame);
 }
 // tapping anywhere outside the sheet (other than the tank, which picks another fish) closes it
@@ -5564,7 +5605,7 @@ function onHour(gentle,ts){
     const groups={};S.fish.forEach(f=>{groups[f.id]=groups[f.id]||[];groups[f.id].push(f);});
     Object.keys(groups).forEach(id=>{
       const cat=FISH_DEF.find(c=>c.id===id);if(!cat||!cat.breedable||groups[id].filter(f=>f.stage==='adult'&&!f.weak).length<2||avgW()<75)return;
-      if(Math.random()<0.03&&S.fish.length<getTankCap()){const name=NAMES[Math.floor(Math.random()*NAMES.length)];S.fish.push({id,name,health:100,hunger:100,joy:80,age:0,born:ts,stage:'baby',diseased:false,disease:null,uid:++S.uid});S.totalBred=(S.totalBred||0)+1;showAl('global','🥚 Baby '+cat.name+' ('+name+') was born!','ok');if(!gentle)sfx('happy');addXP(10);gameEvent('breed',{id});}
+      if(Math.random()<0.03&&S.fish.length<getTankCap()){const name=NAMES[Math.floor(Math.random()*NAMES.length)];S.fish.push({id,name,health:100,hunger:100,joy:80,age:0,born:ts,stage:'baby',diseased:false,disease:null,uid:++S.uid});newFishEgg(S.fish[S.fish.length-1]);S.totalBred=(S.totalBred||0)+1;showAl('global','🥚 Baby '+cat.name+' ('+name+') was born!','ok');if(!gentle)sfx('happy');addXP(10);gameEvent('breed',{id});}
     });
   }
   sv();if(!gentle)renderFishList();checkAch();
@@ -5724,7 +5765,7 @@ function openDiary(away,thenGreet){
   const box=bg.querySelector('.dy-lines');
   lines.forEach(l=>{const row=document.createElement('div');row.className='dy-l';const f=l.f!=null&&S.fish.find(x=>x.uid===l.f);
     const ic=document.createElement('div');ic.className='dy-ic';
-    if(f)ic.appendChild(fitPreview(f.isCreature?'c':'f',f.id,36,26,1,{stage:f.stage,bottom:false}));else ic.textContent=l.icon||'•';
+    if(f)ic.appendChild(fitPreview(f.isCreature?'c':'f',f.id,36,26,1,{stage:f.stage,bottom:false,shiny:f.shiny}));else ic.textContent=l.icon||'•';
     row.appendChild(ic);const tx=document.createElement('div');tx.textContent=l.text;row.appendChild(tx);box.appendChild(row);});
   document.body.appendChild(bg);
   const close=()=>{bg.remove();if(thenGreet)setTimeout(()=>{greet(away.ms);if(noteAvailable())setTimeout(spawnLetter,2600);surpriseAfterGreet(away);},350);};
@@ -5765,7 +5806,7 @@ function openNote(){
 function renderNotes(){
   const el=document.getElementById('q-notes');if(!el)return;
   const ns=(S.notes||[]).slice().reverse();
-  el.innerHTML=ns.length?ns.map(n=>'<div class="note-row"><div class="nr-d">'+n.d+'</div><div class="nr-t">'+NOTES[n.i]+'</div><div class="nr-f">— '+(n.from||'')+'</div></div>').join('')
+  el.innerHTML=ns.length?ns.map(n=>'<div class="note-row'+(n.special?' ann':'')+'"><div class="nr-d">'+n.d+'</div><div class="nr-t">'+(n.text||NOTES[n.i])+'</div><div class="nr-f">— '+(n.from||'')+'</div></div>').join('')
     :'<div class="refresh-note">A little note arrives in the tank once a day. Tap it to keep it here.</div>';
 }
 
@@ -5813,7 +5854,7 @@ function renderStrip(){
   const mini=v=>{let s='';for(let i=0;i<3;i++){const r=v-i*34;const k=r>=24?'full':r>=10?'half':'empty';s+='<img alt="" src="'+(_heartUrl[k]||(_heartUrl[k]=heartCanvas(k).toDataURL()))+'">';}return s;};
   S.fish.forEach(f=>{
     const c=document.createElement('button');c.className='strip-card';
-    const pv=document.createElement('div');pv.className='sc-pv';pv.appendChild(fitPreview(f.isCreature?'c':'f',f.id,44,30,1,{stage:f.stage,bottom:false}));c.appendChild(pv);
+    const pv=document.createElement('div');pv.className='sc-pv';pv.appendChild(fitPreview(f.isCreature?'c':'f',f.id,44,30,1,{stage:f.stage,bottom:false,shiny:f.shiny}));c.appendChild(pv);
     c.insertAdjacentHTML('beforeend','<div class="sc-n">'+(isAwake(f)?'':'💤')+f.name+stripBadge(f)+'</div><div class="sc-h"><span>🍞</span>'+mini(f.hunger)+'</div><div class="sc-h"><span>♥</span>'+mini(f.joy==null?70:f.joy)+'</div>');
     c.addEventListener('click',()=>openPet(f.uid));box.appendChild(c);
   });
@@ -5996,21 +6037,23 @@ function surpriseAfterGreet(away){
 }
 let _idleNext=Date.now()+4*60000;
 function extrasTick(){
-  X('tick');
+  X('tick');eggTick();
   if(Date.now()>_idleNext&&!document.hidden){
     _idleNext=Date.now()+(4+Math.random()*4)*60000;
     if(!_ev&&!document.querySelector('.modal-bg')){const d=rollSurprise('idle');if(d)evStart(d);}
   }
 }
-function drawExtrasBack(ctx,W,H,t,flY){X('drawBack',ctx,W,H,t,flY);if(_ev&&_ev.def.back&&_ev.def.back(ctx,W,H,t,_ev,flY)===false)evEnd();}
+function drawExtrasBack(ctx,W,H,t,flY){X('drawBack',ctx,W,H,t,flY);drawEggBack(ctx,W,H,t,flY);if(_ev&&_ev.def.back&&_ev.def.back(ctx,W,H,t,_ev,flY)===false)evEnd();}
 function drawExtrasFront(ctx,W,H,t){
   const flY=Math.round(H*0.75/2)*2;
-  X('drawFront',ctx,W,H,t,flY);
+  X('drawFront',ctx,W,H,t,flY);drawEggFront(ctx,W,H,t,flY);
   if(_ev&&_ev.def.draw&&_ev.def.draw(ctx,W,H,t,_ev,flY)===false)evEnd();
   drawArrangeSel(ctx,W,H,t);
 }
 function extrasTap(px,py,W,H){
+  if(annTap(px,py))return true;
   if(_ev&&_ev.def.tap&&_ev.def.tap(px,py,W,H,_ev))return true;
+  if(moonEggTap(px,py,W,H))return true;
   for(const k of XORDER.tap){const h=SCH[k].tap;if(h&&h(px,py,W,H))return true;}
   return false;
 }
@@ -6378,7 +6421,7 @@ SCH[1]={
     const T=S.treasures||{};const n=TREASURES.filter(t=>T[t.id]).length;
     return'<div class="al-h"><span>🐚 Treasure shelf</span><small>'+n+'/'+TREASURES.length+'</small></div><div class="shelf">'
       +TREASURES.map(t=>T[t.id]?'<div class="sh-it" title="'+t.name+'"><img alt="" src="'+treasureIcon(t,4)+'"><span>'+t.name+(T[t.id]>1?' ×'+T[t.id]:'')+'</span></div>'
-        :'<div class="sh-it q"><b>?</b><span>'+(t.night?'found at night':'???')+'</span></div>').join('')+'</div>'
+        :'<div class="sh-it q"><b>?</b><span>'+(t.night?'found at night':'???')+'</span></div>').join('')+((S.eggs||{}).twodee?'<div class="sh-it egg" title="Twodee Sticker"><img alt="" src="'+stickerURL()+'"><span>Twodee Sticker</span></div>':'')+'</div>'
       +'<div class="refresh-note">Visitors bring treasures. Some only appear at night.</div>';
   },
 };
@@ -6819,9 +6862,356 @@ function starterTank(){
   S.fish.push({id:'goldfish',name:'Mochi',health:100,hunger:70,joy:80,born:now,age:0,stage:'baby',diseased:false,disease:null,uid:++S.uid});
   S.plantSeeds.push({id:'vallis',x:0.16,maxH:70,swayOff:1.3,d:0.2},{id:'moss',x:0.78,maxH:40,swayOff:4.1,d:0.5});
   S.seen=S.seen||{f:{},c:{},p:{},d:{}};S.seen.f.goldfish=true;S.seen.p.vallis=true;S.seen.p.moss=true;
-  S.tut=0;S.tutDone=false;S.tutVer=2;S.lastDate=todayStr();S.lastSeen=now;
+  S.tut=0;S.tutDone=false;S.tutVer=2;S.lastDate=todayStr();S.lastSeen=now;S.startTs=now;
   recalcWater();ensureDaily();sv();
 }
+
+/* ═══ LITTLE SECRETS (v3.9) ═══
+   Seven easter eggs. None of them is explained anywhere in the game.
+   · 2:09 — at 2:09 (am or pm) bubbles rise from the sand in the shape of "209"
+   · Twodee — very rarely, two D-shaped fish swim in and meet in the middle; tap them for a secret sticker
+   · dizzy — tap one fish very fast and it spins and sees stars
+   · handheld — tap the title 7 times for a hidden four-green theme with 8-bit music
+   · the moon — tap it a few times at night: it winks, and a shooting star goes by
+   · shiny — about 1 in 64 new fish comes in different colours; the picture book remembers it
+   · one year — on the day you started, a year later, Mochi writes you a letter            */
+function eggs(){return S.eggs||(S.eggs={});}
+function eggFound(k){const E=eggs();if(E[k])return false;E[k]=calToday();sv();return true;}
+
+// ── 2:09 ──
+const DIG209={'2':['###','..#','###','#..','###'],'0':['###','#.#','#.#','#.#','###'],'9':['###','#.#','###','..#','###']};
+let _b209=null;
+function tick209(){
+  if(_b209||!S.waterAdded||document.hidden)return;
+  const d=calNow();if(d.getHours()%12!==2||d.getMinutes()!==9)return;
+  const key=calToday()+(d.getHours()<12?'a':'p');if(S.egg209===key)return;
+  S.egg209=key;sv();start209();
+}
+function start209(){
+  const pts=[];
+  '209'.split('').forEach((ch,ci)=>DIG209[ch].forEach((row,y)=>[...row].forEach((c,x)=>{if(c==='#')pts.push({gx:ci*4+x,gy:y,ph:Math.random()*6,dl:Math.random()*0.7+(4-y)*0.12});})));
+  _b209={t0:Date.now(),pts,snap:false};
+}
+function draw209(ctx,W,H,t,flY){
+  const e=_b209;if(!e)return;const age=(Date.now()-e.t0)/1000;
+  if(age>15){_b209=null;return;}
+  const sp=12,ox=Math.round((W-10*sp)/2/2)*2,oy=Math.round(H*0.2/2)*2;
+  ctx.save();
+  e.pts.forEach(p=>{
+    const tx=ox+p.gx*sp,ty=oy+p.gy*sp;
+    let x,y,a=1;
+    const k=(age-p.dl)/3.6;if(k<=0)return;
+    if(k<1){const e2=1-Math.pow(1-k,3);x=tx+Math.sin(t*3+p.ph)*(1-e2)*10;y=flY-8+(ty-flY+8)*e2;}
+    else if(age<10){x=tx+Math.sin(t*1.8+p.ph)*1;y=ty+Math.sin(t*1.4+p.ph)*1;}
+    else{const k2=Math.max(0,age-10-p.dl*0.6);x=tx+Math.sin(t*3+p.ph)*k2*3;y=ty-k2*k2*26-k2*14;if(y<4)return;a=Math.min(1,y/ty+0.2);}
+    x=Math.round(x/2)*2;y=Math.round(y/2)*2;
+    ctx.globalAlpha=a*0.32;ctx.fillStyle='#ffffff';ctx.fillRect(x-4,y-4,8,8);ctx.fillRect(x-2,y-6,4,12);ctx.fillRect(x-6,y-2,12,4);// a soft filled middle
+    ctx.globalAlpha=a;pixBubble(ctx,x,y,3,2);// the ring
+    ctx.fillRect(x-4,y-4,2,2);// shine
+  });
+  ctx.restore();
+  if(!e.snap&&age>6.5){e.snap=true;if(eggFound('b209')){snapTank('2:09 — the bubbles spelled something','🫧');toast('🫧 2:09 · 📷 saved to the Album','ok');}}
+}
+
+// ── Twodee: two D-shaped fish (the studio logo) ──
+const DFISH=[
+ '.....ff........',
+ '.....fff.......',
+ '....aaaaaaa....',
+ '....ahhhaaaaa..',
+ 't...aaaaaaaaaa.',
+ 'tt..aaaaaaakkaa',
+ 'ttt.aaaaaaakwaa',
+ '.ttaaaaaaaaaaaa',
+ 'ttt.bbbbbbbbpaa',
+ 'tt..bbbbbbbbbba',
+ 't...bbbbbbbbba.',
+ '....abbbbbbaa..',
+ '....aaaaaaa....'];
+const DF_TAIL2={4:'....',5:'.t..',6:'ttt.',7:'.tta',8:'ttt.',9:'.t..',10:'....'};
+const DF_COL={
+  o:{a:'#ffa64d',b:'#ffd9a3',h:'#ffd59a',f:'#ffc98f',t:'#ffc98f',k:'#3b2b3e',w:'#ffffff',p:'#ff8fb0'},
+  p:{a:'#ff8fb6',b:'#ffd6e4',h:'#ffc8dc',f:'#ffb8d2',t:'#ffb8d2',k:'#3b2b3e',w:'#ffffff',p:'#ff6f9a'}};
+function _hx(h){h=h.replace('#','');return[parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function _deep(c){// a deep, more saturated version of a colour, for outlines
+  let[r,g,b]=c.map(v=>v/255);const mx=Math.max(r,g,b),mn=Math.min(r,g,b),d=mx-mn;let h=0;
+  if(d)h=mx===r?((g-b)/d+6)%6:mx===g?(b-r)/d+2:(r-g)/d+4;h*=60;let s=mx?d/mx:0,v=mx;
+  if(s<0.08)return[120,128,150];s=Math.min(1,s+0.35);v*=0.55;
+  const f=n=>{const k=(n+h/60)%6;return v-v*s*Math.max(0,Math.min(k,4-k,1));};return[f(5),f(3),f(1)].map(x=>Math.round(x*255));}
+// rows of letters → a canvas with a soft coloured outline, one cell = sc pixels
+function softSprite(rows,cmap,sc){
+  const h=rows.length,w=rows[0].length,W=w+2,H=h+2;const F=new Map();
+  rows.forEach((r,y)=>[...r].forEach((ch,x)=>{if(cmap[ch])F.set((x+1)+','+(y+1),_hx(cmap[ch]));}));
+  const c=document.createElement('canvas');c.width=W*sc;c.height=H*sc;const x=c.getContext('2d');
+  const put=(px,py,col)=>{x.fillStyle='rgb('+col.map(Math.round).join(',')+')';x.fillRect(px*sc,py*sc,sc,sc);};
+  F.forEach((col,k)=>{const[px,py]=k.split(',').map(Number);put(px,py,col);});
+  for(let py=0;py<H;py++)for(let px=0;px<W;px++){
+    if(F.has(px+','+py))continue;
+    const nb=[[px-1,py],[px+1,py],[px,py-1],[px,py+1]].map(([a,b])=>F.get(a+','+b)).filter(Boolean);if(!nb.length)continue;
+    const base=nb[0],dk=_deep(base),tt=0.75;put(px,py,base.map((v,i)=>v+(dk[i]-v)*tt));
+  }
+  return c;
+}
+const _dfImg={};
+function dfishImg(col,frame){const k=col+frame;if(!_dfImg[k]){const rows=frame?DFISH.map((r,y)=>DF_TAIL2[y]!=null?DF_TAIL2[y]+r.slice(4):r):DFISH;_dfImg[k]=softSprite(rows,DF_COL[col],ART_SC);}return _dfImg[k];}
+// the sticker: the two fish facing each other with a bubble, on a white die-cut sticker
+let _stkURL=null;
+function stickerURL(){
+  if(_stkURL)return _stkURL;
+  const a=softSprite(DFISH,DF_COL.o,1),b=softSprite(DFISH.map(r=>[...r].reverse().join('')),DF_COL.p,1);
+  const pad=3,W=a.width+b.width+1+pad*2,H=a.height+pad*2+3;
+  const c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d');
+  const art=document.createElement('canvas');art.width=W;art.height=H;const ax=art.getContext('2d');
+  ax.drawImage(a,pad,pad+3);ax.drawImage(b,pad+a.width+1,pad+3);
+  ax.fillStyle='#9fdcef';const cx=pad+a.width;[[cx,pad+1],[cx-1,pad+2],[cx+1,pad+2],[cx,pad+3],[cx+1,pad-1]].forEach(([u,v])=>ax.fillRect(u,v,1,1));
+  // die-cut edge: grow the art by 2 pixels in white, with a thin sea-glass line around it
+  const d=ax.getImageData(0,0,W,H).data;const on=(u,v)=>u>=0&&v>=0&&u<W&&v<H&&d[(v*W+u)*4+3]>0;
+  for(let v=0;v<H;v++)for(let u=0;u<W;u++){
+    let n2=false,n3=false;for(let dv=-3;dv<=3;dv++)for(let du=-3;du<=3;du++){const r=Math.abs(du)+Math.abs(dv);if(r>3||!on(u+du,v+dv))continue;if(r<=2)n2=true;else n3=true;}
+    if(n2){x.fillStyle='#ffffff';x.fillRect(u,v,1,1);}else if(n3){x.fillStyle='#bfe6dc';x.fillRect(u,v,1,1);}
+  }
+  x.drawImage(art,0,0);
+  return(_stkURL=c.toDataURL());
+}
+const PXHEART=['.p.p.','ppppp','ppppp','.ppp.','..p..'];
+EVENTS[1].push({id:'twodee',w:0.6,when:()=>!isNightNow()&&(S.day||1)>=3,diary:'Two little D-shaped fish swam in and met in the middle of the tank.',
+  start:e=>{e.dur=21000;e.yf=0.3+Math.random()*0.1;},
+  back:(ctx,W,H,t,e)=>{
+    const now=e.paused?e.pauseAt:Date.now();const s=(now-e.t0)/1000;if(s>e.dur/1000)return false;
+    const A=dfishImg('o',0),w=A.width,h=A.height,gap=4;const cx=Math.round(W/2/2)*2,y0=Math.round(e.yf*H/2)*2;
+    const ease=k=>1-Math.pow(1-Math.min(1,Math.max(0,k)),3);
+    let ox,oy,px,py,oDir=1,pDir=-1,swim=true;
+    if(s<7){const k=ease(s/7);ox=-w-10+(cx-gap/2-w+w+10)*k;px=W+10+(cx+gap/2-W-10)*k;oy=y0+Math.sin(s*1.3)*6*(1-k);py=y0+Math.sin(s*1.3+2)*6*(1-k);swim=k<0.98;}
+    else if(s<12.5){ox=cx-gap/2-w;px=cx+gap/2;oy=py=y0+Math.round(Math.sin(s*2)*1);swim=false;}
+    else{const k=(s-12.5)/7;pDir=1;ox=cx-gap/2-w+k*k*W*0.9+k*W*0.25;px=cx+gap/2+k*k*W*0.9+k*W*0.3;oy=y0-k*28+Math.sin(s*3)*2;py=y0-k*22+Math.sin(s*3+1)*2;}
+    const fr=swim?Math.floor(t*7)%2:Math.floor(t*2)%2;
+    const draw=(col,x,y,dir)=>{const img=dfishImg(col,fr);x=Math.round(x/2)*2;y=Math.round(y/2)*2;ctx.save();if(dir<0){ctx.translate(x+img.width,y);ctx.scale(-1,1);}else ctx.translate(x,y);ctx.drawImage(img,0,0);ctx.restore();};
+    draw('o',ox,oy,oDir);draw('p',px,py,pDir);
+    // meeting in the middle: little bubbles, then a heart, between them (the logo)
+    if(s>=7&&s<12.5){
+      const k=s-7;ctx.fillStyle='#ffffff';
+      for(let i=0;i<3;i++){const kk=(k*0.8+i*0.33)%1;pixBubble(ctx,cx+Math.sin(t*3+i)*2,y0+h*0.45-kk*h*0.9,1,2);}
+      if(k>1.2){ctx.save();ctx.globalAlpha=Math.min(1,(k-1.2)*2,(5.5-k)*2);pix(ctx,PXHEART,cx-5,Math.round((y0-14-Math.min(1,(k-1.2))*6)/2)*2,2,{p:'#ff7fae'});ctx.restore();}
+    }
+    e.box={x0:Math.min(ox,px)-8,x1:Math.max(ox,px)+w+8,y0:Math.min(oy,py)-10,y1:Math.max(oy,py)+h+8};
+  },
+  tap:(px,py,W,H,e)=>{
+    const b=e.box;if(!b||e.paused||px<b.x0||px>b.x1||py<b.y0||py>b.y1)return false;
+    e.paused=true;e.pauseAt=Date.now();
+    const ph=snapTank('Two D-shaped fish came to say hi','🐟');flashTank();
+    const first=eggFound('twodee');
+    const resume=()=>{e.t0+=Date.now()-e.pauseAt;e.paused=false;};
+    surpriseCard({photo:ph,iconHTML:'<img class="tr-ic stk" alt="" src="'+stickerURL()+'">',
+      title:first?'A secret sticker!':'They came back to say hi ♥',
+      text:first?'Two little D-shaped fish swam by and left you a <b>Twodee sticker</b>. It\'s on your treasure shelf now.':'The two D-fish wave hello again.',
+      extra:'<div class="mnote">made with ♥ by Twodee</div>',
+      buttons:[{id:'sp-ok',label:'♥ Lovely',fn:resume}]});
+    return true;
+  }});
+
+// ── dizzy ──
+const _taps=new Map(),_dizzy=new Map();
+function isDizzy(uid){return(_dizzy.get(uid)||0)>Date.now();}
+function dizzyLeft(uid){return(_dizzy.get(uid)||0)-Date.now();}
+function eggTap(f){
+  const now=Date.now();if(!f||isDizzy(f.uid))return;
+  const L=(_taps.get(f.uid)||[]).filter(x=>now-x<2600);L.push(now);_taps.set(f.uid,L);
+  if(L.length<8)return;
+  _taps.delete(f.uid);_dizzy.set(f.uid,now+5200);sfx('play');
+  setTimeout(()=>{if(S.fish.includes(f))say(f,pick(['Whoa… the whole tank was spinning…','So many little stars…','Everything went wobbly…']),3600);},5300);
+  if(eggFound('dizzy'))setTimeout(()=>{snapTank(f.name+' got a little dizzy','⭐');toast('⭐ Too many pats — '+f.name+' got dizzy! 📷 saved','ok');},700);
+}
+const STAR5=['..y..','.yyy.','yyWyy','.yyy.','..y..'];
+function dizzyStars(ctx,cx,cy,rx,t,sc){
+  sc=sc||2;for(let i=0;i<3;i++){const a=t*5+i*Math.PI*2/3;const x=cx+Math.cos(a)*rx,y=cy+Math.sin(a)*rx*0.28;
+    ctx.save();ctx.globalAlpha=Math.sin(a)<-0.2?0.65:1;pix(ctx,STAR5,Math.round((x-2.5*sc)/sc)*sc,Math.round((y-2.5*sc)/sc)*sc,sc,{y:'#ffd34d',W:'#fffbe0'});ctx.restore();}
+}
+
+// ── handheld: title tapped 7 times ──
+(function(){
+  const el=document.querySelector('.game-title');if(!el)return;let n=0,last=0;
+  el.addEventListener('click',()=>{
+    const now=Date.now();n=now-last<900?n+1:1;last=now;
+    el.classList.remove('egg-hop');void el.offsetWidth;el.classList.add('egg-hop');
+    if(n>=7){n=0;titleEgg();}
+  });
+})();
+function titleEgg(){
+  if(UIPAL.current().id==='handheld'){applyUIPal(S._palBeforeGB||'lagoon');sfx('happy');toast('✨ Colours back','ok');return;}
+  const first=eggFound('gb');
+  S._palBeforeGB=UIPAL.current().id;sv();applyUIPal('handheld');sfx('happy');
+  if(first)surpriseCard({icon:'✨',title:'Secret theme: Handheld',text:'Four sea-glass greens and 8-bit music, like an old pocket game. It stays in ⚙ Settings now — tap the title 7 times again to switch back.'});
+  else toast('✨ Handheld','ok');
+}
+// the tank and the close-up are drawn in full colour, then pressed down to the four greens
+const GB4=[[230,247,240],[143,211,195],[58,138,134],[18,50,56]];
+function gbOn(){return!!(window.UIPAL&&UIPAL.current().id==='handheld');}
+function gbPost(ctx,W,H){
+  if(!gbOn())return;
+  const cv=ctx.canvas;const w=W>>1,h=H>>1;let b=cv._gb;
+  if(!b||b.width!==w||b.height!==h){b=cv._gb=document.createElement('canvas');b.width=w;b.height=h;b._x=b.getContext('2d',{willReadFrequently:true});}
+  const x=b._x;x.imageSmoothingEnabled=false;x.clearRect(0,0,w,h);x.drawImage(cv,0,0,W,H,0,0,w,h);
+  const im=x.getImageData(0,0,w,h),d=im.data,n=d.length>>2;
+  // the most common brightness is the water: it becomes the lightest green by day (the second at night),
+  // and everything else is sorted into the darker greens relative to it
+  const Ls=cv._gbL&&cv._gbL.length===n?cv._gbL:(cv._gbL=new Uint8Array(n));const hist=new Uint32Array(64);
+  for(let i=0,j=0;j<n;i+=4,j++){const L=(d[i]*77+d[i+1]*150+d[i+2]*29)>>8;Ls[j]=L;if(d[i+3])hist[L>>2]++;}
+  let pk=0;for(let k=1;k<64;k++)if(hist[k]>hist[pk])pk=k;const p=pk*4+2;
+  const night=isNightNow();
+  const T0=night?p+14:p-10,T1=night?p-10:Math.max(110,p*0.7),T2=night?Math.max(56,p*0.5):Math.max(60,p*0.36);
+  const LUT=new Uint8Array(256);for(let L=0;L<256;L++)LUT[L]=L>=T0?0:L>=T1?1:L>=T2?2:3;
+  for(let i=0,j=0;j<n;i+=4,j++){
+    if(!d[i+3])continue;
+    const c=GB4[LUT[Ls[j]]];d[i]=c[0];d[i+1]=c[1];d[i+2]=c[2];d[i+3]=255;
+  }
+  x.putImageData(im,0,0);
+  ctx.save();ctx.setTransform(1,0,0,1,0,0);ctx.imageSmoothingEnabled=false;ctx.globalCompositeOperation='copy';ctx.drawImage(b,0,0,w,h,0,0,W,H);ctx.restore();
+}
+T.chip=function(ac,t,f,v,echo,len){len=len||0.3;voice(ac,t,f,len,{type:'square',vol:v,a:0.002,hold:len*0.55,lp:2400,echo});};
+T.tri=function(ac,t,f,v,len){len=len||0.5;voice(ac,t,f,len,{type:'triangle',vol:v,a:0.004,hold:len*0.7});};
+function chipBar(ac,t,B,n,night){
+  [0,8].forEach(h=>{
+    if(night&&h)return;
+    T.tri(ac,t+h*B,mtof(n[0]),0.04,8*B*0.9);T.tri(ac,t+(h+1)*B,mtof(n[1]),0.028,7*B*0.8);
+    const up=night?[2,3,4]:[2,3,4,2,3,4];
+    up.forEach((k,j)=>T.chip(ac,t+(h+2+j*(night?2:1))*B,mtof(n[k]+12),night?0.012:0.014,0.1,B*(night?1.7:0.85)));
+  });
+}
+SETS.handheld={name:'Handheld',tag:'8-bit Bach',col:['#e6f7f0','#8fd3c3','#3a8a86','#123238'],meta:['Bach BWV 846','square + triangle','8-bit'],
+  desc:'Bach\'s C major prelude on a square wave, with a triangle bass, like an old pocket game.',fx:SETS.lagoon.fx,
+  bgm:{day:{beat:0.21,beats:19*16,play(ac,t,B){BACH.forEach((n,i)=>chipBar(ac,t+i*16*B,B,n,false));}},
+       night:{beat:0.32,beats:19*16,play(ac,t,B){BACH.forEach((n,i)=>chipBar(ac,t+i*16*B,B,n,true));}}}};
+THEME_MUSIC.handheld='8-bit Bach';
+
+// ── the moon ──
+let _moonT=[],_wink=0,_mStar=null;
+function moonPos(W){const big=holidayOf(calToday())==='midautumn'||isFullMoon(calNow());return{x:Math.round(W*0.2/2)*2,y:36,r:big?14:10};}
+function moonEggTap(px,py,W,H){
+  if(_mStar&&!_mStar.wished&&Date.now()>_mStar.t0&&_mStar.x!=null&&Math.hypot(px-_mStar.x,py-_mStar.y)<34){
+    _mStar.wished=true;const ph=snapTank('A wish on a shooting star','🌠');flashTank();
+    const bg=surpriseCard({photo:ph,icon:'🌠',title:'Make a wish!',text:'The moon sent this one just for you.',
+      extra:'<div class="wish-pick">'+WISHES.map(w=>'<button class="btn2" data-w="'+w.k+'">'+w.ico+' '+w.t+'</button>').join('')+'</div>',buttons:[]});
+    bg.querySelectorAll('[data-w]').forEach(b=>b.addEventListener('click',()=>{const w=WISHES.find(x=>x.k===b.dataset.w);bg.remove();coin(15);surpriseCard({icon:w.ico,title:'Wish made ✨',text:'<i>'+w.n+'</i><br><small>🪙 +15</small>'});}));
+    return true;
+  }
+  if(!isNightNow())return false;const m=moonPos(W);if(Math.hypot(px-m.x,py-m.y)>m.r+10)return false;
+  const now=Date.now();_moonT=_moonT.filter(x=>now-x<2500);_moonT.push(now);
+  if(_moonT.length>=3&&now>_wink){
+    _moonT=[];_wink=now+2800;_mStar={t0:now+900,wished:false};sfx('happy');
+    if(eggFound('moon'))setTimeout(()=>{snapTank('The moon winked at you','🌙');toast('🌙 The moon winked at you! 📷 saved','ok');},500);
+  }
+  return true;
+}
+function drawMoonEgg(ctx,W,H,t){
+  if(Date.now()>=_wink||!isNightNow())return;
+  const m=moonPos(W),r=m.r;
+  // for a moment the moon is round and has a face
+  for(let y=-r;y<=r;y+=2)for(let x=-r;x<=r;x+=2){if(x*x+y*y>r*r)continue;ctx.fillStyle='#fff6c8';ctx.fillRect(m.x+x,m.y+y,2,2);}
+  const k=r>=14?2:0,ink='#8a6a3a';
+  ctx.fillStyle=ink;
+  ctx.fillRect(m.x-6-k,m.y-4,2,4);                                       // open eye
+  ctx.fillRect(m.x+2+k,m.y-2,2,2);ctx.fillRect(m.x+4+k,m.y-4,2,2);ctx.fillRect(m.x+6+k,m.y-2,2,2);// winking eye ^
+  ctx.fillRect(m.x-2,m.y+4,2,2);ctx.fillRect(m.x,m.y+6,2,2);ctx.fillRect(m.x+2,m.y+4,2,2);          // smile
+  ctx.fillStyle='#ffb0c4';ctx.fillRect(m.x-8-k,m.y+2,2,2);ctx.fillRect(m.x+6+k,m.y+2,2,2);          // blush
+}
+function drawMoonStar(ctx,W,H,t){
+  const s=_mStar;if(!s)return;const now=Date.now();if(now<s.t0)return;
+  const k=(now-s.t0)/1900;if(k>1){_mStar=null;return;}
+  const m=moonPos(W);const x=m.x+14+k*W*0.62,y=m.y-18+k*40;s.x=x;s.y=y;
+  ctx.save();ctx.globalAlpha=0.35*(1-k*0.5);ctx.fillStyle='#fff8d0';ctx.beginPath();ctx.arc(x,y,9,0,Math.PI*2);ctx.fill();
+  for(let i=0;i<14;i++){ctx.globalAlpha=(1-i/14)*(1-k*0.4);ctx.fillStyle=i?'#fff3b8':'#ffffff';const s2=i<3?4:2;ctx.fillRect(Math.round((x-i*6)/2)*2-s2/2,Math.round((y-i*0.65*6)/2)*2-s2/2,s2,s2);}
+  ctx.restore();
+}
+
+// ── shiny ──
+const SHINY_ODDS=64;
+const SHINY_HUE={dragon:60,koi:45};// per-species hue turn; 150° unless listed
+function _rgb2hsl(r,g,b){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0;const l=(mx+mn)/2;if(mx!==mn){const d=mx-mn;s=l>0.5?d/(2-mx-mn):d/(mx+mn);h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4;h*=60;}return[h,s,l];}
+function _hsl2rgb(h,s,l){h=((h%360)+360)%360/360;if(!s)return[l*255,l*255,l*255];const q=l<0.5?l*(1+s):l+s-l*s,p=2*l-q;const f=t=>{t=(t+1)%1;return t<1/6?p+(q-p)*6*t:t<1/2?q:t<2/3?p+(q-p)*(2/3-t)*6:p;};return[f(h+1/3)*255,f(h)*255,f(h-1/3)*255];}
+const _shinyC=new WeakMap();
+function shinyOf(c,id){
+  if(!c)return c;let s=_shinyC.get(c);if(s)return s;
+  s=document.createElement('canvas');s.width=c.width;s.height=c.height;const x=s.getContext('2d');x.drawImage(c,0,0);
+  const turn=SHINY_HUE[id]!=null?SHINY_HUE[id]:150;
+  try{const im=x.getImageData(0,0,s.width,s.height),d=im.data;
+    for(let i=0;i<d.length;i+=4){
+      if(!d[i+3])continue;const r=d[i],g=d[i+1],b=d[i+2];
+      if(r===255&&g===140&&b===170)continue;// keep the blush pink
+      const[h,sa,l]=_rgb2hsl(r,g,b);if(sa<0.16||l<0.1||l>0.96)continue;
+      const o=_hsl2rgb(h+turn,sa,l);d[i]=o[0];d[i+1]=o[1];d[i+2]=o[2];
+    }
+    x.putImageData(im,0,0);}catch(e){}
+  _shinyC.set(c,s);return s;
+}
+function newFishEgg(f){
+  if(!f||f.isCreature)return;
+  if(!(window.__shinyNext||Math.random()<1/SHINY_ODDS))return;
+  window.__shinyNext=false;f.shiny=true;
+  S.shinySeen=S.shinySeen||{};const firstOfKind=!S.shinySeen[f.id];if(firstOfKind)S.shinySeen[f.id]=calToday();
+  const def=FISH_DEF.find(d=>d.id===f.id)||{};sv();
+  setTimeout(()=>{
+    toast('✨ '+f.name+' is a shiny '+(def.name||'fish')+'! (about 1 in '+SHINY_ODDS+')','ok');sfx('happy');
+    if(eggFound('shiny'))setTimeout(()=>{snapTank(f.name+' — a shiny '+(def.name||'fish'),'✨');},1500);
+    else if(firstOfKind)setTimeout(()=>toast('📖 Shiny '+(def.name||'fish')+' added to your Book','ok'),1600);
+  },900);
+}
+function shinySpark(ctx,px,py,img,t,uid){
+  const k=(t+(uid%5)*0.7)%3.2;if(k>0.6)return;
+  const n=Math.floor((t+(uid%5)*0.7)/3.2);const fx=0.2+((n*0.37+uid*0.13)%0.6),fy=0.15+((n*0.53)%0.5);
+  const x=Math.round((px+img.width*fx)/2)*2,y=Math.round((py+img.height*fy)/2)*2;const s=k<0.2||k>0.4?1:2;
+  ctx.save();ctx.fillStyle='#fffbe0';ctx.fillRect(x-1,y-1-s*2,2,s*4+2);ctx.fillRect(x-1-s*2,y-1,s*4+2,2);ctx.fillStyle='#ffd34d';ctx.fillRect(x-1,y-1,2,2);ctx.restore();
+}
+
+// ── one year together ──
+function startDay(){return S.startTs?dateStr(new Date(S.startTs)):null;}
+function annivYears(){
+  const s=startDay();if(!s)return 0;const td=calToday();let md=s.slice(5);const yr=+td.slice(0,4);
+  if(md==='02-29'&&!(yr%4===0&&(yr%100!==0||yr%400===0)))md='02-28';
+  return td.slice(5)===md?yr-+s.slice(0,4):0;
+}
+let _ann=null;
+function tickAnniv(){
+  if(_ann||!S.waterAdded||!S.tutDone||document.hidden)return;
+  const y=annivYears();if(y<1||S.annivDone===calToday())return;
+  if(Date.now()<_quietUntil+9000||document.querySelector('.modal-bg'))return;
+  _ann={t0:Date.now(),y};
+  const cw=(document.getElementById('TC')||{}).width||360;for(let i=0;i<40;i++)_confetti.push({x:Math.random()*cw,y:-Math.random()*60,vy:30+Math.random()*30,life:4+Math.random()*2,ph:Math.random()*6,w:2+(i%2)*2,c:pick(['#ff7fae','#ffd34d','#7fd6ff','#8fe3c9'])});
+}
+const ENV=['xxxxxxxxxx','xpxxxxxxpx','xxpxxxxpxx','xxxpxxpxxx','xxxxhhxxxx','xxxxhhxxxx','xxxxxxxxxx'];
+function drawAnniv(ctx,W,H,t){
+  if(!_ann)return;
+  const x=Math.round((W/2+Math.sin(t*0.7)*W*0.18)/2)*2,y=Math.round((H*0.2+Math.sin(t*1.5)*5)/2)*2;_ann.px=x;_ann.py=y;
+  ctx.save();ctx.globalAlpha=0.3+0.12*Math.sin(t*2.4);ctx.fillStyle='#fff8d0';ctx.beginPath();ctx.arc(x,y,30,0,Math.PI*2);ctx.fill();ctx.restore();
+  pix(ctx,ENV,x-20,y-14,4,{x:'#fffaf0',p:'#f2c6d6',h:PALC('#ff7fae')});
+  ctx.fillStyle=PALC('#e7b9cc');ctx.fillRect(x-20,y+14,40,2);
+  for(let i=0;i<4;i++){const a=t*1.6+i*Math.PI/2;if(Math.sin(t*3+i)>0.2){ctx.fillStyle='#ffffff';ctx.fillRect(Math.round((x+Math.cos(a)*30)/2)*2,Math.round((y+Math.sin(a)*22)/2)*2,2,2);}}
+}
+function annTap(px,py){if(!_ann||_ann.px==null)return false;if(Math.hypot(px-_ann.px,py-_ann.py)>34)return false;openAnniv();return true;}
+function listAnd(a){return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1];}
+function openAnniv(){
+  const y=(_ann&&_ann.y)||1;_ann=null;S.annivDone=calToday();
+  const mochi=S.fish.find(f=>f.uid===1);
+  const from=mochi||S.fish.filter(f=>!f.isCreature).sort((a,b)=>(a.born||0)-(b.born||0))[0]||S.fish[0];
+  const nm=from?from.name:'your tank';
+  const days=daysBetween(startDay(),calToday());
+  const friends=1+(S.totalFishBought||0)+(S.totalBred||0);
+  const photos=(S.album||[]).length,bubbles=S.totalBubbles||0;
+  const yrs=(['','A year','Two years','Three years','Four years','Five years'][y]||y+' years');
+  const text='Dear you,<br><br>'+yrs+' ago today you filled this tank with water'+(mochi?', and I swam in — tiny and brand new.':'.')
+    +'<br><br>Since then: '+listAnd([[days,'days'],[friends,friends===1?'friend':'friends'],[photos,'photos'],[bubbles,'bubbles caught']].filter(([v],i)=>i<1||v>0).map(([v,w])=>'<b>'+v.toLocaleString('en-US')+'</b> '+w))+'.'
+    +'<br><br>Thank you for every crumb, every hello, and every time you came back.<br>Let\'s keep going, slowly, together. ♥';
+  const ph=snapTank(yrs+' together','🎂');
+  S.notes=S.notes||[];S.notes.push({d:todayStr(),text,from:nm,special:true});eggFound('anniv');sv();
+  sfx('happy');
+  const bg=openModal('<div class="note-card ann-card"><div class="ann-pv"></div><div class="ann-y">'+(y===1?'ONE YEAR':y+' YEARS')+'</div><div class="nc-t ann-t">'+text+'</div><div class="nc-f">— '+esc(nm)+'</div></div><button class="btn" id="ann-keep">Keep it ♥</button><div class="mnote">Kept in 🏆 Quests → 💌 Notes · 📷 a photo of today is in the Album</div>');
+  const pv=bg.querySelector('.ann-pv');if(pv&&from)pv.appendChild(fitPreview(from.isCreature?'c':'f',from.id,90,52,3,{stage:from.stage,shiny:from.shiny}));
+  bg.querySelector('#ann-keep').addEventListener('click',()=>bg.remove());
+}
+
+// ── hooks ──
+function eggTick(){tick209();tickAnniv();}
+function drawEggBack(ctx,W,H,t,flY){drawMoonEgg(ctx,W,H,t);}
+function drawEggFront(ctx,W,H,t,flY){draw209(ctx,W,H,t,flY);drawMoonStar(ctx,W,H,t);drawAnniv(ctx,W,H,t);}
 
 // change the colour scheme while playing
 function applyUIPal(id){const was=curTheme();UIPAL.set(id);_bgCache.key='';_petBg=null;_stripSig='';renderStrip();drawTank();if(petUid!=null)renderPet(true);if(SND.music&&curTheme()!==was)startBGM();syncThemeColor();}
