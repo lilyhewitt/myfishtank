@@ -7238,13 +7238,15 @@ function drawEggFront(ctx,W,H,t,flY){draw209(ctx,W,H,t,flY);drawMoonStar(ctx,W,H
    home-screen app). The game always saves on the device first; the online copy is refreshed
    every few minutes while you play and whenever the game is put away, and nothing breaks offline.
    Until CLOUD_CFG is filled in, none of this shows up in the game.                              */
-const CLOUD_CFG={apiKey:'',projectId:''};// ← Firebase console → Project settings → Your apps → Web app
+const CLOUD_CFG={apiKey:'AIzaSyBma7I01TyiC2DepW6nmetq52Lo6O48STE',projectId:'my-aquarium-f8152',
+  live:false};// ← live:false = only shows on a device that opened the game once with ?cloud at the end of the address (for testing)
 const CL_KEY='aq8_cloud',CL_ALPH='23456789ABCDEFGHJKMNPQRSTVWXYZ',CL_EVERY=5*60000;
-function clOn(){return!!(CLOUD_CFG.apiKey&&CLOUD_CFG.projectId);}
+function clOn(){return!!(CLOUD_CFG.apiKey&&CLOUD_CFG.projectId&&(CLOUD_CFG.live||CL.beta));}
 let CL=(()=>{try{return JSON.parse(localStorage.getItem(CL_KEY)||'null')||{};}catch(e){return{};}})();
 // CL: code (the cloud code, no dashes) · rt (sign-in refresh token) · dev (this device) · last (last good backup) · up (photo ids already online)
 function clStore(){try{localStorage.setItem(CL_KEY,JSON.stringify(CL));}catch(e){}}
 if(!CL.dev){CL.dev=Math.random().toString(36).slice(2,10);clStore();}
+if(/[?&]cloud\b/.test(location.search)&&!CL.beta){CL.beta=1;clStore();}
 function clBase(){return Object.assign({auth:'https://identitytoolkit.googleapis.com/v1',token:'https://securetoken.googleapis.com/v1',fs:'https://firestore.googleapis.com/v1'},window.__cloudBase||{});}
 function clFmt(c){return(c||'').match(/.{1,4}/g).join('-');}
 function clClean(s){return String(s||'').toUpperCase().replace(/[^0-9A-Z]/g,'');}
