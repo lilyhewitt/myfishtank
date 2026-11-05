@@ -1,0 +1,30 @@
+rules_version = '2';
+// My Aquarium — cloud save rules. Paste this into Firebase console → Firestore Database → Rules → Publish.
+// One aquarium per cloud code: saves/{code}, with its album photos in saves/{code}/photos/{id}.
+// The code (16 random letters and digits) is the key, so anyone who has a code can open that aquarium,
+// and nobody can list or guess the others.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function validCode(c) { return c.matches('^[2-9A-HJKMNP-TV-Z]{16}$'); }
+
+    match /saves/{code} {
+      allow get: if signedIn() && validCode(code);
+      allow list: if false;
+      allow create, update: if signedIn() && validCode(code)
+        && request.resource.data.keys().hasOnly(['save', 't', 'seen', 'day', 'fish', 'pics', 'dev'])
+        && request.resource.data.save is string
+        && request.resource.data.save.size() < 900000;
+      allow delete: if false;
+
+      match /photos/{pid} {
+        allow read: if signedIn() && validCode(code);
+        allow create, update: if signedIn() && validCode(code) && pid.matches('^[0-9a-z]{4,24}$')
+          && request.resource.data.keys().hasOnly(['img'])
+          && request.resource.data.img is string
+          && request.resource.data.img.size() < 200000;
+        allow delete: if signedIn() && validCode(code);
+      }
+    }
+  }
+}

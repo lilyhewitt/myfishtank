@@ -224,6 +224,15 @@ body{background:#fff4ea !important;background-image:radial-gradient(#ffe2ec 1.2p
 .snd-row{display:flex;align-items:center;justify-content:space-between;font-size:17px;padding:5px 0;border-bottom:2px dotted #f3e2d6;}
 .snd-tg{font-family:var(--font);font-size:15px;min-width:64px;padding:3px 10px;border-radius:20px;border:2px solid var(--line);background:#f3eef5;color:var(--muted);cursor:pointer;}
 .snd-tg.on{background:var(--mint);border-color:var(--mint-d);color:#fff;}
+.cl-tg{font-family:var(--font);font-size:15px;min-width:64px;padding:3px 10px;border-radius:20px;border:2px solid var(--line);background:#f3eef5;color:var(--muted);cursor:pointer;}
+.cl-tg.on{background:var(--mint);border-color:var(--mint-d);color:#fff;}
+.cl-lbl{font-size:14px;color:var(--muted);text-align:center;margin-top:4px;}
+.cl-code{font-family:var(--pfont);font-size:13px;letter-spacing:1px;text-align:center;background:#fffaf5;border:2px dashed var(--line);border-radius:10px;padding:12px 6px;margin:6px 0;color:var(--text);-webkit-user-select:all;user-select:all;}
+.cl-wide{width:100%;margin-top:8px;}
+.cl-note{font-size:15px;line-height:1.25;color:var(--muted);margin:8px 0;}
+.cl-st{font-size:14px;color:var(--text);margin:6px 0 8px;}
+.cl-in{width:100%;font-family:var(--pfont);font-size:13px;letter-spacing:1px;text-align:center;padding:12px 6px;border:2px solid var(--line);border-radius:10px;background:#fffaf5;color:var(--text);margin:6px 0 10px;}
+.cl-found{font-size:17px;color:var(--text);background:#f3fbf8;border:2px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;}
 .snd-lbl{font-size:14px;color:var(--muted);margin:10px 0 5px;}
 .snd-packs{display:grid;gap:6px;}
 .snd-pack{font-family:var(--font);text-align:left;background:#fff;border:2px solid var(--line);border-radius:12px;padding:6px 10px;cursor:pointer;color:var(--text);box-shadow:0 2px 0 var(--line);}
@@ -991,10 +1000,12 @@ function openSound(){
     +'<div class="snd-row"><span>Sound effects</span><button class="snd-tg" data-t="sfx"></button></div>'
     +'<div class="snd-lbl">Theme — tap to try</div>'
     +'<div class="snd-packs" data-nopal>'+UIPAL.list.filter(p=>!p.hidden||(S.eggs||{}).gb||UIPAL.current().id===p.id).map(p=>'<button class="snd-pack pal-pick" data-pal="'+p.id+'"><span class="th-top"><b>'+p.name+'</b><small>♪ '+(THEME_MUSIC[p.id]||'')+'</small></span><span class="pal-sw">'+UIPAL.swatch(p).map(c=>'<i style="background:'+c+'"></i>').join('')+'</span></button>').join('')+'</div>'
+    +(clOn()?'<div class="snd-row"><span>☁ Cloud save</span><button class="cl-tg'+(CL.code?' on':'')+'" id="cl-open">'+(CL.code?'ON':'OFF')+'</button></div>':'')
     +'<button class="btn" id="snd-close">Done</button>'
     +'<div class="made-by" data-nopal><img alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAKCAYAAABFXiVrAAAA+UlEQVR4XmNgwAGEjCz+45LDB0jWB9LQf/nwfxANw4QsgKmD6cOmnhEkCFL47twJOPvK0R0YanWsPRhgapABSG/twm4M9c3xpXD1MPOZYIrRvS/JwY9iAMgB6GqwWRSuoovhGJheJpgMyHXIhj3/8RGuCeQrEEC2ENkikC9gYOWdy3A2SA1yKMGDDhYU6C5DB7DgxOYrdAAzC6aHBd2FzVAfoAOQi7E5ZPX2wwxrcrOwOgpmFsh3OtYeiGBEjlBsAGQRciIBJRaQnlBPW5wJFaQGFgUgwALVBE+NuAC21AjTy4AlNcIA1EKw+eA4QwfYMia2ZA8DxKoHAHZbpFNOFnSbAAAAAElFTkSuQmCC"><span>made by Twodee</span></div>');
   const refresh=()=>{bg.querySelectorAll('.snd-tg').forEach(b=>{const on=SND[b.dataset.t];b.textContent=on?'ON':'OFF';b.classList.toggle('on',on);});bg.querySelectorAll('.pal-pick').forEach(b=>b.classList.toggle('on',b.dataset.pal===UIPAL.current().id));};
   refresh();
+  const clb=bg.querySelector('#cl-open');if(clb)clb.addEventListener('click',()=>{bg.remove();openCloud();});
   bg.addEventListener('click',e=>{
     const tg=e.target.closest('.snd-tg');
     if(tg){const k=tg.dataset.t;SND[k]=!SND[k];saveSnd();if(k==='music'){if(SND.music)startBGM();else stopBGM();}else if(SND.sfx)sfx('pet');refresh();return;}
@@ -7218,6 +7229,203 @@ function openAnniv(){
 function eggTick(){tick209();tickAnniv();}
 function drawEggBack(ctx,W,H,t,flY){drawMoonEgg(ctx,W,H,t);}
 function drawEggFront(ctx,W,H,t,flY){draw209(ctx,W,H,t,flY);drawMoonStar(ctx,W,H,t);drawAnniv(ctx,W,H,t);}
+
+/* ═══ CLOUD SAVE (v4.0) ═══
+   An optional copy of the save (and the album photos) kept online in Firebase.
+   There's no account: turning it on makes a random cloud code like 7KQ2-M9XD-4TPH-B3RW,
+   and typing that code on another phone or computer brings the same aquarium there.
+   Sign-in is anonymous and invisible (Google sign-in doesn't work reliably inside an iPhone
+   home-screen app). The game always saves on the device first; the online copy is refreshed
+   every few minutes while you play and whenever the game is put away, and nothing breaks offline.
+   Until CLOUD_CFG is filled in, none of this shows up in the game.                              */
+const CLOUD_CFG={apiKey:'',projectId:''};// ← Firebase console → Project settings → Your apps → Web app
+const CL_KEY='aq8_cloud',CL_ALPH='23456789ABCDEFGHJKMNPQRSTVWXYZ',CL_EVERY=5*60000;
+function clOn(){return!!(CLOUD_CFG.apiKey&&CLOUD_CFG.projectId);}
+let CL=(()=>{try{return JSON.parse(localStorage.getItem(CL_KEY)||'null')||{};}catch(e){return{};}})();
+// CL: code (the cloud code, no dashes) · rt (sign-in refresh token) · dev (this device) · last (last good backup) · up (photo ids already online)
+function clStore(){try{localStorage.setItem(CL_KEY,JSON.stringify(CL));}catch(e){}}
+if(!CL.dev){CL.dev=Math.random().toString(36).slice(2,10);clStore();}
+function clBase(){return Object.assign({auth:'https://identitytoolkit.googleapis.com/v1',token:'https://securetoken.googleapis.com/v1',fs:'https://firestore.googleapis.com/v1'},window.__cloudBase||{});}
+function clFmt(c){return(c||'').match(/.{1,4}/g).join('-');}
+function clClean(s){return String(s||'').toUpperCase().replace(/[^0-9A-Z]/g,'');}
+function clValid(c){return c.length===16&&[...c].every(ch=>CL_ALPH.includes(ch));}
+function clNewCode(){let s='';while(s.length<16){const a=new Uint8Array(24);crypto.getRandomValues(a);for(const b of a)if(b<240&&s.length<16)s+=CL_ALPH[b%30];}return s;}
+// ── signing in (anonymous) ──
+let _clTok=null,_clTokExp=0;
+async function clToken(){
+  if(_clTok&&Date.now()<_clTokExp-60000)return _clTok;
+  const B=clBase(),k=encodeURIComponent(CLOUD_CFG.apiKey);
+  if(CL.rt){
+    const r=await fetch(B.token+'/token?key='+k,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'grant_type=refresh_token&refresh_token='+encodeURIComponent(CL.rt)});
+    if(r.ok){const j=await r.json();_clTok=j.id_token;_clTokExp=Date.now()+(+j.expires_in||3600)*1000;CL.rt=j.refresh_token;clStore();return _clTok;}
+    if(r.status>=500)throw new Error('net');
+    // the old sign-in has expired: make a new one (the cloud code still works with any sign-in)
+  }
+  const r=await fetch(B.auth+'/accounts:signUp?key='+k,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({returnSecureToken:true})});
+  if(!r.ok)throw new Error('auth '+r.status);
+  const j=await r.json();_clTok=j.idToken;_clTokExp=Date.now()+(+j.expiresIn||3600)*1000;CL.rt=j.refreshToken;clStore();return _clTok;
+}
+// ── the online documents: saves/{code} and saves/{code}/photos/{id} ──
+async function clReq(path,o){
+  o=o||{};const tok=await clToken();
+  const r=await fetch(clBase().fs+'/projects/'+CLOUD_CFG.projectId+'/databases/(default)/documents/'+path+(o.q||''),
+    {method:o.method||'GET',cache:'no-store',keepalive:!!o.keepalive,headers:Object.assign({Authorization:'Bearer '+tok},o.body?{'Content-Type':'application/json'}:{}),body:o.body?JSON.stringify(o.body):undefined});
+  if(r.status===404)return null;
+  if(!r.ok){const j=await r.json().catch(()=>({}));const st=((j.error||{}).status)||'';const e=new Error('fs '+r.status+' '+st);
+    if(st==='FAILED_PRECONDITION'||st==='ALREADY_EXISTS'||r.status===409)e.conflict=true;throw e;}
+  return r.json().catch(()=>({}));
+}
+const _I=v=>({integerValue:String(Math.round(v||0))}),_Sv=v=>({stringValue:String(v)});
+function clMeta(d){const f=(d&&d.fields)||{};const n=k=>+((f[k]||{}).integerValue||0);return{ut:(d&&d.updateTime)||'',t:n('t'),seen:n('seen'),day:n('day'),fish:n('fish'),pics:n('pics'),dev:(f.dev||{}).stringValue||''};}
+const CL_MASK='?'+['t','seen','day','fish','pics','dev'].map(k=>'mask.fieldPaths='+k).join('&');
+let _clBusy=false,_clFail=0,_clHold=false;
+// put this device's aquarium online (photos too, only the ones that aren't there yet).
+// The write only goes through if the online copy is still the one this device last saw (CL.ut) —
+// so a phone left open in the background can never overwrite newer progress from another device.
+async function clPush(o){
+  o=o||{};
+  if(!clOn()||!CL.code||_clBusy||(_clHold&&!o.force))return false;
+  if(navigator.onLine===false){_clFail++;return false;}
+  _clBusy=true;
+  try{
+    sv();
+    const ids=(S.album||[]).map(a=>a.id).filter(id=>photos()[id]);
+    const write=()=>clReq('saves/'+CL.code,{method:'PATCH',keepalive:o.keepalive&&JSON.stringify(S).length<60000,
+      q:o.force?'':CL.ut?'?currentDocument.updateTime='+encodeURIComponent(CL.ut):'?currentDocument.exists=false',
+      body:{fields:{save:_Sv(JSON.stringify(S)),t:_I(Date.now()),seen:_I(S.lastSeen),day:_I(S.day||1),fish:_I(S.fish.length),pics:_I(ids.length),dev:_Sv(CL.dev)}}});
+    let w;
+    try{w=await write();}
+    catch(e){
+      if(!e.conflict)throw e;
+      const d=await clReq('saves/'+CL.code,{q:CL_MASK});
+      if(!d){CL.ut='';w=await write();}// the online copy was removed: start it again
+      else{const m=clMeta(d);
+        if(m.dev!==CL.dev){_clHold=true;clOfferNewer(m);return false;}// someone else saved since: let the player choose
+        CL.ut=m.ut;w=await write();}// it was this device's own earlier save
+    }
+    if(w&&w.updateTime){CL.ut=w.updateTime;clStore();}
+    if(!o.keepalive){
+      CL.up=CL.up||{};
+      for(const id of ids){if(CL.up[id])continue;await clReq('saves/'+CL.code+'/photos/'+id,{method:'PATCH',body:{fields:{img:_Sv(photos()[id])}}});CL.up[id]=1;clStore();}
+      for(const id of Object.keys(CL.up)){if(ids.includes(id))continue;await clReq('saves/'+CL.code+'/photos/'+id,{method:'DELETE'});delete CL.up[id];clStore();}
+    }
+    CL.last=Date.now();clStore();_clFail=0;return true;
+  }catch(e){_clFail++;return false;}
+  finally{_clBusy=false;}
+}
+// fetch an aquarium by its code (null if there isn't one)
+async function clPull(code,withPhotos){
+  const d=await clReq('saves/'+code);if(!d)return null;
+  const f=d.fields||{};let save=null;try{save=JSON.parse(f.save.stringValue);}catch(e){}
+  if(!save||!Array.isArray(save.fish))return null;
+  const imgs={};
+  if(withPhotos){let tok='';do{const r=await clReq('saves/'+code+'/photos',{q:'?pageSize=100'+(tok?'&pageToken='+encodeURIComponent(tok):'')});((r&&r.documents)||[]).forEach(x=>{imgs[x.name.split('/').pop()]=((x.fields||{}).img||{}).stringValue;});tok=r&&r.nextPageToken;}while(tok);}
+  return Object.assign(clMeta(d),{save,imgs});
+}
+// replace this device's aquarium with the one online
+function clApply(code,c){
+  const data=c.save;data.lastSeen=Date.now();
+  const al=(data.album||[]).filter(a=>c.imgs[a.id]);data.album=al;
+  const pics={};al.forEach(a=>{pics[a.id]=c.imgs[a.id];});
+  try{localStorage.setItem('aq8',JSON.stringify(data));localStorage.setItem(PHOTO_KEY,JSON.stringify(pics));}catch(e){toast('Could not save in this browser','bad');return false;}
+  CL.code=code;CL.ut=c.ut;CL.up={};al.forEach(a=>{CL.up[a.id]=1;});CL.last=Date.now();clStore();
+  _noSaveOnUnload=true;location.reload();return true;
+}
+function clAgo(ms){const m=Math.round((Date.now()-ms)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' days ago';}
+function clSummary(c){return'Day '+(c.day||c.save.day||1)+' · '+c.fish+' '+(c.fish===1?'animal':'animals')+(c.pics?' · '+c.pics+' photos':'')+' · last played '+clAgo(c.seen||c.t);}
+
+// ── the cloud sheet (⚙ Settings → ☁ Cloud save) ──
+function openCloud(){
+  if(!clOn())return;
+  const on=!!CL.code;
+  const st=!on?'':_clBusy?'Backing up…':navigator.onLine===false?'Offline — it will back up when you\'re online again.':CL.last?'Last backup: '+clAgo(CL.last):'Not backed up yet.';
+  const bg=openModal('<h3>☁ CLOUD SAVE</h3>'
+    +(on
+      ?'<div class="cl-lbl">Your cloud code</div><div class="cl-code" id="cl-code">'+clFmt(CL.code)+'</div>'
+        +'<button class="btn2 cl-wide" id="cl-copy">Copy code</button>'
+        +'<div class="cl-note">Keep it somewhere safe — Notes, or a message to yourself. Type it on another phone or computer to bring this aquarium there. Anyone with the code can open this aquarium.</div>'
+        +'<div class="cl-st" id="cl-st">'+st+'</div>'
+        +'<div class="btn-row"><button class="btn" id="cl-now" style="flex:1">Back up now</button><button class="btn2" id="cl-off">Turn off</button></div>'
+        +'<button class="btn2 cl-wide" id="cl-have">Use a different code</button>'
+      :'<div class="cl-note">Keep a copy of your aquarium online, so you can pick it up on another phone or computer — or get it back if this one is lost. No account needed: you get a cloud code.</div>'
+        +'<button class="btn cl-wide" id="cl-turn">☁ Turn on cloud save</button>'
+        +'<button class="btn2 cl-wide" id="cl-have">I have a cloud code</button>')
+    +'<button class="btn2 cl-wide" id="cl-close">Done</button>');
+  const $=s=>bg.querySelector(s);
+  $('#cl-close').addEventListener('click',()=>bg.remove());
+  if($('#cl-copy'))$('#cl-copy').addEventListener('click',()=>{const t=clFmt(CL.code);(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('☁ Code copied','ok')).catch(()=>{const r=document.createRange();r.selectNodeContents($('#cl-code'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Select and copy the code','ok');});});
+  if($('#cl-now'))$('#cl-now').addEventListener('click',async()=>{$('#cl-st').textContent='Backing up…';const ok=await clPush();if(document.body.contains(bg))$('#cl-st').textContent=ok?'Last backup: just now':'Couldn\'t reach the cloud — it will try again later.';});
+  if($('#cl-off'))$('#cl-off').addEventListener('click',()=>{
+    bg.remove();const b2=openModal('<h3>Turn off cloud save?</h3><div class="cl-note">This device stops backing up. The online copy stays, and code <b>'+clFmt(CL.code)+'</b> still opens it — keep the code if you might want it back.</div><div class="btn-row"><button class="btn" id="co-yes" style="flex:1">Turn off</button><button class="btn2" id="co-no">Cancel</button></div>');
+    b2.querySelector('#co-no').addEventListener('click',()=>{b2.remove();openCloud();});
+    b2.querySelector('#co-yes').addEventListener('click',()=>{CL.code=null;CL.ut='';CL.up={};CL.last=0;_clHold=false;clStore();b2.remove();toast('☁ Cloud save is off on this device','ok');});
+  });
+  if($('#cl-turn'))$('#cl-turn').addEventListener('click',async()=>{
+    const b=$('#cl-turn');b.disabled=true;b.textContent='Setting up…';
+    try{let code=clNewCode();for(let i=0;i<3&&await clReq('saves/'+code,{q:CL_MASK});i++)code=clNewCode();CL.code=code;CL.ut='';CL.up={};_clHold=false;clStore();}
+    catch(e){b.disabled=false;b.textContent='☁ Turn on cloud save';toast('Couldn\'t reach the cloud — check the internet and try again','bad');return;}
+    const ok=await clPush();bg.remove();openCloud();if(ok)toast('☁ Cloud save is on','ok');
+  });
+  $('#cl-have').addEventListener('click',()=>{bg.remove();openCloudCode();});
+}
+function openCloudCode(){
+  const bg=openModal('<h3>☁ USE A CLOUD CODE</h3><div class="cl-note">Type the code from your other device.</div>'
+    +'<input class="cl-in" id="cl-in" maxlength="24" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX">'
+    +'<div class="btn-row"><button class="btn" id="cl-go" style="flex:1">Find my aquarium</button><button class="btn2" id="cl-x">Cancel</button></div>');
+  const inp=bg.querySelector('#cl-in'),go=bg.querySelector('#cl-go');
+  inp.addEventListener('input',()=>{const c=clClean(inp.value).slice(0,16);const f=c?clFmt(c):'';if(inp.value!==f)inp.value=f;});
+  bg.querySelector('#cl-x').addEventListener('click',()=>{bg.remove();openCloud();});
+  go.addEventListener('click',async()=>{
+    const code=clClean(inp.value);
+    if(!clValid(code)){toast('A cloud code has 16 letters and numbers','warn');return;}
+    go.disabled=true;go.textContent='Looking…';
+    let c=null;try{c=await clPull(code,true);}catch(e){go.disabled=false;go.textContent='Find my aquarium';toast('Couldn\'t reach the cloud — check the internet and try again','bad');return;}
+    go.disabled=false;go.textContent='Find my aquarium';
+    if(!c){toast('No aquarium found with that code','warn');return;}
+    bg.remove();
+    const b2=openModal('<h3>☁ FOUND IT</h3><div class="cl-found">'+clSummary(c)+'</div>'
+      +'<div class="cl-note">'+(S.fish.length>1||(S.day||1)>1?'This replaces the aquarium on this device ('+'Day '+(S.day||1)+' · '+S.fish.length+' animals). If you might want this one back, make a backup first: 🧽 Care → 💾 Export save.':'This replaces the new aquarium on this device.')+'</div>'
+      +'<div class="btn-row"><button class="btn" id="cf-yes" style="flex:1">Bring it here</button><button class="btn2" id="cf-no">Cancel</button></div>');
+    b2.querySelector('#cf-no').addEventListener('click',()=>b2.remove());
+    b2.querySelector('#cf-yes').addEventListener('click',()=>clApply(code,c));
+  });
+  setTimeout(()=>inp.focus(),50);
+}
+
+// ── keeping it up to date ──
+// when the game opens, and whenever a backup finds the online copy changed: if another device saved since
+// this one last synced, show both and let the player choose
+const _clSeen0=(()=>{try{return(JSON.parse(localStorage.getItem('aq8')||'{}').lastSeen)||0;}catch(e){return 0;}})();
+async function clCheckNewer(){
+  if(!clOn()||!CL.code)return;
+  let d=null;try{d=await clReq('saves/'+CL.code,{q:CL_MASK});}catch(e){return;}
+  if(!d){CL.ut='';CL.up={};clStore();clPush();return;}// the online copy is gone: put this one back
+  const m=clMeta(d);
+  if(m.ut===CL.ut||m.dev===CL.dev){CL.ut=m.ut;clStore();clPush();return;}
+  _clHold=true;clOfferNewer(m);
+}
+let _clOffer=false;
+function clOfferNewer(m){
+  if(_clOffer)return;_clOffer=true;
+  const show=()=>{
+    if(document.querySelector('.modal-bg')){setTimeout(show,2500);return;}
+    const bg=openModal('<h3>☁ A NEWER SAVE</h3><div class="cl-note">This aquarium was saved on another device since you last played here:</div><div class="cl-found">'+clSummary(m)+'</div>'
+      +'<div class="cl-note">On this device: Day '+(S.day||1)+' · '+S.fish.length+' '+(S.fish.length===1?'animal':'animals')+((S.album||[]).length?' · '+S.album.length+' photos':'')+'</div>'
+      +'<div class="btn-row"><button class="btn" id="cn-load" style="flex:1">Load that one</button><button class="btn2" id="cn-keep">Keep this one</button></div>');
+    bg.addEventListener('click',e=>{if(e.target===bg)_clOffer=false;});// tapped outside: ask again next time
+    bg.querySelector('#cn-keep').addEventListener('click',async()=>{bg.remove();_clOffer=false;_clHold=false;if(await clPush({force:true}))toast('☁ Kept this device\'s aquarium — it\'s the cloud copy now','ok');});
+    bg.querySelector('#cn-load').addEventListener('click',async()=>{const b=bg.querySelector('#cn-load');b.disabled=true;b.textContent='Loading…';try{const c=await clPull(CL.code,true);if(c)clApply(CL.code,c);else bg.remove();}catch(e){b.disabled=false;b.textContent='Load that one';toast('Couldn\'t reach the cloud — try again','bad');}});
+  };
+  show();
+}
+function clBoot(){
+  if(!clOn())return;
+  setTimeout(clCheckNewer,2500);
+  setInterval(()=>{if(CL.code&&!document.hidden&&Date.now()-(CL.last||0)>CL_EVERY*(_clFail>2?3:1))clPush();},30000);
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&CL.code&&Date.now()-(CL.last||0)>20000)clPush({keepalive:true});});
+  window.addEventListener('online',()=>{if(CL.code&&_clFail)clPush();});
+}
+clBoot();
 
 // change the colour scheme while playing
 function applyUIPal(id){const was=curTheme();UIPAL.set(id);_bgCache.key='';_petBg=null;_stripSig='';renderStrip();drawTank();if(petUid!=null)renderPet(true);if(SND.music&&curTheme()!==was)startBGM();syncThemeColor();}
